@@ -5,7 +5,7 @@
         <div class="login-container">
           <div class="login-body-left">
             <div class="app-logo"></div>
-            <div class="app-name"> {{ $t('login.sysname') }} </div>
+            <div class="app-name">{{ $t('login.sysname') }}</div>
           </div>
           <div class="login-body-right">
             <h3 class="login-title">{{ $t('login.title') }}</h3>
@@ -27,10 +27,7 @@
               </el-select>
               </el-form-item>-->
               <el-form-item prop="username">
-                <el-input
-                  v-model="postData.username"
-                  :placeholder="$t('login.username')"
-                >
+                <el-input v-model="postData.username" :placeholder="$t('login.username')">
                   <span slot="prefix" class="el-input__icon">
                     <svg class="icon-svg" aria-hidden="true">
                       <use xlink:href="#icon-user" />
@@ -54,10 +51,7 @@
               <el-form-item prop="captcha">
                 <el-row :gutter="20">
                   <el-col :span="14">
-                    <el-input
-                      v-model="postData.captcha"
-                      :placeholder="$t('login.captcha')"
-                    >
+                    <el-input v-model="postData.captcha" :placeholder="$t('login.captcha')">
                       <span slot="prefix" class="el-input__icon">
                         <svg class="icon-svg" aria-hidden="true">
                           <use xlink:href="#icon-safetycertificate" />
@@ -75,9 +69,7 @@
                   type="primary"
                   class="w-percent-100 el-button-login"
                   @click="postDataSubmitHandle()"
-                >
-                  {{ $t('login.title') }}
-                </el-button>
+                >{{ $t('login.title') }}</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -153,6 +145,7 @@ export default {
     },
     // 表单提交
     postDataSubmitHandle() {
+      console.log(this.$route)
       this.$refs['postData'].validate(valid => {
         if (!valid) {
           return false

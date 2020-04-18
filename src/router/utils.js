@@ -1,5 +1,6 @@
-import { Layout } from '@/router'
+import { Layout, staticRouterMap } from '@/router'
 import router from '@/router'
+import { getMenuStore } from '@/utils/localStorage'
 
 // 生成路由
 export function generateDynamicRoutes(menus) {
@@ -44,14 +45,6 @@ export function generateDynamicRoutes(menus) {
 
 // 添加动态路由
 export function addRoutes(dynamicRoutes) {
-  console.log([
-    {
-      path: '/dynamic_routes',
-      name: 'dynamic_routes',
-      component: Layout,
-      children: dynamicRoutes
-    }
-  ])
   router.addRoutes([
     {
       path: '/dynamic_routes',
@@ -61,4 +54,25 @@ export function addRoutes(dynamicRoutes) {
     }
   ])
   console.log('添加动态路由成功')
+}
+
+// 用于刷新的时候添加所有路由
+export function addAllRoutes() {
+  const menus = getMenuStore()
+  if (menus) {
+    const dynamicRoutes = generateDynamicRoutes(menus)
+    const allRouters = [
+      ...staticRouterMap,
+      {
+        path: '/dynamic_routes',
+        name: 'dynamic_routes',
+        component: Layout,
+        children: dynamicRoutes
+      }
+    ]
+    router.addRoutes(allRouters)
+    console.log('添加所有动态路由成功')
+  } else {
+    console.log('storage中没有菜单数据')
+  }
 }

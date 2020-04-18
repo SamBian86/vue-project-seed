@@ -1,5 +1,7 @@
 import router from '@/router'
 import { getToken } from '@/utils/cookie'
+import { addAllRoutes } from '@/router/utils'
+import { getMenuStore } from '@/utils/localStorage'
 
 import store from '@/store'
 
@@ -13,11 +15,12 @@ router.beforeEach((to, from, next) => {
     } else if (to.path === '/404') {
       next()
     } else {
-      if (store.getters.layout_menuStore.length === 0) {
-        store.dispatch('layout/getMenuNav').then(() => {
-          console.log('刷新页面重新生成路由数据')
-          next()
-        })
+      if (store.getters.layout_menuStore.length === 0 && getMenuStore()) {
+        addAllRoutes()
+        next({ ...to, replace: true })
+      } else {
+        store.commit('app/logout')
+        next({ path: '/login' })
       }
     }
   } else {

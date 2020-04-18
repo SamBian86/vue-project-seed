@@ -15,6 +15,7 @@ module.exports = {
   //it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
     'vue/singleline-html-element-content-newline': 'off',
+    'vue/multiline-html-element-content-newline': 'off',
     'vue/no-v-html': 'off',
     'vue/max-attributes-per-line': [
       2,
