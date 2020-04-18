@@ -1,32 +1,30 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <transition name="el-fade-in-linear">
+    <router-view />
+  </transition>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import { setLanguage } from '@/utils/cookie'
+import { messages } from '@/i18n'
+export default {
+  watch: {
+    '$i18n.locale': 'i18nHandle'
+  },
+  created() {
+    this.i18nHandle(this.$i18n.locale)
+  },
+  methods: {
+    i18nHandle(val, oldVal) {
+      setLanguage(val)
+      document.querySelector('html').setAttribute('lang', val)
+      document.title = messages[val].brand.lg
+      // 非登录页面，切换语言刷新页面
+      if (this.$route.name !== 'login' && oldVal) {
+        window.location.reload()
+      }
+    }
+  }
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+</script>
+<style></style>

@@ -1,0 +1,86 @@
+<template>
+  <div
+    v-loading.fullscreen.lock="loading"
+    :element-loading-text="$t('loading')"
+    :class="['aui-wrapper', { 'aui-sidebar--fold': layout_sidebar_fold }]"
+  >
+    layout
+    <router-view />
+  </div>
+</template>
+
+<script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { windowResizeListen, debounce } from '@/utils'
+export default {
+  name: 'Layout',
+  provide() {
+    return {
+      // 刷新
+      refresh() {
+        console.log('刷新功能暂时没用，预留')
+      }
+    }
+  },
+  components: {
+    // Navbar,
+    // Sidebar,
+    // Content,
+    // ThemeTools
+  },
+  data() {
+    return {
+      loading: false
+    }
+  },
+  computed: {
+    ...mapGetters(['layout_sidebar_fold', 'page_refresh'])
+  },
+  watch: {
+    $route: 'applicationCheck'
+  },
+  created() {
+    console.log(this.$router)
+    // 窗口resize监听
+    this.windowResizeHandle()
+    // 路由切换的时候会自动检查初始化数据是否需要重新获取
+    this.applicationCheck(this.$route)
+    // setTimeout(() => {
+    //   // 清除字典方法
+    //   this.cleanDictStore()
+    // }, 5000)
+  },
+  methods: {
+    ...mapMutations('app', ['cleanDictStore']),
+    ...mapMutations('layout', ['setSidebarFold']),
+    ...mapActions('app', ['getDict', 'getPermissions']),
+    ...mapActions('user', ['getUserInfo']),
+    ...mapActions('layout', ['getMenuNav']),
+    // 初始化数据方法
+    applicationCheck() {
+      Promise.all([
+        // 获取菜单
+        this.getMenuNav(),
+        // 获取字典
+        this.getDict(),
+        // 获取权限列表
+        this.getPermissions(),
+        // 获取用户信息
+        this.getUserInfo()
+      ]).then(() => {
+        this.loading = false
+      })
+    },
+    // 窗口resize
+    windowResizeHandle() {
+      const status = windowResizeListen()
+      // 提供一个防抖方法
+      const debounceSetSidebarFold = debounce(this.setSidebarFold, 200)
+
+      window.addEventListener('resize', () => {
+        debounceSetSidebarFold(status)
+      })
+    }
+  }
+}
+</script>

@@ -1,29 +1,46 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Router from 'vue-router'
 
-Vue.use(VueRouter)
+export const Layout = () => import('@/views/layout')
 
-  const routes = [
+Vue.use(Router)
+
+export const staticRouterMap = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/login'),
+    meta: { title: '登录' }
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/',
+    name: 'main',
+    component: Layout,
+    redirect: { name: 'home' },
+    children: [
+      {
+        path: '/home',
+        name: 'home',
+        component: () => import('@/views/modules/home')
+      }
+    ]
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    name: '404',
+    meta: { title: '404未找到' }
+  },
+  {
+    path: '*',
+    redirect: { name: '404' }
   }
 ]
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
-})
+export const dynamicRouterMap = []
 
-export default router
+export default new Router({
+  mode: 'hash',
+  scrollBehavior: () => ({ y: 0 }),
+  routes: staticRouterMap
+})
