@@ -45,6 +45,21 @@ export default {
     setSidebarFold(state, boolean) {
       state.sidebar.fold = boolean
       console.log('设置成功')
+    },
+    setLayoutType(state, layoutType) {
+      state.navbar.layoutType = layoutType
+    },
+    setLayoutSkin(state, layoutSkin) {
+      state.sidebar.layoutSkin = layoutSkin
+    },
+    setTabActive(state, tabActive) {
+      state.tabActive = tabActive
+    },
+    setMenuActive(state, menuActive) {
+      state.menuActive = menuActive
+    },
+    setTabs(state, tabs) {
+      state.tabs = tabs
     }
   },
   actions: {
@@ -72,6 +87,24 @@ export default {
             })
         })
       }
+    }
+  },
+  getters: {
+    // 返回指定名称的标签页(单个)
+    filterTabByName: state => name => {
+      return state.tabs.filter(item => item.name === name)
+    },
+    // 返回除name以外的其他标签页
+    filterTabExceptName: state => name => {
+      return state.tabs.filter(item => item.name !== name)
+    },
+    // 返回指定名称标签页的indexindex
+    filterTabIndexByName: state => name => {
+      return state.tabs.findIndex(item => item.name === name)
+    },
+    // 返回指定名称的标签页(多个)
+    filterTabIncludeByNames: state => names => {
+      return state.tabs.filter(item => names.indexOf(item.name) !== -1)
     }
   }
 }

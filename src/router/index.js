@@ -3,6 +3,10 @@ import Router from 'vue-router'
 
 export const Layout = () => import('@/views/layout')
 
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 Vue.use(Router)
 
 export const staticRouterMap = [
@@ -15,13 +19,14 @@ export const staticRouterMap = [
   {
     path: '/',
     name: 'main',
-    component: Layout,
+    component: () => import('@/views/layout'),
     redirect: { name: 'home' },
     children: [
       {
         path: '/home',
         name: 'home',
-        component: () => import('@/views/modules/home')
+        component: () => import('@/views/modules/home'),
+        meta: { title: '首页', isTab: true }
       }
     ]
   },
@@ -30,10 +35,6 @@ export const staticRouterMap = [
     component: () => import('@/views/404'),
     name: '404',
     meta: { title: '404未找到' }
-  },
-  {
-    path: '*',
-    redirect: { name: '404' }
   }
 ]
 

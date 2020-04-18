@@ -19,10 +19,14 @@ export function generateDynamicRoutes(menus) {
           path: !isIframeURL ? `/${ite.url}` : `/i-${ite.id}`,
           name: !isIframeURL ? ite.url.replace(/\//g, '-') : `i-${ite.id}`,
           meta: {
+            name: ite.name,
             title: ite.name,
+            params: {},
+            query: {},
             isTab: true,
             iframeURL: !isIframeURL ? '' : iframeURL,
-            menuId: ite.id
+            menuId: ite.id,
+            menuIndex: index
           }
         }
 

@@ -4,14 +4,25 @@
     :element-loading-text="$t('loading')"
     :class="['aui-wrapper', { 'aui-sidebar--fold': layout_sidebar_fold }]"
   >
-    layout
-    <router-view />
+    <template v-if="!loading">
+      <layout-navbar />
+      <layout-sidebar />
+      <div class="aui-content__wrapper">
+        <!-- <router-view /> -->
+        <layout-content v-if="!page_refresh" />
+      </div>
+      <layout-theme-tools />
+    </template>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { windowResizeListen, debounce } from '@/utils'
+import LayoutNavbar from './navbar'
+import LayoutSidebar from './sidebar'
+import LayoutContent from './content'
+import LayoutThemeTools from './themeTools'
 export default {
   name: 'Layout',
   provide() {
@@ -23,10 +34,10 @@ export default {
     }
   },
   components: {
-    // Navbar,
-    // Sidebar,
-    // Content,
-    // ThemeTools
+    LayoutNavbar,
+    LayoutSidebar,
+    LayoutContent,
+    LayoutThemeTools
   },
   data() {
     return {

@@ -1,4 +1,4 @@
-import { generateDynamicRoutes } from '@/router/utils'
+import { addRoutes, generateDynamicRoutes } from '@/router/utils'
 // addRoutes,
 export default {
   namespaced: true,
@@ -12,7 +12,7 @@ export default {
   mutations: {
     setDynamicRoutes: (state, menus) => {
       const dynamicRoutes = generateDynamicRoutes(menus)
-      // addRoutes(dynamicRoutes)
+      addRoutes(dynamicRoutes)
       state.dynamicRoutes = dynamicRoutes
     },
     setDynamicRoutesFinish: (state, dynamicRoutesFinish) => {
@@ -24,5 +24,10 @@ export default {
       state.dynamicRoutesFinish = false
     }
   },
-  actions: {}
+  actions: {},
+  getters: {
+    filterMenuByMenuId: state => menuId => {
+      return state.dynamicRoutes.filter(item => item.meta.menuId === menuId)
+    }
+  }
 }

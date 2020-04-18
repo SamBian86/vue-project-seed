@@ -6,10 +6,10 @@ import user from './modules/user'
 import page from './modules/page'
 
 import getters from './getters'
-import { appPlugin } from '@/store/plugin/app'
-import { userPlugin } from '@/store/plugin/user'
-import { layoutPlugin } from '@/store/plugin/layout'
-import { pagePlugin } from '@/store/plugin/page'
+import { appPlugin } from '@/store/plugins/app'
+import { userPlugin } from '@/store/plugins/user'
+import { layoutPlugin } from '@/store/plugins/layout'
+import { pagePlugin } from '@/store/plugins/page'
 
 Vue.use(Vuex)
 

@@ -98,7 +98,7 @@
 import { messages } from '@/i18n'
 import { getUUID } from '@/utils'
 import { getCaptcha } from '@/api/auth'
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -143,6 +143,7 @@ export default {
     this.getCaptcha()
   },
   methods: {
+    ...mapMutations('layout', ['setTabActive']),
     ...mapActions('app', ['login']),
     // 获取验证码
     getCaptcha() {
@@ -158,7 +159,8 @@ export default {
         }
         this.login(this.postData)
           .then(response => {
-            this.$router.push({ path: '/' })
+            this.$router.replace({ name: 'home' })
+            this.setTabActive('home')
           })
           .catch(error => {
             this.getCaptcha()
