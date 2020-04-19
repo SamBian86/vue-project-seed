@@ -35,7 +35,7 @@
               class="icon-svg aui-content--tabs-icon-nav"
               aria-hidden="true"
             >
-              <use xlink:href="#icon-home"></use>
+              <use xlink:href="#icon-home" />
             </svg>
           </template>
           <iframe
@@ -81,7 +81,8 @@ export default {
     ])
   },
   watch: {
-    layout_tabActive: 'storeUpdate'
+    layout_tabActive: 'storeUpdate',
+    tabs: 'storeUpdate'
   },
   created() {
     this.storeUpdate()
