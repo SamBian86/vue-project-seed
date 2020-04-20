@@ -129,5 +129,10 @@ export default {
           })
       })
     }
+  },
+  getters: {
+    filterPermission: state => value => {
+      return state.permissionStore.findIndex(item => item === value) !== -1 || false
+    }
   }
 }

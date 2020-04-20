@@ -1,5 +1,6 @@
 const getters = {
   app_token: state => state.app.token,
+  app_permissionStore: state => state.app.permissionStore,
   layout_sidebar_fold: state => state.layout.sidebar.fold,
   layout_sidebar_layoutSkin: state => state.layout.sidebar.layoutSkin,
   layout_navbar_layoutType: state => state.layout.navbar.layoutType,

@@ -10,12 +10,16 @@ import '@/icons'
 import '@/element-ui/theme/index.css'
 import '@/assets/scss/aui.scss'
 
+// 全局directive
+// import permission from './directive/permission'
+
 Vue.config.productionTip = false
 
 Vue.use(Element, {
   size: 'default',
   i18n: (key, value) => i18n.t(key, value)
 })
+// Vue.use(permission)
 
 new Vue({
   i18n,

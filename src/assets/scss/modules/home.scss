@@ -1,6 +1,7 @@
-.mod-home {
-  line-height: 1.8;
-  ul li {
-    color: $--color-text-regular;
-  }
+.layout_container .el-card__body {
+  padding: 10px;
+}
+
+.el-form-item {
+  margin-bottom: 10px;
 }

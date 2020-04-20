@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 body {
-  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
   font-size: $--font-size-base;
   line-height: $base--line-height;
   color: $--color-text-primary;
@@ -34,7 +34,7 @@ img {
 }
 .clearfix:before,
 .clearfix:after {
-  content: " ";
+  content: ' ';
   display: table;
 }
 .clearfix:after {
@@ -80,7 +80,6 @@ img {
   line-height: $base--line-height !important;
 }
 
-
 /* Reset element-ui
 ------------------------------ */
 .aui-wrapper {
@@ -109,7 +108,6 @@ img {
     margin-right: 5px;
   }
 }
-
 
 /* Common
 ------------------------------ */
@@ -145,8 +143,8 @@ img {
     background-color: transparent;
   }
   &-add {
-    > span > *[class*="el-icon-"],
-    > span > *[class*="icon"] {
+    > span > *[class*='el-icon-'],
+    > span > *[class*='icon'] {
       vertical-align: middle;
       font-size: 18px;
       margin-right: 5px;
@@ -156,12 +154,12 @@ img {
 // 主题工具
 .aui-theme-tools {
   position: fixed;
-  top: $navbar--height + $content--tabs-header-height + 15px;
+  top: $navbar--height + $content--tabs-header-height + 45px;
   right: -210px;
   bottom: 0;
   z-index: 1010;
   width: 210px;
-  transition: right .3s;
+  transition: right 0.3s;
   &--open {
     right: 0;
   }
@@ -197,14 +195,12 @@ img {
   }
 }
 
-
 /* Layout
 ------------------------------ */
 .aui-wrapper {
   position: relative;
   padding-top: $navbar--height;
 }
-
 
 /* Sidebar fold
 ------------------------------ */
@@ -252,7 +248,6 @@ img {
   }
 }
 
-
 /* Navbar
 ------------------------------ */
 .aui-navbar {
@@ -265,7 +260,7 @@ img {
   align-items: stretch;
   height: $navbar--height;
   background-color: $--color-primary;
-  box-shadow: 0 1px 0 0 rgba(0, 0, 0, .05);
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.05);
   &--colorful {
     .aui-navbar__body {
       background-color: transparent;
@@ -316,7 +311,7 @@ img {
     position: relative;
     width: $sidebar--width;
     height: $navbar--height;
-    transition: width .3s;
+    transition: width 0.3s;
   }
   &__brand {
     display: flex;
@@ -331,7 +326,7 @@ img {
     white-space: nowrap;
     color: #fff;
     overflow: hidden;
-    transition: width .3s;
+    transition: width 0.3s;
     &-lg,
     &-mini {
       max-width: 100%;
@@ -402,7 +397,7 @@ img {
           width: auto;
           font-size: 12px;
           margin: 0 0 0 5px;
-          transition: transform .3s;
+          transition: transform 0.3s;
         }
       }
     }
@@ -415,14 +410,14 @@ img {
     }
   }
   &__search {
-    > *[class*="el-icon-"],
-    > *[class*="icon"] {
+    > *[class*='el-icon-'],
+    > *[class*='icon'] {
       display: inline-block;
       vertical-align: middle;
     }
     &-txt {
       width: 0;
-      transition: width .3s, margin-left .3s;
+      transition: width 0.3s, margin-left 0.3s;
       &.is-show {
         width: 210px;
         margin-left: 8px;
@@ -453,7 +448,6 @@ img {
   }
 }
 
-
 /* Sidebar
 ------------------------------ */
 .aui-sidebar {
@@ -464,9 +458,9 @@ img {
   z-index: 1020;
   width: $sidebar--width;
   background-color: #fff;
-  box-shadow: 1px 0 2px 0 rgba(0, 0, 0, .05);
+  box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.05);
   overflow: hidden;
-  transition: width .3s;
+  transition: width 0.3s;
   &--dark {
     background-color: $sidebar--background-color-dark;
     .aui-sidebar__menu,
@@ -499,12 +493,12 @@ img {
     padding-bottom: 15px;
     overflow-x: hidden;
     overflow-y: scroll;
-    transition: width .3s;
+    transition: width 0.3s;
   }
   &__menu {
     width: $sidebar--width;
     border-right: 0;
-    transition: width .3s;
+    transition: width 0.3s;
     .el-menu-item,
     .el-submenu__title {
       height: $sidebar--menu-item-height;
@@ -519,10 +513,9 @@ img {
     text-align: center;
     font-size: 16px;
     color: inherit !important;
-    transition: font-size .3s;
+    transition: font-size 0.3s;
   }
 }
-
 
 /* Content
 ------------------------------ */
@@ -535,7 +528,7 @@ img {
     margin-left: $sidebar--width;
     min-height: calc(100vh - #{$navbar--height});
     background-color: $content--background-color;
-    transition: margin-left .3s;
+    transition: margin-left 0.3s;
   }
   > .aui-card--fill > .el-card__body {
     min-height: calc(#{$content--fill-height} - 2px);
@@ -574,9 +567,9 @@ img {
       z-index: 930;
       padding: 0 55px 0 15px;
       margin: 0;
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
       background-color: #fff;
-      transition: left .3s;
+      transition: left 0.3s;
       > .el-tabs__nav-wrap {
         margin-bottom: 0;
         &:after {
@@ -692,10 +685,9 @@ img {
   }
 }
 
-
 /* Page
 ------------------------------ */
-*[class*="aui-page__"] {
+*[class*='aui-page__'] {
   padding-top: 0;
   .aui-content {
     min-height: auto;
