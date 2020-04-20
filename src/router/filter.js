@@ -1,27 +1,32 @@
 import router from '@/router'
 import { getToken } from '@/utils/cookie'
-import { addAllRoutes } from '@/router/utils'
-import { getMenuStore } from '@/utils/localStorage'
 
 import store from '@/store'
 
 const whiteList = ['/login'] // 不重定向白名单
 
 router.beforeEach((to, from, next) => {
-  // debugger
   if (getToken()) {
     if (to.path === '/login') {
       next({ path: '/' })
     } else if (to.path === '/404') {
       next()
-    } else {
-      if (store.getters.layout_menuStore.length === 0 && getMenuStore()) {
-        addAllRoutes()
-        next({ ...to, replace: true })
+    } else if (from.path === '/') {
+      // 在当前页面强制刷新
+      console.log(
+        `store.getters.layout_menuStore.length: ${store.getters.layout_menuStore.length}`
+      )
+      if (store.getters.layout_menuStore.length === 0) {
+        store.dispatch('layout/getMenuNav').then(() => {
+          next({ ...to, replace: true })
+        })
       } else {
-        store.commit('app/logout')
-        next({ path: '/login' })
+        next()
+        // store.commit('app/logout') // 用于处理不存在的页面
+        // next({ path: '/login' })
       }
+    } else {
+      next()
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {

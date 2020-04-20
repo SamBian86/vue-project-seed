@@ -6,10 +6,10 @@ export function layoutPlugin(store) {
     // 请求成功以后保存用户数据到storage
     if (mutation.type === 'layout/setMenuStore') {
       const nextMenuStoreState = state.layout.menuStore
-      setMenuStore(nextMenuStoreState)
 
       // 根据菜单创建动态路由
       store.commit('page/setDynamicRoutes', nextMenuStoreState)
+      setMenuStore(nextMenuStoreState)
     }
 
     // 清除用户storage数据
