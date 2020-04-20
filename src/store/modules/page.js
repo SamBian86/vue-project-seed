@@ -1,4 +1,4 @@
-import { addRoutes, addAllRoutes, generateDynamicRoutes } from '@/router/utils'
+import { addRoutes, generateDynamicRoutes } from '@/router/utils'
 import { getMenuStore } from '@/utils/localStorage'
 // addRoutes,
 export default {
@@ -12,16 +12,13 @@ export default {
   },
   mutations: {
     setDynamicRoutes: (state, menus) => {
-      const dynamicRoutes = generateDynamicRoutes(menus)
-      // 如果localStorage中有菜单数据直接用于添加路由
-      if (getMenuStore()) {
-        addAllRoutes()
-      } else {
-        addRoutes(dynamicRoutes)
-      }
-      state.dynamicRoutes = getMenuStore()
+      const dynamicRoutes = getMenuStore()
         ? generateDynamicRoutes(getMenuStore())
-        : dynamicRoutes
+        : generateDynamicRoutes(menus)
+      // 如果localStorage中有菜单数据说明触发了刷新功能，需要动态添加路由
+      // 如果localStorage中没有菜单数据说明是登录成功以后第一次初始化动态路由
+      addRoutes(dynamicRoutes)
+      state.dynamicRoutes = dynamicRoutes
     },
     setDynamicRoutesFinish: (state, dynamicRoutesFinish) => {
       state.dynamicRoutesFinish = dynamicRoutesFinish

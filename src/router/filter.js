@@ -21,7 +21,11 @@ router.beforeEach((to, from, next) => {
           next({ ...to, replace: true })
         })
       } else {
-        next()
+        console.log(store.getters.hasDynamicRoutes(to.path))
+        if (store.getters.hasDynamicRoutes(to.path)) {
+          // 如果跳转的页面在已有的动态路由中就放行, 没有该动态路由时进入404页面
+          next()
+        }
         // store.commit('app/logout') // 用于处理不存在的页面
         // next({ path: '/login' })
       }

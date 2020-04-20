@@ -38,7 +38,12 @@ export const staticRouterMap = [
   }
 ]
 
-export const dynamicRouterMap = []
+export const dynamicRouterMap = [
+  {
+    path: '*',
+    redirect: { name: '404' }
+  }
+]
 
 export default new Router({
   mode: 'hash',

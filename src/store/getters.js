@@ -9,6 +9,9 @@ const getters = {
   layout_tabs: state => state.layout.tabs,
   page_refresh: state => state.page.refresh,
   page_dynamicRoutes: state => state.page.dynamicRoutes,
+  hasDynamicRoutes: state => path => {
+    return state.page.dynamicRoutes.findIndex(item => item.path === path) !== -1
+  },
   user_userInfo: state => state.user.userInfoStore
 }
 export default getters

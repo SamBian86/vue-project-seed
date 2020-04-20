@@ -69,6 +69,7 @@ export default {
         const menuStore = getMenuStore()
         if (menuStore) {
           console.log('从storage获取菜单数据')
+          // 保存菜单数据到vuex
           commit('setMenuStore', menuStore)
           commit('setMenuTag', true)
           return Promise.resolve()
@@ -78,6 +79,7 @@ export default {
             .then(response => {
               const menuStore = response
               console.log('获取远程菜单数据')
+              // 保存菜单数据到vuex
               commit('setMenuStore', menuStore)
               commit('setMenuTag', true)
               resolve(response)
