@@ -39,8 +39,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['page_dynamicRoutes', 'layout_tabs']),
-    ...mapGetters('page', ['filterMenuByMenuId'])
+    ...mapGetters([
+      'page_dynamicRoutes',
+      'layout_tabs',
+      'layout_menuActive',
+      'layout_tabActive'
+    ]),
+    ...mapGetters('page', ['filterMenuByMenuId']),
+    ...mapGetters('layout', ['filterTabByName'])
   },
   methods: {
     ...mapMutations('layout', ['setTabActive', 'setMenuActive', 'setTabs']),
@@ -48,6 +54,7 @@ export default {
     gotoRouteHandle(menuId) {
       const routes = this.filterMenuByMenuId(menuId)
       if (routes.length === 1) {
+        // 如果有该动态路由
         const route = routes[0]
         const tab = [
           {
@@ -60,11 +67,18 @@ export default {
             iframeURL: route.meta.iframeURL
           }
         ]
+
+        const hasTab = this.filterTabByName(route.name).length === 1 || false
+
         this.setMenuActive(route.meta.menuIndex)
         this.setTabActive(route.name)
-        // console.log([...this.layout_tabs, ...routes])
-        this.setTabs([...this.layout_tabs, ...tab])
+        if (!hasTab) {
+          // 如果还没有这个tab选项，需要新增tabs
+          this.setTabs([...this.layout_tabs, ...tab])
+        }
         this.$router.push({ path: route.path })
+      } else {
+        console.log('没有此动态路由')
       }
     }
   }

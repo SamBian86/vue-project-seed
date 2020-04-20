@@ -2,7 +2,6 @@
   <aside :class="['aui-sidebar', `aui-sidebar--${layout_sidebar_layoutSkin}`]">
     <div class="aui-sidebar__inner">
       <el-menu
-        :default-active="menuActive"
         :collapse="!!layout_sidebar_fold"
         :collapse-transition="false"
         :unique-opened="true"
@@ -10,7 +9,7 @@
       >
         <sub-menu
           v-for="menu in layout_menuStore"
-          :key="menu.id"
+          :key="`${menu.id}`"
           :menu="menu"
         />
       </el-menu>

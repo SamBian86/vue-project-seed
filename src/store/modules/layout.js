@@ -44,7 +44,6 @@ export default {
     },
     setSidebarFold(state, boolean) {
       state.sidebar.fold = boolean
-      console.log('设置成功')
     },
     setLayoutType(state, layoutType) {
       state.navbar.layoutType = layoutType

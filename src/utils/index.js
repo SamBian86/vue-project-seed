@@ -31,7 +31,6 @@ export function parse(string) {
 
 // 检查窗口大小
 export function windowResizeListen() {
-  console.log('windowResizeListen')
   return document.documentElement['clientWidth'] <= 992 || false
 }
 

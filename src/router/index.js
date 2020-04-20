@@ -21,6 +21,7 @@ export const staticRouterMap = [
     name: 'main',
     component: () => import('@/views/layout'),
     redirect: { name: 'home' },
+    meta: { title: '项目入口' },
     children: [
       {
         path: '/home',

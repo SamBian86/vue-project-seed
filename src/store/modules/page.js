@@ -1,6 +1,6 @@
 import { addRoutes, generateDynamicRoutes } from '@/router/utils'
 import { getMenuStore } from '@/utils/localStorage'
-// addRoutes,
+
 export default {
   namespaced: true,
   state: {

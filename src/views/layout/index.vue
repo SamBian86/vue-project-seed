@@ -45,13 +45,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['layout_sidebar_fold', 'page_refresh'])
+    ...mapGetters(['layout_sidebar_fold', 'page_refresh', 'layout_tabs'])
   },
   watch: {
     $route: 'applicationCheck'
   },
   created() {
-    console.log(this.$router)
+    // console.log(this.$router)
     // 窗口resize监听
     this.windowResizeHandle()
     // 路由切换的时候会自动检查初始化数据是否需要重新获取
@@ -63,12 +63,42 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['cleanDictStore']),
-    ...mapMutations('layout', ['setSidebarFold']),
+    ...mapMutations('layout', [
+      'setSidebarFold',
+      'setTabActive',
+      'setTabActive',
+      'setMenuActive',
+      'setTabs'
+    ]),
     ...mapActions('app', ['getDict', 'getPermissions']),
     ...mapActions('user', ['getUserInfo']),
     ...mapActions('layout', ['getMenuNav']),
     // 初始化数据方法
     applicationCheck() {
+      // 在非home页面强刷页面修复tabs显示
+      if (this.layout_tabs.length === 1 && this.$route.name !== 'home') {
+        const route = this.$route
+        const tab = [
+          {
+            name: route.name,
+            params: {},
+            query: {},
+            menuId: route.meta.menuIndex,
+            title: route.meta.title,
+            isTab: route.meta.isTab,
+            iframeURL: route.meta.iframeURL
+          }
+        ]
+        this.setMenuActive(route.meta.menuIndex)
+        this.setTabActive(route.name)
+        this.setTabs([...this.layout_tabs, ...tab])
+      }
+
+      if (this.layout_tabs.length === 1 && this.$route.name === 'home') {
+        this.setMenuActive('')
+        this.setTabActive('home')
+      }
+
       Promise.all([
         // 获取菜单
         this.getMenuNav(),

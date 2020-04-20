@@ -1,6 +1,20 @@
 import { Layout, dynamicRouterMap } from '@/router'
 import router from '@/router'
 
+// 添加动态路由
+export function addRoutes(dynamicRoutes) {
+  router.addRoutes([
+    {
+      path: '/dynamic_routes',
+      name: 'dynamic_routes',
+      component: Layout,
+      children: dynamicRoutes
+    },
+    ...dynamicRouterMap
+  ])
+  console.log('添加动态路由成功')
+}
+
 // 生成路由
 export function generateDynamicRoutes(menus) {
   const dynamicRoutes = []
@@ -40,18 +54,4 @@ export function generateDynamicRoutes(menus) {
     }
   })
   return dynamicRoutes
-}
-
-// 添加动态路由
-export function addRoutes(dynamicRoutes) {
-  router.addRoutes([
-    ...dynamicRouterMap,
-    {
-      path: '/dynamic_routes',
-      name: 'dynamic_routes',
-      component: Layout,
-      children: dynamicRoutes
-    }
-  ])
-  console.log('添加动态路由成功')
 }

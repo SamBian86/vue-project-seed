@@ -13,19 +13,17 @@ router.beforeEach((to, from, next) => {
       next()
     } else if (from.path === '/') {
       // 在当前页面强制刷新
-      console.log(
-        `store.getters.layout_menuStore.length: ${store.getters.layout_menuStore.length}`
-      )
+      // console.log(
+      //   `store.getters.layout_menuStore.length: ${store.getters.layout_menuStore.length}`
+      // )
       if (store.getters.layout_menuStore.length === 0) {
         store.dispatch('layout/getMenuNav').then(() => {
           next({ ...to, replace: true })
         })
       } else {
-        console.log(store.getters.hasDynamicRoutes(to.path))
-        if (store.getters.hasDynamicRoutes(to.path)) {
-          // 如果跳转的页面在已有的动态路由中就放行, 没有该动态路由时进入404页面
-          next()
-        }
+        // console.log(store.getters.hasDynamicRoutes(to.path))
+        // 动态路由生成工程以后就放行, 没有该动态路由时进入404页面
+        next()
         // store.commit('app/logout') // 用于处理不存在的页面
         // next({ path: '/login' })
       }

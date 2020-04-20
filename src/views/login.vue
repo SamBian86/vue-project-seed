@@ -153,7 +153,6 @@ export default {
     },
     // 表单提交
     postDataSubmitHandle() {
-      console.log(this.$route)
       this.$refs['postData'].validate(valid => {
         if (!valid) {
           return false
@@ -161,7 +160,6 @@ export default {
         this.login(this.postData)
           .then(response => {
             this.$router.replace({ name: 'home' })
-            this.setTabActive('home')
           })
           .catch(error => {
             this.getCaptcha()

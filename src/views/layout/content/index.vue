@@ -86,7 +86,7 @@ export default {
   },
   created() {
     this.storeUpdate()
-    console.log(`$route.meta.isTab: ${this.$route.meta.isTab}`)
+    // console.log(`$route.meta.isTab: ${this.$route.meta.isTab}`)
   },
   methods: {
     ...mapMutations('layout', ['setTabActive', 'setTabs', 'setMenuActive']),
