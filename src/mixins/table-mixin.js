@@ -8,12 +8,10 @@ export default {
         searchParams: {} // 查询条件
       },
       tableHandle: {
-        getList: () => {
-          console.log('请覆盖获取列表方法')
-        },
-        deleteItem: () => {
-          console.log('请覆盖删除方法')
-        }
+        // 列表抽象方法
+        getList: Promise.reject('请覆盖获取列表方法'),
+        // 删除抽象方法
+        deleteItem: Promise.reject('请覆盖删除方法')
       }
     }
   },
@@ -23,10 +21,6 @@ export default {
   },
   activated() {
     console.log('table mixin activated')
-    const { _reload } = this
-    if (_reload) {
-      this.init()
-    }
   },
   methods: {
     init() {

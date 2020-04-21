@@ -43,13 +43,53 @@ export default {
   beforeUpdate() {},
   updated() {},
   activated() {
-    console.log(this.$attrs.config.pagination)
+    console.log(this.$attrs.config.tableName)
+    const { reload } = this
+    if (reload) {
+      this.init()
+    }
     console.log('table component activated')
   },
   deactivated() {},
   beforeDestroy() {},
   destroyed() {},
   errorCaptured() {},
-  methods: {}
+  methods: {
+    init() {
+      this.getListHandler()
+    },
+    getListHandler() {
+      // 获取列表数据
+      const { pagination } = this.config
+      const { searchParams } = this.$attrs.config
+      const _pagination = {}
+      const _searchParams = {}
+      Object.keys(pagination).map(item => {
+        if (pagination[item] !== '') {
+          _pagination[item] = pagination[item]
+        }
+      })
+      Object.keys(searchParams).map(item => {
+        if (searchParams[item] !== '') {
+          _searchParams[item] = searchParams[item]
+        }
+      })
+      this.getListBridge({ ..._pagination, ..._searchParams })
+        .then(response => {
+          this.$set(this, 'tableData', response)
+        })
+        .catch(message => {
+          console.log(message)
+        })
+    },
+    // 触发查询
+    handleSearch() {
+      this.getListHandler()
+    },
+    // 重置查询条件
+    handleSearchReset() {
+      this.getListHandler()
+    }
+  }
 }
 </script>
