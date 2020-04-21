@@ -2,18 +2,12 @@ export default {
   data() {
     return {
       tableConfig: {
-        reload: true, // 重新获取数据
-        loading: false,
-        searchParams: {}, // 查询条件
-        pagination: {
-          page: 1, // 第几页
-          limit: 10, // 每页几条
-          order: '', // 排序方式 asc、desc
-          orderField: '' // 排序字段
-        } // 分页查询条件
+        tableName: 'yunlinTable', // 表格名称，请与父组件ref名称相同
+        tableHead: [], // 表格表头
+        tableType: '', // 表格类型
+        searchParams: {} // 查询条件
       },
-      tableData: [],
-      tableAction: {
+      tableHandle: {
         getList: () => {
           console.log('请覆盖获取列表方法')
         },
@@ -23,21 +17,14 @@ export default {
       }
     }
   },
-  computed: {
-    getListBridge() {
-      return this.tableAction.getList
-    },
-    deleteItemBridge() {
-      return this.tableAction.deleteItem
-    }
-  },
+  computed: {},
   created() {
     console.log('table mixin created')
   },
   activated() {
     console.log('table mixin activated')
-    const { reload } = this.tableConfig
-    if (reload) {
+    const { _reload } = this
+    if (_reload) {
       this.init()
     }
   },

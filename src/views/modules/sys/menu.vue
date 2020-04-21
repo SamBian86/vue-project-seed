@@ -1,13 +1,17 @@
 <template>
   <el-card shadow="never" class="layout_container aui-card--fill">
-    <el-form :inline="true" :model="tableConfig.searchParams" @keyup.enter.native="handleSearch">
-      <el-form-item>
-        <el-button v-if="filterPermission('sys:menu:save')" type="primary" size="small" @click="addOrUpdateHandle()">{{ $t('add') }}</el-button>
-        <el-button v-if="filterPermission('sys:menu:save')" type="primary" size="small" @click="handleSearch">{{ $t('add') }}</el-button>
-      </el-form-item>
-    </el-form>
+    <yunlin-table ref="yunlinTable" :config="tableConfig" :handle="tableHandle" v-bind="$attrs" v-on="$listeners">
+      <template slot="search">
+        <el-form :inline="true" :model="tableConfig.searchParams" @keyup.enter.native="handleSearch">
+          <el-form-item>
+            <el-button v-if="filterPermission('sys:menu:save')" type="primary" size="small" @click="addOrUpdateHandle()">{{ $t('add') }}</el-button>
+            <el-button v-if="filterPermission('sys:menu:save')" type="primary" size="small" @click="handleSearch">{{ $t('add') }}</el-button>
+          </el-form-item>
+        </el-form>
+      </template>
+    </yunlin-table>
 
-    <el-table v-loading="tableConfig.loading" :data="tableData" border style="width: 100%;">
+    <!-- <el-table v-loading="tableConfig.loading" :data="tableData" row-key="id" border style="width: 100%;">
       <el-table-column prop="name" :label="$t('menu.name')" header-align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="icon" :label="$t('menu.icon')" header-align="center" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
@@ -29,25 +33,27 @@
           <el-button v-if="filterPermission('sys:menu:delete')" type="text" size="small" @click="deleteHandle(scope.row.id)">{{ $t('delete') }}</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </el-table> -->
   </el-card>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import normalTableMixin from '@/mixins/normal-table-mixin'
+import tableMixin from '@/mixins/table-mixin'
 import { getMenuList } from '@/api/sys/menu'
 export default {
   components: {},
-  mixins: [normalTableMixin],
+  mixins: [tableMixin],
   data() {
     return {}
   },
   computed: {
+    // 用于判断是否有权限的方法
     ...mapGetters('app', ['filterPermission'])
   },
   created() {
-    this.tableAction.getList = getMenuList
+    this.tableConfig.tableHead = [{}]
+    this.tableHandle.getList = getMenuList
     console.log('table page created')
   },
   methods: {

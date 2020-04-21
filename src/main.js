@@ -10,17 +10,20 @@ import '@/icons'
 import '@/element-ui/theme/index.css'
 import '@/assets/scss/aui.scss'
 
-// 全局directive
-// import permission from './directive/permission'
-
-Vue.config.productionTip = false
-
 Vue.use(Element, {
   size: 'default',
   i18n: (key, value) => i18n.t(key, value)
 })
+
+// 添加全局插件
+import YunlinTable from '@/components/yunlin-table'
+Vue.use(YunlinTable)
+
+// 全局directive
+// import permission from './directive/permission'
 // Vue.use(permission)
 
+Vue.config.productionTip = false
 new Vue({
   i18n,
   store,
