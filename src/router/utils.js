@@ -25,10 +25,7 @@ export function generateDynamicRoutes(menus) {
           return false
         }
         const isIframeURL = /{{([^}}]+)?}}/g.test(ite.url)
-        const iframeURL = (ite.url || '').replace(
-          /{{([^}}]+)?}}/g,
-          process.env.VUE_APP_API_URL
-        )
+        const iframeURL = (ite.url || '').replace(/{{([^}}]+)?}}/g, process.env.VUE_APP_API_URL)
         const route = {
           path: !isIframeURL ? `/${ite.url}` : `/i-${ite.id}`,
           name: !isIframeURL ? ite.url.replace(/\//g, '-') : `i-${ite.id}`,
@@ -45,8 +42,8 @@ export function generateDynamicRoutes(menus) {
         }
 
         if (!isIframeURL) {
-          console.log(`@/views/modules/${ite.url}`)
-          route.component = () => import(`@/views/modules/${ite.url}`)
+          console.log(`@/views/modules/${ite.url}/`)
+          route.component = () => import(`@/views/modules/${ite.url}/`)
         }
 
         dynamicRoutes.push(route)

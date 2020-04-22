@@ -17,7 +17,9 @@ Vue.use(Element, {
 
 // 添加全局插件
 import YunlinTable from '@/components/yunlin-table'
+import YunlinForm from '@/components/yunlin-form'
 Vue.use(YunlinTable)
+Vue.use(YunlinForm)
 
 // 全局directive
 // import permission from './directive/permission'
