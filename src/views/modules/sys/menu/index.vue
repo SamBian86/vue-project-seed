@@ -1,6 +1,6 @@
 <template>
   <el-card shadow="never" class="layout-container aui-card--fill">
-    <transition>
+    <transition name="fade" mode="out-in">
       <keep-alive>
         <component
           :is="pageInfo.component"
@@ -38,6 +38,8 @@ export default {
   },
   computed: {},
   created() {
+    // 初始化include
+    this.generateInclude()
     const { pageComponents } = this
     // 初始化显示列表页面
     this.pageInfo = pageComponents[0]

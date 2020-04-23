@@ -33,6 +33,7 @@ import { mapGetters } from 'vuex'
 import tableMixin from '@/mixins/table-mixin'
 import { getMenuList, deleteMenu } from '@/api/sys/menu'
 export default {
+  name: 'Tabel',
   components: {},
   mixins: [tableMixin],
   data() {

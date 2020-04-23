@@ -16,8 +16,10 @@ Vue.use(Element, {
 })
 
 // 添加全局插件
+import common from '@/components/yunlin-common'
 import YunlinTable from '@/components/yunlin-table'
 import YunlinForm from '@/components/yunlin-form'
+Vue.use(common)
 Vue.use(YunlinTable)
 Vue.use(YunlinForm)
 

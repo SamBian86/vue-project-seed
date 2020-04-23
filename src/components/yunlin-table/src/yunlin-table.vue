@@ -46,6 +46,7 @@ export default {
   props: {},
   data() {
     return {
+      ToolComponents, // 工具组件
       loading: true,
       reload: true, // 重新获取数据
       config: {
@@ -56,8 +57,7 @@ export default {
           orderField: '' // 排序字段
         } // 分页查询条件
       },
-      tableData: [], // 列表数据
-      ToolComponents // 工具组件
+      tableData: [] // 列表数据
     }
   },
   computed: {

@@ -1,7 +1,5 @@
 <template>
-  <svg class="icon-svg" aria-hidden="true">
-    <use :xlink:href="`#${columnData[config.svgName]}`" />
-  </svg>
+  <common-svg-icon :config="{ name: columnData[config.svgName] }"></common-svg-icon>
 </template>
 
 <script>

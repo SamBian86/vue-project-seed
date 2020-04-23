@@ -15,7 +15,17 @@ export default {
           value: '', // 哪个键名用于取数据
           name: '', // 哪个键名用于显示tag名称
           tagSize: '', // tag尺寸
-          tagConfig: [] // 不同的数据如何显示tag
+          tagConfig: [
+            // {
+            //   value: 0,
+            //   name: '菜单'
+            // },
+            // {
+            //   value: 1,
+            //   type: 'info',
+            //   name: '按钮'
+            // }
+          ] // 不同的数据如何显示tag的type
         }
       }
     },
@@ -43,7 +53,7 @@ export default {
     tagConfig.map(item => {
       if (item.value === value) {
         this.tagItem.type = item.type
-        this.tagItem.name = item.name || name
+        this.tagItem.name = item.name || name // 默认用tagConfig中的name
       }
     })
   }

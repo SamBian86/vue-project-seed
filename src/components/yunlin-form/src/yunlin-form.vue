@@ -1,15 +1,15 @@
-/* eslint-disable vue/html-closing-bracket-spacing */
 <template>
   <div>
     <el-form
+      :ref="$attrs.config.formName"
       :model="$attrs.data"
       :rules="$attrs.rules"
       :label-width="$attrs.config.labelWidth"
       :size="$attrs.config.formSize"
       :label-position="$attrs.config.labelPosition"
-      @keyup.enter.native="formSubmitHandle()"
+      @keyup.enter.native="submitHandle()"
     >
-      <el-row :gutter="20">
+      <el-row :gutter="10">
         <el-col
           v-for="(item, index) in $attrs.config.formItems"
           :key="index"
@@ -28,25 +28,31 @@
             </template>
             <!-- input -->
             <template v-if="item.type === 'text'">
-              <el-input v-model="$attrs.data[item.prop]" :placeholder="`请输入${$t(item.name)}`"></el-input>
+              <el-input
+                v-model="$attrs.data[item.prop]"
+                :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
+                clearable
+              ></el-input>
             </template>
             <!-- popover-tree -->
-            <template v-if="item.type === 'popover-tree'">
-              <div class="popover-tree-input" @click="togglePopoverTree">
-                {{ $attrs.pageinfo.data[item.prop] === undefined ? `${$t(item.nameDefault)}` : $attrs.pageinfo.data[item.prop] }}
-              </div>
-              <el-popover v-model="popoverStatus" placement="bottom-start" trigger="click">
-                <el-tree
-                  :data="item.items"
-                  :props="item.treeProps"
-                  :node-key="item.treeNodeKey"
-                  :highlight-current="true"
-                  :expand-on-click-node="false"
-                  accordion
-                  @current-change="item.currentChange"
-                >
-                </el-tree>
-              </el-popover>
+            <template v-if="item.component">
+              <component
+                :is="ToolComponents[item.component]"
+                :config="item.componentConfig"
+                :page-data="{ ...$attrs.data }"
+                v-on="$listeners"
+              ></component>
+            </template>
+            <!-- input -->
+            <template v-if="item.type === 'input-number'">
+              <el-input-number
+                v-model="$attrs.data[item.prop]"
+                :controls-position="item.attrs.controlsPosition"
+                :min="item.attrs.min"
+                :max="item.attrs.max"
+                :step="item.attrs.step"
+                :placeholder="`请输入${$t(item.name)}`"
+              ></el-input-number>
             </template>
           </el-form-item>
         </el-col>
@@ -56,12 +62,13 @@
 </template>
 
 <script>
+import ToolComponents from '@/components/yunlin-form/tool'
 export default {
   name: 'YunlinForm',
   props: {},
   data() {
     return {
-      popoverStatus: false // 用于 popover-tree
+      ToolComponents
     }
   },
   computed: {
@@ -89,9 +96,17 @@ export default {
   destroyed() {},
   errorCaptured() {},
   methods: {
-    // 处理popover组件
-    togglePopoverTree() {
-      this.popoverStatus = !this.popoverStatus
+    // 表单校验
+    submitHandle() {
+      const { formName } = this.$attrs.config
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$refs[formName].formSubmitHandle()
+        } else {
+          console.log('校验未通过')
+          return false
+        }
+      })
     },
     // 表单提交
     formSubmitHandle() {

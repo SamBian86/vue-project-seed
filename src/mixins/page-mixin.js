@@ -7,15 +7,16 @@ export default {
         //   component: table
         // }
       ], // 用于分割当前模块存在的页面
-      pageInfo: {} // 当前模块信息
+      pageInfo: {}, // 当前模块信息
+      include: [] // 用于keep-alive缓存
     }
   },
   computed: {},
   created() {
-    console.log('control mixin created')
+    console.log('page mixin created')
   },
   activated() {
-    console.log('control mixin activated')
+    console.log('page mixin activated')
   },
   methods: {
     // 用于子页面切换其他页面
@@ -31,6 +32,14 @@ export default {
       } else {
         Promise.reject(`请检查是否有${name}组件`)
       }
+    },
+    // 生成include
+    generateInclude() {
+      const { pageComponents } = this
+      const include = pageComponents.map(item => {
+        return item.name.toUpperCase()
+      })
+      this.include = include
     }
   }
 }

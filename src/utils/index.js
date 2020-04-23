@@ -12,11 +12,21 @@ export function getUUID() {
  * 获取svg图标(id)列表
  */
 export function getIconList() {
-  var res = []
+  const res = []
   document.querySelectorAll('svg symbol').forEach(item => {
-    res.push(item.id)
+    res.push({ name: item.id })
   })
   return res
+}
+
+export function getResourceSelector() {
+  const rescourse = [
+    { label: 'GET', value: 'GET' },
+    { label: 'POST', value: 'POST' },
+    { label: 'PUT', value: 'PUT' },
+    { label: 'DELETE', value: 'DELETE' }
+  ]
+  return rescourse
 }
 
 // 对象转字符串
