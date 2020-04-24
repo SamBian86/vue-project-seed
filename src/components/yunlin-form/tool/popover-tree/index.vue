@@ -2,8 +2,8 @@
   <div>
     <el-input
       type="text"
-      :placeholder="$t(config.nameDefault)"
-      :value="pageData[config.nameInit]"
+      :placeholder="$t(config.i18nDefault)"
+      :value="pageData[config.propName]"
       clearable
       @focus="togglePopoverShow"
       @clear="clearHandle"
@@ -17,31 +17,32 @@
         :expand-on-click-node="false"
         accordion
         @current-change="currentChoose"
-      >
-      </el-tree>
+      ></el-tree>
     </el-popover>
   </div>
 </template>
 
 <script>
+import commonMixin from '@/mixins/common-mixin'
 export default {
   name: 'ToolPopoverTree',
+  mixins: [commonMixin],
   props: {
     config: {
       type: Object,
       default: () => {
         return {
-          useApi: null, // el-tree 获取数据的方法
-          useParams: {}, // 获取数据方法传参
-          nameDefault: '', // 默认显示的数据
-          nameInit: '', // 初始化用于显示的键名
-          nameChange: '', // 修改后用于取选中数据的键名
+          request: null, // el-tree 获取数据的方法
+          requestParams: {}, // 获取数据方法传参
+          i18nDefault: '', // 默认显示的placeholder内容
+          propName: '', // 初始化用于显示的键名
+          sourceName: '', // 修改后用于在本组件中显示文字的键名
           treeProps: {}, // el-tree的props配置 { label: 'name', children: 'children' }
           treeNodeKey: '', // el-tree的node-key配置 'id'
           mergeData: [
-            // 点击el-tree节点数据传递 from节点的键 to传递给父组件用于覆盖数据对应的键名
-            // { from: 'name', to: 'parentName' },
-            // { from: 'id', to: 'pid' }
+            // 点击el-tree节点数据传递 source 被选中节点数据中用于取数据的键 target传递给父组件用于覆盖表单数据对应的键名
+            // { source: 'name', target: 'parentName' },
+            // { source: 'id', target: 'pid' }
           ]
         }
       }
@@ -57,21 +58,31 @@ export default {
   data() {
     return {
       popoverStatus: false,
-      name: this.pageData[this.config.nameInit] ? this.pageData[this.config.nameInit] : this.$t(this.config.nameDefault),
+      name: this.pageData[this.config.propName] ? this.pageData[this.config.propName] : this.$t(this.config.i18nDefault),
       list: []
     }
   },
+  activated() {
+    console.log('popover-tree activated')
+  },
   created() {
-    this.config
-      .useApi(this.config.useParams)
-      .then(response => {
-        this.list = response
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    this.init()
   },
   methods: {
+    init() {
+      if (this.isPromise(this.config.request())) {
+        this.config
+          .request(this.config.requestParams)
+          .then(response => {
+            this.list = response
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      } else {
+        Promise.reject('请提供一个返回Promise对象的request方法')
+      }
+    },
     // 处理popover组件
     togglePopoverShow() {
       this.popoverStatus = true
@@ -81,12 +92,12 @@ export default {
     },
     // 点击树节点
     currentChoose(e) {
-      const { mergeData, nameChange } = this.config
+      const { mergeData, sourceName } = this.config
       const postData = {}
       mergeData.map(item => {
-        postData[item.to] = e[item.from]
+        postData[item.target] = e[item.source]
       })
-      this.name = e[nameChange] || '请检查键名'
+      this.name = e[sourceName] || '请检查键名'
       this.togglePopoverHide()
       this.$emit('merge-data', postData)
     },
@@ -95,7 +106,7 @@ export default {
       const { mergeData } = this.config
       const postData = {}
       mergeData.map(item => {
-        postData[item.to] = ''
+        postData[item.target] = item.default || ''
       })
       this.togglePopoverHide()
       this.$emit('merge-data', postData)

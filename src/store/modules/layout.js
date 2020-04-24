@@ -39,7 +39,7 @@ export default {
       state.menuTag = menuTag
     },
     cleanMenuStore(state) {
-      state.menuStore = Array.from(state.emptyList).concat()
+      state.menuStore = Array.from(state.emptyList)
       state.menuTag = false
     },
     setSidebarFold(state, boolean) {

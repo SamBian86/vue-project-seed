@@ -48,6 +48,9 @@ export default {
       this.$emit('page-change', name, data)
     },
     // 删除
-    handleDelete() {}
+    handleDelete(item) {
+      const { tableName } = this.tableConfig
+      this.$refs[tableName].handleDelete(item)
+    }
   }
 }

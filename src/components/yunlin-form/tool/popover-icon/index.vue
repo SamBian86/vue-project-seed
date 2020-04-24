@@ -2,19 +2,24 @@
   <div>
     <el-input
       type="text"
-      :placeholder="`请选择${$t(config.nameDefault)}`"
-      :value="pageData[config.nameInit]"
+      :placeholder="`请选择${$t(config.i18nName)}`"
+      :value="pageData[config.propName]"
       clearable
       @focus="togglePopoverShow"
       @clear="clearHandle"
     ></el-input>
-    <el-popover v-model="popoverStatus" popper-class="popover-icon-container" placement="bottom-start" trigger="click">
+    <el-popover
+      v-model="popoverStatus"
+      popper-class="popover-icon-container"
+      placement="bottom-start"
+      trigger="click"
+    >
       <div class="popover-icon-list">
         <div class="popover-icon-list-inner">
           <el-button
             v-for="(item, index) in list"
             :key="index"
-            :class="{ 'is-active': pageData[config.nameInit] === item[config.listKey] }"
+            :class="{ 'is-active': pageData[config.propName] === item[config.compareKey] }"
             @click="currentChoose(item)"
           >
             <common-svg-icon :config="{ name: item.name }"></common-svg-icon>
@@ -35,17 +40,17 @@ export default {
       type: Object,
       default: () => {
         return {
-          useApi: null, // el-tree 获取数据的方法
-          useParams: {}, // 获取数据方法传参
-          nameDefault: '', // 默认显示的数据
-          nameInit: '', // 初始化用于显示的键名 页面数据键名
-          nameChange: '', // 修改后 取选中数据的键名
+          request: null, // 获取数据的方法
+          requestParams: {}, // 获取数据方法传参
+          i18nName: '', // 默认显示的数据
+          propName: '', // 初始化用于显示的键名 页面数据键名
+          sourceName: '', // 修改后 取选中数据的键名
           mergeData: [
-            // 点击el-tree节点数据传递 from节点的键 to传递给父组件用于覆盖数据对应的键名
-            // { from: 'name', to: 'parentName' },
-            // { from: 'id', to: 'pid' }
+            // 点击el-tree节点数据传递 source 被选中节点数据中用于取数据的键 target传递给父组件用于覆盖表单数据对应的键名
+            // { source: 'name', target: 'parentName' },
+            // { source: 'id', target: 'pid' }
           ],
-          listKey: '' // 用于设置用于比较的list中的key
+          compareKey: '' // 用于设置用于比较的list中的key
         }
       }
     },
@@ -60,20 +65,23 @@ export default {
   data() {
     return {
       popoverStatus: false,
-      name: this.pageData[this.config.nameInit]
-        ? this.pageData[this.config.nameInit]
-        : '请选择' + this.$t(this.config.nameDefault),
+      name: this.pageData[this.config.propName] ? this.pageData[this.config.propName] : '请选择' + this.$t(this.config.i18nName),
       list: []
     }
   },
   created() {
-    this.transformToPromise(this.config.useApi)
-      .then(response => {
-        this.list = response
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    if (this.isPromise(this.config.request())) {
+      this.config
+        .request(this.config.requestParams)
+        .then(response => {
+          this.list = response
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    } else {
+      Promise.reject('请提供一个返回Promise对象的request方法')
+    }
   },
   methods: {
     // 处理popover组件
@@ -85,12 +93,12 @@ export default {
     },
     // 点击按钮
     currentChoose(e) {
-      const { mergeData, nameChange } = this.config
+      const { mergeData, sourceName } = this.config
       const postData = {}
       mergeData.map(item => {
-        postData[item.to] = e[item.from]
+        postData[item.target] = e[item.source]
       })
-      this.name = e[nameChange] || '请检查键名'
+      this.name = e[sourceName] || '请检查键名'
       this.togglePopoverHide()
       this.$emit('merge-data', postData)
     },
@@ -99,7 +107,7 @@ export default {
       const { mergeData } = this.config
       const postData = {}
       mergeData.map(item => {
-        postData[item.to] = ''
+        postData[item.target] = item.default || ''
       })
       this.togglePopoverHide()
       this.$emit('merge-data', postData)

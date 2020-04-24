@@ -1,7 +1,13 @@
 /* eslint-disable vue/html-end-tags */
 <template>
   <el-row :gutter="10">
-    <el-col :span="formConfig.formSpan" :lg="formConfig.formSpan" :md="formConfig.formSpan" :sm="24" :xs="24">
+    <el-col
+      :span="formConfig.formSpan"
+      :lg="formConfig.formSpan"
+      :md="formConfig.formSpan"
+      :sm="24"
+      :xs="24"
+    >
       <div class="form-title">{{ formTitle[$attrs.pageinfo.data.pageType] }}</div>
       <yunlin-form
         ref="yunlinForm"
@@ -11,16 +17,43 @@
         :rules="formRules"
         v-bind="$attrs"
         @merge-data="mergeDataHandle"
+        @generate-rule-by-prop="generateRuleByProp"
+        @check-action="checkAction"
         v-on="$listeners"
-      ></yunlin-form>
+      >
+        <template slot="footer">
+          <div>
+            <el-button
+              v-if="$attrs.pageinfo.data.pageType === 'create'"
+              :size="formConfig.formSize"
+              @click.stop="handleCancle"
+            >取消</el-button>
+            <el-button
+              v-if="formHandle.create && $attrs.pageinfo.data.pageType === 'create' && filterPermission('sys:menu:save')"
+              type="primary"
+              :size="formConfig.formSize"
+              @click.stop="handleSubmit"
+            >提交</el-button>
+            <el-button
+              v-if="formHandle.edit && $attrs.pageinfo.data.pageType === 'edit' && filterPermission('sys:menu:update')"
+              type="primary"
+              :size="formConfig.formSize"
+              @click.stop="handleSubmit"
+            >编辑</el-button>
+          </div>
+        </template>
+      </yunlin-form>
     </el-col>
   </el-row>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import formMixin from '@/mixins/form-mixin'
-import { getMenuList } from '@/api/sys/menu'
+import { getMenuList, createMenu, editMenu, getMenuById } from '@/api/sys/menu'
 import { getIconList, getResourceSelector } from '@/utils'
+import { validateEmpty } from '@/utils/validator'
+
 export default {
   name: 'Form',
   components: {},
@@ -33,25 +66,52 @@ export default {
         edit: '修改',
         detail: '详情'
       },
+      formHandle: {
+        // 创建抽象方法，用创建接口方法覆盖
+        create: {
+          api: createMenu
+        },
+        // 修改抽象方法，用修改接口方法覆盖
+        edit: {
+          api: editMenu
+        },
+        // 详情抽象方法，用详情接口方法覆盖
+        detail: {
+          api: getMenuById
+        }
+      },
       // 初始化数据定义
       formDefaultData: {
         type: 0,
-        sort: 0
-      }
+        sort: 0,
+        pid: 0
+      },
+      // 用于处理表单的隐藏与显示禁用行为
+      formAction: [
+        {
+          prop: 'type',
+          exclude: [
+            { value: 0, props: ['permissions'] },
+            { value: 1, props: ['url', 'icon'] }
+          ]
+        }
+      ]
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters('app', ['filterPermission'])
+  },
+  activated() {
+    console.log('form activated')
+  },
   created() {
     console.log(this.$attrs.pageinfo)
     console.log('form created')
 
-    // 初始化数据
-    this.initFormData()
-
     // 设置整体表单栅格列数
     this.formConfig.formSpan = 12
-    // 设置表格内容
-    this.formConfig.formItems = [
+    // 设置表单内容
+    this.formConfig.formItemsReadOnly = [
       {
         // 类型
         span: 24,
@@ -74,22 +134,22 @@ export default {
       {
         // 上级菜单
         span: 24,
-        prop: 'parentName',
+        prop: 'pid',
         name: 'menu.parentName',
         type: 'popover-tree',
         rules: [{ required: true }],
         component: 'toolPopoverTree',
         componentConfig: {
-          useApi: getMenuList,
-          useParams: { type: 0 },
-          nameDefault: 'menu.parentNameDefault',
-          nameInit: 'parentName',
-          nameChange: 'name',
+          request: getMenuList,
+          requestParams: { type: 0 },
+          i18nDefault: 'menu.parentNameDefault',
+          propName: 'parentName',
+          sourceName: 'name',
           treeProps: { label: 'name', children: 'children' },
           treeNodeKey: 'id',
           mergeData: [
-            { from: 'name', to: 'parentName' },
-            { from: 'id', to: 'pid' }
+            { source: 'name', target: 'parentName', defalut: '' },
+            { source: 'id', target: 'pid', defalut: 0 }
           ]
         }
       },
@@ -119,13 +179,15 @@ export default {
         type: 'popover-icon',
         component: 'toolPopoverIcon',
         componentConfig: {
-          useApi: getIconList,
-          useParams: {},
-          nameDefault: 'menu.icon',
-          nameInit: 'icon',
-          nameChange: 'name',
-          mergeData: [{ from: 'name', to: 'icon' }],
-          listKey: 'name'
+          request: args => {
+            return Promise.resolve(getIconList(args))
+          },
+          requestParams: {},
+          i18nName: 'menu.icon',
+          propName: 'icon',
+          sourceName: 'name',
+          mergeData: [{ source: 'name', target: 'icon' }],
+          compareKey: 'name'
         }
       },
       // 授权标识
@@ -142,22 +204,30 @@ export default {
         prop: 'resourceList',
         name: 'menu.resource',
         type: 'resource-selector',
-        rules: [{ required: true }],
+        rules: [{ required: true }, { validator: validateEmpty, trigger: 'blur' }],
+        ruleConfig: {
+          nodata: false
+        },
         component: 'toolResourceSelector',
         componentConfig: {
-          useApi: getResourceSelector,
-          useParams: {},
-          nameInit: 'resourceList',
+          request: args => {
+            return Promise.resolve(getResourceSelector(args))
+          },
+          requestParams: {},
+          propName: 'resourceList',
           defaultItem: {
             resourceMethod: 'GET',
             resourceUrl: ''
           },
-          mergeData: { to: 'resourceList' }
+          mergeData: { target: 'resourceList' }
         }
       }
     ]
 
-    this.generateRules(this.formConfig.formItems)
+    // 初始化数据
+    this.initFormData()
+    // 根据当前行为生成校验规则等
+    this.generateForm()
   },
   methods: {}
 }

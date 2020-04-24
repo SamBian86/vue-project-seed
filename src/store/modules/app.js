@@ -39,7 +39,7 @@ export default {
       state.permissionTag = permissionTag
     },
     cleantPermissionStore(state) {
-      state.permissionStore = Array.from(state.emptyList).concat()
+      state.permissionStore = Array.from(state.emptyList)
       state.permissionTag = false
     },
     logout(state) {

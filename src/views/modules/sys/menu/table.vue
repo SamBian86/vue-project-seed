@@ -1,26 +1,47 @@
 <template>
   <div>
-    <yunlin-table ref="yunlinTable" :config="tableConfig" :handle="tableHandle" v-bind="$attrs" v-on="$listeners">
+    <yunlin-table
+      ref="yunlinTable"
+      :config="tableConfig"
+      :handle="tableHandle"
+      v-bind="$attrs"
+      v-on="$listeners"
+    >
       <!-- 查询区域 -->
       <template slot="search">
         <el-form :inline="true" :model="tableConfig.searchParams" @keyup.enter.native="tableSearch">
           <el-form-item>
-            <el-button v-if="filterPermission('sys:menu:save')" type="primary" size="small" @click="handleCreate()">
-              {{ $t('add') }}
-            </el-button>
+            <el-button
+              v-if="filterPermission('sys:menu:save')"
+              type="primary"
+              size="small"
+              @click="handleCreate()"
+            >{{ $t('add') }}</el-button>
           </el-form-item>
         </el-form>
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="100">
+        <el-table-column
+          :label="$t('handle')"
+          align="center"
+          header-align="center"
+          fixed="right"
+          width="100"
+        >
           <template slot-scope="scope">
-            <el-button v-if="filterPermission('sys:menu:update')" type="text" size="small" @click="handleEdit(scope.row)">
-              {{ $t('update') }}
-            </el-button>
-            <el-button v-if="filterPermission('sys:menu:delete')" type="text" size="small" @click="handleDelete(scope.row)">
-              {{ $t('delete') }}
-            </el-button>
+            <el-button
+              v-if="filterPermission('sys:menu:update')"
+              type="text"
+              size="small"
+              @click="handleEdit(scope.row)"
+            >{{ $t('update') }}</el-button>
+            <el-button
+              v-if="filterPermission('sys:menu:delete')"
+              type="text"
+              size="small"
+              @click="handleDelete(scope.row)"
+            >{{ $t('delete') }}</el-button>
           </template>
         </el-table-column>
       </template>
@@ -90,9 +111,6 @@ export default {
     this.tableHandle.delete = deleteMenu
     console.log('table page created')
   },
-  methods: {
-    addOrUpdateHandle() {},
-    deleteHandle() {}
-  }
+  methods: {}
 }
 </script>

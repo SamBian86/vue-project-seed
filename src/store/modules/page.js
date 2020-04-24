@@ -12,9 +12,7 @@ export default {
   },
   mutations: {
     setDynamicRoutes: (state, menus) => {
-      const dynamicRoutes = getMenuStore()
-        ? generateDynamicRoutes(getMenuStore())
-        : generateDynamicRoutes(menus)
+      const dynamicRoutes = getMenuStore() ? generateDynamicRoutes(getMenuStore()) : generateDynamicRoutes(menus)
       // 如果localStorage中有菜单数据说明触发了刷新功能，需要动态添加路由
       // 如果localStorage中没有菜单数据说明是登录成功以后第一次初始化动态路由
       addRoutes(dynamicRoutes)
@@ -25,7 +23,7 @@ export default {
       console.log('修改路由初始化状态成功')
     },
     cleanDynamicRoutes(state) {
-      state.dynamicRoutes = Array.from(state.emptyList).concat()
+      state.dynamicRoutes = Array.from(state.emptyList)
       state.dynamicRoutesFinish = false
     }
   },

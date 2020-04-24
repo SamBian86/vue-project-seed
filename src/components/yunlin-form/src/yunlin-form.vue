@@ -7,7 +7,7 @@
       :label-width="$attrs.config.labelWidth"
       :size="$attrs.config.formSize"
       :label-position="$attrs.config.labelPosition"
-      @keyup.enter.native="submitHandle()"
+      @keyup.enter.native="handleSubmit()"
     >
       <el-row :gutter="10">
         <el-col
@@ -22,14 +22,23 @@
           <el-form-item v-if="item.prop" :prop="item.prop" :label="$t(item.name)">
             <!-- radio-group -->
             <template v-if="item.type === 'radio-group'">
-              <el-radio-group v-model="$attrs.data[item.prop]" :disabled="item.disabled">
-                <el-radio v-for="(ite, idx) in item.items" :key="idx" :label="ite.label">{{ $t(ite.name) }}</el-radio>
+              <el-radio-group
+                v-model="$attrs.data[item.prop]"
+                :disabled="item.disabled"
+                @change="handleFormItem(item.prop, $event)"
+              >
+                <el-radio
+                  v-for="(ite, idx) in item.items"
+                  :key="idx"
+                  :label="ite.label"
+                >{{ $t(ite.name) }}</el-radio>
               </el-radio-group>
             </template>
             <!-- input -->
             <template v-if="item.type === 'text'">
               <el-input
                 v-model="$attrs.data[item.prop]"
+                :disabled="item.disabled"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
                 clearable
               ></el-input>
@@ -47,6 +56,7 @@
             <template v-if="item.type === 'input-number'">
               <el-input-number
                 v-model="$attrs.data[item.prop]"
+                :disabled="item.disabled"
                 :controls-position="item.attrs.controlsPosition"
                 :min="item.attrs.min"
                 :max="item.attrs.max"
@@ -54,6 +64,13 @@
                 :placeholder="`请输入${$t(item.name)}`"
               ></el-input-number>
             </template>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col>
+          <el-form-item>
+            <slot name="footer" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -74,13 +91,28 @@ export default {
   computed: {
     // 从父组件的form-mixin的formHandle中获取方法
     createBridge() {
-      return this.$attrs.handle.create || null
+      return (
+        this.$attrs.handle.create.api ||
+        (() => {
+          return Promise.reject('请覆盖创建方法')
+        })
+      )
     },
     editBridge() {
-      return this.$attrs.handle.edit || null
+      return (
+        this.$attrs.handle.edit.api ||
+        (() => {
+          return Promise.reject('请覆盖编辑方法')
+        })
+      )
     },
     detailBridge() {
-      return this.$attrs.handle.detail || null
+      return (
+        this.$attrs.handle.detail.api ||
+        (() => {
+          return Promise.reject('请覆盖详情方法')
+        })
+      )
     }
   },
   watch: {},
@@ -96,21 +128,57 @@ export default {
   destroyed() {},
   errorCaptured() {},
   methods: {
+    formMethordHandle() {
+      return Promise.reject('请检查接口配置')
+    },
     // 表单校验
-    submitHandle() {
+    handleSubmit() {
       const { formName } = this.$attrs.config
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$refs[formName].formSubmitHandle()
+          this.formSubmitHandle()
         } else {
-          console.log('校验未通过')
           return false
         }
       })
     },
+    // 取消按钮
+    handleCancle() {
+      this.$emit('page-change', 'table')
+    },
     // 表单提交
     formSubmitHandle() {
-      console.log(this.$attrs.data)
+      const { pageType } = this.$attrs.data
+      switch (pageType) {
+        case 'create':
+          this.formMethordHandle = this.createBridge
+          break
+        case 'edit':
+          this.formMethordHandle = this.editBridge
+          break
+        default:
+          if (this.$attrs.handle[pageType] && this.$attrs.handle[pageType]['api']) {
+            this.formMethordHandle = this.$attrs.handle[pageType]['api']
+          }
+          break
+      }
+      const fn = this.$attrs.handle[pageType]['fn'] || null
+      this.formMethordHandle({ ...this.$attrs.data }).then(response => {
+        if (fn) {
+          fn()
+        } else {
+          this.$emit('page-change', 'table')
+        }
+      })
+    },
+    // 清除校验信息
+    clearValidate() {
+      const { formName } = this.$attrs.config
+      this.$refs[formName].clearValidate()
+    },
+    // 表单元素处理,控制隐藏显示
+    handleFormItem(prop) {
+      this.$emit('check-action', prop)
     }
   }
 }

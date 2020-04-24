@@ -3,7 +3,13 @@
     <!-- 查询区域插槽 -->
     <slot name="search" />
 
-    <el-table v-loading="loading" :data="tableData" :row-key="$attrs.config.rowKey" border style="width: 100%;">
+    <el-table
+      v-loading="loading"
+      :data="tableData"
+      :row-key="$attrs.config.rowKey"
+      border
+      style="width: 100%;"
+    >
       <el-table-column
         v-for="item in $attrs.config.tableHead"
         :key="item.id"
@@ -26,7 +32,10 @@
             :config="item.componentConfig"
             :column-data="{ ...scope.row }"
           ></component>
-          <span v-else v-html="item.preHandle ? item.preHandle(scope.row[item.prop], scope.row) : scope.row[item.prop]"></span>
+          <span
+            v-else
+            v-html="item.preHandle ? item.preHandle(scope.row[item.prop], scope.row) : scope.row[item.prop]"
+          ></span>
         </template>
       </el-table-column>
 
@@ -63,10 +72,20 @@ export default {
   computed: {
     // 从父组件的table-mixin的tableHandle中获取方法
     getListBridge() {
-      return this.$attrs.handle.getList || null
+      return (
+        this.$attrs.handle.getList ||
+        (() => {
+          return Promise.reject('请覆盖获取列表方法')
+        })
+      )
     },
     deleteBridge() {
-      return this.$attrs.handle.delete || null
+      return (
+        this.$attrs.handle.delete ||
+        (() => {
+          return Promise.reject('请覆盖删除方法')
+        })
+      )
     }
   },
   watch: {},
@@ -110,19 +129,15 @@ export default {
       })
 
       // 检查是否覆盖获取列表方法
-      if (!this.getListBridge) {
-        Promise.reject('请覆盖获取列表方法')
-      } else {
-        this.getListBridge({ ..._pagination, ..._searchParams })
-          .then(response => {
-            this.$set(this, 'tableData', response)
-            this.$set(this, 'loading', false)
-            this.$set(this, 'reload', false) // 用于控制在activated钩子上是否获取数据
-          })
-          .catch(message => {
-            console.log(message)
-          })
-      }
+      this.getListBridge({ ..._pagination, ..._searchParams })
+        .then(response => {
+          this.$set(this, 'tableData', response)
+          this.$set(this, 'loading', false)
+          this.$set(this, 'reload', false) // 用于控制在activated钩子上是否获取数据
+        })
+        .catch(message => {
+          console.log(message)
+        })
     },
     // 触发查询
     handleSearch() {
@@ -131,6 +146,20 @@ export default {
     // 重置查询条件
     handleSearchReset() {
       this.getListHandler()
+    },
+    // 触发删除
+    handleDelete(item) {
+      this.$confirm('确认删除？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.deleteBridge(item).then(response => {
+            this.handleSearch()
+          })
+        })
+        .catch(() => {})
     }
   }
 }
