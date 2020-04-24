@@ -24,7 +24,7 @@
         <template slot="footer">
           <div>
             <el-button
-              v-if="$attrs.pageinfo.data.pageType === 'create'"
+              v-if="$attrs.pageinfo.data.pageType === 'create' || $attrs.pageinfo.data.pageType === 'edit'"
               :size="formConfig.formSize"
               @click.stop="handleCancle"
             >取消</el-button>
@@ -103,132 +103,136 @@ export default {
   },
   activated() {
     console.log('form activated')
+    this.init()
   },
   created() {
     console.log(this.$attrs.pageinfo)
     console.log('form created')
-
-    // 设置整体表单栅格列数
-    this.formConfig.formSpan = 12
-    // 设置表单内容
-    this.formConfig.formItemsReadOnly = [
-      {
-        // 类型
-        span: 24,
-        prop: 'type',
-        name: 'menu.type',
-        type: 'radio-group',
-        items: [
-          { label: 0, name: 'menu.type0' },
-          { label: 1, name: 'menu.type1' }
-        ]
-      },
-      {
-        // 名称
-        span: 24,
-        prop: 'name',
-        name: 'menu.name',
-        type: 'text',
-        rules: [{ required: true }]
-      },
-      {
-        // 上级菜单
-        span: 24,
-        prop: 'pid',
-        name: 'menu.parentName',
-        type: 'popover-tree',
-        rules: [{ required: true }],
-        component: 'toolPopoverTree',
-        componentConfig: {
-          request: getMenuList,
-          requestParams: { type: 0 },
-          i18nDefault: 'menu.parentNameDefault',
-          propName: 'parentName',
-          sourceName: 'name',
-          treeProps: { label: 'name', children: 'children' },
-          treeNodeKey: 'id',
-          mergeData: [
-            { source: 'name', target: 'parentName', defalut: '' },
-            { source: 'id', target: 'pid', defalut: 0 }
-          ]
-        }
-      },
-      {
-        // 路由
-        span: 24,
-        prop: 'url',
-        name: 'menu.url',
-        type: 'text'
-      },
-      {
-        // 排序
-        span: 24,
-        prop: 'sort',
-        name: 'menu.sort',
-        type: 'input-number',
-        attrs: {
-          controlsPosition: 'right',
-          min: 0
-        }
-      },
-      {
-        // 图标
-        span: 24,
-        prop: 'icon',
-        name: 'menu.icon',
-        type: 'popover-icon',
-        component: 'toolPopoverIcon',
-        componentConfig: {
-          request: args => {
-            return Promise.resolve(getIconList(args))
-          },
-          requestParams: {},
-          i18nName: 'menu.icon',
-          propName: 'icon',
-          sourceName: 'name',
-          mergeData: [{ source: 'name', target: 'icon' }],
-          compareKey: 'name'
-        }
-      },
-      // 授权标识
-      {
-        span: 24,
-        prop: 'permissions',
-        name: 'menu.permissions',
-        placeholder: 'menu.permissionsTips',
-        type: 'text'
-      },
-      // 授权资源
-      {
-        span: 24,
-        prop: 'resourceList',
-        name: 'menu.resource',
-        type: 'resource-selector',
-        rules: [{ required: true }, { validator: validateEmpty, trigger: 'blur' }],
-        ruleConfig: {
-          nodata: false
-        },
-        component: 'toolResourceSelector',
-        componentConfig: {
-          request: args => {
-            return Promise.resolve(getResourceSelector(args))
-          },
-          requestParams: {},
-          propName: 'resourceList',
-          defaultItem: {
-            resourceMethod: 'GET',
-            resourceUrl: ''
-          },
-          mergeData: { target: 'resourceList' }
-        }
-      }
-    ]
-
-    // 初始化数据
-    this.initFormData()
-    // 根据当前行为生成校验规则等
-    this.generateForm()
+    this.init()
   },
-  methods: {}
+  methods: {
+    init() {
+      // 设置整体表单栅格列数
+      this.formConfig.formSpan = 12
+      // 设置表单内容
+      this.formConfig.formItemsReadOnly = [
+        {
+          // 类型
+          span: 24,
+          prop: 'type',
+          name: 'menu.type',
+          type: 'radio-group',
+          items: [
+            { label: 0, name: 'menu.type0' },
+            { label: 1, name: 'menu.type1' }
+          ]
+        },
+        {
+          // 名称
+          span: 24,
+          prop: 'name',
+          name: 'menu.name',
+          type: 'text',
+          rules: [{ required: true }]
+        },
+        {
+          // 上级菜单
+          span: 24,
+          prop: 'pid',
+          name: 'menu.parentName',
+          type: 'popover-tree',
+          rules: [{ required: true }],
+          component: 'toolPopoverTree',
+          componentConfig: {
+            request: getMenuList,
+            requestParams: { type: 0 },
+            i18nDefault: 'menu.parentNameDefault',
+            propName: 'parentName',
+            sourceName: 'name',
+            treeProps: { label: 'name', children: 'children' },
+            treeNodeKey: 'id',
+            mergeData: [
+              { source: 'name', target: 'parentName', defalut: '' },
+              { source: 'id', target: 'pid', defalut: 0 }
+            ]
+          }
+        },
+        {
+          // 路由
+          span: 24,
+          prop: 'url',
+          name: 'menu.url',
+          type: 'text'
+        },
+        {
+          // 排序
+          span: 24,
+          prop: 'sort',
+          name: 'menu.sort',
+          type: 'input-number',
+          attrs: {
+            controlsPosition: 'right',
+            min: 0
+          }
+        },
+        {
+          // 图标
+          span: 24,
+          prop: 'icon',
+          name: 'menu.icon',
+          type: 'popover-icon',
+          component: 'toolPopoverIcon',
+          componentConfig: {
+            request: args => {
+              return Promise.resolve(getIconList(args))
+            },
+            requestParams: {},
+            i18nName: 'menu.icon',
+            propName: 'icon',
+            sourceName: 'name',
+            mergeData: [{ source: 'name', target: 'icon' }],
+            compareKey: 'name'
+          }
+        },
+        // 授权标识
+        {
+          span: 24,
+          prop: 'permissions',
+          name: 'menu.permissions',
+          placeholder: 'menu.permissionsTips',
+          type: 'text'
+        },
+        // 授权资源
+        {
+          span: 24,
+          prop: 'resourceList',
+          name: 'menu.resource',
+          type: 'resource-selector',
+          rules: [{ required: true }, { validator: validateEmpty, trigger: 'blur' }],
+          ruleConfig: {
+            nodata: false
+          },
+          component: 'toolResourceSelector',
+          componentConfig: {
+            request: args => {
+              return Promise.resolve(getResourceSelector(args))
+            },
+            requestParams: {},
+            propName: 'resourceList',
+            defaultItem: {
+              resourceMethod: 'GET',
+              resourceUrl: ''
+            },
+            mergeData: { target: 'resourceList' }
+          }
+        }
+      ]
+
+      // 初始化数据
+      this.initFormData()
+      // 根据当前行为生成校验规则等
+      this.generateForm()
+    }
+  }
 }
 </script>
