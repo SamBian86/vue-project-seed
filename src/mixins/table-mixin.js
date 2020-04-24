@@ -23,6 +23,7 @@ export default {
     console.log('table mixin created')
   },
   activated() {
+    // 需要在此进行刷新，并且修改pageUpdateList
     console.log('table mixin activated')
   },
   methods: {

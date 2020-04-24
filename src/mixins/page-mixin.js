@@ -33,6 +33,12 @@ export default {
         Promise.reject(`请检查是否有${name}组件`)
       }
     },
+    pageUpdate(name) {
+      const { pageUpdateList } = this
+      pageUpdateList.push(name)
+      this.pageUpdateList = pageUpdateList
+      console.log('接下来以下列表会更新' + pageUpdateList)
+    },
     // 生成include
     generateInclude() {
       const { pageComponents } = this

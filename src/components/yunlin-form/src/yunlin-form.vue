@@ -168,6 +168,7 @@ export default {
           fn()
         } else {
           this.$emit('page-change', 'table')
+          this.$emit('page-update', 'table')
         }
       })
     },

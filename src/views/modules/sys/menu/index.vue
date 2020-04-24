@@ -5,8 +5,10 @@
         <component
           :is="pageInfo.component"
           :pageinfo="pageInfo"
+          :pageupdate="pageUpdateList"
           v-bind="$attrs"
           @page-change="pageChange"
+          @page-update="pageUpdate"
           v-on="$listeners"
         ></component>
       </keep-alive>
@@ -33,7 +35,8 @@ export default {
           component: pageForm
         }
       ],
-      pageInfo: {}
+      pageInfo: {},
+      pageUpdateList: []
     }
   },
   computed: {},
