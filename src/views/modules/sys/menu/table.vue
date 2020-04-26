@@ -64,6 +64,9 @@ export default {
     // 用于判断是否有权限的方法
     ...mapGetters('app', ['filterPermission'])
   },
+  activated() {
+    // console.log('table activated')
+  },
   created() {
     // 是否显示树形数据
     this.tableConfig.rowKey = 'id'
@@ -109,8 +112,16 @@ export default {
     this.tableHandle.getList = getMenuList
     // 配置删除功能
     this.tableHandle.delete = deleteMenu
-    console.log('table page created')
+    // console.log('table page created')
   },
-  methods: {}
+  methods: {
+    handleCreate(options = { pageUpdateNames: ['table', 'popover-tree'] }) {
+      this.handleAny('form', { pageType: 'create', ...options })
+    },
+    // 编辑
+    handleEdit(item, options = { pageUpdateNames: ['table', 'popover-tree'] }) {
+      this.handleAny('form', { ...item, pageType: 'edit', ...options })
+    }
+  }
 }
 </script>

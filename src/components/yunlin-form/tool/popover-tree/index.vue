@@ -24,9 +24,10 @@
 
 <script>
 import commonMixin from '@/mixins/common-mixin'
+import pageMixin from '@/mixins/page-mixin'
 export default {
   name: 'ToolPopoverTree',
-  mixins: [commonMixin],
+  mixins: [commonMixin, pageMixin],
   props: {
     config: {
       type: Object,
@@ -43,7 +44,8 @@ export default {
             // 点击el-tree节点数据传递 source 被选中节点数据中用于取数据的键 target传递给父组件用于覆盖表单数据对应的键名
             // { source: 'name', target: 'parentName' },
             // { source: 'id', target: 'pid' }
-          ]
+          ],
+          updateCheck: []
         }
       }
     },
@@ -63,9 +65,16 @@ export default {
     }
   },
   activated() {
-    console.log('popover-tree activated')
+    // console.log('popover-tree activated')
+    const { updateCheck } = this.config
+    const { pageupdate } = this.$attrs
+    if (this.isInPageUpdateList(pageupdate, updateCheck)) {
+      this.init()
+      // console.log('重新获取popover-tree组件数据')
+    }
   },
   created() {
+    // console.log('popover-tree created')
     this.init()
   },
   methods: {

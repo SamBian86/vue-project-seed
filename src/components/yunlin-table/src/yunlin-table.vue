@@ -46,12 +46,12 @@
 </template>
 
 <script>
+import pageMixin from '@/mixins/page-mixin'
 import ToolComponents from '@/components/yunlin-table/tool'
 export default {
   name: 'YunlinTable',
-  components: {
-    // ToolDefalutComponent
-  },
+  components: {},
+  mixins: [pageMixin],
   props: {},
   data() {
     return {
@@ -91,7 +91,7 @@ export default {
   watch: {},
   breforeCreate() {},
   created() {
-    console.log('table component created')
+    // console.log('table component created')
   },
   beforeMount() {},
   mounted() {},
@@ -99,10 +99,18 @@ export default {
   updated() {},
   activated() {
     const { reload } = this
+    const { updateCheck } = this.$attrs.config
+    const { pageupdate } = this.$attrs
     if (reload) {
       this.getListHandler()
     }
-    console.log('table component activated')
+
+    // 检查是否需要重新获取数据
+    if (this.isInPageUpdateList(pageupdate, updateCheck)) {
+      this.getListHandler()
+      console.log('重新获取列表数据')
+    }
+    // console.log('table component activated')
   },
   deactivated() {},
   beforeDestroy() {},

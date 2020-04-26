@@ -1,6 +1,7 @@
 import commonMixin from '@/mixins/common-mixin'
+import pageMixin from '@/mixins/page-mixin'
 export default {
-  mixins: [commonMixin],
+  mixins: [commonMixin, pageMixin],
   data() {
     return {
       formConfig: {
@@ -10,7 +11,8 @@ export default {
         formSize: 'small', // 控件尺寸
         formSpan: 12, // 整体表单栅格占据列数 默认12列
         labelPosition: '',
-        labelWidth: '120px' // 标签宽度
+        labelWidth: '120px', // 标签宽度
+        updateCheck: ['form'] // 用于检查pageMixin中pageUpdateList是否存在updateCheck中存在的项，如果存在需要重新获取数据
       },
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
@@ -32,10 +34,16 @@ export default {
   },
   computed: {},
   created() {
-    console.log('form mixin created')
+    // console.log('form mixin created')
   },
   activated() {
-    console.log('form mixin activated')
+    const { updateCheck } = this.formConfig
+    const { pageupdate } = this.$attrs
+    // 重新获取数据以后需要管理pagemixin中的pageUpdateList
+    if (this.isInPageUpdateList(pageupdate, updateCheck)) {
+      this.$emit('page-queue-delete', updateCheck)
+    }
+    // console.log('form mixin activated')
   },
   methods: {
     // 工具方法清单

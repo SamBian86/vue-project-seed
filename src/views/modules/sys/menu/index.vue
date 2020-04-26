@@ -8,7 +8,8 @@
           :pageupdate="pageUpdateList"
           v-bind="$attrs"
           @page-change="pageChange"
-          @page-update="pageUpdate"
+          @page-queue-update="pageUpdateQueue"
+          @page-queue-delete="pageDeleteQueue"
           v-on="$listeners"
         ></component>
       </keep-alive>

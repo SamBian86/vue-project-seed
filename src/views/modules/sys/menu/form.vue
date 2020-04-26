@@ -53,7 +53,6 @@ import formMixin from '@/mixins/form-mixin'
 import { getMenuList, createMenu, editMenu, getMenuById } from '@/api/sys/menu'
 import { getIconList, getResourceSelector } from '@/utils'
 import { validateEmpty } from '@/utils/validator'
-
 export default {
   name: 'Form',
   components: {},
@@ -102,12 +101,11 @@ export default {
     ...mapGetters('app', ['filterPermission'])
   },
   activated() {
-    console.log('form activated')
-    this.init()
+    // console.log('form activated')
   },
   created() {
     console.log(this.$attrs.pageinfo)
-    console.log('form created')
+    // console.log('form created')
     this.init()
   },
   methods: {
@@ -154,7 +152,8 @@ export default {
             mergeData: [
               { source: 'name', target: 'parentName', defalut: '' },
               { source: 'id', target: 'pid', defalut: 0 }
-            ]
+            ],
+            updateCheck: ['popover-tree']
           }
         },
         {

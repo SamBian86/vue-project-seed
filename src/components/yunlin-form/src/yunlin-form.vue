@@ -49,6 +49,7 @@
                 :is="ToolComponents[item.component]"
                 :config="item.componentConfig"
                 :page-data="{ ...$attrs.data }"
+                v-bind="$attrs"
                 v-on="$listeners"
               ></component>
             </template>
@@ -79,9 +80,12 @@
 </template>
 
 <script>
+import pageMixin from '@/mixins/page-mixin'
 import ToolComponents from '@/components/yunlin-form/tool'
 export default {
   name: 'YunlinForm',
+  components: {},
+  mixins: [pageMixin],
   props: {},
   data() {
     return {
@@ -122,7 +126,14 @@ export default {
   mounted() {},
   beforeUpdate() {},
   updated() {},
-  activated() {},
+  activated() {
+    const { updateCheck } = this.$attrs.config
+    const { pageupdate } = this.$attrs
+    // 检查是否需要重新获取数据
+    if (this.isInPageUpdateList(pageupdate, updateCheck)) {
+      console.log('重新获取数据')
+    }
+  },
   deactivated() {},
   beforeDestroy() {},
   destroyed() {},
@@ -167,8 +178,9 @@ export default {
         if (fn) {
           fn()
         } else {
+          console.log(this.$attrs.data.pageUpdateNames)
+          this.$emit('page-queue-update', this.$attrs.data.pageUpdateNames)
           this.$emit('page-change', 'table')
-          this.$emit('page-update', 'table')
         }
       })
     },
