@@ -20,6 +20,15 @@
           :xs="24"
         >
           <el-form-item v-if="item.prop" :prop="item.prop" :label="$t(item.name)">
+            <!-- input -->
+            <template v-if="item.type === 'text'">
+              <el-input
+                v-model="$attrs.data[item.prop]"
+                :disabled="item.disabled"
+                :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
+                clearable
+              ></el-input>
+            </template>
             <!-- radio-group -->
             <template v-if="item.type === 'radio-group'">
               <el-radio-group
@@ -34,26 +43,7 @@
                 >{{ $t(ite.name) }}</el-radio>
               </el-radio-group>
             </template>
-            <!-- input -->
-            <template v-if="item.type === 'text'">
-              <el-input
-                v-model="$attrs.data[item.prop]"
-                :disabled="item.disabled"
-                :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
-                clearable
-              ></el-input>
-            </template>
-            <!-- popover-tree -->
-            <template v-if="item.component">
-              <component
-                :is="ToolComponents[item.component]"
-                :config="item.componentConfig"
-                :page-data="{ ...$attrs.data }"
-                v-bind="$attrs"
-                v-on="$listeners"
-              ></component>
-            </template>
-            <!-- input -->
+            <!-- input-number -->
             <template v-if="item.type === 'input-number'">
               <el-input-number
                 v-model="$attrs.data[item.prop]"
@@ -64,6 +54,17 @@
                 :step="item.attrs.step"
                 :placeholder="`请输入${$t(item.name)}`"
               ></el-input-number>
+            </template>
+            <!-- 自定义组件 popover-tree popover-icon -->
+            <template v-if="item.component">
+              <component
+                :is="ToolComponents[item.component]"
+                :disabled="item.disabled"
+                :config="item.componentConfig"
+                :page-data="{ ...$attrs.data }"
+                v-bind="$attrs"
+                v-on="$listeners"
+              ></component>
             </template>
           </el-form-item>
         </el-col>
@@ -182,6 +183,12 @@ export default {
           this.$emit('page-queue-update', this.$attrs.data.pageUpdateNames)
           this.$emit('page-change', 'table')
         }
+      })
+    },
+    // 更新数据
+    updateFormData(formData) {
+      this.detailBridge({ ...formData }).then(response => {
+        this.$emit('update-form-data', response)
       })
     },
     // 清除校验信息

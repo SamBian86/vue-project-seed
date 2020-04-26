@@ -8,7 +8,7 @@
       :sm="24"
       :xs="24"
     >
-      <div class="form-title">{{ formTitle[$attrs.pageinfo.data.pageType] }}</div>
+      <div class="form-title">{{ formGenerateTitle[$attrs.pageinfo.data.pageType] }}</div>
       <yunlin-form
         ref="yunlinForm"
         :config="formConfig"
@@ -19,27 +19,28 @@
         @merge-data="mergeDataHandle"
         @generate-rule-by-prop="generateRuleByProp"
         @check-action="checkAction"
+        @update-form-data="updateFormData"
         v-on="$listeners"
       >
         <template slot="footer">
-          <div>
+          <div class="form-submit-container">
             <el-button
-              v-if="$attrs.pageinfo.data.pageType === 'create' || $attrs.pageinfo.data.pageType === 'edit'"
+              v-if="checkPageType(['create', 'edit', 'detail'])"
               :size="formConfig.formSize"
               @click.stop="handleCancle"
-            >取消</el-button>
+            >返回</el-button>
             <el-button
-              v-if="formHandle.create && $attrs.pageinfo.data.pageType === 'create' && filterPermission('sys:menu:save')"
+              v-if="formHandle.create && checkPageType(['create']) && filterPermission('sys:menu:save')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="handleSubmit"
-            >提交</el-button>
+            >新增</el-button>
             <el-button
-              v-if="formHandle.edit && $attrs.pageinfo.data.pageType === 'edit' && filterPermission('sys:menu:update')"
+              v-if="formHandle.edit && checkPageType(['edit']) && filterPermission('sys:menu:update')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="handleSubmit"
-            >编辑</el-button>
+            >修改</el-button>
           </div>
         </template>
       </yunlin-form>
@@ -65,6 +66,7 @@ export default {
         edit: '修改',
         detail: '详情'
       },
+      formGenerateTitle: {},
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
@@ -83,7 +85,9 @@ export default {
       formDefaultData: {
         type: 0,
         sort: 0,
-        pid: 0
+        pid: 0,
+        resourceList: [],
+        parentName: '一级菜单'
       },
       // 用于处理表单的隐藏与显示禁用行为
       formAction: [
@@ -92,7 +96,8 @@ export default {
           exclude: [
             { value: 0, props: ['permissions'] },
             { value: 1, props: ['url', 'icon'] }
-          ]
+          ],
+          disabledPageType: ['edit']
         }
       ]
     }
@@ -101,14 +106,18 @@ export default {
     ...mapGetters('app', ['filterPermission'])
   },
   activated() {
-    // console.log('form activated')
-  },
-  created() {
-    console.log(this.$attrs.pageinfo)
-    // console.log('form created')
+    console.log('form activated')
     this.init()
   },
+  created() {
+    // console.log(this.$attrs.pageinfo)
+    // console.log('form created')
+  },
   methods: {
+    generateTitle() {
+      const { formTitle } = this
+      this.formGenerateTitle = formTitle
+    },
     init() {
       // 设置整体表单栅格列数
       this.formConfig.formSpan = 12
@@ -231,6 +240,8 @@ export default {
       this.initFormData()
       // 根据当前行为生成校验规则等
       this.generateForm()
+      // 生成标题
+      this.generateTitle()
     }
   }
 }

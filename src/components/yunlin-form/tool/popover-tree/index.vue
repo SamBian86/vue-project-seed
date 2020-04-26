@@ -4,7 +4,9 @@
       type="text"
       :placeholder="$t(config.i18nDefault)"
       :value="pageData[config.propName]"
+      :disabled="disabled"
       clearable
+      readonly
       @focus="togglePopoverShow"
       @clear="clearHandle"
     ></el-input>
@@ -55,6 +57,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

@@ -5,7 +5,6 @@ export default {
     const permissionStore = store.getters && store.getters.app_permissionStore
 
     if (value && value.length > 0) {
-      debugger
       const permissionBtns = value
       const hasPermission = permissionStore.some(btn => {
         return permissionBtns.includes(btn)

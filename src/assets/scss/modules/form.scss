@@ -2,3 +2,11 @@
   padding: 0px 10px 10px 0px;
   font-size: 18px;
 }
+
+.form-submit-container {
+  text-align: right;
+}
+
+.form-submit-container button:last-child {
+  margin-right: 0px;
+}

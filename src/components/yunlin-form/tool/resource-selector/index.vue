@@ -2,11 +2,22 @@
   <div>
     <el-row v-if="resources.length !== 0">
       <div v-for="(item, index) in resources" :key="index" class="resource-selector-item">
-        <el-col :span="22" :lg="22" :md="22" :sm="24" :xs="24">
-          <el-input v-model="item.resourceUrl" :placeholder="$t('menu.resourceUrl')">
+        <el-col
+          :span="disabled? 24 :22"
+          :lg="disabled? 24 :22"
+          :md="disabled? 24 :22"
+          :sm="24"
+          :xs="24"
+        >
+          <el-input
+            v-model="item.resourceUrl"
+            :disabled="disabled"
+            :placeholder="$t('menu.resourceUrl')"
+          >
             <el-select
               slot="prepend"
               v-model="item.resourceMethod"
+              :disabled="disabled"
               class="resource-selector"
               :placeholder="$t('menu.resourceMethod')"
             >
@@ -19,14 +30,26 @@
             </el-select>
           </el-input>
         </el-col>
-        <el-col :span="2" :lg="2" :md="2" :sm="24" :xs="24" class="resource-selector-button">
+        <el-col
+          v-if="!disabled"
+          :span="2"
+          :lg="2"
+          :md="2"
+          :sm="24"
+          :xs="24"
+          class="resource-selector-button"
+        >
           <el-button size="small" type="text" @click="deleteHandle(index)">{{ $t('delete') }}</el-button>
         </el-col>
       </div>
     </el-row>
     <el-row>
       <el-col :span="24">
-        <el-button style="width: 100%;" @click="addHandle()">{{ $t('menu.resourceAddItem') }}</el-button>
+        <el-button
+          style="width: 100%;"
+          :disabled="disabled"
+          @click="addHandle()"
+        >{{ $t('menu.resourceAddItem') }}</el-button>
       </el-col>
     </el-row>
   </div>
@@ -57,6 +80,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -65,33 +92,34 @@ export default {
       resources: []
     }
   },
-  created() {
-    this.resources = this.pageData[this.config.propName] || []
-
-    if (this.isPromise(this.config.request())) {
-      this.config
-        .request(this.config.requestParams)
-        .then(response => {
-          this.list = response
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    } else {
-      Promise.reject('请提供一个返回Promise对象的request方法')
+  watch: {
+    pageData() {
+      this.init()
+      // console.log('pageData change')
     }
   },
+  activated() {
+    // console.log('resource-selector activated')
+  },
+  created() {
+    // console.log('resource-selector created')
+  },
   methods: {
-    // 点击按钮
-    currentChoose(e) {
-      // const { mergeData, nameChange } = this.config
-      // const postData = {}
-      // mergeData.map(item => {
-      //   postData[item.target] = e[item.from]
-      // })
-      // this.name = e[nameChange] || '请检查键名'
-      // this.togglePopoverHide()
-      // this.$emit('merge-data', postData)
+    init() {
+      this.resources = this.pageData[this.config.propName] || []
+
+      if (this.isPromise(this.config.request())) {
+        this.config
+          .request(this.config.requestParams)
+          .then(response => {
+            this.list = response
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      } else {
+        Promise.reject('请提供一个返回Promise对象的request方法')
+      }
     },
     // 清除方法
     clearHandle() {

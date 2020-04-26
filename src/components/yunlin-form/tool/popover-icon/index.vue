@@ -4,6 +4,7 @@
       type="text"
       :placeholder="`请选择${$t(config.i18nName)}`"
       :value="pageData[config.propName]"
+      :disabled="disabled"
       clearable
       @focus="togglePopoverShow"
       @clear="clearHandle"
@@ -60,6 +61,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

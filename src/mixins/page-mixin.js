@@ -53,21 +53,24 @@ export default {
             }
           })
         })
+        console.log('接下来以下列表会更新' + pageUpdateList)
       }
-      // console.log('接下来以下列表会更新' + pageUpdateList)
       return hasTarget
     },
     // 重新获取数据以后，删除pageUpdateList中updateCheck的值
     pageDeleteQueue(updateCheck) {
       const { pageUpdateList } = this
-      updateCheck.map(item => {
-        const idx = pageUpdateList.findIndex(ite => item === ite)
-        if (idx !== -1) {
-          pageUpdateList.splice(idx, 1)
-        }
-      })
-      // console.log('更新以后的更新列表' + pageUpdateList)
-      this.pageUpdateList = pageUpdateList
+
+      if (pageUpdateList.length !== 0) {
+        updateCheck.map(item => {
+          const idx = pageUpdateList.findIndex(ite => item === ite)
+          if (idx !== -1) {
+            pageUpdateList.splice(idx, 1)
+          }
+        })
+        console.log('更新以后的更新列表' + pageUpdateList)
+        this.pageUpdateList = pageUpdateList
+      }
     },
     // 生成include
     generateInclude() {

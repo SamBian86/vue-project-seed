@@ -28,7 +28,8 @@ export default {
       formAction: [
         // 用于处理表单的隐藏与显示禁用行为
         // prop代表会影响表单展现的因子, exclude中代表该prop一旦符合某个value就排除现实props中对应的项目
-        // { prop: 'type', exclude: [{ value: 0, props: ['permissions'] }] }
+        // 默认在所有detail类型的页面所有控件都禁用,如果在创建编辑页面需要提供禁用需要配置disabledPageType,对需要禁用的pageType进行配置
+        // { prop: 'type', exclude: [{ value: 0, props: ['permissions'] }], disabledPageType: ['edit'] }
       ]
     }
   },
@@ -46,11 +47,32 @@ export default {
     // console.log('form mixin activated')
   },
   methods: {
-    // 工具方法清单
+    // 生成表单名称
+    generateTitle() {
+      const { formTitle } = this
+      const { name } = this.formData
+      const skip = ['create']
+      const formGenerateTitle = {}
+      Object.keys(formTitle).map(item => {
+        if (skip.indexOf(item) === -1) {
+          formGenerateTitle[item] = formTitle[item] + name
+        }
+      })
+      this.formGenerateTitle = formGenerateTitle
+    },
     // 初始化页面数据
     initFormData() {
-      this.formData = { ...this.$attrs.pageinfo.data, ...this.formDefaultData }
-      console.log('初始化页面数据')
+      const { pageType } = this.$attrs.pageinfo.data
+      const { formName } = this.formConfig
+
+      this.formData = { ...this.formDefaultData, ...this.$attrs.pageinfo.data }
+
+      if (pageType === 'edit' || pageType === 'detail') {
+        this.$refs[formName].updateFormData(this.formData)
+      }
+    },
+    updateFormData(data) {
+      this.$set(this, 'formData', { ...this.formData, ...data })
     },
     generateForm() {
       this.generateAction()
@@ -127,12 +149,15 @@ export default {
     // 初始化表单行为, 过滤出需要渲染的项目
     generateAction() {
       const { formAction, formData } = this
+      const { pageType } = this.$attrs.pageinfo.data
       const { formItemsReadOnly } = this.formConfig
       let excludeProps = []
       let generateProps = []
-
+      const disabledMap = {}
+      // { prop: 'type', exclude: [{ value: 0, props: ['permissions'] }], disabledPageType: ['edit'] }
       formAction.map(item => {
         const excludes = item.exclude
+        disabledMap[item.prop] = Array.from(item.disabledPageType)
         excludes.map(ite => {
           if (ite.value === formData[item.prop]) {
             excludeProps = [...ite.props]
@@ -140,10 +165,34 @@ export default {
         })
       })
       excludeProps = Array.from(new Set([...excludeProps]))
+      // 过滤出需要显示的项
       generateProps = formItemsReadOnly.filter(item => excludeProps.indexOf(item.prop) === -1)
 
+      // 如果是详情页面
+      if (pageType === 'detail') {
+        generateProps.forEach(item => {
+          item.disabled = true
+        })
+      } else {
+        generateProps.forEach(item => {
+          // 用于控制某些字段在某种特定的页面上禁用
+          if (disabledMap[item.prop] !== undefined) {
+            if (disabledMap[item.prop].indexOf(pageType) !== -1) {
+              item.disabled = true
+            }
+          }
+        })
+      }
       this.formConfig.formItems = generateProps
       this.generateRules(generateProps)
+    },
+    // 判断是不是某种页面
+    checkPageType(types) {
+      const { pageType } = this.$attrs.pageinfo.data
+      if (types.indexOf(pageType) !== -1) {
+        return true
+      }
+      return false
     },
     // 提交表单
     handleSubmit() {

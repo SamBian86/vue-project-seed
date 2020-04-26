@@ -72,7 +72,7 @@ export default {
     this.tableConfig.rowKey = 'id'
     // 设置获取列表信息
     this.tableConfig.tableHead = [
-      { prop: 'name', label: 'menu.name', width: '140' },
+      { prop: 'name', label: 'menu.name', minWidth: '110px' },
       {
         prop: 'icon',
         label: 'menu.icon',

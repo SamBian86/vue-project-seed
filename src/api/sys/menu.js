@@ -29,8 +29,7 @@ export function getMenuById(params = {}) {
   const { id } = params
   return request({
     url: `/sys/menu/${id}`,
-    method: 'get',
-    params
+    method: 'get'
   })
 }
 

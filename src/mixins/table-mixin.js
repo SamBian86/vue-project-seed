@@ -40,7 +40,7 @@ export default {
       const { tableName } = this.tableConfig
       this.$refs[tableName].getListHandler()
     },
-    // 创建 如果提交成功 那么在返回pageUpdateNames对应的页面时，会重新获取数据
+    // 创建 如果提交成功 那么在返回pageUpdateNames对应的组件时，会重新获取数据
     handleCreate(options = { pageUpdateNames: ['table'] }) {
       this.handleAny('form', { pageType: 'create', ...options })
     },
