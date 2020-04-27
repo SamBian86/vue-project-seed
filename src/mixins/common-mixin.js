@@ -10,13 +10,17 @@ export default {
     // console.log('common mixin activated')
   },
   methods: {
-    // 打开任何组件 name 组件名称
-    handleAny(name, data = {}) {
-      this.$emit('page-change', name, data)
-    },
     // 判断是不是一个promise方法
     isPromise(obj) {
       return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function'
+    },
+    // 判断是不是某种页面
+    containsPageType(types) {
+      const { pageType } = this.$attrs.page_info.data
+      if (types.indexOf(pageType) !== -1) {
+        return true
+      }
+      return false
     }
   }
 }

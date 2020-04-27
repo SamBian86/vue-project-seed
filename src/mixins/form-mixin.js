@@ -1,208 +1,31 @@
-import commonMixin from '@/mixins/common-mixin'
-import pageMixin from '@/mixins/page-mixin'
+// 这个mixin在form.vue的子组件中使用, 用于触发form-default-mixin中的方法
 export default {
-  mixins: [commonMixin, pageMixin],
+  mixins: [],
   data() {
-    return {
-      formConfig: {
-        formName: 'yunlinForm', // 表单名称
-        formItems: [], // 表单项
-        formItemsReadOnly: [], // 初始表单项
-        formSize: 'small', // 控件尺寸
-        formSpan: 12, // 整体表单栅格占据列数 默认12列
-        labelPosition: '',
-        labelWidth: '120px', // 标签宽度
-        updateCheck: ['form'] // 用于检查pageMixin中pageUpdateList是否存在updateCheck中存在的项，如果存在需要重新获取数据
-      },
-      formHandle: {
-        // 创建抽象方法，用创建接口方法覆盖
-        create: null,
-        // 修改抽象方法，用修改接口方法覆盖
-        edit: null,
-        // 详情抽象方法，用详情接口方法覆盖
-        detail: null
-      },
-      formData: {}, // 存放表单数据
-      formDefaultData: {}, // 存放表单默认数据
-      formRules: {}, // 存放表单验证规则
-      formAction: [
-        // 用于处理表单的隐藏与显示禁用行为
-        // prop代表会影响表单展现的因子, exclude中代表该prop一旦符合某个value就排除现实props中对应的项目
-        // 默认在所有detail类型的页面所有控件都禁用,如果在创建编辑页面需要提供禁用需要配置disabledPageType,对需要禁用的pageType进行配置
-        // { prop: 'type', exclude: [{ value: 0, props: ['permissions'] }], disabledPageType: ['edit'] }
-      ]
-    }
+    return {}
   },
   computed: {},
   created() {
     // console.log('form mixin created')
   },
   activated() {
-    const { updateCheck } = this.formConfig
-    const { pageupdate } = this.$attrs
-    // 重新获取数据以后需要管理pagemixin中的pageUpdateList
-    if (this.isInPageUpdateList(pageupdate, updateCheck)) {
-      this.$emit('page-queue-delete', updateCheck)
-    }
     // console.log('form mixin activated')
   },
   methods: {
-    // 生成表单名称
-    generateTitle() {
-      const { formTitle } = this
-      const { name } = this.formData
-      const skip = ['create']
-      const formGenerateTitle = {}
-      Object.keys(formTitle).map(item => {
-        if (skip.indexOf(item) === -1) {
-          formGenerateTitle[item] = formTitle[item] + name
-        }
-      })
-      this.formGenerateTitle = formGenerateTitle
-    },
-    // 初始化页面数据
-    initFormData() {
-      const { pageType } = this.$attrs.pageinfo.data
-      const { formName } = this.formConfig
-
-      this.formData = { ...this.formDefaultData, ...this.$attrs.pageinfo.data }
-
-      if (pageType === 'edit' || pageType === 'detail') {
-        this.$refs[formName].updateFormData(this.formData)
-      }
-    },
-    updateFormData(data) {
-      this.$set(this, 'formData', { ...this.formData, ...data })
-    },
-    generateForm() {
-      this.generateAction()
-    },
-    // 生成校验规则, 用于普通添加校验规则，如果是动态添加请使用 generateRuleByProp
-    generateRules(items) {
-      const { formRules, formData } = this
-      const inputTypes = ['text', 'input-number']
-      const changeTypes = ['select', 'radio-group', 'popover-tree', 'popover-icon', 'resource-selector']
-      items.map(item => {
-        const rules = []
-        if (item.rules) {
-          item.rules.forEach(ite => {
-            if (ite.required && !ite.message) {
-              // 必填验证 输入类型
-              if (inputTypes.indexOf(item.type) !== -1) {
-                ite.message = '请输入' + this.$t(item.name)
-                ite.trigger = 'blur'
-              }
-              // 必填验证 选择
-              if (changeTypes.indexOf(item.type) !== -1) {
-                ite.message = '请选择' + this.$t(item.name)
-                ite.trigger = 'change'
-              }
-            } else {
-              ite.trigger = 'change'
-            }
-            rules.push(ite)
-          })
-          if (item.ruleConfig) {
-            if (!item.ruleConfig.nodata && formData[item.prop] && formData[item.prop].length !== 0) {
-              formRules[item.prop] = rules
-            }
-            if (!item.ruleConfig.nodata && formData[item.prop] && formData[item.prop].length === 0) {
-              delete formRules[item.prop]
-            }
-          } else {
-            formRules[item.prop] = rules
-          }
-        }
-      })
-      this.$set(this, 'formRules', Object.assign({}, formRules))
-
-      this.$nextTick(() => {
-        const { formRules } = this
-        this.clearValidate(Object.keys(Object.assign({}, formRules)))
-      })
+    // 用于子组件修改数据以后的数据合并
+    $formDataMerge(data = {}) {
+      this.$emit('form-data-merge', data)
     },
     // 重新生成对应的校验规则, 用于动态添加校验规则
-    generateRuleByProp(prop = []) {
-      const { formItems } = this.formConfig
-      const items = prop.length === 0 ? formItems : formItems.filter(item => prop.indexOf(item.prop) !== -1)
-      this.generateRules(items)
-    },
-    // 用于各类自定义组件修改数据
-    mergeDataHandle(data) {
-      // console.log('form-mixin 合并数据 ')
-      this.formData = { ...this.formData, ...data }
-    },
-    // 清除校验信息
-    clearValidate() {
-      const { formName } = this.formConfig
-      this.$refs[formName].clearValidate()
+    $formGenerateRuleByProps(props = []) {
+      this.$emit('form-generate-rule-by-props', props)
     },
     // 用于检查值的修改，用于控制表单的隐藏与显示禁用行为
-    checkAction(prop) {
-      const { formAction } = this
-      const len = formAction.filter(item => item.prop === prop)
-      if (len === 0) {
-        return
-      }
-      this.generateAction()
+    $formValueListener(prop = '') {
+      this.$emit('form-value-listener', prop)
     },
-    // 初始化表单行为, 过滤出需要渲染的项目
-    generateAction() {
-      const { formAction, formData } = this
-      const { pageType } = this.$attrs.pageinfo.data
-      const { formItemsReadOnly } = this.formConfig
-      let excludeProps = []
-      let generateProps = []
-      const disabledMap = {}
-      // { prop: 'type', exclude: [{ value: 0, props: ['permissions'] }], disabledPageType: ['edit'] }
-      formAction.map(item => {
-        const excludes = item.exclude
-        disabledMap[item.prop] = Array.from(item.disabledPageType)
-        excludes.map(ite => {
-          if (ite.value === formData[item.prop]) {
-            excludeProps = [...ite.props]
-          }
-        })
-      })
-      excludeProps = Array.from(new Set([...excludeProps]))
-      // 过滤出需要显示的项
-      generateProps = formItemsReadOnly.filter(item => excludeProps.indexOf(item.prop) === -1)
-
-      // 如果是详情页面
-      if (pageType === 'detail') {
-        generateProps.forEach(item => {
-          item.disabled = true
-        })
-      } else {
-        generateProps.forEach(item => {
-          // 用于控制某些字段在某种特定的页面上禁用
-          if (disabledMap[item.prop] !== undefined) {
-            if (disabledMap[item.prop].indexOf(pageType) !== -1) {
-              item.disabled = true
-            }
-          }
-        })
-      }
-      this.formConfig.formItems = generateProps
-      this.generateRules(generateProps)
-    },
-    // 判断是不是某种页面
-    checkPageType(types) {
-      const { pageType } = this.$attrs.pageinfo.data
-      if (types.indexOf(pageType) !== -1) {
-        return true
-      }
-      return false
-    },
-    // 提交表单
-    handleSubmit() {
-      const { formName } = this.formConfig
-      this.$refs[formName].handleSubmit()
-    },
-    // 取消按钮
-    handleCancle() {
-      const { formName } = this.formConfig
-      this.$refs[formName].handleCancle()
+    $formDataUpdate(data) {
+      this.$emit('form-data-update', data)
     }
   }
 }

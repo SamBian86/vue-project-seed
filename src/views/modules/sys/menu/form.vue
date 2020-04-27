@@ -1,4 +1,3 @@
-/* eslint-disable vue/html-end-tags */
 <template>
   <el-row :gutter="10">
     <el-col
@@ -8,7 +7,7 @@
       :sm="24"
       :xs="24"
     >
-      <div class="form-title">{{ formGenerateTitle[$attrs.pageinfo.data.pageType] }}</div>
+      <div class="form-title">{{ formGenerateTitle[$attrs.page_info.data.pageType] }}</div>
       <yunlin-form
         ref="yunlinForm"
         :config="formConfig"
@@ -16,27 +15,27 @@
         :data="formData"
         :rules="formRules"
         v-bind="$attrs"
-        @merge-data="mergeDataHandle"
-        @generate-rule-by-prop="generateRuleByProp"
-        @check-action="checkAction"
-        @update-form-data="updateFormData"
+        @form-data-merge="formDataMerge"
+        @form-generate-rule-by-props="formGenerateRuleByProps"
+        @form-value-listener="formValueListener"
+        @form-data-update="formDataUpdate"
         v-on="$listeners"
       >
         <template slot="footer">
           <div class="form-submit-container">
             <el-button
-              v-if="checkPageType(['create', 'edit', 'detail'])"
+              v-if="containsPageType(['create', 'edit', 'detail'])"
               :size="formConfig.formSize"
               @click.stop="handleCancle"
             >返回</el-button>
             <el-button
-              v-if="formHandle.create && checkPageType(['create']) && filterPermission('sys:menu:save')"
+              v-if="containsPageType(['create']) && filterPermission('sys:menu:save')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="handleSubmit"
             >新增</el-button>
             <el-button
-              v-if="formHandle.edit && checkPageType(['edit']) && filterPermission('sys:menu:update')"
+              v-if="containsPageType(['edit']) && filterPermission('sys:menu:update')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="handleSubmit"
@@ -50,14 +49,16 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import formMixin from '@/mixins/form-mixin'
+import commonMixin from '@/mixins/common-mixin'
+import pageMixin from '@/mixins/page-mixin'
+import formDefaultMixin from '@/mixins/form-default-mixin'
 import { getMenuList, createMenu, editMenu, getMenuById } from '@/api/sys/menu'
 import { getIconList, getResourceSelector } from '@/utils'
 import { validateEmpty } from '@/utils/validator'
 export default {
   name: 'Form',
   components: {},
-  mixins: [formMixin],
+  mixins: [commonMixin, pageMixin, formDefaultMixin],
   data() {
     return {
       // 定义表单名称
@@ -106,12 +107,15 @@ export default {
     ...mapGetters('app', ['filterPermission'])
   },
   activated() {
-    console.log('form activated')
+    // console.log('form activated')
     this.init()
   },
   created() {
-    // console.log(this.$attrs.pageinfo)
+    // console.log(this.$attrs.page_info)
     // console.log('form created')
+
+    // 设置整体表单栅格列数
+    this.formConfig.formSpan = 12
   },
   methods: {
     generateTitle() {
@@ -119,8 +123,6 @@ export default {
       this.formGenerateTitle = formTitle
     },
     init() {
-      // 设置整体表单栅格列数
-      this.formConfig.formSpan = 12
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
@@ -159,10 +161,10 @@ export default {
             treeProps: { label: 'name', children: 'children' },
             treeNodeKey: 'id',
             mergeData: [
-              { source: 'name', target: 'parentName', defalut: '' },
-              { source: 'id', target: 'pid', defalut: 0 }
+              { source: 'name', target: 'parentName', default: '' },
+              { source: 'id', target: 'pid', default: 0 }
             ],
-            updateCheck: ['popover-tree']
+            componentNames: ['popover-tree']
           }
         },
         {
@@ -236,12 +238,12 @@ export default {
         }
       ]
 
-      // 初始化数据
-      this.initFormData()
-      // 根据当前行为生成校验规则等
-      this.generateForm()
+      // 组装表单初始数据
+      this.generateFormData()
       // 生成标题
       this.generateTitle()
+      // 生成表单及验证规则
+      this.generateForm()
     }
   }
 }

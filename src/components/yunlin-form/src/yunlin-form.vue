@@ -34,7 +34,7 @@
               <el-radio-group
                 v-model="$attrs.data[item.prop]"
                 :disabled="item.disabled"
-                @change="handleFormItem(item.prop, $event)"
+                @change="formValueListener(item.prop, $event)"
               >
                 <el-radio
                   v-for="(ite, idx) in item.items"
@@ -82,38 +82,43 @@
 
 <script>
 import pageMixin from '@/mixins/page-mixin'
+import formMixin from '@/mixins/form-mixin'
 import ToolComponents from '@/components/yunlin-form/tool'
 export default {
   name: 'YunlinForm',
   components: {},
-  mixins: [pageMixin],
+  mixins: [pageMixin, formMixin],
   props: {},
   data() {
     return {
+      componentNames: ['yunlin-form'],
       ToolComponents
     }
   },
   computed: {
     // 从父组件的form-mixin的formHandle中获取方法
     createBridge() {
+      const { api } = this.$attrs.handle.create
       return (
-        this.$attrs.handle.create.api ||
+        api ||
         (() => {
           return Promise.reject('请覆盖创建方法')
         })
       )
     },
     editBridge() {
+      const { api } = this.$attrs.handle.edit
       return (
-        this.$attrs.handle.edit.api ||
+        api ||
         (() => {
           return Promise.reject('请覆盖编辑方法')
         })
       )
     },
     detailBridge() {
+      const { api } = this.$attrs.handle.detail
       return (
-        this.$attrs.handle.detail.api ||
+        api ||
         (() => {
           return Promise.reject('请覆盖详情方法')
         })
@@ -128,12 +133,10 @@ export default {
   beforeUpdate() {},
   updated() {},
   activated() {
-    const { updateCheck } = this.$attrs.config
-    const { pageupdate } = this.$attrs
     // 检查是否需要重新获取数据
-    if (this.isInPageUpdateList(pageupdate, updateCheck)) {
+    this.$pageCheckUpdateWhenActivated(() => {
       console.log('重新获取数据')
-    }
+    })
   },
   deactivated() {},
   beforeDestroy() {},
@@ -142,6 +145,11 @@ export default {
   methods: {
     formMethordHandle() {
       return Promise.reject('请检查接口配置')
+    },
+    // 清除校验信息
+    clearValidate() {
+      const { formName } = this.$attrs.config
+      this.$refs[formName].clearValidate()
     },
     // 表单校验
     handleSubmit() {
@@ -156,11 +164,12 @@ export default {
     },
     // 取消按钮
     handleCancle() {
-      this.$emit('page-change', 'table')
+      this.$pageSwitch('table')
     },
     // 表单提交
     formSubmitHandle() {
       const { pageType } = this.$attrs.data
+      const { handle, data } = this.$attrs
       switch (pageType) {
         case 'create':
           this.formMethordHandle = this.createBridge
@@ -169,36 +178,31 @@ export default {
           this.formMethordHandle = this.editBridge
           break
         default:
-          if (this.$attrs.handle[pageType] && this.$attrs.handle[pageType]['api']) {
-            this.formMethordHandle = this.$attrs.handle[pageType]['api']
+          if (handle[pageType] && handle[pageType]['api']) {
+            this.formMethordHandle = handle[pageType]['api']
           }
           break
       }
-      const fn = this.$attrs.handle[pageType]['fn'] || null
-      this.formMethordHandle({ ...this.$attrs.data }).then(response => {
-        if (fn) {
-          fn()
+      const callback = handle[pageType]['callback'] || null
+      this.formMethordHandle({ ...data }).then(response => {
+        if (callback) {
+          callback()
         } else {
-          console.log(this.$attrs.data.pageUpdateNames)
-          this.$emit('page-queue-update', this.$attrs.data.pageUpdateNames)
-          this.$emit('page-change', 'table')
+          // 将需要下次重新获取数据的组件加入page组件的page_update_list中
+          this.$pageUpdateListAdd(data.componentNames)
+          this.$pageSwitch('table')
         }
       })
     },
     // 更新数据
-    updateFormData(formData) {
+    formDataUpdate(formData) {
       this.detailBridge({ ...formData }).then(response => {
-        this.$emit('update-form-data', response)
+        this.$formDataUpdate(response)
       })
     },
-    // 清除校验信息
-    clearValidate() {
-      const { formName } = this.$attrs.config
-      this.$refs[formName].clearValidate()
-    },
     // 表单元素处理,控制隐藏显示
-    handleFormItem(prop) {
-      this.$emit('check-action', prop)
+    formValueListener(prop) {
+      this.$formValueListener(prop)
     }
   }
 }

@@ -23,7 +23,7 @@
         :show-overflow-tooltip="item.showOverFlowTooltip === null ? true : item.showOverFlowTooltip"
       >
         <!--
-          item.component 是否使用table专用组件 /components/yunlin-table/tool 中
+          item.component 是否使用table专用组件 /components/yunlin-table/tool
         -->
         <template slot-scope="scope">
           <component
@@ -55,6 +55,7 @@ export default {
   props: {},
   data() {
     return {
+      componentNames: ['yunlin-table'],
       ToolComponents, // 工具组件
       loading: true,
       reload: true, // 重新获取数据
@@ -99,17 +100,14 @@ export default {
   updated() {},
   activated() {
     const { reload } = this
-    const { updateCheck } = this.$attrs.config
-    const { pageupdate } = this.$attrs
     if (reload) {
-      this.getListHandler()
+      this.searchHandle()
     }
 
     // 检查是否需要重新获取数据
-    if (this.isInPageUpdateList(pageupdate, updateCheck)) {
-      this.getListHandler()
-      console.log('重新获取列表数据')
-    }
+    this.$pageCheckUpdateWhenActivated(() => {
+      this.searchHandle()
+    })
     // console.log('table component activated')
   },
   deactivated() {},
@@ -117,7 +115,7 @@ export default {
   destroyed() {},
   errorCaptured() {},
   methods: {
-    getListHandler() {
+    searchHandle() {
       // 获取列表数据
       const { pagination } = this.config
       const { searchParams } = this.$attrs.config
@@ -149,11 +147,11 @@ export default {
     },
     // 触发查询
     handleSearch() {
-      this.getListHandler()
+      this.searchHandle()
     },
     // 重置查询条件
     handleSearchReset() {
-      this.getListHandler()
+      this.searchHandle()
     },
     // 触发删除
     handleDelete(item) {

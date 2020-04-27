@@ -1,24 +1,24 @@
 <template>
   <div>
     <el-input
+      v-popover:popover-tree
+      class="popover-tree-input"
       type="text"
       :placeholder="$t(config.i18nDefault)"
       :value="pageData[config.propName]"
       :disabled="disabled"
       clearable
-      readonly
-      @focus="togglePopoverShow"
       @clear="clearHandle"
     ></el-input>
-    <el-popover v-model="popoverStatus" placement="bottom-start" trigger="click">
+    <el-popover ref="popover-tree" v-model="popoverStatus" placement="bottom-start" trigger="hover">
       <el-tree
+        ref="tree"
         :data="list"
         :props="config.treeProps"
         :node-key="config.treeNodeKey"
-        :highlight-current="true"
         :expand-on-click-node="false"
         accordion
-        @current-change="currentChoose"
+        @current-change="changeHandle"
       ></el-tree>
     </el-popover>
   </div>
@@ -27,9 +27,10 @@
 <script>
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
+import formMixin from '@/mixins/form-mixin'
 export default {
   name: 'ToolPopoverTree',
-  mixins: [commonMixin, pageMixin],
+  mixins: [commonMixin, pageMixin, formMixin],
   props: {
     config: {
       type: Object,
@@ -47,7 +48,7 @@ export default {
             // { source: 'name', target: 'parentName' },
             // { source: 'id', target: 'pid' }
           ],
-          updateCheck: []
+          componentNames: []
         }
       }
     },
@@ -65,19 +66,20 @@ export default {
   },
   data() {
     return {
+      componentNames: ['popover-tree'],
       popoverStatus: false,
       name: this.pageData[this.config.propName] ? this.pageData[this.config.propName] : this.$t(this.config.i18nDefault),
       list: []
     }
   },
+  computed: {},
   activated() {
     // console.log('popover-tree activated')
-    const { updateCheck } = this.config
-    const { pageupdate } = this.$attrs
-    if (this.isInPageUpdateList(pageupdate, updateCheck)) {
+    // 检查是否需要重新获取数据
+    this.$pageCheckUpdateWhenActivated(() => {
       this.init()
       // console.log('重新获取popover-tree组件数据')
-    }
+    })
   },
   created() {
     // console.log('popover-tree created')
@@ -98,35 +100,35 @@ export default {
         Promise.reject('请提供一个返回Promise对象的request方法')
       }
     },
-    // 处理popover组件
-    togglePopoverShow() {
-      this.popoverStatus = true
-    },
     togglePopoverHide() {
       this.popoverStatus = false
     },
     // 点击树节点
-    currentChoose(e) {
+    changeHandle(e) {
       const { mergeData, sourceName } = this.config
-      const postData = {}
+      const newData = {}
       mergeData.map(item => {
-        postData[item.target] = e[item.source]
+        newData[item.target] = e[item.source]
       })
       this.name = e[sourceName] || '请检查键名'
       this.togglePopoverHide()
-      this.$emit('merge-data', postData)
+      this.$formDataMerge(newData)
     },
     // 清除方法
     clearHandle() {
       const { mergeData } = this.config
-      const postData = {}
+      const newData = {}
       mergeData.map(item => {
-        postData[item.target] = item.default || ''
+        newData[item.target] = '' || item.default
       })
       this.togglePopoverHide()
-      this.$emit('merge-data', postData)
+      this.$formDataMerge(newData)
     }
   }
 }
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.popover-tree-input input {
+  cursor: pointer;
+}
+</style>

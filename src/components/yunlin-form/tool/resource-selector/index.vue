@@ -57,10 +57,12 @@
 
 <script>
 import commonMixin from '@/mixins/common-mixin'
+import pageMixin from '@/mixins/page-mixin'
+import formMixin from '@/mixins/form-mixin'
 export default {
   // 资源选择器
   name: 'ToolResourceSelector',
-  mixins: [commonMixin],
+  mixins: [commonMixin, pageMixin, formMixin],
   props: {
     config: {
       type: Object,
@@ -124,18 +126,18 @@ export default {
     // 清除方法
     clearHandle() {
       const { mergeData } = this.config
-      const postData = {}
+      const newData = {}
       mergeData.map(item => {
-        postData[item.target] = ''
+        newData[item.target] = ''
       })
       this.togglePopoverHide()
-      this.$emit('merge-data', postData)
+      this.$formDataMerge(newData)
     },
     // 添加方法
     addHandle() {
       const { defaultItem, mergeData } = this.config
       const { resources } = this
-      const postData = {}
+      const newData = {}
       let hasEmpty = false
       Object.keys(defaultItem).map(item => {
         resources.map(ite => {
@@ -149,19 +151,19 @@ export default {
         return
       }
       resources.push(Object.assign({}, defaultItem))
-      postData[mergeData.target] = resources
-      this.$emit('merge-data', postData)
-      this.$emit('generate-rule-by-prop', [this.config.propName])
+      newData[mergeData.target] = resources
+      this.$formDataMerge(newData)
+      this.$formGenerateRuleByProps([this.config.propName])
     },
     // 删除方法
     deleteHandle(index) {
       const { mergeData } = this.config
       const { resources } = this
-      const postData = {}
+      const newData = {}
       resources.splice(index, 1)
-      postData[mergeData.target] = Array.from(resources)
-      this.$emit('merge-data', postData)
-      this.$emit('generate-rule-by-prop', [this.config.propName])
+      newData[mergeData.target] = Array.from(resources)
+      this.$formDataMerge(newData)
+      this.$formGenerateRuleByProps([this.config.propName])
     }
   }
 }

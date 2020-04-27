@@ -4,12 +4,12 @@
       <keep-alive>
         <component
           :is="pageInfo.component"
-          :pageinfo="pageInfo"
-          :pageupdate="pageUpdateList"
+          :page_info="pageInfo"
+          :page_update_list="pageUpdateList"
           v-bind="$attrs"
-          @page-change="pageChange"
-          @page-queue-update="pageUpdateQueue"
-          @page-queue-delete="pageDeleteQueue"
+          @page-switch="pageSwitch"
+          @page-update-list-add="pageUpdateListAdd"
+          @page-update-list-delete="pageUpdateListDelete"
           v-on="$listeners"
         ></component>
       </keep-alive>
@@ -18,12 +18,13 @@
 </template>
 
 <script>
-import pageMixin from '@/mixins/page-mixin'
+import pageDefaultMixin from '@/mixins/page-default-mixin'
 import pageTable from './table'
 import pageForm from './form'
+// 页面根组件
 export default {
   components: { pageTable, pageForm },
-  mixins: [pageMixin],
+  mixins: [pageDefaultMixin],
   data() {
     return {
       pageComponents: [

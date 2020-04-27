@@ -9,7 +9,12 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form :inline="true" :model="tableConfig.searchParams" @keyup.enter.native="tableSearch">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableConfig.searchParams"
+          @keyup.enter.native="searchHandle"
+        >
           <el-form-item>
             <el-button
               v-if="filterPermission('sys:menu:save')"
@@ -51,12 +56,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import tableMixin from '@/mixins/table-mixin'
+import pageMixin from '@/mixins/page-mixin'
+import tableDefaultMixin from '@/mixins/table-default-mixin'
 import { getMenuList, deleteMenu } from '@/api/sys/menu'
 export default {
   name: 'Tabel',
   components: {},
-  mixins: [tableMixin],
+  mixins: [pageMixin, tableDefaultMixin],
   data() {
     return {}
   },
@@ -68,6 +74,7 @@ export default {
     // console.log('table activated')
   },
   created() {
+    // console.log('table created')
     // 是否显示树形数据
     this.tableConfig.rowKey = 'id'
     // 设置获取列表信息
@@ -115,12 +122,12 @@ export default {
     // console.log('table page created')
   },
   methods: {
-    handleCreate(options = { pageUpdateNames: ['table', 'popover-tree'] }) {
-      this.handleAny('form', { pageType: 'create', ...options })
+    handleCreate(options = { componentNames: ['yunlin-table', 'popover-tree'] }) {
+      this.$pageSwitch('form', { pageType: 'create', ...options })
     },
     // 编辑
-    handleEdit(item, options = { pageUpdateNames: ['table', 'popover-tree'] }) {
-      this.handleAny('form', { ...item, pageType: 'edit', ...options })
+    handleEdit(item, options = { componentNames: ['yunlin-table', 'popover-tree'] }) {
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
     }
   }
 }
