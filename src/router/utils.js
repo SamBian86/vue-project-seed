@@ -19,11 +19,11 @@ export function addRoutes(dynamicRoutes) {
 export function generateDynamicRoutes(menus) {
   const dynamicRoutes = []
   menus.map((item, index) => {
-    if (item.children.length !== 0 && index === 0) {
+    if (item.children.length !== 0) {
       item.children.map((ite, idx) => {
-        if (idx !== 0) {
-          return false
-        }
+        // if (idx !== 0) {
+        //   return false
+        // }
         const isIframeURL = /{{([^}}]+)?}}/g.test(ite.url)
         const iframeURL = (ite.url || '').replace(/{{([^}}]+)?}}/g, process.env.VUE_APP_API_URL)
         const route = {
