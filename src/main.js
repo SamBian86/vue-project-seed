@@ -19,9 +19,11 @@ Vue.use(Element, {
 import common from '@/components/yunlin-common'
 import YunlinTable from '@/components/yunlin-table'
 import YunlinForm from '@/components/yunlin-form'
+import YunlinMaskView from '@/components/yunlin-mash-view'
 Vue.use(common)
 Vue.use(YunlinTable)
 Vue.use(YunlinForm)
+Vue.use(YunlinMaskView)
 
 // 全局directive
 // import permission from './directive/permission'

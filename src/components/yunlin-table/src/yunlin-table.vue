@@ -28,7 +28,7 @@
         :fixed="item.fixed"
         :width="item.width"
         :min-width="item.minWidth"
-        :show-overflow-tooltip="item.showOverFlowTooltip === null ? true : item.showOverFlowTooltip"
+        :show-overflow-tooltip="item.showOverFlowTooltip === undefined ? true : item.showOverFlowTooltip"
       >
         <!--
           item.component 是否使用table专用组件 /components/yunlin-table/tool
@@ -42,6 +42,7 @@
           ></component>
           <span
             v-else
+            @click="item.clickHandle ? item.clickHandle(scope.row) : () => {}"
             v-html="item.preHandle ? item.preHandle(scope.row[item.prop], scope.row) : scope.row[item.prop]"
           ></span>
         </template>

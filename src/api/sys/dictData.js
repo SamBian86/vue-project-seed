@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-
 // 字典数据
 // 保存
 // POST
@@ -26,11 +25,11 @@ export function editDictData(data = {}) {
 // 删除
 // DELETE
 // /sys/dict/data
-export function deleteDictData(params = []) {
+export function deleteDictData(data = []) {
   return request({
     url: `/sys/dict/data`,
     method: 'delete',
-    params
+    data
   })
 }
 

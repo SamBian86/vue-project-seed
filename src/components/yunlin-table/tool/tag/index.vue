@@ -1,12 +1,10 @@
 <template>
-  <el-tag :size="config.tagSize" :type="tagItem.type">
-    {{ tagItem.name }}
-  </el-tag>
+  <el-tag :size="config.tagSize" :type="tagItem.type">{{ tagItem.name }}</el-tag>
 </template>
 
 <script>
 export default {
-  name: 'ToolSvg',
+  name: 'ToolTag',
   props: {
     config: {
       type: Object,
@@ -14,7 +12,7 @@ export default {
         return {
           value: '', // 哪个键名用于取数据
           name: '', // 哪个键名用于显示tag名称
-          tagSize: '', // tag尺寸
+          tagSize: 'small', // tag尺寸
           tagConfig: [
             // {
             //   value: 0,

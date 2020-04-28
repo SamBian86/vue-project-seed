@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'ToolTag',
+  name: 'ToolSvg',
   props: {
     config: {
       type: Object,

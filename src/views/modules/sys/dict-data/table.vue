@@ -92,7 +92,7 @@
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
-import { getDictTypeList, deleteDictType } from '@/api/sys/dictType'
+import { getDictDataList, deleteDictData } from '@/api/sys/dictData'
 
 export default {
   name: 'Tabel',
@@ -113,28 +113,23 @@ export default {
     // 是否显示树形数据
     this.tableConfig.rowKey = 'id'
     this.tableConfig.tableType = 'selection'
+    console.log(this.$attrs)
+    // this.tableConfig.searchParams.dictTypeId
 
     // 设置获取列表信息
     this.tableConfig.tableHead = [
-      { prop: 'dictName', label: 'dict.dictName', align: 'center' },
-      {
-        prop: 'dictType',
-        label: 'dict.dictType',
-        minWidth: '120',
-        align: 'center',
-        component: 'toolButton',
-        componentConfig: { prop: 'dictType', buttonType: 'text', clickHandle: this.dictTypeClickHandle }
-      },
+      { prop: 'dictValue', label: 'dict.dictValue', align: 'center' },
+      { prop: 'dictLabel', label: 'dict.dictLabel', minWidth: '120', align: 'center' },
       { prop: 'sort', label: 'dict.sort', width: '50', align: 'center' },
       { prop: 'remark', label: 'dict.remark', align: 'center' },
       { prop: 'createDate', label: 'dict.createDate', align: 'center' }
     ]
     // 配置列表请求
-    this.tableHandle.list.api = getDictTypeList
+    this.tableHandle.list.api = getDictDataList
     // 配置删除功能
-    this.tableHandle.delete.api = deleteDictType
+    this.tableHandle.delete.api = deleteDictData
     // 配置section删除功能
-    this.tableHandle.deleteSection.api = deleteDictType
+    this.tableHandle.deleteSection.api = deleteDictData
     // console.log('table page created')
   },
   methods: {
@@ -144,9 +139,6 @@ export default {
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
       this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
-    },
-    dictTypeClickHandle(row) {
-      console.log(row)
     }
   }
 }

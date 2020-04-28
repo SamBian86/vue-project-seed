@@ -5,22 +5,16 @@
       <el-dropdown class="aui-content--tabs-tools">
         <i class="el-icon-arrow-down"></i>
         <el-dropdown-menu slot="dropdown" :show-timeout="0">
-          <el-dropdown-item @click.native="tabRemoveHandle(tabActive)">
-            {{ $t('contentTabs.closeCurrent') }}
-          </el-dropdown-item>
-          <el-dropdown-item @click.native="tabsCloseOtherHandle()">
-            {{ $t('contentTabs.closeOther') }}
-          </el-dropdown-item>
-          <el-dropdown-item @click.native="tabsCloseAllHandle()">
-            {{ $t('contentTabs.closeAll') }}
-          </el-dropdown-item>
+          <el-dropdown-item
+            @click.native="tabRemoveHandle(tabActive)"
+          >{{ $t('contentTabs.closeCurrent') }}</el-dropdown-item>
+          <el-dropdown-item
+            @click.native="tabsCloseOtherHandle()"
+          >{{ $t('contentTabs.closeOther') }}</el-dropdown-item>
+          <el-dropdown-item @click.native="tabsCloseAllHandle()">{{ $t('contentTabs.closeAll') }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-tabs
-        v-model="tabActive"
-        @tab-click="tabSelectedHandle"
-        @tab-remove="tabRemoveHandle"
-      >
+      <el-tabs v-model="tabActive" @tab-click="tabSelectedHandle" @tab-remove="tabRemoveHandle">
         <el-tab-pane
           v-for="item in tabs"
           :key="item.name"
@@ -30,11 +24,7 @@
           :class="{ 'is-iframe': tabIsIframe(item.iframeURL) }"
         >
           <template v-if="item.name === 'home'">
-            <svg
-              slot="label"
-              class="icon-svg aui-content--tabs-icon-nav"
-              aria-hidden="true"
-            >
+            <svg slot="label" class="icon-svg aui-content--tabs-icon-nav" aria-hidden="true">
               <use xlink:href="#icon-home" />
             </svg>
           </template>
@@ -73,12 +63,7 @@ export default {
   },
   computed: {
     ...mapGetters(['layout_tabActive', 'layout_tabs', 'layout_menuActive']),
-    ...mapGetters('layout', [
-      'filterTabByName',
-      'filterTabExceptName',
-      'filterTabIndexByName',
-      'filterTabIncludeByNames'
-    ])
+    ...mapGetters('layout', ['filterTabByName', 'filterTabExceptName', 'filterTabIndexByName', 'filterTabIncludeByNames'])
   },
   watch: {
     layout_tabActive: 'storeUpdate',

@@ -21,7 +21,6 @@
 import pageDefaultMixin from '@/mixins/page-default-mixin'
 import pageTable from './table'
 import pageForm from './form'
-
 // 页面根组件
 export default {
   components: { pageTable, pageForm },
