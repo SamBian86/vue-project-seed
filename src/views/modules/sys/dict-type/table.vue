@@ -145,6 +145,7 @@ export default {
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
       this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
     },
+    // 点击字典类型
     dictTypeClickHandle(row) {
       console.log(row)
     }
