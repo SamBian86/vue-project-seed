@@ -36,8 +36,8 @@ export function getMenuById(params = {}) {
 // DELETE
 // /sys/menu/{id}
 // 删除
-export function deleteMenu(params = {}) {
-  const { id } = params
+export function deleteMenu(data = {}) {
+  const { id } = data
   return request({
     url: `/sys/menu/${id}`,
     method: 'delete'

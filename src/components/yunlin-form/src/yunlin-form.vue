@@ -7,7 +7,7 @@
       :label-width="$attrs.config.labelWidth"
       :size="$attrs.config.formSize"
       :label-position="$attrs.config.labelPosition"
-      @keyup.enter.native="handleSubmit()"
+      @keyup.enter.native="submitHandle()"
     >
       <el-row :gutter="10">
         <el-col
@@ -25,6 +25,17 @@
               <el-input
                 v-model="$attrs.data[item.prop]"
                 :disabled="item.disabled"
+                :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
+                clearable
+              ></el-input>
+            </template>
+            <!-- textarea -->
+            <template v-if="item.type === 'textarea'">
+              <el-input
+                v-model="$attrs.data[item.prop]"
+                type="textarea"
+                :disabled="item.disabled"
+                :autosize="item.attrs.autosize"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
                 clearable
               ></el-input>
@@ -152,7 +163,7 @@ export default {
       this.$refs[formName].clearValidate()
     },
     // 表单校验
-    handleSubmit() {
+    submitHandle() {
       const { formName } = this.$attrs.config
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -163,7 +174,7 @@ export default {
       })
     },
     // 取消按钮
-    handleCancle() {
+    cancleHandle() {
       this.$pageSwitch('table')
     },
     // 表单提交

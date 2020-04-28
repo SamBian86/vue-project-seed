@@ -17,10 +17,7 @@ export default {
     // 判断是不是某种页面
     containsPageType(types) {
       const { pageType } = this.$attrs.page_info.data
-      if (types.indexOf(pageType) !== -1) {
-        return true
-      }
-      return false
+      return types.includes(pageType)
     }
   }
 }

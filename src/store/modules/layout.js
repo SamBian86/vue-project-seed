@@ -105,7 +105,7 @@ export default {
     },
     // 返回指定名称的标签页(多个)
     filterTabIncludeByNames: state => names => {
-      return state.tabs.filter(item => names.indexOf(item.name) !== -1)
+      return state.tabs.filter(item => names.includes(item.name))
     }
   }
 }

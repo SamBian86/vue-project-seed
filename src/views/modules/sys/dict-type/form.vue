@@ -52,9 +52,8 @@ import { mapGetters } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
-import { getMenuList, createMenu, editMenu, getMenuById } from '@/api/sys/menu'
-import { getIconList, getResourceSelector } from '@/utils'
-import { validateEmpty } from '@/utils/validator'
+import { createDictType, editDictType, getDictTypeById } from '@/api/sys/dictType'
+
 export default {
   name: 'Form',
   components: {},
@@ -63,44 +62,29 @@ export default {
     return {
       // 定义表单名称
       formTitle: {
-        create: '新增',
-        edit: '修改',
-        detail: '详情'
+        create: '新增字典类型',
+        edit: '修改字典类型',
+        detail: '详情字典类型'
       },
       formGenerateTitle: {},
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
-          api: createMenu
+          api: createDictType
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
-          api: editMenu
+          api: editDictType
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
-          api: getMenuById
+          api: getDictTypeById
         }
       },
       // 初始化数据定义
-      formDefaultData: {
-        type: 0,
-        sort: 0,
-        pid: 0,
-        resourceList: [],
-        parentName: '一级菜单'
-      },
+      formDefaultData: {},
       // 用于处理表单的隐藏与显示禁用行为
-      formAction: [
-        {
-          prop: 'type',
-          exclude: [
-            { value: 0, props: ['permissions'] },
-            { value: 1, props: ['url', 'icon'] }
-          ],
-          disabledPageType: ['edit']
-        }
-      ]
+      formAction: []
     }
   },
   computed: {
@@ -126,115 +110,40 @@ export default {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
-          // 类型
+          // 字典名称
           span: 24,
-          prop: 'type',
-          name: 'menu.type',
-          type: 'radio-group',
-          items: [
-            { label: 0, name: 'menu.type0' },
-            { label: 1, name: 'menu.type1' }
-          ]
-        },
-        {
-          // 名称
-          span: 24,
-          prop: 'name',
-          name: 'menu.name',
+          prop: 'dictName',
+          name: 'dict.dictName',
           type: 'text',
           rules: [{ required: true }]
         },
         {
-          // 上级菜单
+          // 字典类型
           span: 24,
-          prop: 'pid',
-          name: 'menu.parentName',
-          type: 'popover-tree',
-          rules: [{ required: true }],
-          component: 'toolPopoverTree',
-          componentConfig: {
-            request: getMenuList,
-            requestParams: { type: 0 },
-            i18nDefault: 'menu.parentNameDefault',
-            propName: 'parentName',
-            sourceName: 'name',
-            treeProps: { label: 'name', children: 'children' },
-            treeNodeKey: 'id',
-            mergeData: [
-              { source: 'name', target: 'parentName', default: '' },
-              { source: 'id', target: 'pid', default: 0 }
-            ],
-            componentNames: ['popover-tree']
-          }
-        },
-        {
-          // 路由
-          span: 24,
-          prop: 'url',
-          name: 'menu.url',
-          type: 'text'
+          prop: 'dictType',
+          name: 'dict.dictType',
+          type: 'text',
+          rules: [{ required: true }]
         },
         {
           // 排序
           span: 24,
           prop: 'sort',
-          name: 'menu.sort',
+          name: 'dict.sort',
           type: 'input-number',
+          rules: [{ required: true }],
           attrs: {
             controlsPosition: 'right',
             min: 0
           }
         },
         {
-          // 图标
+          // 字典类型
           span: 24,
-          prop: 'icon',
-          name: 'menu.icon',
-          type: 'popover-icon',
-          component: 'toolPopoverIcon',
-          componentConfig: {
-            request: args => {
-              return Promise.resolve(getIconList(args))
-            },
-            requestParams: {},
-            i18nName: 'menu.icon',
-            propName: 'icon',
-            sourceName: 'name',
-            mergeData: [{ source: 'name', target: 'icon' }],
-            compareKey: 'name'
-          }
-        },
-        // 授权标识
-        {
-          span: 24,
-          prop: 'permissions',
-          name: 'menu.permissions',
-          placeholder: 'menu.permissionsTips',
-          type: 'text'
-        },
-        // 授权资源
-        {
-          span: 24,
-          prop: 'resourceList',
-          name: 'menu.resource',
-          type: 'resource-selector',
-          rules: [{ required: true }, { validator: validateEmpty, trigger: 'blur' }],
-          ruleConfig: {
-            nodata: false
-          },
-          component: 'toolResourceSelector',
-          componentConfig: {
-            request: args => {
-              return Promise.resolve(getResourceSelector(args))
-            },
-            requestParams: {},
-            propName: 'resourceList',
-            defaultItem: {
-              resourceMethod: 'GET',
-              resourceUrl: ''
-            },
-            mergeData: { target: 'resourceList' }
-          }
+          prop: 'remark',
+          name: 'dict.remark',
+          type: 'textarea',
+          attrs: { autosize: { minRows: 2, maxRows: 4 } }
         }
       ]
 

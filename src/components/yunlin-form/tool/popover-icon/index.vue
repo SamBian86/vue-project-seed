@@ -15,7 +15,7 @@
       v-model="popoverStatus"
       popper-class="popover-icon-container"
       placement="bottom-start"
-      trigger="hover"
+      trigger="click"
     >
       <div class="popover-icon-list">
         <div class="popover-icon-list-inner">

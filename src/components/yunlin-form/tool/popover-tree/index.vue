@@ -10,7 +10,7 @@
       clearable
       @clear="clearHandle"
     ></el-input>
-    <el-popover ref="popover-tree" v-model="popoverStatus" placement="bottom-start" trigger="hover">
+    <el-popover ref="popover-tree" v-model="popoverStatus" placement="bottom-start" trigger="click">
       <el-tree
         ref="tree"
         :data="list"

@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+// 字典类型
 // POST
 // /sys/dict/type
 // 保存
@@ -25,7 +25,7 @@ export function editDictType(data = {}) {
 // DELETE
 // /sys/dict/type
 // 删除
-export function deleteDictType(data = {}) {
+export function deleteDictType(data = []) {
   return request({
     url: '/sys/dict/type',
     method: 'delete',
@@ -40,8 +40,7 @@ export function getDictTypeById(params = {}) {
   const { id } = params
   return request({
     url: `/sys/dict/type/${id}`,
-    method: 'get',
-    params
+    method: 'get'
   })
 }
 

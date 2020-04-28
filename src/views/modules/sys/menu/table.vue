@@ -19,8 +19,8 @@
             <el-button
               v-if="filterPermission('sys:menu:save')"
               type="primary"
-              size="small"
-              @click="handleCreate()"
+              :size="tableConfig.tableSearchSize"
+              @click="createHandle()"
             >{{ $t('add') }}</el-button>
           </el-form-item>
         </el-form>
@@ -38,14 +38,14 @@
             <el-button
               v-if="filterPermission('sys:menu:update')"
               type="text"
-              size="small"
-              @click="handleEdit(scope.row)"
+              :size="tableConfig.tableSearchSize"
+              @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>
             <el-button
               v-if="filterPermission('sys:menu:delete')"
               type="text"
-              size="small"
-              @click="handleDelete(scope.row)"
+              :size="tableConfig.tableSearchSize"
+              @click="deleteHandle(scope.row)"
             >{{ $t('delete') }}</el-button>
           </template>
         </el-table-column>
@@ -77,9 +77,10 @@ export default {
     // console.log('table created')
     // 是否显示树形数据
     this.tableConfig.rowKey = 'id'
+    this.tableConfig.hasPagination = false
     // 设置获取列表信息
     this.tableConfig.tableHead = [
-      { prop: 'name', label: 'menu.name', minWidth: '110px' },
+      { prop: 'name', label: 'menu.name', minWidth: '110' },
       {
         prop: 'icon',
         label: 'menu.icon',
@@ -116,17 +117,17 @@ export default {
       { prop: 'permissions', label: 'menu.permissions', align: 'center' }
     ]
     // 配置列表请求
-    this.tableHandle.getList = getMenuList
+    this.tableHandle.list.api = getMenuList
     // 配置删除功能
-    this.tableHandle.delete = deleteMenu
+    this.tableHandle.delete.api = deleteMenu
     // console.log('table page created')
   },
   methods: {
-    handleCreate(options = { componentNames: ['yunlin-table', 'popover-tree'] }) {
+    createHandle(options = { componentNames: ['yunlin-table', 'popover-tree'] }) {
       this.$pageSwitch('form', { pageType: 'create', ...options })
     },
     // 编辑
-    handleEdit(item, options = { componentNames: ['yunlin-table', 'popover-tree'] }) {
+    editHandle(item, options = { componentNames: ['yunlin-table', 'popover-tree'] }) {
       this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
     }
   }

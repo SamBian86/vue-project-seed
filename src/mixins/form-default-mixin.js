@@ -63,7 +63,7 @@ export default {
       const skip = ['create']
       const formGenerateTitle = {}
       Object.keys(formTitle).map(item => {
-        if (skip.indexOf(item) === -1) {
+        if (!skip.includes(item)) {
           formGenerateTitle[item] = formTitle[item] + name
         }
       })
@@ -90,7 +90,8 @@ export default {
         })
       })
       excludeProps = Array.from(new Set([...excludeProps]))
-      generateProps = formItemsReadOnly.filter(item => excludeProps.indexOf(item.prop) === -1)
+
+      generateProps = formItemsReadOnly.filter(item => !excludeProps.includes(item.prop))
 
       // 如果是详情页面
       if (pageType === 'detail') {
@@ -101,9 +102,7 @@ export default {
         generateProps.forEach(item => {
           // 用于控制某些字段在某种特定的页面上禁用
           if (disabledMap[item.prop] !== undefined) {
-            if (disabledMap[item.prop].indexOf(pageType) !== -1) {
-              item.disabled = true
-            }
+            item.disabled = disabledMap[item.prop].includes(pageType)
           }
         })
       }
@@ -124,12 +123,12 @@ export default {
           item.rules.forEach(ite => {
             if (ite.required && !ite.message) {
               // 必填验证 输入类型
-              if (inputTypes.indexOf(item.type) !== -1) {
+              if (inputTypes.includes(item.type)) {
                 ite.message = '请输入' + this.$t(item.name)
                 ite.trigger = 'blur'
               }
               // 必填验证 选择
-              if (changeTypes.indexOf(item.type) !== -1) {
+              if (changeTypes.includes(item.type)) {
                 ite.message = '请选择' + this.$t(item.name)
                 ite.trigger = 'change'
               }
@@ -166,14 +165,14 @@ export default {
       this.$refs[formName].clearValidate()
     },
     // 提交表单
-    handleSubmit() {
+    submitHandle() {
       const { formName } = this.formConfig
-      this.$refs[formName].handleSubmit()
+      this.$refs[formName].submitHandle()
     },
     // 取消按钮
-    handleCancle() {
+    cancleHandle() {
       const { formName } = this.formConfig
-      this.$refs[formName].handleCancle()
+      this.$refs[formName].cancleHandle()
     },
     // 表单行为 --------------------------------------------------------
 
@@ -185,7 +184,7 @@ export default {
     // 重新生成对应的校验规则, 用于动态添加校验规则
     formGenerateRuleByProps(props = []) {
       const { formItems } = this.formConfig
-      const items = props.length === 0 ? formItems : formItems.filter(item => props.indexOf(item.prop) !== -1)
+      const items = props.length === 0 ? formItems : formItems.filter(item => props.includes(item.prop))
       this.generateRules(items)
     },
     // 用于检查值的修改，用于控制表单的隐藏与显示禁用行为

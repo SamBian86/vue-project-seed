@@ -11,5 +11,9 @@ export default {
   activated() {
     // console.log('table mixin activated')
   },
-  methods: {}
+  methods: {
+    $tableSelectionListener(values) {
+      this.$emit('table-selection-listener', values)
+    }
+  }
 }
