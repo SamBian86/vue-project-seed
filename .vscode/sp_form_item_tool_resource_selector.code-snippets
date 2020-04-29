@@ -1,0 +1,33 @@
+{
+  "form代码片段_tool_resource_selector": {
+    "prefix": "sp_form_item_tool_resource_selector",
+    "body": [
+      "// $1\r",
+      "{\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'resource-selector',\r",
+      "  rules: [{ required: true }, { validator: validateEmpty, trigger: 'blur' }],\r",
+      "  ruleConfig: {\r",
+      "    nodata: false\r",
+      "  },\r",
+      "  component: 'toolResourceSelector',\r",
+      "  componentConfig: {\r",
+      "    request: args => {\r",
+      "      return Promise.resolve(获取数据接口$4(args))\r",
+      "    },\r",
+      "    requestParams: { 传参$5 },\r",
+      "    propName: 'resourceList',\r",
+      "    defaultItem: {\r",
+      "      resourceMethod: 'GET',\r",
+      "      resourceUrl: ''\r",
+      "    },\r",
+      "    mergeData: { target: 'resourceList' }\r",
+      "  }\r",
+      "}\r",
+      "$6"
+    ],
+    "description": "form代码片段_tool_resource_selector"
+  }
+}

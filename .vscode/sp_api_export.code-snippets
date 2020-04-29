@@ -1,0 +1,16 @@
+{
+  "api代码片段export导出": {
+    "prefix": "sp_api_export",
+    "body": [
+      "export function export$1(params = {}) {\r",
+      "  return request({\r",
+      "    url: `$2`,\r",
+      "    method: 'get',\r",
+      "    params\r",
+      "  })\r",
+      "}\r",
+      ""
+    ],
+    "description": "api代码片段export导出"
+  }
+}

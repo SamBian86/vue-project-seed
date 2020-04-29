@@ -1,0 +1,21 @@
+{
+  "form代码片段_input_number_计数器": {
+    "prefix": "sp_form_item_input_number",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$1',\r",
+      "  name: '国际化$2',\r",
+      "  type: 'input-number',\r",
+      "  rules: [{ required: true }],\r",
+      "  attrs: {\r",
+      "    controlsPosition: 'right',\r",
+      "    min: 0\r",
+      "  }\r",
+      "},\r",
+      "$3"
+    ],
+    "description": "form代码片段_input_number_计数器"
+  }
+}

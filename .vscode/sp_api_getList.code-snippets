@@ -1,0 +1,16 @@
+{
+  "api代码片段getList分页列表": {
+    "prefix": "sp_api_getList",
+    "body": [
+      "export function get$1List(params = {}) {\r",
+      "  return request({\r",
+      "    url: `$2`,\r",
+      "    method: 'get',\r",
+      "    params\r",
+      "  })\r",
+      "}",
+      ""
+    ],
+    "description": "api代码片段getList分页列表"
+  }
+}

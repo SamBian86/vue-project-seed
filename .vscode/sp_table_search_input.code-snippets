@@ -1,0 +1,18 @@
+{
+  "table代码片段_查询条件_input": {
+    "prefix": "sp_table_search_input",
+    "body": [
+      "<el-form-item>\r",
+      "  <el-input\r",
+      "    v-model=\"tableConfig.searchParams.字段名$1\"\r",
+      "    :placeholder=\"$t('国际化$2')\"\r",
+      "    :size=\"tableConfig.tableSearchSize\"\r",
+      "    clearable\r",
+      "    @clear=\"clearHandle\"\r",
+      "  ></el-input>\r",
+      "</el-form-item>\r",
+      "$3"
+    ],
+    "description": "table代码片段_查询条件_input"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "form代码片段_tool_popover_icon": {
+    "prefix": "sp_form_item_tool_popover_icon",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'popover-icon',\r",
+      "  component: 'toolPopoverIcon',\r",
+      "  componentConfig: {\r",
+      "    request: args => {\r",
+      "      return Promise.resolve(获取数据接口$4(args))\r",
+      "    },\r",
+      "    requestParams: { 传参$5 },\r",
+      "    i18nName: '国际化$6',\r",
+      "    propName: 'icon',\r",
+      "    sourceName: 'name',\r",
+      "    mergeData: [{ source: 'name', target: 'icon' }],\r",
+      "    compareKey: 'name'\r",
+      "  }\r",
+      "},\r",
+      "$7"
+    ],
+    "description": "form代码片段_tool_popover_icon"
+  }
+}

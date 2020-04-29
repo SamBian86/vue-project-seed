@@ -1,0 +1,16 @@
+{
+  "api代码片段create新增": {
+    "prefix": "sp_api_create",
+    "body": [
+      "export function create$1(data = {}) {\r",
+      "  return request({\r",
+      "    url: `$2`,\r",
+      "    method: 'post',\r",
+      "    data\r",
+      "  })\r",
+      "}",
+      ""
+    ],
+    "description": "api代码片段create新增"
+  }
+}

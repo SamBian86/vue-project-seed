@@ -1,0 +1,20 @@
+{
+  "form代码片段_radio_group_static": {
+    "prefix": "sp_form_item_radio_group_static",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'radio-group',\r",
+      "  items: [\r",
+      "    { label: 0, name: '国际化$4' },\r",
+      "    { label: 1, name: '国际化$5' }\r",
+      "  ]\r",
+      "},\r",
+      "$6"
+    ],
+    "description": "form代码片段_radio_group_static"
+  }
+}

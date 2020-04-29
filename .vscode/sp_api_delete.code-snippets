@@ -1,0 +1,16 @@
+{
+  "api代码片段delete删除": {
+    "prefix": "sp_api_delete",
+    "body": [
+      "export function delete$1(data = []) {\r",
+      "  return request({\r",
+      "    url: `$2`,\r",
+      "    method: 'delete',\r",
+      "    data\r",
+      "  })\r",
+      "}",
+      ""
+    ],
+    "description": "api代码片段delete删除"
+  }
+}

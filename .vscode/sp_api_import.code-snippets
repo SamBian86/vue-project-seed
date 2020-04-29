@@ -1,0 +1,7 @@
+{
+  "api代码片段import引入axios封装": {
+    "prefix": "sp_api_import",
+    "body": ["import request from '@/utils/request'"],
+    "description": "api代码片段import引入axios封装"
+  }
+}

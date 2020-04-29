@@ -1,0 +1,17 @@
+{
+  "table代码片段_item_toolButton": {
+    "prefix": "sp_table_item_tool_button",
+    "body": [
+      "{\r",
+      "  prop: '字段$1',\r",
+      "  label: '国际化$2',\r",
+      "  minWidth: '120',\r",
+      "  align: 'center',\r",
+      "  component: 'toolButton',\r",
+      "  componentConfig: { prop: '字段$3', buttonType: 'text', clickHandle: this.clickHandle }\r",
+      "},\r",
+      "$4"
+    ],
+    "description": "table代码片段_item_toolButton"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "table代码片段_item_toolSvg": {
+    "prefix": "sp_table_item_tool_svg",
+    "body": [
+      "{\r",
+      "  prop: '字段$1',\r",
+      "  label: '国际化$2',\r",
+      "  minWidth: '80',\r",
+      "  align: 'center',\r",
+      "  component: 'toolSvg',\r",
+      "  componentConfig: { svgName: '取图标的prop名称$3' }\r",
+      "},\r",
+      "$4"
+    ],
+    "description": "table代码片段_item_toolSvg"
+  }
+}

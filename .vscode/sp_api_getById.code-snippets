@@ -1,0 +1,16 @@
+{
+  "api代码片段getById详情": {
+    "prefix": "sp_api_getById",
+    "body": [
+      "export function get$1ById(params = {}) {\r",
+      "  const { id } = params\r",
+      "  return request({\r",
+      "    url: `/$2/\\${id}`,\r",
+      "    method: 'get'\r",
+      "  })\r",
+      "}\r",
+      ""
+    ],
+    "description": "api代码片段getById详情"
+  }
+}

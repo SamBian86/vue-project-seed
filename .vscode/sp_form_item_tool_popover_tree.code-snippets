@@ -1,0 +1,32 @@
+{
+  "form代码片段_tool_popover_tree": {
+    "prefix": "sp_form_item_tool_popover_tree",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'popover-tree',\r",
+      "  rules: [{ required: true }],\r",
+      "  component: 'toolPopoverTree',\r",
+      "  componentConfig: {\r",
+      "    request: 获取数据接口$4,\r",
+      "    requestParams: { 传参$5 },\r",
+      "    i18nDefault: 'menu.parentNameDefault',\r",
+      "    propName: 'parentName',\r",
+      "    sourceName: 'name',\r",
+      "    treeProps: { label: 'name', children: 'children' },\r",
+      "    treeNodeKey: 'id',\r",
+      "    mergeData: [\r",
+      "      { source: 'name', target: 'parentName', default: '' },\r",
+      "      { source: 'id', target: 'pid', default: 0 }\r",
+      "    ],\r",
+      "    componentNames: ['popover-tree']\r",
+      "  }\r",
+      "},\r",
+      "$6"
+    ],
+    "description": "form代码片段_tool_popover_tree"
+  }
+}

@@ -1,0 +1,18 @@
+﻿{
+  "table代码片段_drawer_parent_父组件代码": {
+    "prefix": "sp_table_handle_drawer",
+    "body": [
+      "<yunlin-drawer\r",
+      "  ref=\"yunlinDrawer\"\r",
+      "  :config=\"drawerConfig\"\r",
+      "  v-bind=\"$attrs\"\r",
+      "  @drawer-closed=\"drawerClosed\"\r",
+      "  v-on=\"$listeners\"\r",
+      ">\r",
+      "  <div :drawer-data=\"drawerData\"></div>\r",
+      "</yunlin-drawer>\r",
+      ""
+    ],
+    "description": "table代码片段_drawer_parent_父组件代码"
+  }
+}

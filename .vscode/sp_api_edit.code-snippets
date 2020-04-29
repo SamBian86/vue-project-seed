@@ -1,0 +1,16 @@
+{
+  "api代码片段edit编辑": {
+    "prefix": "sp_api_edit",
+    "body": [
+      "export function edit$1(data = {}) {\r",
+      "  return request({\r",
+      "    url: `$2`,\r",
+      "    method: 'put',\r",
+      "    data\r",
+      "  })\r",
+      "}",
+      ""
+    ],
+    "description": "api代码片段edit编辑"
+  }
+}

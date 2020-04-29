@@ -1,0 +1,32 @@
+{
+  "table代码片段_item_toolTag": {
+    "prefix": "sp_table_item_tool_tag",
+    "body": [
+      "{\r",
+      "  prop: '字段$1',\r",
+      "  label: '国际化$2',\r",
+      "  width: '80',\r",
+      "  align: 'center',\r",
+      "  component: 'toolTag',\r",
+      "  componentConfig: {\r",
+      "    value: '对应下面value值的prop$3',\r",
+      "    name: 'name',\r",
+      "    tagSize: 'small',\r",
+      "    tagConfig: [\r",
+      "      {\r",
+      "        value: 0,\r",
+      "        name: '菜单'\r",
+      "      },\r",
+      "      {\r",
+      "        value: 1,\r",
+      "        type: 'info',\r",
+      "        name: '按钮'\r",
+      "      }\r",
+      "    ]\r",
+      "  }\r",
+      "},\r",
+      "$4"
+    ],
+    "description": "table代码片段_item_toolTag"
+  }
+}

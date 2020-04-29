@@ -1,0 +1,16 @@
+{
+  "api代码片段getListAll获取所有数据": {
+    "prefix": "sp_api_getListAll",
+    "body": [
+      "export function get$1ListAll(params = {}) {\r",
+      "  return request({\r",
+      "    url: `$2`,\r",
+      "    method: 'get',\r",
+      "    params\r",
+      "  })\r",
+      "}",
+      ""
+    ],
+    "description": "api代码片段getListAll获取所有数据"
+  }
+}
