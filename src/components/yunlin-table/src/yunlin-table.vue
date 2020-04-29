@@ -9,7 +9,7 @@
       :row-key="$attrs.config.rowKey"
       border
       style="width: 100%;"
-      @selection-change="selectionChangeHandle"
+      @selection-change="tableSelectionChangeHandle"
     >
       <el-table-column
         v-if="$attrs.config.tableType === 'selection'"
@@ -58,8 +58,8 @@
       :page-size="pagination.pageSize"
       :layout="pagination.layout"
       :total="pagination.total"
-      @size-change="PaginationSizeChangeHandle"
-      @current-change="PaginationCurrentChangeHandle"
+      @size-change="paginationSizeChangeHandle"
+      @current-change="paginationCurrentChangeHandle"
     ></el-pagination>
   </div>
 </template>
@@ -135,13 +135,17 @@ export default {
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {},
+  updated() {
+    // 检查是否需要重新获取数据
+    this.$pageCheckUpdateWhenActivated(() => {
+      this.searchHandle()
+    })
+  },
   activated() {
     const { reload } = this
     if (reload) {
       this.searchHandle()
     }
-
     // 检查是否需要重新获取数据
     this.$pageCheckUpdateWhenActivated(() => {
       this.searchHandle()
@@ -247,17 +251,17 @@ export default {
       this.query = _query
     },
     // Pagination pageSize改变监听
-    PaginationSizeChangeHandle(value) {
+    paginationSizeChangeHandle(value) {
       console.log(value)
     },
     // Pagination currentPage 改变监听
-    PaginationCurrentChangeHandle(value) {
+    paginationCurrentChangeHandle(value) {
       this.query.page = value
       this.pagination.currentPage = value
       this.searchHandle()
     },
     // section-change处理
-    selectionChangeHandle(values) {
+    tableSelectionChangeHandle(values) {
       this.$tableSelectionListener(values)
     }
   }

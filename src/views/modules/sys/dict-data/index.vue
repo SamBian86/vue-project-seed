@@ -6,6 +6,7 @@
           :is="pageInfo.component"
           :page_info="pageInfo"
           :page_update_list="pageUpdateList"
+          :page_drawer_data="drawerData"
           v-bind="$attrs"
           @page-switch="pageSwitch"
           @page-update-list-add="pageUpdateListAdd"

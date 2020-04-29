@@ -1,4 +1,12 @@
 export default {
+  props: {
+    drawerData: {
+      type: Object,
+      default: function() {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       pageComponents: [

@@ -18,8 +18,8 @@
         >
           <el-form-item>
             <el-input
-              v-model="tableConfig.searchParams.dictName"
-              :placeholder="$t('dict.dictName')"
+              v-model="tableConfig.searchParams.dictValue"
+              :placeholder="$t('dict.dictValue')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -27,8 +27,8 @@
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model="tableConfig.searchParams.dictType"
-              :placeholder="$t('dict.dictType')"
+              v-model="tableConfig.searchParams.dictLabel"
+              :placeholder="$t('dict.dictLabel')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -109,17 +109,18 @@ export default {
     // console.log('table activated')
   },
   created() {
+    const { id } = this.$attrs.page_drawer_data
     // console.log('table created')
     // 是否显示树形数据
     this.tableConfig.rowKey = 'id'
     this.tableConfig.tableType = 'selection'
-    console.log(this.$attrs)
-    // this.tableConfig.searchParams.dictTypeId
+    // console.log(this.$attrs)
+    this.tableConfig.searchParams.dictTypeId = id
 
     // 设置获取列表信息
     this.tableConfig.tableHead = [
-      { prop: 'dictValue', label: 'dict.dictValue', align: 'center' },
-      { prop: 'dictLabel', label: 'dict.dictLabel', minWidth: '120', align: 'center' },
+      { prop: 'dictValue', label: 'dict.dictValue', width: '80', align: 'center' },
+      { prop: 'dictLabel', label: 'dict.dictLabel', width: '150', align: 'center' },
       { prop: 'sort', label: 'dict.sort', width: '50', align: 'center' },
       { prop: 'remark', label: 'dict.remark', align: 'center' },
       { prop: 'createDate', label: 'dict.createDate', align: 'center' }

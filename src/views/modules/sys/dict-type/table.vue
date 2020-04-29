@@ -85,6 +85,16 @@
         </el-table-column>
       </template>
     </yunlin-table>
+
+    <yunlin-drawer
+      ref="yunlinDrawer"
+      :config="drawerConfig"
+      v-bind="$attrs"
+      @drawer-closed="drawerClosed"
+      v-on="$listeners"
+    >
+      <dict-data :drawer-data="drawerData"></dict-data>
+    </yunlin-drawer>
   </div>
 </template>
 
@@ -92,12 +102,14 @@
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
+import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
 import { getDictTypeList, deleteDictType } from '@/api/sys/dictType'
+import dictData from '../dict-data'
 
 export default {
   name: 'Tabel',
-  components: {},
-  mixins: [pageMixin, tableDefaultMixin],
+  components: { dictData },
+  mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
   data() {
     return {}
   },
@@ -147,7 +159,9 @@ export default {
     },
     // 点击字典类型
     dictTypeClickHandle(row) {
-      console.log(row)
+      this.setDrawerData(row)
+      this.setDrawerTitle(row.dictName + '列表')
+      this.drawerVisibleHandle()
     }
   }
 }

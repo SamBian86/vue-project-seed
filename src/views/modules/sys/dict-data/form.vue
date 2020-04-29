@@ -52,7 +52,7 @@ import { mapGetters } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
-import { createDictType, editDictType, getDictTypeById } from '@/api/sys/dictType'
+import { createDictData, editDictData, getDictDataById } from '@/api/sys/dictData'
 
 export default {
   name: 'Form',
@@ -62,23 +62,23 @@ export default {
     return {
       // 定义表单名称
       formTitle: {
-        create: '新增字典类型',
-        edit: '修改字典类型',
-        detail: '详情字典类型'
+        create: '新增',
+        edit: '修改',
+        detail: '详情'
       },
       formGenerateTitle: {},
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
-          api: createDictType
+          api: createDictData
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
-          api: editDictType
+          api: editDictData
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
-          api: getDictTypeById
+          api: getDictDataById
         }
       },
       // 初始化数据定义
@@ -110,18 +110,18 @@ export default {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
-          // 字典名称
+          // 字典值
           span: 24,
-          prop: 'dictName',
-          name: 'dict.dictName',
+          prop: 'dictValue',
+          name: 'dict.dictValue',
           type: 'text',
           rules: [{ required: true }]
         },
         {
-          // 字典类型
+          // 字典标签
           span: 24,
-          prop: 'dictType',
-          name: 'dict.dictType',
+          prop: 'dictLabel',
+          name: 'dict.dictLabel',
           type: 'text',
           rules: [{ required: true }]
         },
