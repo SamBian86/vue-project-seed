@@ -74,55 +74,58 @@ export default {
     // console.log('table activated')
   },
   created() {
-    // console.log('table created')
-    // 是否显示树形数据
-    this.tableConfig.rowKey = 'id'
-    this.tableConfig.hasPagination = false
-    // 设置获取列表信息
-    this.tableConfig.tableHead = [
-      { prop: 'name', label: 'menu.name', minWidth: '110' },
-      {
-        prop: 'icon',
-        label: 'menu.icon',
-        width: '80',
-        align: 'center',
-        component: 'toolSvg',
-        componentConfig: { svgName: 'icon' }
-      },
-      {
-        prop: 'type',
-        label: 'menu.type',
-        width: '80',
-        align: 'center',
-        component: 'toolTag',
-        componentConfig: {
-          value: 'type',
-          name: 'name',
-          tagSize: 'small',
-          tagConfig: [
-            {
-              value: 0,
-              name: '菜单'
-            },
-            {
-              value: 1,
-              type: 'info',
-              name: '按钮'
-            }
-          ]
-        }
-      },
-      { prop: 'sort', label: 'menu.sort', width: '50', align: 'center' },
-      { prop: 'url', label: 'menu.url', align: 'center' },
-      { prop: 'permissions', label: 'menu.permissions', align: 'center' }
-    ]
-    // 配置列表请求
-    this.tableHandle.list.api = getMenuList
-    // 配置删除功能
-    this.tableHandle.delete.api = deleteMenu
-    // console.log('table page created')
+    this.init()
   },
   methods: {
+    init() {
+      // console.log('table created')
+      // 是否显示树形数据
+      this.tableConfig.rowKey = 'id'
+      this.tableConfig.hasPagination = false
+      // 设置获取列表信息
+      this.tableConfig.tableHead = [
+        { prop: 'name', label: 'menu.name', minWidth: '110' },
+        {
+          prop: 'icon',
+          label: 'menu.icon',
+          width: '80',
+          align: 'center',
+          component: 'toolSvg',
+          componentConfig: { svgName: 'icon' }
+        },
+        {
+          prop: 'type',
+          label: 'menu.type',
+          width: '80',
+          align: 'center',
+          component: 'toolTag',
+          componentConfig: {
+            value: 'type',
+            name: 'name',
+            tagSize: 'small',
+            tagConfig: [
+              {
+                value: 0,
+                name: '菜单'
+              },
+              {
+                value: 1,
+                type: 'info',
+                name: '按钮'
+              }
+            ]
+          }
+        },
+        { prop: 'sort', label: 'menu.sort', width: '50', align: 'center' },
+        { prop: 'url', label: 'menu.url', align: 'center' },
+        { prop: 'permissions', label: 'menu.permissions', align: 'center' }
+      ]
+      // 配置列表请求
+      this.tableHandle.list.api = getMenuList
+      // 配置删除功能
+      this.tableHandle.delete.api = deleteMenu
+      // console.log('table page created')
+    },
     createHandle(options = { componentNames: ['yunlin-table', 'popover-tree'] }) {
       this.$pageSwitch('form', { pageType: 'create', ...options })
     },

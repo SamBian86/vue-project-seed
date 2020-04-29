@@ -6,7 +6,7 @@
       :handle="tableHandle"
       v-bind="$attrs"
       @table-selection-listener="tableSelectionListener"
-      v-on="$listeners"
+      v-on="listeners"
     >
       <!-- 查询区域 -->
       <template slot="search">
@@ -18,17 +18,8 @@
         >
           <el-form-item>
             <el-input
-              v-model="tableConfig.searchParams.dictValue"
-              :placeholder="$t('dict.dictValue')"
-              :size="tableConfig.tableSearchSize"
-              clearable
-              @clear="clearHandle"
-            ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-input
-              v-model="tableConfig.searchParams.dictLabel"
-              :placeholder="$t('dict.dictLabel')"
+              v-model="tableConfig.searchParams.paramCode"
+              :placeholder="$t('params.paramCode')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -36,14 +27,14 @@
           </el-form-item>
           <el-form-item>
             <el-button
-              v-if="filterPermission('sys:dict:view')"
+              v-if="filterPermission('sys:params:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
             >{{ $t('query') }}</el-button>
           </el-form-item>
           <el-form-item>
             <el-button
-              v-if="filterPermission('sys:dict:save')"
+              v-if="filterPermission('sys:params:save')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
@@ -51,7 +42,7 @@
           </el-form-item>
           <el-form-item>
             <el-button
-              v-if="filterPermission('sys:dict:delete') && tableSections.length"
+              v-if="filterPermission('sys:params:delete') && tableSections.length"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
@@ -66,17 +57,17 @@
           align="center"
           header-align="center"
           fixed="right"
-          width="100"
+          width="160"
         >
           <template slot-scope="scope">
             <el-button
-              v-if="filterPermission('sys:dict:update')"
+              v-if="filterPermission('sys:params:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>
             <el-button
-              v-if="filterPermission('sys:dict:delete')"
+              v-if="filterPermission('sys:params:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
@@ -92,7 +83,7 @@
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
-import { getDictDataList, deleteDictData } from '@/api/sys/dictData'
+import { getParamsList, deleteParams } from '@/api/sys/params'
 
 export default {
   name: 'Tabel',
@@ -109,40 +100,36 @@ export default {
     // console.log('table activated')
   },
   created() {
-    this.init()
+    this.ini$t()
   },
   methods: {
-    init() {
-      const { id } = this.$attrs.page_drawer_data
+    ini$t() {
       // console.log('table created')
       // 是否显示树形数据
       this.tableConfig.rowKey = 'id'
       this.tableConfig.tableType = 'selection'
       // console.log(this.$attrs)
-      this.tableConfig.searchParams.dictTypeId = id
 
       // 设置获取列表信息
       this.tableConfig.tableHead = [
-        { prop: 'dictValue', label: 'dict.dictValue', width: '80', align: 'center' },
-        { prop: 'dictLabel', label: 'dict.dictLabel', width: '150', align: 'center' },
-        { prop: 'sort', label: 'dict.sort', width: '50', align: 'center' },
-        { prop: 'remark', label: 'dict.remark', align: 'center' },
-        { prop: 'createDate', label: 'dict.createDate', align: 'center' }
+        { prop: 'paramCode', label: 'params.paramCode', minWidth: '200', align: 'center' },
+        { prop: 'paramValue', label: 'params.paramValue', minWidth: '200', align: 'center' },
+        { prop: 'remark', label: 'params.remark', width: '300', align: 'center' }
       ]
       // 配置列表请求
-      this.tableHandle.list.api = getDictDataList
+      this.tableHandle.list.api = getParamsList
       // 配置删除功能
-      this.tableHandle.delete.api = deleteDictData
+      this.tableHandle.delete.api = deleteParams
       // 配置section删除功能
-      this.tableHandle.deleteSection.api = deleteDictData
+      this.tableHandle.deleteSection.api = deleteParams
       // console.log('table page created')
     },
     createHandle(options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { pageType: 'create', ...options })
+      this.pageSwitch('form', { pageType: 'create', ...options })
     },
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
+      this.pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
     }
   }
 }

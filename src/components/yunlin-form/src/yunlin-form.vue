@@ -33,7 +33,7 @@
             <template v-if="item.type === 'textarea'">
               <el-input
                 v-model="$attrs.data[item.prop]"
-                type="textarea"
+                :type="item.type"
                 :disabled="item.disabled"
                 :autosize="item.attrs.autosize"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"

@@ -137,6 +137,7 @@ export default {
             }
             rules.push(ite)
           })
+          // 如果没有nodata为false代表没有数据的不进行校验
           if (item.ruleConfig) {
             if (!item.ruleConfig.nodata && formData[item.prop] && formData[item.prop].length !== 0) {
               formRules[item.prop] = rules

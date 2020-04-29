@@ -62,7 +62,6 @@ export function getDictDataById(params = {}) {
   const { id } = params
   return request({
     url: `/sys/dict/data/${id}`,
-    method: 'get',
-    params
+    method: 'get'
   })
 }

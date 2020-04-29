@@ -121,35 +121,38 @@ export default {
     // console.log('table activated')
   },
   created() {
-    // console.log('table created')
-    // 是否显示树形数据
-    this.tableConfig.rowKey = 'id'
-    this.tableConfig.tableType = 'selection'
-
-    // 设置获取列表信息
-    this.tableConfig.tableHead = [
-      { prop: 'dictName', label: 'dict.dictName', align: 'center' },
-      {
-        prop: 'dictType',
-        label: 'dict.dictType',
-        minWidth: '120',
-        align: 'center',
-        component: 'toolButton',
-        componentConfig: { prop: 'dictType', buttonType: 'text', clickHandle: this.dictTypeClickHandle }
-      },
-      { prop: 'sort', label: 'dict.sort', width: '50', align: 'center' },
-      { prop: 'remark', label: 'dict.remark', align: 'center' },
-      { prop: 'createDate', label: 'dict.createDate', align: 'center' }
-    ]
-    // 配置列表请求
-    this.tableHandle.list.api = getDictTypeList
-    // 配置删除功能
-    this.tableHandle.delete.api = deleteDictType
-    // 配置section删除功能
-    this.tableHandle.deleteSection.api = deleteDictType
-    // console.log('table page created')
+    this.init()
   },
   methods: {
+    init() {
+      // console.log('table created')
+      // 是否显示树形数据
+      this.tableConfig.rowKey = 'id'
+      this.tableConfig.tableType = 'selection'
+
+      // 设置获取列表信息
+      this.tableConfig.tableHead = [
+        { prop: 'dictName', label: 'dict.dictName', align: 'center' },
+        {
+          prop: 'dictType',
+          label: 'dict.dictType',
+          minWidth: '120',
+          align: 'center',
+          component: 'toolButton',
+          componentConfig: { prop: 'dictType', buttonType: 'text', clickHandle: this.dictTypeClickHandle }
+        },
+        { prop: 'sort', label: 'dict.sort', width: '50', align: 'center' },
+        { prop: 'remark', label: 'dict.remark', align: 'center' },
+        { prop: 'createDate', label: 'dict.createDate', align: 'center' }
+      ]
+      // 配置列表请求
+      this.tableHandle.list.api = getDictTypeList
+      // 配置删除功能
+      this.tableHandle.delete.api = deleteDictType
+      // 配置section删除功能
+      this.tableHandle.deleteSection.api = deleteDictType
+      // console.log('table page created')
+    },
     createHandle(options = { componentNames: ['yunlin-table'] }) {
       this.$pageSwitch('form', { pageType: 'create', ...options })
     },

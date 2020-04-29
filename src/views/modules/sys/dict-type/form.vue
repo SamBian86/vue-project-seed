@@ -143,7 +143,7 @@ export default {
           prop: 'remark',
           name: 'dict.remark',
           type: 'textarea',
-          attrs: { autosize: { minRows: 2, maxRows: 4 } }
+          attrs: { autosize: { minRows: 6, maxRows: 10 } }
         }
       ]
 
