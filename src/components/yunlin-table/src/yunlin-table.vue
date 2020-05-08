@@ -255,7 +255,9 @@ export default {
     },
     // Pagination pageSize改变监听
     paginationSizeChangeHandle(value) {
-      console.log(value)
+      this.query.limit = value
+      this.pagination.pageSize = value
+      this.searchHandle()
     },
     // Pagination currentPage 改变监听
     paginationCurrentChangeHandle(value) {
@@ -273,12 +275,10 @@ export default {
       let orderField = prop
 
       if (sortable === true) {
-        const m = prop.match(/([A-Z])/g)
-        if (m !== null) {
-          m.map(item => {
-            orderField = orderField.replace(item, '_' + item.toLowerCase())
-          })
-        }
+        orderField = prop
+          .split(/([A-Z])/g)
+          .map(item => (item !== item.toLowerCase() ? '_' + item.toLowerCase() : item))
+          .join('')
       }
       // console.log(column, prop, order)
       if (order === 'descending') {
