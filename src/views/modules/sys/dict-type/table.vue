@@ -132,18 +132,19 @@ export default {
 
       // 设置获取列表信息
       this.tableConfig.tableHead = [
-        { prop: 'dictName', label: 'dict.dictName', align: 'center' },
+        { prop: 'dictName', label: 'dict.dictName', align: 'center', sortable: true },
         {
           prop: 'dictType',
           label: 'dict.dictType',
           minWidth: '120',
           align: 'center',
           component: 'toolButton',
+          sortable: true,
           componentConfig: { prop: 'dictType', buttonType: 'text', clickHandle: this.dictTypeClickHandle }
         },
-        { prop: 'sort', label: 'dict.sort', width: '50', align: 'center' },
+        { prop: 'sort', label: 'dict.sort', width: '100', align: 'center', sortable: true },
         { prop: 'remark', label: 'dict.remark', align: 'center' },
-        { prop: 'createDate', label: 'dict.createDate', align: 'center' }
+        { prop: 'createDate', label: 'dict.createDate', align: 'center', sortable: true }
       ]
       // 配置列表请求
       this.tableHandle.list.api = getDictTypeList

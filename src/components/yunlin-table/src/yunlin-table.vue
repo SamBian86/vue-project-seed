@@ -10,6 +10,7 @@
       border
       style="width: 100%;"
       @selection-change="tableSelectionChangeHandle"
+      @sort-change="tableSortChangeHandle"
     >
       <el-table-column
         v-if="$attrs.config.tableType === 'selection'"
@@ -28,6 +29,7 @@
         :fixed="item.fixed"
         :width="item.width"
         :min-width="item.minWidth"
+        :sortable="item.sortable === null || item.sortable === false ? false : item.sortable"
         :show-overflow-tooltip="item.showOverFlowTooltip === undefined ? true : item.showOverFlowTooltip"
       >
         <!--
@@ -68,6 +70,7 @@
 import pageMixin from '@/mixins/page-mixin'
 import tableMixin from '@/mixins/table-mixin'
 import ToolComponents from '@/components/yunlin-table/tool'
+
 export default {
   name: 'YunlinTable',
   components: {},
@@ -263,6 +266,32 @@ export default {
     // section-change处理
     tableSelectionChangeHandle(values) {
       this.$tableSelectionListener(values)
+    },
+    // sort-change处理
+    tableSortChangeHandle({ column, prop, order }) {
+      const { sortable } = column
+      let orderField = prop
+
+      if (sortable === true) {
+        const m = prop.match(/([A-Z])/g)
+        if (m !== null) {
+          m.map(item => {
+            orderField = orderField.replace(item, '_' + item.toLowerCase())
+          })
+        }
+      }
+      // console.log(column, prop, order)
+      if (order === 'descending') {
+        this.query.order = 'desc'
+        this.query.orderField = orderField
+      } else if (order === 'ascending') {
+        this.query.order = 'asc'
+        this.query.orderField = orderField
+      } else {
+        this.query.order = ''
+        this.query.orderField = ''
+      }
+      this.searchHandle()
     }
   }
 }
