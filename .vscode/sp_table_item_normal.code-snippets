@@ -1,7 +1,7 @@
 {
   "table代码片段_item_普通字段": {
     "prefix": "sp_table_item_normal",
-    "body": ["{ prop: '字段$1', label: '国际化$2', width: '80', align: 'center' },\r", "$1"],
+    "body": ["{ prop: '字段$1', label: '国际化$2', width: '80', align: 'center', sortable: true },\r", "$1"],
     "description": "table代码片段_item_普通字段"
   }
 }
