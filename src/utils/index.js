@@ -57,15 +57,3 @@ export const debounce = (fn, time) => {
     }, time)
   }
 }
-
-// 自动生成查询字符
-export const generateOrderField = field => {
-  const m = field.match(/([A-Z])/g)
-  let _field
-  if (m !== null) {
-    m.map(item => {
-      _field = _field.replace(item, '_' + item.toLowerCase())
-    })
-  }
-  return m === null ? field : _field
-}

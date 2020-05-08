@@ -272,7 +272,7 @@ export default {
     // sort-change处理
     tableSortChangeHandle({ column, prop, order }) {
       const { sortable } = column
-      let orderField = prop
+      let orderField = sortable
 
       if (sortable === true) {
         orderField = prop
