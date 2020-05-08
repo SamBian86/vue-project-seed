@@ -6,7 +6,7 @@
       :handle="tableHandle"
       v-bind="$attrs"
       @table-selection-listener="tableSelectionListener"
-      v-on="listeners"
+      v-on="$listeners"
     >
       <!-- 查询区域 -->
       <template slot="search">
@@ -100,10 +100,10 @@ export default {
     // console.log('table activated')
   },
   created() {
-    this.ini$t()
+    this.init()
   },
   methods: {
-    ini$t() {
+    init() {
       // console.log('table created')
       // 是否显示树形数据
       this.tableConfig.rowKey = 'id'
@@ -125,11 +125,11 @@ export default {
       // console.log('table page created')
     },
     createHandle(options = { componentNames: ['yunlin-table'] }) {
-      this.pageSwitch('form', { pageType: 'create', ...options })
+      this.$pageSwitch('form', { pageType: 'create', ...options })
     },
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-      this.pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
     }
   }
 }

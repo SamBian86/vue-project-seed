@@ -6,11 +6,11 @@
           :is="pageInfo.component"
           :page_info="pageInfo"
           :page_update_list="pageUpdateList"
-          v-bind="attrs"
+          v-bind="$attrs"
           @page-switch="pageSwitch"
           @page-update-list-add="pageUpdateListAdd"
           @page-update-list-delete="pageUpdateListDelete"
-          v-on="listeners"
+          v-on="$listeners"
         ></component>
       </keep-alive>
     </transition>

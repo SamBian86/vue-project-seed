@@ -23,7 +23,7 @@
       "        @form-generate-rule-by-props=\"formGenerateRuleByProps\"\r",
       "        @form-value-listener=\"formValueListener\"\r",
       "        @form-data-update=\"formDataUpdate\"\r",
-      "        v-on=\"$listeners\"\r",
+      "        v-on=\"$$listeners\"\r",
       "      >\r",
       "        <template slot=\"footer\">\r",
       "          <div class=\"form-submit-container\">\r",
