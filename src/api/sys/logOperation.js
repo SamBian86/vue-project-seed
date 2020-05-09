@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { exportFile } from '@/utils'
 
 // 操作日志
 
@@ -6,11 +7,7 @@ import request from '@/utils/request'
 // GET
 // /sys/log/operation/export
 export function exportLogOperation(params = {}) {
-  return request({
-    url: `/sys/log/operation/export`,
-    method: 'get',
-    params
-  })
+  exportFile(`/sys/log/operation/export`, params)
 }
 
 // 分页

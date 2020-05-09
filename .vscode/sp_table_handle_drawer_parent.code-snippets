@@ -1,16 +1,23 @@
 ﻿{
   "table代码片段_drawer_parent_父组件代码": {
-    "prefix": "sp_table_handle_drawer",
+    "prefix": "sp_table_handle_drawer_parent",
     "body": [
       "<yunlin-drawer\r",
       "  ref=\"yunlinDrawer\"\r",
       "  :config=\"drawerConfig\"\r",
-      "  v-bind=\"$attrs\"\r",
+      "  v-bind=\"$$attrs\"\r",
       "  @drawer-closed=\"drawerClosed\"\r",
-      "  v-on=\"$listeners\"\r",
+      "  v-on=\"$$listeners\"\r",
       ">\r",
-      "  <div :drawer-data=\"drawerData\"></div>\r",
+      "  <xxx :drawer-data=\"drawerData\"></xxx>\r",
       "</yunlin-drawer>\r",
+      "import drawerDefaultMixin from '@/mixins/drawer-default-mixin'\r",
+      "// 打开drawer组件方法\r",
+      "XXXXXXHandle(row) {\r",
+      "  this.setDrawerData(row)\r",
+      "  this.setDrawerTitle(row.XXX + '列表')\r",
+      "  this.drawerVisibleHandle()\r",
+      "}\r",
       ""
     ],
     "description": "table代码片段_drawer_parent_父组件代码"

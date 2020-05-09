@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { exportFile } from '@/utils'
 
 // 异常日志
 
@@ -6,11 +7,7 @@ import request from '@/utils/request'
 // GET
 // /sys/log/error/export
 export function exportLogError(params = {}) {
-  return request({
-    url: `/sys/log/error/export`,
-    method: 'get',
-    params
-  })
+  exportFile(`/sys/log/error/export`, params)
 }
 
 // 分页

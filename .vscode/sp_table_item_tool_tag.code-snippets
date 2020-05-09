@@ -10,7 +10,7 @@
       "  component: 'toolTag',\r",
       "  componentConfig: {\r",
       "    prop: '对应下面value值的prop$3',\r",
-      "    name: 'name',\r",
+      "    name: '哪个键名用于显示tag名称',\r",
       "    tagSize: 'small',\r",
       "    tagConfig: [\r",
       "      {\r",

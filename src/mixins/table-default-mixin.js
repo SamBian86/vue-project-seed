@@ -55,7 +55,8 @@ export default {
     },
     // 清除
     clearHandle() {
-      this.searchHandle()
+      const { tableName } = this.tableConfig
+      this.$refs[tableName].clearHandle()
     },
     // 删除
     deleteHandle(item) {

@@ -219,6 +219,11 @@ export default {
           console.log(message)
         })
     },
+    // 清除查询条件
+    clearHandle() {
+      this.query.page = 1
+      this.searchHandle()
+    },
     // 重置查询条件
     searchResetHandle() {
       this.searchHandle()

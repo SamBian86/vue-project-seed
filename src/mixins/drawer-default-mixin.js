@@ -44,8 +44,7 @@ export default {
     },
     // yunlin-drawer组件 事件监听器 --------------------------------------------------------
     drawerClosed() {
-      // this.drawerData = {}
-      console.log('清空数据')
+      console.log('关闭drawer钩子')
     }
   }
 }
