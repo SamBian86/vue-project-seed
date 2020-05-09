@@ -2,6 +2,7 @@
   <el-button
     :size="config.buttonSize"
     :type="config.buttonType"
+    :disabled="disabled"
     @click="config.clickHandle(columnData)"
   >{{ name }}</el-button>
 </template>
@@ -17,6 +18,18 @@ export default {
           prop: '', // 哪个键名用于显示
           buttonSize: '', // button尺寸
           buttonType: '',
+          buttonConfig: [
+            // {
+            //   value: 0,
+            //   type: 'text',
+            //   name: '文字'
+            // },
+            // {
+            //   value: 1,
+            //   type: 'text',
+            //   name: '文字'
+            // }
+          ],
           clickHandle: () => {}
         }
       }
@@ -31,12 +44,24 @@ export default {
   },
   data() {
     return {
-      name: ''
+      name: '',
+      disabled: false
     }
   },
   created() {
-    const name = this.columnData[this.config.prop]
-    this.name = name
+    const { buttonConfig } = this.config
+    const value = this.columnData[this.config.prop]
+
+    if (buttonConfig) {
+      buttonConfig.map(item => {
+        if (item.value === value) {
+          this.name = item.name || value // 默认用buttonConfig中的name
+          this.disabled = item.disabled ? item.disabled : false
+        }
+      })
+    } else {
+      this.name = value
+    }
   }
 }
 </script>

@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import { getToken } from '@/utils/cookie'
 /**
  * 获取uuid
  */
@@ -56,4 +57,16 @@ export const debounce = (fn, time) => {
       fn.apply(content, arguments)
     }, time)
   }
+}
+
+// 导出文件
+export const exportFile = (url, params) => {
+  params._t = new Date().getTime()
+  params.token = getToken()
+  const _params = '?'.concat(
+    Object.entries(params)
+      .map(item => item.join('='))
+      .join('&')
+  )
+  window.location.href = process.env.VUE_APP_API_URL + url + _params
 }

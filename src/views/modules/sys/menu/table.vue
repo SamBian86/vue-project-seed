@@ -4,6 +4,7 @@
       ref="yunlinTable"
       :config="tableConfig"
       :handle="tableHandle"
+      :searchparams="tableSearchParams"
       v-bind="$attrs"
       v-on="$listeners"
     >
@@ -12,7 +13,7 @@
         <el-form
           class="table-search-form"
           :inline="true"
-          :model="tableConfig.searchParams"
+          :model="tableSearchParams"
           @keyup.enter.native="searchHandle"
         >
           <el-form-item>
@@ -100,7 +101,7 @@ export default {
           align: 'center',
           component: 'toolTag',
           componentConfig: {
-            value: 'type',
+            prop: 'type',
             name: 'name',
             tagSize: 'small',
             tagConfig: [

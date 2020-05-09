@@ -3,7 +3,7 @@
     "prefix": "sp_table_handle_drawer",
     "body": [
       "// const { id } = this.$attrs.page_drawer_data\r",
-      "// this.tableConfig.searchParams.dictTypeId = id\r",
+      "// this.tableSearchParams.dictTypeId = id\r",
       ""],
     "description": "table代码片段_drawer_children_子组件代码"
   }

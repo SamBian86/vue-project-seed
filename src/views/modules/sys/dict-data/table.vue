@@ -4,6 +4,7 @@
       ref="yunlinTable"
       :config="tableConfig"
       :handle="tableHandle"
+      :searchparams="tableSearchParams"
       v-bind="$attrs"
       @table-selection-listener="tableSelectionListener"
       v-on="$listeners"
@@ -13,12 +14,12 @@
         <el-form
           class="table-search-form"
           :inline="true"
-          :model="tableConfig.searchParams"
+          :model="tableSearchParams"
           @keyup.enter.native="searchHandle"
         >
           <el-form-item>
             <el-input
-              v-model="tableConfig.searchParams.dictValue"
+              v-model="tableSearchParams.dictValue"
               :placeholder="$t('dict.dictValue')"
               :size="tableConfig.tableSearchSize"
               clearable
@@ -27,7 +28,7 @@
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model="tableConfig.searchParams.dictLabel"
+              v-model="tableSearchParams.dictLabel"
               :placeholder="$t('dict.dictLabel')"
               :size="tableConfig.tableSearchSize"
               clearable
@@ -119,7 +120,7 @@ export default {
       this.tableConfig.rowKey = 'id'
       this.tableConfig.tableType = 'selection'
       // console.log(this.$attrs)
-      this.tableConfig.searchParams.dictTypeId = id
+      this.tableSearchParams.dictTypeId = id
 
       // 设置获取列表信息
       this.tableConfig.tableHead = [

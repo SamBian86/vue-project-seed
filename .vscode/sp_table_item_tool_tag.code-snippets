@@ -9,7 +9,7 @@
       "  align: 'center',\r",
       "  component: 'toolTag',\r",
       "  componentConfig: {\r",
-      "    value: '对应下面value值的prop$3',\r",
+      "    prop: '对应下面value值的prop$3',\r",
       "    name: 'name',\r",
       "    tagSize: 'small',\r",
       "    tagConfig: [\r",

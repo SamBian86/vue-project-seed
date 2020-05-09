@@ -3,11 +3,8 @@
     "prefix": "sp_api_export",
     "body": [
       "export function export$1(params = {}) {\r",
-      "  return request({\r",
-      "    url: `$2`,\r",
-      "    method: 'get',\r",
-      "    params\r",
-      "  })\r",
+      "  // import { exportFile } from '@/utils'\r",
+      "  exportFile(`$2`, params)\r",
       "}\r",
       ""
     ],

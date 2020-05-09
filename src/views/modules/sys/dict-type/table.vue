@@ -4,6 +4,7 @@
       ref="yunlinTable"
       :config="tableConfig"
       :handle="tableHandle"
+      :searchparams="tableSearchParams"
       v-bind="$attrs"
       @table-selection-listener="tableSelectionListener"
       v-on="$listeners"
@@ -13,12 +14,12 @@
         <el-form
           class="table-search-form"
           :inline="true"
-          :model="tableConfig.searchParams"
+          :model="tableSearchParams"
           @keyup.enter.native="searchHandle"
         >
           <el-form-item>
             <el-input
-              v-model="tableConfig.searchParams.dictName"
+              v-model="tableSearchParams.dictName"
               :placeholder="$t('dict.dictName')"
               :size="tableConfig.tableSearchSize"
               clearable
@@ -27,7 +28,7 @@
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model="tableConfig.searchParams.dictType"
+              v-model="tableSearchParams.dictType"
               :placeholder="$t('dict.dictType')"
               :size="tableConfig.tableSearchSize"
               clearable

@@ -1,0 +1,25 @@
+{
+  "table代码片段_查询条件_select_i18n": {
+    "prefix": "sp_table_search_select",
+    "body": [
+      "<el-form-item>\r",
+      "  <el-select\r",
+      "    v-model=\"tableSearchParams.字段名$1\"\r",
+      "    :placeholder=\"$$t('国际化$2')\"\r",
+      "    :size=\"tableConfig.tableSearchSize\"\r",
+      "    clearable\r",
+      "    @clear=\"clearHandle\"\r",
+      "  >\r",
+      "    <el-option\r",
+      "      v-for=\"(item, index) in i18nItems\"\r",
+      "      :key=\"index\"\r",
+      "      :label=\"item.label\"\r",
+      "      :value=\"item.value\"\r",
+      "    ></el-option>\r",
+      "  </el-select>\r",
+      "</el-form-item>\r",
+      "$3"
+    ],
+    "description": "table代码片段_查询条件_select_i18n"
+  }
+}

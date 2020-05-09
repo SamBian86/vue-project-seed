@@ -9,7 +9,7 @@ export default {
         tableHead: [], // 表格表头
         tableType: '', // 表格类型
         rowKey: '', // 支持多层显示
-        searchParams: {}, // 查询条件
+        searchFillEmpty: false, // 是否填充查询条件为空
         hasPagination: true, // 是否分页组件
         paginationConfig: {
           query: {
@@ -22,11 +22,14 @@ export default {
           layout: 'total, sizes, prev, pager, next, jumper'
         }
       },
+      tableSearchParams: {}, // 查询条件
       tableHandle: {
         // 列表抽象方法，用获取列表接口方法覆盖
         list: { api: null, callback: null },
         // 删除抽象方法，如果有删除功能，使用删除接口方法覆盖
         delete: { api: null, callback: null },
+        // 导出抽象方法，如果有导出功能，使用导出接口方法覆盖
+        export: { api: null, callback: null },
         // 删除section选中项目
         deleteSection: { api: null, callback: null }
       },
@@ -70,6 +73,11 @@ export default {
       const { tableName } = this.tableConfig
       const items = this.filterSectionData()
       this.$refs[tableName].deleteSectionHandle(items)
+    },
+    // 导出操作
+    exportHandle() {
+      const { tableName } = this.tableConfig
+      this.$refs[tableName].exportHandle()
     },
     // 批量删除获取数据
     // 创建 提交成功后,那么下次componentNames对应的组件activated事件触发时会重新发请求获取数据

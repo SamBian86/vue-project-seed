@@ -110,6 +110,15 @@ export default {
         })
       )
     },
+    exportBridge() {
+      const { api } = this.$attrs.handle.export
+      return (
+        api ||
+        (() => {
+          return Promise.reject('请覆盖导出方法')
+        })
+      )
+    },
     deleteBridge() {
       const { api } = this.$attrs.handle.delete
       return (
@@ -163,20 +172,29 @@ export default {
     searchHandle() {
       // 获取列表数据
       const { query } = this
-      const { searchParams, hasPagination } = this.$attrs.config
+      const { hasPagination, searchFillEmpty } = this.$attrs.config
+      const searchParams = this.$attrs.searchparams
       const _query = {}
       const _searchParams = {}
       let params = {}
 
       // 组装查询条件
       Object.keys(query).map(item => {
-        if (query[item] !== '') {
-          _query[item] = query[item]
+        if (searchFillEmpty) {
+          _query[item] = query[item] !== '' ? query[item] : ''
+        } else {
+          if (query[item] !== '') {
+            _query[item] = query[item]
+          }
         }
       })
       Object.keys(searchParams).map(item => {
-        if (searchParams[item] !== '') {
-          _searchParams[item] = searchParams[item]
+        if (searchFillEmpty) {
+          _searchParams[item] = searchParams[item] !== '' ? searchParams[item] : ''
+        } else {
+          if (searchParams[item] !== '') {
+            _searchParams[item] = searchParams[item]
+          }
         }
       })
 
@@ -218,6 +236,11 @@ export default {
           })
         })
         .catch(() => {})
+    },
+    // 触发导出
+    exportHandle() {
+      const searchParams = this.$attrs.searchparams
+      this.exportBridge(searchParams)
     },
     // 批量操作
     deleteSectionHandle(items) {

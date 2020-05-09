@@ -4,7 +4,7 @@
     "body": [
       "<el-form-item>\r",
       "  <el-input\r",
-      "    v-model=\"tableConfig.searchParams.字段名$1\"\r",
+      "    v-model=\"tableSearchParams.字段名$1\"\r",
       "    :placeholder=\"$t('国际化$2')\"\r",
       "    :size=\"tableConfig.tableSearchSize\"\r",
       "    clearable\r",

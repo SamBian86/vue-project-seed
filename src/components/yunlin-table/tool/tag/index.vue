@@ -10,7 +10,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          value: '', // 哪个键名用于取数据
+          prop: '', // 哪个键名用于取数据
           name: '', // 哪个键名用于显示tag名称
           tagSize: 'small', // tag尺寸
           tagConfig: [
@@ -45,7 +45,7 @@ export default {
   },
   created() {
     const { tagConfig } = this.config
-    const value = this.columnData[this.config.value]
+    const value = this.columnData[this.config.prop]
     const name = this.columnData[this.config.name]
 
     tagConfig.map(item => {
