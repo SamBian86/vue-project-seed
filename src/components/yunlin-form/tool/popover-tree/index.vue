@@ -11,15 +11,21 @@
       @clear="clearHandle"
     ></el-input>
     <el-popover ref="popover-tree" v-model="popoverStatus" placement="bottom-start" trigger="click">
-      <el-tree
-        ref="tree"
-        :data="list"
-        :props="config.treeProps"
-        :node-key="config.treeNodeKey"
-        :expand-on-click-node="false"
-        accordion
-        @current-change="changeHandle"
-      ></el-tree>
+      <div class="popover-tree-out">
+        <el-input v-model="filterText" size="small" :placeholder="$t('keywordFilterSearch')"></el-input>
+        <div class="popover-tree-in">
+          <el-tree
+            ref="tree"
+            :data="list"
+            :props="config.treeProps"
+            :node-key="config.treeNodeKey"
+            :expand-on-click-node="false"
+            :filter-node-method="filterNodeMethod"
+            accordion
+            @current-change="changeHandle"
+          ></el-tree>
+        </div>
+      </div>
     </el-popover>
   </div>
 </template>
@@ -38,6 +44,9 @@ export default {
         return {
           request: null, // el-tree 获取数据的方法
           requestParams: {}, // 获取数据方法传参
+          treeDataTranslate: null, // 获取数据以后是否要进行数据处理
+          treeDataFilter: false, // 是否开启过滤功能
+          treeDataFilterKey: '', // 根据那个key进行过滤
           i18nDefault: '', // 默认显示的placeholder内容
           propName: '', // 初始化用于显示的键名
           sourceName: '', // 修改后用于在本组件中显示文字的键名
@@ -66,6 +75,7 @@ export default {
   },
   data() {
     return {
+      filterText: '',
       componentNames: ['popover-tree'],
       popoverStatus: false,
       name: this.pageData[this.config.propName] ? this.pageData[this.config.propName] : this.$t(this.config.i18nDefault),
@@ -73,6 +83,11 @@ export default {
     }
   },
   computed: {},
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val)
+    }
+  },
   activated() {
     // console.log('popover-tree activated')
     // 检查是否需要重新获取数据
@@ -87,11 +102,16 @@ export default {
   },
   methods: {
     init() {
+      const { treeDataTranslate } = this.config
       if (this.isPromise(this.config.request())) {
         this.config
           .request(this.config.requestParams)
           .then(response => {
-            this.list = response
+            if (treeDataTranslate !== null && treeDataTranslate !== undefined) {
+              this.list = treeDataTranslate(response)
+            } else {
+              this.list = response
+            }
           })
           .catch(error => {
             console.log(error)
@@ -123,6 +143,12 @@ export default {
       })
       this.togglePopoverHide()
       this.$formDataMerge(newData)
+    },
+    // 过滤方法
+    filterNodeMethod(value, data) {
+      const { treeDataFilterKey } = this.config
+      if (!value) return true
+      return data[treeDataFilterKey].indexOf(value) !== -1
     }
   }
 }
@@ -130,5 +156,17 @@ export default {
 <style lang="scss">
 .popover-tree-input input {
   cursor: pointer;
+}
+
+.popover-tree-out {
+  width: 200px;
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.popover-tree-in {
+  width: 250px;
+  max-height: 300px;
+  overflow: auto;
 }
 </style>

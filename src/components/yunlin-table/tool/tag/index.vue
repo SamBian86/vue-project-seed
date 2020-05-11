@@ -1,5 +1,8 @@
 <template>
-  <el-tag :size="config.tagSize" :type="tagItem.type">{{ tagItem.name }}</el-tag>
+  <div>
+    <span v-if="config.type === 'text'">{{ tagItem.name }}</span>
+    <el-tag v-else :size="config.tagSize" :type="tagItem.type">{{ tagItem.name }}</el-tag>
+  </div>
 </template>
 
 <script>
@@ -12,6 +15,7 @@ export default {
         return {
           prop: '', // 哪个键名用于取数据
           name: '', // 哪个键名用于显示tag名称
+          type: '', // 用于直接显示文本 text
           tagSize: 'small', // tag尺寸
           tagConfig: [
             // {

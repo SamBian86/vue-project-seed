@@ -39,7 +39,6 @@ export default {
       const pageInfo = pageComponents.filter(item => {
         return item.name === name
       })
-
       if (pageInfo.length === 1) {
         this.pageInfo = pageInfo[0]
         this.pageInfo.data = data

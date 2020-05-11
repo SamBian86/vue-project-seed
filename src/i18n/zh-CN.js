@@ -20,6 +20,7 @@ t.logout = '退出'
 t.manage = '处理'
 t.createDate = '创建时间'
 t.keyword = '关键字：'
+t.keywordFilterSearch = '根据关键字进行过滤'
 t.choose = '请选择'
 
 t.prompt = {}
@@ -81,9 +82,7 @@ t.login.copyright.address = '地址:无锡市高浪东路999号-8-A1-1201'
 t.home = {}
 t.home.desc = {}
 t.home.desc.title = '项目介绍'
-t.home.desc.list = [
-  '耘林信息工程管理项目平台，基于最新的Spring Boot 2.2、Mybatis、Element 2.0+开发'
-]
+t.home.desc.list = ['耘林信息工程管理项目平台，基于最新的Spring Boot 2.2、Mybatis、Element 2.0+开发']
 
 /* 模块 */
 t.model = {}

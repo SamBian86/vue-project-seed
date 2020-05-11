@@ -7,6 +7,8 @@
       v-loading="loading"
       :data="tableData"
       :row-key="$attrs.config.rowKey"
+      :lazy="$attrs.config.lazy"
+      :load="lazyLoadHandle"
       border
       style="width: 100%;"
       @selection-change="tableSelectionChangeHandle"
@@ -136,6 +138,15 @@ export default {
           return Promise.reject('请覆盖批量删除方法')
         })
       )
+    },
+    lazyloadBridge() {
+      const { api } = this.$attrs.handle.lazy
+      return (
+        api ||
+        (() => {
+          return Promise.reject('请覆盖列表懒加载方法')
+        })
+      )
     }
   },
   watch: {},
@@ -230,15 +241,28 @@ export default {
     },
     // 触发删除
     deleteHandle(item) {
+      const { callback } = this.$attrs.handle.delete
       this.$confirm('确认删除？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.deleteBridge(item).then(response => {
-            this.searchHandle()
-          })
+          this.deleteBridge(item)
+            .then(response => {
+              if (callback) {
+                callback()
+              } else {
+                this.searchHandle()
+              }
+            })
+            .catch(message => {
+              this.$message({
+                message,
+                type: 'error',
+                duration: 2 * 1000
+              })
+            })
         })
         .catch(() => {})
     },
@@ -249,6 +273,7 @@ export default {
     },
     // 批量操作
     deleteSectionHandle(items) {
+      const { callback } = this.$attrs.handle.delete
       this.$confirm(`确认删除这${items.length}项目？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -256,7 +281,11 @@ export default {
       })
         .then(() => {
           this.deleteSectionBridge(items).then(response => {
-            this.searchHandle()
+            if (callback) {
+              callback()
+            } else {
+              this.searchHandle()
+            }
           })
         })
         .catch(() => {})
@@ -320,6 +349,15 @@ export default {
         this.query.orderField = ''
       }
       this.searchHandle()
+    },
+    // 懒加载方法
+    lazyLoadHandle(tree, treeNode, resolve) {
+      const { lazy } = this.$attrs.config
+      if (!lazy) {
+        Promise.reject('请先配置列表懒加载')
+      } else {
+        this.$tableLazyloadListener(this.lazyloadBridge, tree, treeNode, resolve)
+      }
     }
   }
 }

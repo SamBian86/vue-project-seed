@@ -20,6 +20,7 @@ t.clear = 'Clear'
 t.logout = 'Sign Out'
 t.createDate = 'Create Time'
 t.keyword = 'Keyword：'
+t.keywordFilterSearch = 'filter by keyword'
 t.choose = 'Please Choose'
 
 t.prompt = {}
@@ -53,8 +54,7 @@ t.updatePassword.password = 'Original'
 t.updatePassword.newPassword = 'New Password'
 t.updatePassword.confirmPassword = 'Confirm'
 t.updatePassword.validate = {}
-t.updatePassword.validate.confirmPassword =
-  'Confirm password is not consistent with new password input'
+t.updatePassword.validate.confirmPassword = 'Confirm password is not consistent with new password input'
 
 t.contentTabs = {}
 t.contentTabs.closeCurrent = 'Close Current Tab'
@@ -229,8 +229,7 @@ t.oss.qiniuSecretKeyTips = 'Seven Cow SecretKey'
 t.oss.qiniuBucketName = 'Space Name'
 t.oss.qiniuBucketNameTips = 'Seven cattle storage space name'
 t.oss.aliyunDomain = 'Domain Name'
-t.oss.aliyunDomainTips =
-  'Alibaba Cloud bound domain name, such as: http://cdn.yunlin.io'
+t.oss.aliyunDomainTips = 'Alibaba Cloud bound domain name, such as: http://cdn.yunlin.io'
 t.oss.aliyunPrefix = 'Path Prefix'
 t.oss.aliyunPrefixTips = 'Do not set default to empty'
 t.oss.aliyunEndPoint = 'EndPoint'
@@ -376,8 +375,7 @@ t.user.gender1 = 'Female'
 t.user.gender2 = 'Secure'
 t.user.roleIdList = 'Role Config'
 t.user.validate = {}
-t.user.validate.confirmPassword =
-  'Confirm password is not consistent with password input'
+t.user.validate.confirmPassword = 'Confirm password is not consistent with password input'
 
 t.region = {}
 t.region.id = 'Region ID'
@@ -431,14 +429,12 @@ t.process.formURLError = 'Set the URL to save the form'
 t.process.keyError = 'Set up process KEY'
 t.process.formNameError = 'Please set the form name'
 t.process.businessKeyError = 'Business KEY is empty and cannot start process'
-t.process.notExistError =
-  'No process is queried, please design the process first'
+t.process.notExistError = 'No process is queried, please design the process first'
 t.process.circulation = 'Circulation details'
 
 t.task = {}
 t.task.businessKeyError = 'Business KEY is empty and cannot handle task'
-t.task.detailError =
-  'Business KEY is empty and processing details cannot be viewed'
+t.task.detailError = 'Business KEY is empty and processing details cannot be viewed'
 t.task.startTime = 'Task Begin Time'
 t.task.endTime = 'Task End Time'
 t.task.durationInSeconds = 'Task Duration (seconds)'

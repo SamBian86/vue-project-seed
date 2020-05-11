@@ -13,6 +13,7 @@ export default {
   methods: {
     // 用于子页面切换其他页面
     $pageSwitch(name, data = {}) {
+      console.log(name)
       this.$emit('page-switch', name, data)
     },
     // 将组件名称添加到检查列表
@@ -24,6 +25,7 @@ export default {
       this.$emit('page-update-list-delete', componentNames)
       console.log(`删除标识${componentNames}`)
     },
+    //
     // 判断componentNames组件是否在page_update_list中
     $pageUpdateListContains(componentNames = []) {
       const { page_update_list } = this.$attrs

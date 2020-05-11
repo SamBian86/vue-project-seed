@@ -49,7 +49,7 @@
       "  computed: {},\r",
       "  created() {\r",
       "    // 初始化include\r",
-      "    this.generateInclude()\r",
+      "    // this.generateInclude()\r",
       "    const { pageComponents } = this\r",
       "    // 初始化显示列表页面\r",
       "    this.pageInfo = pageComponents[0]\r",

@@ -42,8 +42,7 @@ service.interceptors.response.use(
       return data
     } else {
       // 调用方在页面处理
-      if (code === 10004 || code === 10007) {
-        // 验证码不正确
+      if (code === 10004 || code === 10007 || code === 10008 || code === 10018) {
         return Promise.reject(msg)
       }
 

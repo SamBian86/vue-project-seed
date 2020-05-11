@@ -11,6 +11,7 @@ export default {
         rowKey: '', // 支持多层显示
         searchFillEmpty: false, // 是否填充查询条件为空
         hasPagination: true, // 是否分页组件
+        lazy: false, // 是否懒加载子节点
         paginationConfig: {
           query: {
             page: 1, // 第几页
@@ -31,7 +32,9 @@ export default {
         // 导出抽象方法，如果有导出功能，使用导出接口方法覆盖
         export: { api: null, callback: null },
         // 删除section选中项目
-        deleteSection: { api: null, callback: null }
+        deleteSection: { api: null, callback: null },
+        // 懒加载列表数据
+        lazy: { api: null, callback: null }
       },
       tableSections: [] // 如果tableType是section类型勾选的值将会保存在这
     }
@@ -98,6 +101,17 @@ export default {
     // 接收section的值
     tableSelectionListener(values) {
       this.tableSections = values
+    },
+    // 接收节点异步加载处理
+    tableLazyloadListener(fn, tree, treeNode, resolve) {
+      // 此方法在需要时可以在业务页面重写
+      fn({ pid: tree.id })
+        .then(response => {
+          resolve(response)
+        })
+        .catch(() => {
+          Promise.reject('请配置列表懒加载方法')
+        })
     }
   }
 }

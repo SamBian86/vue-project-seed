@@ -14,6 +14,9 @@ export default {
   methods: {
     $tableSelectionListener(values) {
       this.$emit('table-selection-listener', values)
+    },
+    $tableLazyloadListener(fn, tree, treeNode, resolve) {
+      this.$emit('table-lazyload-listener', fn, tree, treeNode, resolve)
     }
   }
 }

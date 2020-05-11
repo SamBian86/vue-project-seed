@@ -20,6 +20,7 @@ t.logout = '退出'
 t.manage = '處理'
 t.createDate = '創建時間'
 t.keyword = '關鍵字：'
+t.keywordFilterSearch = '根據關鍵字檢索'
 t.choose = '請選擇'
 
 t.prompt = {}
