@@ -252,9 +252,8 @@ export default {
             .then(response => {
               if (callback) {
                 callback()
-              } else {
-                this.searchHandle()
               }
+              this.searchHandle()
             })
             .catch(message => {
               this.$message({
