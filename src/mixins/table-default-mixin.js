@@ -66,6 +66,11 @@ export default {
       const { tableName } = this.tableConfig
       this.$refs[tableName].deleteHandle(item)
     },
+    // 自定义单个操作
+    customHandle(opts) {
+      const { tableName } = this.tableConfig
+      this.$refs[tableName].customHandle(opts)
+    },
     // 批量删除
     filterSectionData() {
       const { tableSections } = this
@@ -73,10 +78,34 @@ export default {
         return item.id
       })
     },
+    // 批量删除操作
     deleteSectionHandle() {
-      const { tableName } = this.tableConfig
+      const { tableName, tableType } = this.tableConfig
       const items = this.filterSectionData()
+      if (tableType === 'selection' && items.length === 0) {
+        this.$message({
+          message: this.$t('prompt.deleteBatch'),
+          type: 'warning',
+          duration: 2000
+        })
+        return false
+      }
       this.$refs[tableName].deleteSectionHandle(items)
+    },
+    // 批量执行操作
+    customSectionHandle(opts) {
+      const { tableName, tableType } = this.tableConfig
+      const items = this.filterSectionData()
+      if (tableType === 'selection' && items.length === 0) {
+        this.$message({
+          message: this.$t(opts.i18nMessage),
+          type: 'warning',
+          duration: 2000
+        })
+        return false
+      }
+      opts.data = items
+      this.$refs[tableName].customSectionHandle(opts)
     },
     // 导出操作
     exportHandle() {

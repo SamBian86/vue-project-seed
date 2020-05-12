@@ -22,6 +22,7 @@ t.createDate = '創建時間'
 t.keyword = '關鍵字：'
 t.keywordFilterSearch = '根據關鍵字檢索'
 t.choose = '請選擇'
+t.back = '返回'
 
 t.prompt = {}
 t.prompt.title = '提示'
@@ -29,6 +30,7 @@ t.prompt.info = '確定進行[{handle}]操作?'
 t.prompt.success = '操作成功'
 t.prompt.failed = '操作失敗'
 t.prompt.deleteBatch = '請選擇刪除項'
+t.prompt.customBatch = '請選擇批量處理的選項'
 
 t.validate = {}
 t.validate.required = '必填項不能為空'

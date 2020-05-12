@@ -22,6 +22,7 @@ t.createDate = '创建时间'
 t.keyword = '关键字：'
 t.keywordFilterSearch = '根据关键字进行过滤'
 t.choose = '请选择'
+t.back = '返回'
 
 t.prompt = {}
 t.prompt.title = '提示'
@@ -29,6 +30,7 @@ t.prompt.info = '确定进行[{handle}]操作?'
 t.prompt.success = '操作成功'
 t.prompt.failed = '操作失败'
 t.prompt.deleteBatch = '请选择删除项'
+t.prompt.customBatch = '请选择批量处理的项目'
 
 t.validate = {}
 t.validate.required = '必填项不能为空'

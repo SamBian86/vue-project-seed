@@ -43,7 +43,7 @@
           </el-form-item>
           <el-form-item>
             <el-button
-              v-if="filterPermission('sys:region:delete') && tableSections.length"
+              v-if="filterPermission('sys:region:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
@@ -169,7 +169,7 @@ export default {
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
       this.tableHandle.delete.api = deleteRegionById
-      this.tableHandle.delete.callback = this.deleteCallback
+      // this.tableHandle.delete.callback = this.deleteCallback
       // 配置节点懒加载功能
       this.tableHandle.lazy.api = getRegionList
       // 配置section删除功能
@@ -184,10 +184,6 @@ export default {
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table', 'popover-tree'] }) {
       this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
-    },
-    // 删除回调
-    deleteCallback() {
-      window.location.reload()
     }
   }
 }

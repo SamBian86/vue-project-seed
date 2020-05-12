@@ -22,6 +22,7 @@ t.createDate = 'Create Time'
 t.keyword = 'Keyword：'
 t.keywordFilterSearch = 'filter by keyword'
 t.choose = 'Please Choose'
+t.back = 'Back'
 
 t.prompt = {}
 t.prompt.title = 'Prompt'
@@ -29,6 +30,7 @@ t.prompt.info = 'Confirm to carry out [{handle}] operation?'
 t.prompt.success = 'Succeeded'
 t.prompt.failed = 'Failed'
 t.prompt.deleteBatch = 'Please select delete item'
+t.prompt.customBatch = 'Please select delete items'
 
 t.validate = {}
 t.validate.required = 'Required field cannot be empty'

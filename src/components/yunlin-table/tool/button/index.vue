@@ -48,19 +48,32 @@ export default {
       disabled: false
     }
   },
+  watch: {
+    columnData(newVal, oldVal) {
+      const { prop } = this.config
+      if (newVal[prop] !== oldVal[prop]) {
+        this.init()
+      }
+    }
+  },
   created() {
-    const { buttonConfig } = this.config
-    const value = this.columnData[this.config.prop]
+    this.init()
+  },
+  methods: {
+    init() {
+      const { buttonConfig } = this.config
+      const value = this.columnData[this.config.prop]
 
-    if (buttonConfig) {
-      buttonConfig.map(item => {
-        if (item.value === value) {
-          this.name = item.name || value // 默认用buttonConfig中的name
-          this.disabled = item.disabled ? item.disabled : false
-        }
-      })
-    } else {
-      this.name = value
+      if (buttonConfig) {
+        buttonConfig.map(item => {
+          if (item.value === value) {
+            this.name = item.name || value // 默认用buttonConfig中的name
+            this.disabled = item.disabled ? item.disabled : false
+          }
+        })
+      } else {
+        this.name = value
+      }
     }
   }
 }

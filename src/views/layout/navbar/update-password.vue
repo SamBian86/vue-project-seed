@@ -23,20 +23,14 @@
           type="password"
         ></el-input>
       </el-form-item>
-      <el-form-item
-        :label="$t('updatePassword.newPassword')"
-        prop="newPassword"
-      >
+      <el-form-item :label="$t('updatePassword.newPassword')" prop="newPassword">
         <el-input
           v-model="dataForm.newPassword"
           :placeholder="$t('updatePassword.newPassword')"
           type="password"
         ></el-input>
       </el-form-item>
-      <el-form-item
-        :label="$t('updatePassword.confirmPassword')"
-        prop="confirmPassword"
-      >
+      <el-form-item :label="$t('updatePassword.confirmPassword')" prop="confirmPassword">
         <el-input
           v-model="dataForm.confirmPassword"
           :placeholder="$t('updatePassword.confirmPassword')"
@@ -46,9 +40,7 @@
     </el-form>
     <template slot="footer">
       <el-button @click="visible = false">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" @click="dataFormSubmitHandle()">
-        {{ $t('confirm') }}
-      </el-button>
+      <el-button type="primary" @click="dataFormSubmitHandle()">{{ $t('confirm') }}</el-button>
     </template>
   </el-dialog>
 </template>
@@ -72,9 +64,7 @@ export default {
     dataRule() {
       var validateConfirmPassword = (rule, value, callback) => {
         if (this.dataForm.newPassword !== value) {
-          return callback(
-            new Error(this.$t('updatePassword.validate.confirmPassword'))
-          )
+          return callback(new Error(this.$t('updatePassword.validate.confirmPassword')))
         }
         callback()
       }
@@ -123,7 +113,7 @@ export default {
             this.$message({
               message: this.$t('prompt.success'),
               type: 'success',
-              duration: 500,
+              duration: 2000,
               onClose: () => {
                 this.visible = false
                 this.logout().then(() => {

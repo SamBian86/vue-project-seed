@@ -47,17 +47,30 @@ export default {
       }
     }
   },
-  created() {
-    const { tagConfig } = this.config
-    const value = this.columnData[this.config.prop]
-    const name = this.columnData[this.config.name]
-
-    tagConfig.map(item => {
-      if (item.value === value) {
-        this.tagItem.type = item.type
-        this.tagItem.name = item.name || name // 默认用tagConfig中的name
+  watch: {
+    columnData(newVal, oldVal) {
+      const { prop } = this.config
+      if (newVal[prop] !== oldVal[prop]) {
+        this.init()
       }
-    })
+    }
+  },
+  created() {
+    this.init()
+  },
+  methods: {
+    init() {
+      const { tagConfig } = this.config
+      const value = this.columnData[this.config.prop]
+      const name = this.columnData[this.config.name]
+
+      tagConfig.map(item => {
+        if (item.value === value) {
+          this.tagItem.type = item.type
+          this.tagItem.name = item.name || name // 默认用tagConfig中的name
+        }
+      })
+    }
   }
 }
 </script>

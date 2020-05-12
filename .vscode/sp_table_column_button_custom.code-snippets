@@ -1,0 +1,20 @@
+{
+  "table代码片段_单元格_按钮_自定义操作": {
+    "prefix": "sp_table_column_button_custom",
+    "body": [
+      "<!-- 单个$1XXX自定义操作 -->\r",
+      "<el-button\r",
+      "  v-if=\"filterPermission('$2xxx:xxx:xxx')\"\r",
+      "  type=\"text\"\r",
+      "  :size=\"tableConfig.tableSearchSize\"\r",
+      "  @click=\"customHandle({\r",
+      "    data: [scope.row.id$3],\r",
+      "    i18nRequestMessage: '$4bbb.bbb',\r",
+      "    request: $5CCC\r",
+      "  })\"\r",
+      ">{{ $$t('$6ddd.ddd') }}</el-button>\r",
+      "$7"
+    ],
+    "description": "table代码片段_单元格_按钮_自定义操作"
+  }
+}

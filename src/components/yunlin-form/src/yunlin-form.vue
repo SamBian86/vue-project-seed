@@ -47,11 +47,7 @@
                 :disabled="item.disabled"
                 @change="formValueListener(item.prop, $event)"
               >
-                <el-radio
-                  v-for="(ite, idx) in item.items"
-                  :key="idx"
-                  :label="ite.label"
-                >{{ $t(ite.name) }}</el-radio>
+                <el-radio v-for="(ite, idx) in item.items" :key="idx" :label="ite.label">{{ $t(ite.name) }}</el-radio>
               </el-radio-group>
             </template>
             <!-- input-number -->
@@ -195,15 +191,28 @@ export default {
           break
       }
       const callback = handle[pageType]['callback'] || null
-      this.formMethordHandle({ ...data }).then(response => {
-        if (callback) {
-          callback()
-        } else {
-          // 将需要下次重新获取数据的组件加入page组件的page_update_list中
-          this.$pageUpdateListAdd(data.componentNames)
-          this.$pageSwitch('table')
-        }
-      })
+      this.formMethordHandle({ ...data })
+        .then(response => {
+          this.$message({
+            message: this.$t('prompt.success'),
+            type: 'success',
+            duration: 2000
+          })
+          if (callback) {
+            callback()
+          } else {
+            // 将需要下次重新获取数据的组件加入page组件的page_update_list中
+            this.$pageUpdateListAdd(data.componentNames)
+            this.$pageSwitch('table')
+          }
+        })
+        .catch(message => {
+          this.$message({
+            message,
+            type: 'error',
+            duration: 2000
+          })
+        })
     },
     // 更新数据
     formDataUpdate(formData) {

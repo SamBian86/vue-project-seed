@@ -45,6 +45,10 @@ export default {
     // yunlin-drawer组件 事件监听器 --------------------------------------------------------
     drawerClosed() {
       console.log('关闭drawer钩子')
+    },
+    // 用于子组件关闭drawer
+    drawerCloseByChild() {
+      this.drawerVisibleHandle(false)
     }
   }
 }

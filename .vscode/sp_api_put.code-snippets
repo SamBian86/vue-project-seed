@@ -1,0 +1,16 @@
+{
+  "api代码片段put": {
+    "prefix": "sp_api_put",
+    "body": [
+      "export function XXX$1(data$2 = {}) {\r",
+      "  return request({\r",
+      "    url: `//`,\r",
+      "    method: 'put',\r",
+      "    data$3\r",
+      "  })\r",
+      "}\r",
+      ""
+    ],
+    "description": "api代码片段put"
+  }
+}

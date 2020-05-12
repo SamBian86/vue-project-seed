@@ -50,7 +50,6 @@ export default {
       const { formName } = this.formConfig
 
       this.formData = { ...this.formDefaultData, ...this.$attrs.page_info.data }
-
       // 如果是编辑或者详情页面
       if (formDataUpdate) {
         this.$refs[formName].formDataUpdate(this.formData)
@@ -81,8 +80,8 @@ export default {
       // { prop: 'type', exclude: [{ value: 0, props: ['permissions'] }], disabledPageType: ['edit'] }
       // 过滤出需要显示的项
       formAction.map(item => {
-        const excludes = item.exclude
-        disabledMap[item.prop] = Array.from(item.disabledPageType)
+        const excludes = item.exclude || []
+        disabledMap[item.prop] = Array.from(item.disabledPageType || [])
         excludes.map(ite => {
           if (ite.value === formData[item.prop]) {
             excludeProps = [...ite.props]

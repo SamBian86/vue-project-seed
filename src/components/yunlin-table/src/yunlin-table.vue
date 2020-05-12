@@ -253,15 +253,46 @@ export default {
               if (callback) {
                 callback()
               }
+              this.$message({
+                message: this.$t('prompt.success'),
+                type: 'success',
+                duration: 2000
+              })
               this.searchHandle()
             })
             .catch(message => {
               this.$message({
                 message,
                 type: 'error',
-                duration: 2 * 1000
+                duration: 2000
               })
             })
+        })
+        .catch(() => {})
+    },
+    // 自定义单个操作
+    customHandle(opts) {
+      // opts
+      // {
+      //    data: data, // 需要提交的数据
+      //    i18nRequestMessage: 'schedule.pauseBatch', // 提交前提示信息
+      //    request: pauseJobSchedule // 处理接口方法
+      // }
+      const { request } = opts
+      this.$confirm(`确认进行${this.$t(opts.i18nRequestMessage)}操作？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          request()(opts.data).then(response => {
+            this.$message({
+              message: this.$t('prompt.success'),
+              type: 'success',
+              duration: 2000
+            })
+            this.searchHandle()
+          })
         })
         .catch(() => {})
     },
@@ -270,7 +301,7 @@ export default {
       const searchParams = this.$attrs.searchparams
       this.exportBridge(searchParams)
     },
-    // 批量操作
+    // 批量删除操作
     deleteSectionHandle(items) {
       const { callback } = this.$attrs.handle.delete
       this.$confirm(`确认删除这${items.length}项目？`, '提示', {
@@ -282,9 +313,39 @@ export default {
           this.deleteSectionBridge(items).then(response => {
             if (callback) {
               callback()
-            } else {
-              this.searchHandle()
             }
+            this.$message({
+              message: this.$t('prompt.success'),
+              type: 'success',
+              duration: 2000
+            })
+            this.searchHandle()
+          })
+        })
+        .catch(() => {})
+    },
+    // 批量执行
+    customSectionHandle(opts) {
+      // opts
+      // {
+      //    i18nMessage: 'prompt.customBatch', // 是否选中处理项提示信息
+      //    i18nRequestMessage: 'schedule.pauseBatch', // 提交前提示信息
+      //    request: pauseJobSchedule // 处理接口方法
+      // }
+      const { request } = opts
+      this.$confirm(`确认进行${this.$t(opts.i18nRequestMessage)}操作？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          request()(opts.data).then(response => {
+            this.$message({
+              message: this.$t('prompt.success'),
+              type: 'success',
+              duration: 2000
+            })
+            this.searchHandle()
           })
         })
         .catch(() => {})

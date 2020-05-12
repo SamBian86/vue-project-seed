@@ -2,9 +2,13 @@
   "table代码片段_drawer_children_子组件代码": {
     "prefix": "sp_table_handle_drawer_children",
     "body": [
-      "// const { id } = this.$attrs.page_drawer_data\r",
+      "// const { id } = this.$$attrs.page_drawer_data\r",
       "// this.tableSearchParams.dictTypeId = id\r",
-      ""],
+      "// XXXCallBack() {\r",
+      "//   this.$$drawerCloseByChild()\r",
+      "// }\r",
+      ""
+    ],
     "description": "table代码片段_drawer_children_子组件代码"
   }
 }

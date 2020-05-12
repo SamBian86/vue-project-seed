@@ -2,12 +2,8 @@
   <nav :class="`aui-navbar--${layout_navbar_layoutType}`" class="aui-navbar">
     <div class="aui-navbar__header">
       <h1 class="aui-navbar__brand" @click="$router.push({ name: 'home' })">
-        <a class="aui-navbar__brand-lg" href="javascript:;">{{
-          $t('brand.lg')
-        }}</a>
-        <a class="aui-navbar__brand-mini" href="javascript:;">{{
-          $t('brand.mini')
-        }}</a>
+        <a class="aui-navbar__brand-lg" href="javascript:;">{{ $t('brand.lg') }}</a>
+        <a class="aui-navbar__brand-mini" href="javascript:;">{{ $t('brand.mini') }}</a>
       </h1>
     </div>
     <div class="aui-navbar__body">
@@ -38,9 +34,7 @@
                 v-for="(val, key) in i18nMessages"
                 :key="key"
                 @click.native="$i18n.locale = key"
-              >
-                {{ val._lang }}
-              </el-dropdown-item>
+              >{{ val._lang }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-menu-item>
@@ -64,22 +58,17 @@
               <i class="el-icon-arrow-down"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="updatePasswordHandle()">
-                {{ $t('updatePassword.title') }}
-              </el-dropdown-item>
-              <el-dropdown-item @click.native="logoutHandle()">
-                {{ $t('logout') }}
-              </el-dropdown-item>
+              <el-dropdown-item
+                @click.native="updatePasswordHandle()"
+              >{{ $t('updatePassword.title') }}</el-dropdown-item>
+              <el-dropdown-item @click.native="logoutHandle()">{{ $t('logout') }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-menu-item>
       </el-menu>
     </div>
     <!-- 弹窗, 修改密码 -->
-    <update-password
-      v-if="updatePassowrdVisible"
-      ref="updatePassowrd"
-    ></update-password>
+    <update-password v-if="updatePassowrdVisible" ref="updatePassowrd"></update-password>
   </nav>
 </template>
 
@@ -101,11 +90,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'layout_navbar_layoutType',
-      'layout_sidebar_fold',
-      'user_userInfo'
-    ])
+    ...mapGetters(['layout_navbar_layoutType', 'layout_sidebar_fold', 'user_userInfo'])
   },
   methods: {
     ...mapMutations('layout', ['setSidebarFold']),
@@ -120,7 +105,7 @@ export default {
         return this.$message({
           message: this.$t('fullscreen.prompt'),
           type: 'warning',
-          duration: 500
+          duration: 2000
         })
       }
       screenfull.toggle()
@@ -134,15 +119,11 @@ export default {
     },
     // 退出
     logoutHandle() {
-      this.$confirm(
-        this.$t('prompt.info', { handle: this.$t('logout') }),
-        this.$t('prompt.title'),
-        {
-          confirmButtonText: this.$t('confirm'),
-          cancelButtonText: this.$t('cancel'),
-          type: 'warning'
-        }
-      )
+      this.$confirm(this.$t('prompt.info', { handle: this.$t('logout') }), this.$t('prompt.title'), {
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
+        type: 'warning'
+      })
         .then(() => {
           this.logout().then(() => {
             this.$router.replace({ name: 'login' }).then(() => {

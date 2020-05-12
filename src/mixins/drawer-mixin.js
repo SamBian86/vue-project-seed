@@ -15,6 +15,10 @@ export default {
     // 用于子组件修改数据以后的数据合并
     $drawerClosed() {
       this.$emit('drawer-closed')
+    },
+    // 用于子组件关闭drawer
+    $drawerCloseByChild() {
+      this.$emit('drawer-close-by-child')
     }
   }
 }

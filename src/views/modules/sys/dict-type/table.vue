@@ -52,7 +52,7 @@
           </el-form-item>
           <el-form-item>
             <el-button
-              v-if="filterPermission('sys:dict:delete') && tableSections.length"
+              v-if="filterPermission('sys:dict:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"

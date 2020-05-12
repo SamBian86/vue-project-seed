@@ -1,0 +1,22 @@
+{
+  "table代码片段_按钮_批量操作": {
+    "prefix": "sp_table_button_custom_batch",
+    "body": [
+      "<!-- 批量操作 -->\r",
+      "<el-form-item>\r",
+      "  <el-button\r",
+      "    v-if=\"filterPermission('$1xxx:xxx:xxx')\"\r",
+      "    type=\"danger\"\r",
+      "    :size=\"tableConfig.tableSearchSize\"\r",
+      "    @click=\"customSectionHandle({\r",
+      "      i18nMessage: 'prompt.customBatch',\r",
+      "      i18nRequestMessage: '$2bbb.bbb',\r",
+      "      request: $3CCC\r",
+      "    })\"\r",
+      "  >{{ $$t('$4ddd.ddd') }}</el-button>\r",
+      "</el-form-item>\r",
+      "$5"
+    ],
+    "description": "table代码片段_按钮_批量操作"
+  }
+}

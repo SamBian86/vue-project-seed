@@ -1,12 +1,6 @@
 <template>
   <el-row :gutter="10">
-    <el-col
-      :span="formConfig.formSpan"
-      :lg="formConfig.formSpan"
-      :md="formConfig.formSpan"
-      :sm="24"
-      :xs="24"
-    >
+    <el-col :span="formConfig.formSpan" :lg="formConfig.formSpan" :md="formConfig.formSpan" :sm="24" :xs="24">
       <div class="form-title">{{ formGenerateTitle[$attrs.page_info.data.pageType] }}</div>
       <yunlin-form
         ref="yunlinForm"
@@ -27,19 +21,25 @@
               v-if="containsPageType(['create', 'edit', 'detail'])"
               :size="formConfig.formSize"
               @click.stop="cancleHandle"
-            >返回</el-button>
+            >
+              {{ $t('back') }}
+            </el-button>
             <el-button
               v-if="containsPageType(['create']) && filterPermission('sys:region:save')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
-            >新增</el-button>
+            >
+              {{ $t('add') }}
+            </el-button>
             <el-button
               v-if="containsPageType(['edit']) && filterPermission('sys:region:update')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
-            >修改</el-button>
+            >
+              {{ $t('update') }}
+            </el-button>
           </div>
         </template>
       </yunlin-form>
