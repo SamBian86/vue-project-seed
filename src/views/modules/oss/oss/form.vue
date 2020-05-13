@@ -17,9 +17,6 @@
         @form-data-update="formDataUpdate"
         v-on="$listeners"
       >
-        <template slot="content">
-          123
-        </template>
         <template slot="footer">
           <div class="form-submit-container">
             <el-button
@@ -29,9 +26,9 @@
             >
               {{ $t('back') }}
             </el-button>
-            <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
+            <!-- <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
               {{ $t('add') }}
-            </el-button>
+            </el-button> -->
             <!-- <el-button
               v-if="containsPageType(['edit'])"
               type="primary"
@@ -110,14 +107,16 @@ export default {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = []
 
-      this.formConfig.formItems = []
-
       // 组装表单初始数据
       this.generateFormData()
       // 生成标题
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
+    },
+    beforeCancleHandle() {
+      const { componentNames } = this.$attrs.page_info.data
+      this.$pageUpdateListAdd(componentNames)
     }
   }
 }
