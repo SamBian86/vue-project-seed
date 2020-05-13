@@ -13,7 +13,7 @@ export default {
   methods: {
     // 用于子页面切换其他页面
     $pageSwitch(name, data = {}) {
-      console.log(name)
+      // console.log(name)
       this.$emit('page-switch', name, data)
     },
     // 将组件名称添加到检查列表

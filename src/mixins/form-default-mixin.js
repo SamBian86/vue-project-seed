@@ -33,6 +33,21 @@ export default {
     }
   },
   computed: {},
+  watch: {
+    $attrs(newVal, oldVal) {
+      const newPageDrawerData = (newVal.page_drawer_data && newVal.page_drawer_data.data) || ''
+      const oldPageDrawerData = (oldVal.page_drawer_data && oldVal.page_drawer_data.data) || ''
+      // 检查page_drawer_data
+      if (JSON.stringify(newPageDrawerData) !== JSON.stringify(oldPageDrawerData)) {
+        // 组装表单初始数据
+        this.generateFormData()
+        // 生成标题
+        this.generateTitle()
+        // 生成表单及验证规则
+        this.generateForm()
+      }
+    }
+  },
   created() {
     // console.log('form default mixin created')
   },
@@ -46,10 +61,12 @@ export default {
   methods: {
     // 初始化页面数据
     generateFormData() {
-      const { formDataUpdate } = this.$attrs.page_info.data
+      const pageInfoData = (this.$attrs.page_info && this.$attrs.page_info.data) || {}
+      const pageDrawerData = (this.$attrs.page_drawer_data && this.$attrs.page_drawer_data.data) || {}
+      const finalData = { ...this.formDefaultData, ...pageInfoData, ...pageDrawerData }
+      const { formDataUpdate } = finalData
       const { formName } = this.formConfig
-
-      this.formData = { ...this.formDefaultData, ...this.$attrs.page_info.data }
+      this.formData = finalData
       // 如果是编辑或者详情页面
       if (formDataUpdate) {
         this.$refs[formName].formDataUpdate(this.formData)
@@ -169,10 +186,18 @@ export default {
       const { formName } = this.formConfig
       this.$refs[formName].submitHandle()
     },
+    // 点击取消按钮前的钩子
+    beforeCancleHandle() {},
     // 取消按钮
     cancleHandle() {
       const { formName } = this.formConfig
+      this.beforeCancleHandle()
       this.$refs[formName].cancleHandle()
+    },
+    // 重置填充的数据
+    resetHandle(filters = []) {
+      const { formName } = this.formConfig
+      this.$refs[formName].resetHandle(filters)
     },
     // 表单行为 --------------------------------------------------------
 
@@ -199,6 +224,7 @@ export default {
     // 通知组件更新表单数据
     formDataUpdate(data) {
       this.$set(this, 'formData', { ...this.formData, ...data })
+      this.generateForm()
     }
     // yunlin-form组件 事件监听器 --------------------------------------------------------
   }

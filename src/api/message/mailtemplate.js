@@ -76,6 +76,7 @@ export function sendMessageMailtemplate(data = {}) {
   return request({
     url: `/message/mailtemplate/send`,
     method: 'post',
+    dataType: 'formData',
     data
   })
 }

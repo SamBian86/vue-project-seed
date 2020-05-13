@@ -73,7 +73,7 @@
             <el-button type="text" :size="tableConfig.tableSearchSize" @click="editHandle(scope.row)">{{
               $t('update')
             }}</el-button>
-            <!-- 单个XXX自定义操作 -->
+            <!-- 单个操作 -->
             <el-button type="text" :size="tableConfig.tableSearchSize" @click="sendMailHandle(scope.row)">{{
               $t('mail.send')
             }}</el-button>
@@ -86,7 +86,14 @@
       </template>
     </yunlin-table>
     <yunlin-drawer ref="yunlinDrawer" :config="drawerConfig" v-bind="$attrs" @drawer-closed="drawerClosed" v-on="$listeners">
-      <config-mail :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild" v-on="$listeners"></config-mail>
+      <component
+        :is="drawerComponent"
+        :drawer-data="drawerData"
+        @drawer-close-by-child="drawerCloseByChild"
+        v-on="$listeners"
+      ></component>
+      <!-- <config-mail :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild" v-on="$listeners"></config-mail>
+      <send-mail :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild" v-on="$listeners"></send-mail> -->
     </yunlin-drawer>
   </div>
 </template>
@@ -98,13 +105,19 @@ import tableDefaultMixin from '@/mixins/table-default-mixin'
 import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
 import { getMessageMailtemplatePageList, deleteMessageMailtemplate } from '@/api/message/mailtemplate'
 import configMail from './config'
+import sendMail from './send'
 
 export default {
   name: 'Tabel',
-  components: { configMail },
+  components: { configMail, sendMail },
   mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
   data() {
-    return {}
+    return {
+      drawerComponents: {
+        config: configMail,
+        send: sendMail
+      }
+    }
   },
   computed: {
     // 用于判断是否有权限的方法
@@ -165,11 +178,17 @@ export default {
       this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
     },
     mailConfigHandle() {
-      this.setDrawerData({ data: { pageType: 'create', formDataUpdate: false } })
+      this.setDrawerComponent('config')
+      this.setDrawerData({ data: { pageType: 'edit', formDataUpdate: true } })
       this.setDrawerTitle(this.$t('mail.config'))
       this.drawerVisibleHandle()
     },
-    sendMailHandle(row) {}
+    sendMailHandle(row) {
+      this.setDrawerComponent('send')
+      this.setDrawerData({ data: { pageType: 'create', id: row.id } })
+      this.setDrawerTitle(this.$t('mail.send'))
+      this.drawerVisibleHandle()
+    }
   }
 }
 </script>

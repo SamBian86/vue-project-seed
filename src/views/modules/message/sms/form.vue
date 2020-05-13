@@ -1,7 +1,9 @@
 <template>
   <el-row :gutter="10">
     <el-col :span="formConfig.formSpan" :lg="formConfig.formSpan" :md="formConfig.formSpan" :sm="24" :xs="24">
-      <div class="form-title">{{ formGenerateTitle[$attrs.page_info.data.pageType] }}</div>
+      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">{{
+        formGenerateTitle[$attrs.page_info.data.pageType]
+      }}</div>
       <yunlin-form
         ref="yunlinForm"
         :config="formConfig"
@@ -24,8 +26,8 @@
             >
               {{ $t('back') }}
             </el-button>
-            <el-button v-if="containsPageType(['edit'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
-              {{ $t('add') }}
+            <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
+              {{ $t('confirm') }}
             </el-button>
             <!-- <el-button
               v-if="containsPageType(['edit'])"
@@ -45,7 +47,7 @@ import { mapGetters } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
-import { saveMessageSmsConfig, getMessageSmsConfig } from '@/api/message/sms'
+import { sendMessageSms } from '@/api/message/sms'
 
 export default {
   name: 'Form',
@@ -55,39 +57,29 @@ export default {
     return {
       // 定义表单名称
       formTitle: {
-        // create: '新增',
-        edit: '新增'
-        // detail: '详情'
+        create: this.$t('sms.send')
+        // edit: this.$t('update'),
+        // detail: this.$t('detail')
       },
       formGenerateTitle: {},
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
-          // api: saveMessageSmsConfig
+          api: sendMessageSms
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
-          api: saveMessageSmsConfig
+          // api: editXXX
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
-          api: getMessageSmsConfig
+          // api: getXXXById
         }
       },
       // 初始化数据定义
-      formDefaultData: {
-        platform: 1
-      },
+      formDefaultData: {},
       // 用于处理表单的隐藏与显示禁用行为
-      formAction: [
-        {
-          prop: 'platform',
-          exclude: [
-            { value: 1, props: ['qcloudAppId', 'qcloudAppKey', 'qcloudSignName', 'qcloudTemplateId'] },
-            { value: 2, props: ['aliyunAccessKeyId', 'aliyunAccessKeySecret', 'aliyunSignName', 'aliyunTemplateCode'] }
-          ]
-        }
-      ]
+      formAction: []
     }
   },
   computed: {
@@ -113,80 +105,20 @@ export default {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
-          // 平台类型
+          // 手机号
           span: 24,
-          prop: 'platform',
-          name: 'sms.platform',
-          type: 'radio-group',
-          rules: [{ required: true }],
-          items: [
-            { label: 1, name: 'sms.platform1' },
-            { label: 2, name: 'sms.platform2' }
-          ]
-        },
-        {
-          // 阿里key
-          span: 24,
-          prop: 'aliyunAccessKeyId',
-          name: 'sms.aliyunAccessKeyId',
+          prop: 'mobile',
+          name: 'sms.mobile',
           type: 'text',
           rules: [{ required: true }]
         },
         {
-          // 阿里secret
+          // 参数
           span: 24,
-          prop: 'aliyunAccessKeySecret',
-          name: 'sms.aliyunAccessKeySecret',
-          type: 'text',
-          rules: [{ required: true }]
-        },
-        {
-          // 阿里短信签名
-          span: 24,
-          prop: 'aliyunSignName',
-          name: 'sms.aliyunSignName',
-          type: 'text',
-          rules: [{ required: true }]
-        },
-        {
-          // 阿里短信模板
-          span: 24,
-          prop: 'aliyunTemplateCode',
-          name: 'sms.aliyunTemplateCode',
-          type: 'text',
-          rules: [{ required: true }]
-        },
-        {
-          // 腾讯AppId
-          span: 24,
-          prop: 'qcloudAppId',
-          name: 'sms.qcloudAppId',
-          type: 'text',
-          rules: [{ required: true }]
-        },
-        {
-          // 腾讯AppKey
-          span: 24,
-          prop: 'qcloudAppKey',
-          name: 'sms.qcloudAppKey',
-          type: 'text',
-          rules: [{ required: true }]
-        },
-        {
-          // 腾讯短信签名
-          span: 24,
-          prop: 'qcloudSignName',
-          name: 'sms.qcloudSignName',
-          type: 'text',
-          rules: [{ required: true }]
-        },
-        {
-          // 腾讯短信模板
-          span: 24,
-          prop: 'qcloudTemplateId',
-          name: 'sms.qcloudTemplateId',
-          type: 'text',
-          rules: [{ required: true }]
+          prop: 'params',
+          name: 'sms.params',
+          placeholder: 'sms.paramsTips',
+          type: 'text'
         }
       ]
 
@@ -196,6 +128,10 @@ export default {
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
+    },
+    beforeCancleHandle() {
+      const { componentNames } = this.$attrs.page_info.data
+      this.$pageUpdateListAdd(componentNames)
     }
   }
 }

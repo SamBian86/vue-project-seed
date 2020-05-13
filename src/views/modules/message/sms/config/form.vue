@@ -29,9 +29,9 @@
             <!-- <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
               {{ $t('add') }}
             </el-button> -->
-            <el-button v-if="containsPageType(['edit'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
-              {{ $t('confirm') }}
-            </el-button>
+            <el-button v-if="containsPageType(['edit'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">{{
+              $t('confirm')
+            }}</el-button>
           </div>
         </template>
       </yunlin-form>
@@ -45,7 +45,7 @@ import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
 import drawerMixin from '@/mixins/drawer-mixin'
-import { saveMessageMailtemplateConfig, getMessageMailtemplateConfig } from '@/api/message/mailtemplate'
+import { saveMessageSmsConfig, getMessageSmsConfig } from '@/api/message/sms'
 
 export default {
   name: 'Form',
@@ -63,22 +63,32 @@ export default {
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
-          // api: createXXX
+          // api: saveMessageSmsConfig
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
-          api: saveMessageMailtemplateConfig,
-          callback: this.saveMessageMailtemplateConfigCallback
+          api: saveMessageSmsConfig,
+          callback: this.saveMessageSmsConfigCallback
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
-          api: getMessageMailtemplateConfig
+          api: getMessageSmsConfig
         }
       },
       // 初始化数据定义
-      formDefaultData: {},
+      formDefaultData: {
+        platform: 1
+      },
       // 用于处理表单的隐藏与显示禁用行为
-      formAction: []
+      formAction: [
+        {
+          prop: 'platform',
+          exclude: [
+            { value: 1, props: ['qcloudAppId', 'qcloudAppKey', 'qcloudSignName', 'qcloudTemplateId'] },
+            { value: 2, props: ['aliyunAccessKeyId', 'aliyunAccessKeySecret', 'aliyunSignName', 'aliyunTemplateCode'] }
+          ]
+        }
+      ]
     }
   },
   computed: {
@@ -104,34 +114,78 @@ export default {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
-          // 邮件配置
+          // 平台类型
           span: 24,
-          prop: 'smtp',
-          name: 'mail.config',
+          prop: 'platform',
+          name: 'sms.platform',
+          type: 'radio-group',
+          rules: [{ required: true }],
+          items: [
+            { label: 1, name: 'sms.platform1' },
+            { label: 2, name: 'sms.platform2' }
+          ]
+        },
+        {
+          // 阿里key
+          span: 24,
+          prop: 'aliyunAccessKeyId',
+          name: 'sms.aliyunAccessKeyId',
           type: 'text',
           rules: [{ required: true }]
         },
         {
-          // 端口号
+          // 阿里secret
           span: 24,
-          prop: 'port',
-          name: 'mail.port',
+          prop: 'aliyunAccessKeySecret',
+          name: 'sms.aliyunAccessKeySecret',
           type: 'text',
           rules: [{ required: true }]
         },
         {
-          // 邮箱帐号
+          // 阿里短信签名
           span: 24,
-          prop: 'username',
-          name: 'mail.username',
+          prop: 'aliyunSignName',
+          name: 'sms.aliyunSignName',
           type: 'text',
           rules: [{ required: true }]
         },
         {
-          // 邮箱密码
+          // 阿里短信模板
           span: 24,
-          prop: 'password',
-          name: 'mail.password',
+          prop: 'aliyunTemplateCode',
+          name: 'sms.aliyunTemplateCode',
+          type: 'text',
+          rules: [{ required: true }]
+        },
+        {
+          // 腾讯AppId
+          span: 24,
+          prop: 'qcloudAppId',
+          name: 'sms.qcloudAppId',
+          type: 'text',
+          rules: [{ required: true }]
+        },
+        {
+          // 腾讯AppKey
+          span: 24,
+          prop: 'qcloudAppKey',
+          name: 'sms.qcloudAppKey',
+          type: 'text',
+          rules: [{ required: true }]
+        },
+        {
+          // 腾讯短信签名
+          span: 24,
+          prop: 'qcloudSignName',
+          name: 'sms.qcloudSignName',
+          type: 'text',
+          rules: [{ required: true }]
+        },
+        {
+          // 腾讯短信模板
+          span: 24,
+          prop: 'qcloudTemplateId',
+          name: 'sms.qcloudTemplateId',
           type: 'text',
           rules: [{ required: true }]
         }
@@ -147,7 +201,7 @@ export default {
     cancleHandle() {
       this.$drawerCloseByChild()
     },
-    saveMessageMailtemplateConfigCallback() {
+    saveMessageSmsConfigCallback() {
       this.$drawerCloseByChild()
     }
   }

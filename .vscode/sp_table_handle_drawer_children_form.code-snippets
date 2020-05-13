@@ -1,6 +1,6 @@
-{
-  "page代码片段_form入口页面": {
-    "prefix": "sp_page_form",
+﻿{
+  "table代码片段_drawer_children_form_子组件代码": {
+    "prefix": "sp_table_handle_drawer_children_form",
     "body": [
       "<template>\r",
       "  <el-row :gutter=\"10\">\r",
@@ -43,7 +43,7 @@
       "              :size=\"formConfig.formSize\"\r",
       "              @click.stop=\"submitHandle\"\r",
       "            >\r",
-      "              {{ $$t('add') }}\r",
+      "              {{ $$t('confirm') }}\r",
       "            </el-button>\r",
       "            <el-button\r",
       "              v-if=\"containsPageType(['edit']) && filterPermission('xxx:xxx:update')\"\r",
@@ -65,12 +65,13 @@
       "import commonMixin from '@/mixins/common-mixin'\r",
       "import pageMixin from '@/mixins/page-mixin'\r",
       "import formDefaultMixin from '@/mixins/form-default-mixin'\r",
+      "import drawerMixin from '@/mixins/drawer-mixin'\r",
       "// import { createXXX, editXXX, getXXXById } from '@/api/XXX'\r",
       "\r",
       "export default {\r",
       "  name: 'Form',\r",
       "  components: {},\r",
-      "  mixins: [commonMixin, pageMixin, formDefaultMixin],\r",
+      "  mixins: [commonMixin, pageMixin, formDefaultMixin, drawerMixin],\r",
       "  data() {\r",
       "    return {\r",
       "      // 定义表单名称\r",
@@ -87,7 +88,8 @@
       "        },\r",
       "        // 修改抽象方法，用修改接口方法覆盖\r",
       "        edit: {\r",
-      "          // api: editXXX\r",
+      "          // api: editXXX,\r",
+      "          // callback: this.XXXCallback\r",
       "        },\r",
       "        // 详情抽象方法，用详情接口方法覆盖\r",
       "        detail: {\r",
@@ -129,12 +131,20 @@
       "      this.generateTitle()\r",
       "      // 生成表单及验证规则\r",
       "      this.generateForm()\r",
+      "    },\r",
+      "    cancleHandle() {\r",
+      "      this.resetHandle()\r",
+      "      this.$$drawerCloseByChild()\r",
+      "    },\r",
+      "    XXXCallback() {\r",
+      "      this.resetHandle()\r",
+      "      this.$$drawerCloseByChild()\r",
       "    }\r",
       "  }\r",
       "}\r",
       "</script>\r",
       ""
     ],
-    "description": "page代码片段_form入口页面"
+    "description": "table代码片段_drawer_children_form_子组件代码"
   }
 }

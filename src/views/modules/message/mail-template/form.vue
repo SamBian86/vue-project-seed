@@ -24,13 +24,13 @@
               :size="formConfig.formSize"
               @click.stop="cancleHandle"
             >
-              返回
+              {{ $t('back') }}
             </el-button>
             <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
-              新增
+              {{ $t('add') }}
             </el-button>
             <el-button v-if="containsPageType(['edit'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
-              修改
+              {{ $t('update') }}
             </el-button>
           </div>
         </template>
@@ -54,9 +54,9 @@ export default {
     return {
       // 定义表单名称
       formTitle: {
-        create: '新增',
-        edit: '修改',
-        detail: '详情'
+        create: this.$t('add'),
+        edit: this.$t('update'),
+        detail: this.$t('detail')
       },
       formGenerateTitle: {},
       formHandle: {

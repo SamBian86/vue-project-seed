@@ -20,19 +20,15 @@
 
 <script>
 import pageDefaultMixin from '@/mixins/page-default-mixin'
-import pageTable from './table'
 import pageForm from './form'
+
 // 页面根组件
 export default {
-  components: { pageTable, pageForm },
+  components: { pageForm },
   mixins: [pageDefaultMixin],
   data() {
     return {
       pageComponents: [
-        {
-          name: 'table',
-          component: pageTable
-        },
         {
           name: 'form',
           component: pageForm
@@ -46,9 +42,13 @@ export default {
   created() {
     // 初始化include
     // this.generateInclude()
-    const { pageComponents } = this
+    const { pageComponents, drawerData } = this
     // 初始化显示列表页面
-    this.pageInfo = pageComponents[0]
+    if (Object.keys(drawerData).length !== 0) {
+      this.pageInfo = { ...pageComponents[0], ...drawerData }
+    } else {
+      this.pageInfo = pageComponents[0]
+    }
   },
   methods: {}
 }

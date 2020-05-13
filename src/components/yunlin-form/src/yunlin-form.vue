@@ -173,6 +173,19 @@ export default {
     cancleHandle() {
       this.$pageSwitch('table')
     },
+    // 重置填充的数据
+    resetHandle(filters = []) {
+      const _defaultFilters = ['pageType']
+      const _filters = Array.from(new Set([..._defaultFilters, ...filters]))
+      const { data } = this.$attrs
+      const dataTemp = Object.keys(data).filter(item => !_filters.includes(item))
+      Object.keys(data).forEach(item => {
+        if (dataTemp.includes(item)) {
+          data[item] = ''
+        }
+      })
+      this.$formDataMerge(data)
+    },
     // 表单提交
     formSubmitHandle() {
       const { pageType } = this.$attrs.data
@@ -198,6 +211,7 @@ export default {
             type: 'success',
             duration: 2000
           })
+          // 此处回调用于不返回table组件的逻辑
           if (callback) {
             callback()
           } else {

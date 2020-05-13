@@ -39,14 +39,14 @@
           </el-form-item>
           <!-- 创建 -->
           <el-form-item>
-            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="createHandle()">{{
-              $t('sms.config')
-            }}</el-button>
+            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="smsConfigHandle()">
+              {{ $t('sms.config') }}
+            </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="sendMessageHandle()">{{
-              $t('sms.send')
-            }}</el-button>
+            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="createHandle()">
+              {{ $t('sms.send') }}
+            </el-button>
           </el-form-item>
 
           <!-- 导出 -->
@@ -59,9 +59,9 @@
           </el-form-item>-->
           <!-- 批量删除 -->
           <el-form-item>
-            <el-button type="danger" :size="tableConfig.tableSearchSize" @click="deleteSectionHandle()">{{
-              $t('deleteBatch')
-            }}</el-button>
+            <el-button type="danger" :size="tableConfig.tableSearchSize" @click="deleteSectionHandle()">
+              {{ $t('deleteBatch') }}
+            </el-button>
           </el-form-item>
           <!-- 批量操作 -->
           <!-- <el-form-item>
@@ -89,15 +89,15 @@
               @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>-->
             <!-- 单个删除 -->
-            <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle([scope.row.id])">{{
-              $t('delete')
-            }}</el-button>
+            <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle([scope.row.id])">
+              {{ $t('delete') }}
+            </el-button>
           </template>
         </el-table-column>
       </template>
     </yunlin-table>
     <yunlin-drawer ref="yunlinDrawer" :config="drawerConfig" v-bind="$attrs" @drawer-closed="drawerClosed" v-on="$listeners">
-      <send-message :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild" v-on="$listeners"></send-message>
+      <config-message :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild" v-on="$listeners"></config-message>
     </yunlin-drawer>
   </div>
 </template>
@@ -108,11 +108,11 @@ import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
 import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
 import { getMessageSmsPageList, deleteMessageSms } from '@/api/message/sms'
-import sendMessage from './send/index'
+import configMessage from './config'
 
 export default {
   name: 'Tabel',
-  components: { sendMessage },
+  components: { configMessage },
   mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
   data() {
     return {}
@@ -230,22 +230,22 @@ export default {
       ]
     },
     // 创建
-    createHandle(options = { componentNames: [] }) {
-      this.$pageSwitch('form', { pageType: 'edit', formDataUpdate: true, ...options })
+    createHandle(options = { componentNames: ['yunlin-table'] }) {
+      this.$pageSwitch('form', { pageType: 'create', ...options })
     },
     // 编辑
     // editHandle(item, options = { componentNames: ['yunlin-table'] }) {
     //   this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
     // }
     // 打开drawer组件方法
-    sendMessageHandle() {
-      this.setDrawerData({ data: { pageType: 'create', formDataUpdate: false } })
-      this.setDrawerTitle(this.$t('sms.send'))
+    smsConfigHandle() {
+      this.setDrawerData({ data: { pageType: 'edit', formDataUpdate: true } })
+      this.setDrawerTitle(this.$t('sms.config'))
       this.drawerVisibleHandle()
     },
     drawerClosed() {
       // 关闭以后需要刷新列表
-      this.searchHandle()
+      // this.searchHandle()
     }
   }
 }

@@ -14,10 +14,16 @@ export default {
         destroyOnClose: true,
         size: '80%'
       },
-      drawerData: {}
+      drawerData: {},
+      drawerComponent: null, // 当前只用的component
+      drawerComponents: {
+        // 页面中如果有多组件切换，则配置此项目
+        // xxx: xxxComponent
+      }
     }
   },
   computed: {},
+  watch: {},
   created() {
     // console.log('drawer default mixin created')
   },
@@ -41,6 +47,15 @@ export default {
     // 设置drawer标题
     setDrawerTitle(title) {
       this.drawerConfig.title = title
+    },
+    // 设置drawer的component
+    setDrawerComponent(name) {
+      const { drawerComponents } = this
+      if (!drawerComponents[name]) {
+        Promise.reject('请检查drawerComponents是否存在')
+      } else {
+        this.drawerComponent = drawerComponents[name]
+      }
     },
     // yunlin-drawer组件 事件监听器 --------------------------------------------------------
     drawerClosed() {

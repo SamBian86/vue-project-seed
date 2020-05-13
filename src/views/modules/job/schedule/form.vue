@@ -1,7 +1,9 @@
 <template>
   <el-row :gutter="10">
     <el-col :span="formConfig.formSpan" :lg="formConfig.formSpan" :md="formConfig.formSpan" :sm="24" :xs="24">
-      <div class="form-title">{{ formGenerateTitle[$attrs.page_info.data.pageType] }}</div>
+      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">{{
+        formGenerateTitle[$attrs.page_info.data.pageType]
+      }}</div>
       <yunlin-form
         ref="yunlinForm"
         :config="formConfig"
@@ -62,9 +64,9 @@ export default {
     return {
       // 定义表单名称
       formTitle: {
-        create: '新增',
-        edit: '修改',
-        detail: '详情'
+        create: this.$t('add'),
+        edit: this.$t('update'),
+        detail: this.$t('detail')
       },
       formGenerateTitle: {},
       formHandle: {

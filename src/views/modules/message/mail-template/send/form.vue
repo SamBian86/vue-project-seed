@@ -19,20 +19,24 @@
       >
         <template slot="footer">
           <div class="form-submit-container">
-            <!-- <el-button
+            <el-button
               v-if="containsPageType(['create', 'edit', 'detail'])"
               :size="formConfig.formSize"
               @click.stop="cancleHandle"
-            >返回</el-button>-->
+            >
+              {{ $t('back') }}
+            </el-button>
             <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
-              发送
+              {{ $t('confirm') }}
             </el-button>
             <!-- <el-button
               v-if="containsPageType(['edit'])"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
-            >修改</el-button>-->
+            >
+              {{ $t('update') }}
+            </el-button> -->
           </div>
         </template>
       </yunlin-form>
@@ -46,7 +50,7 @@ import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
 import drawerMixin from '@/mixins/drawer-mixin'
-import { sendMessageSms } from '@/api/message/sms'
+import { sendMessageMailtemplate } from '@/api/message/mailtemplate'
 
 export default {
   name: 'Form',
@@ -57,19 +61,20 @@ export default {
       // 定义表单名称
       formTitle: {
         create: ''
-        // edit: '修改',
-        // detail: '详情'
+        // edit: this.$t('edit'),
+        // detail: this.$t('detail')
       },
       formGenerateTitle: {},
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
-          api: sendMessageSms,
-          callback: this.sendMessageCallBack
+          api: sendMessageMailtemplate,
+          callback: this.sendMessageMailtemplateCallback
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
-          // api: editXXX
+          // api: editXXX,
+          // callback: this.XXXCallback
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
@@ -86,7 +91,6 @@ export default {
     ...mapGetters('app', ['filterPermission'])
   },
   activated() {
-    // console.log('form activated')
     this.init()
   },
   created() {
@@ -105,19 +109,25 @@ export default {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
-          // 手机号
+          // 收件人
           span: 24,
-          prop: 'mobile',
-          name: 'sms.mobile',
+          prop: 'mailTo',
+          name: 'mail.mailTo',
           type: 'text',
           rules: [{ required: true }]
         },
         {
-          // 参数
+          // 抄送
+          span: 24,
+          prop: 'mailCc',
+          name: 'mail.mailCc',
+          type: 'text'
+        },
+        {
+          // 模板参数
           span: 24,
           prop: 'params',
-          name: 'sms.params',
-          placeholder: 'sms.paramsTips',
+          name: 'mail.params',
           type: 'text'
         }
       ]
@@ -129,7 +139,12 @@ export default {
       // 生成表单及验证规则
       this.generateForm()
     },
-    sendMessageCallBack() {
+    cancleHandle() {
+      this.resetHandle()
+      this.$drawerCloseByChild()
+    },
+    sendMessageMailtemplateCallback() {
+      this.resetHandle()
       this.$drawerCloseByChild()
     }
   }
