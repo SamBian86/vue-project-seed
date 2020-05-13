@@ -9,7 +9,8 @@
       :label-position="$attrs.config.labelPosition"
       @keyup.enter.native="submitHandle()"
     >
-      <el-row :gutter="10">
+      <slot name="content" />
+      <el-row v-if="$attrs.config.formItems.length !== 0" :gutter="10">
         <el-col
           v-for="(item, index) in $attrs.config.formItems"
           :key="index"
@@ -49,6 +50,19 @@
               >
                 <el-radio v-for="(ite, idx) in item.items" :key="idx" :label="ite.label">{{ $t(ite.name) }}</el-radio>
               </el-radio-group>
+            </template>
+            <!-- select -->
+            <template v-if="item.type === 'select'">
+              <el-select
+                v-model="$attrs.data[item.prop]"
+                :type="item.type"
+                :class="item.className || ''"
+                :disabled="item.disabled"
+                :placeholder="$t(item.placeholder) || item.placeholderText || `请选择${$t(item.name)}`"
+                @change="formValueListener(item.prop, $event)"
+              >
+                <el-option v-for="(ite, idx) in item.items" :key="idx" :label="$t(ite.label)" :value="ite.value"></el-option>
+              </el-select>
             </template>
             <!-- input-number -->
             <template v-if="item.type === 'input-number'">

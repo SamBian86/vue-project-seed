@@ -9,7 +9,7 @@
       "  name: '国际化$3',\r",
       "  type: 'radio-group',\r",
       "  items: [\r",
-      "    { label: 0, name: this.$t('$4') },\r",
+      "    { label: 0, name: '国际化$4' },\r",
       "    { label: 1, name: '国际化$5' }\r",
       "  ]\r",
       "},\r",

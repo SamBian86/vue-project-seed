@@ -1,0 +1,23 @@
+{
+  "form代码片段_select_static": {
+    "prefix": "sp_form_item_select_static",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'select',\r",
+      "  placeholder: '国际化$4',\r",
+      "  className: 'select-block',\r",
+      "  rules: [{ required: true }],\r",
+      "  items: [\r",
+      "    { label: 'oss.qcloudRegionBeijing1', value: 1 },\r",
+      "    { label: '国际化', value: '值' },\r",
+      "  ]\r",
+      "},\r",
+      "$6"
+    ],
+    "description": "form代码片段_select_static"
+  }
+}

@@ -15,8 +15,17 @@
         <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
           <el-form-item>
             <el-input
-              v-model="tableSearchParams.mobile"
-              :placeholder="$t('sms.mobile')"
+              v-model="tableSearchParams.templateId"
+              :placeholder="$t('mail.templateId')"
+              :size="tableConfig.tableSearchSize"
+              clearable
+              @clear="clearHandle"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="tableSearchParams.mailTo"
+              :placeholder="$t('mail.mailTo')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -25,12 +34,12 @@
           <el-form-item>
             <el-select
               v-model="tableSearchParams.status"
-              :placeholder="$t('sms.status')"
+              :placeholder="$t('mail.status')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
             >
-              <el-option v-for="(item, index) in smsStatus" :key="index" :label="item.label" :value="item.value"></el-option>
+              <el-option v-for="(item, index) in mailLogStatus" :key="index" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
           <!-- 查询 -->
@@ -38,25 +47,26 @@
             <el-button :size="tableConfig.tableSearchSize" @click="searchHandle()">{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
-          <el-form-item>
-            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="smsConfigHandle()">
-              {{ $t('sms.config') }}
-            </el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="createHandle()">
-              {{ $t('sms.send') }}
-            </el-button>
-          </el-form-item>
-
-          <!-- 导出 -->
           <!-- <el-form-item>
             <el-button
               type="primary"
               :size="tableConfig.tableSearchSize"
+              @click="createHandle()"
+            >
+              {{ $t('add') }}
+            </el-button>
+          </el-form-item> -->
+          <!-- 导出 -->
+          <!-- <el-form-item>
+            <el-button
+              v-if="filterPermission('xxx:xxx:export')"
+              type="primary"
+              :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
-            >{{ $t('export') }}</el-button>
-          </el-form-item>-->
+            >
+              {{ $t('export') }}
+            </el-button>
+          </el-form-item> -->
           <!-- 批量删除 -->
           <el-form-item>
             <el-button type="danger" :size="tableConfig.tableSearchSize" @click="deleteSectionHandle()">
@@ -83,11 +93,9 @@
         <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="100">
           <template slot-scope="scope">
             <!-- 修改 -->
-            <!-- <el-button
-              type="text"
-              :size="tableConfig.tableSearchSize"
-              @click="editHandle(scope.row)"
-            >{{ $t('update') }}</el-button>-->
+            <!-- <el-button type="text" :size="tableConfig.tableSearchSize" @click="editHandle(scope.row)">
+              {{ $t('update') }}
+            </el-button> -->
             <!-- 单个删除 -->
             <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle([scope.row.id])">
               {{ $t('delete') }}
@@ -96,9 +104,6 @@
         </el-table-column>
       </template>
     </yunlin-table>
-    <yunlin-drawer ref="yunlinDrawer" :config="drawerConfig" v-bind="$attrs" @drawer-closed="drawerClosed" v-on="$listeners">
-      <config-message :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild" v-on="$listeners"></config-message>
-    </yunlin-drawer>
   </div>
 </template>
 
@@ -106,14 +111,12 @@
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
-import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
-import { getMessageSmsPageList, deleteMessageSms } from '@/api/message/sms'
-import configMessage from './config'
+import { getMessageMaillogList, deleteMessageMaillog } from '@/api/message/maillog'
 
 export default {
   name: 'Tabel',
-  components: { configMessage },
-  mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
+  components: {},
+  mixins: [pageMixin, tableDefaultMixin],
   data() {
     return {}
   },
@@ -141,44 +144,20 @@ export default {
 
       // 设置获取列表信息
       this.tableConfig.tableHead = [
-        // 平台类型
-        {
-          prop: 'platform',
-          label: 'sms.platform',
-          width: '160',
-          align: 'center',
-          sortable: true,
-          component: 'toolTag',
-          componentConfig: {
-            prop: 'platform',
-            type: 'text',
-            tagSize: 'small',
-            tagConfig: [
-              {
-                value: 1,
-                name: this.$t('sms.platform1')
-              },
-              {
-                value: 2,
-                name: this.$t('sms.platform2')
-              }
-            ]
-          }
-        },
-        // 手机号
-        { prop: 'mobile', label: 'sms.mobile', width: '100', align: 'center' },
-        // 参数1
-        { prop: 'params1', label: 'sms.params1', align: 'center' },
-        // 参数2
-        { prop: 'params2', label: 'sms.params2', align: 'center' },
-        // 参数3
-        { prop: 'params3', label: 'sms.params3', align: 'center' },
-        // 参数4
-        { prop: 'params4', label: 'sms.params4', align: 'center' },
+        // 模板id
+        { prop: 'templateId', label: 'mail.templateId', width: '200', align: 'center', sortable: true },
+        // 发送者
+        { prop: 'mailFrom', label: 'mail.mailFrom', align: 'center' },
+        // 收件人
+        { prop: 'mailTo', label: 'mail.mailTo', align: 'center' },
+        // 抄送
+        { prop: 'mailCc', label: 'mail.mailCc', align: 'center' },
+        // 主题
+        { prop: 'subject', label: 'mail.subject', align: 'center' },
         // 状态
         {
           prop: 'status',
-          label: 'sms.status',
+          label: 'mail.status',
           width: '120',
           align: 'center',
           sortable: true,
@@ -189,44 +168,43 @@ export default {
             tagConfig: [
               {
                 value: 0,
-                type: 'danger',
-                name: this.$t('sms.status0')
+                name: this.$t('mail.status0')
               },
               {
                 value: 1,
-                type: 'success',
-                name: this.$t('sms.status1')
+                name: this.$t('mail.status1')
               }
             ]
           }
         },
         // 发送时间
-        { prop: 'createDate', label: 'sms.createDate', width: '160', align: 'center', sortable: true }
+        { prop: 'createDate', label: 'mail.createDate', width: '160', align: 'center', sortable: true }
       ]
       // 是否填充查询条件为空
       this.tableConfig.searchFillEmpty = true
       this.tableSearchParams = {
-        mobile: '',
+        templateId: '',
+        mailTo: '',
         status: ''
       }
       // 配置列表请求
-      this.tableHandle.list.api = getMessageSmsPageList
+      this.tableHandle.list.api = getMessageMaillogList
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
-      this.tableHandle.delete.api = deleteMessageSms
+      this.tableHandle.delete.api = deleteMessageMaillog
       // this.tableHandle.delete.callback = this.deleteCallback
       // 配置节点懒加载功能
       // this.tableHandle.lazy.api = lazyXXX
       // 配置section删除功能
-      this.tableHandle.deleteSection.api = deleteMessageSms
+      this.tableHandle.deleteSection.api = deleteMessageMaillog
       // console.log('table page created')
     },
     genrateI18nSearchItems() {
-      // 短信状态
-      this.smsStatus = [
-        { label: this.$t('sms.status0'), value: 0 },
-        { label: this.$t('sms.status1'), value: 1 }
+      // 邮件发送状态
+      this.mailLogStatus = [
+        { label: this.$t('mail.status0'), value: 0 },
+        { label: this.$t('mail.status1'), value: 1 }
       ]
     },
     // 创建
@@ -234,19 +212,9 @@ export default {
       this.$pageSwitch('form', { pageType: 'create', ...options })
     },
     // 编辑
-    // editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-    //   this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
-    // }
-    // 打开drawer组件方法
-    smsConfigHandle() {
-      this.setDrawerData({ data: { pageType: 'edit', formDataUpdate: true } })
-      this.setDrawerTitle(this.$t('sms.config'))
-      this.drawerVisibleHandle()
+    editHandle(item, options = { componentNames: ['yunlin-table'] }) {
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
     }
-    // drawerClosed() {
-    // 关闭以后需要刷新列表
-    // this.searchHandle()
-    // }
   }
 }
 </script>

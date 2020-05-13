@@ -13,45 +13,28 @@
       <!-- 查询区域 -->
       <template slot="search">
         <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
-          <el-form-item>
-            <el-input
-              v-model="tableSearchParams.mobile"
-              :placeholder="$t('sms.mobile')"
-              :size="tableConfig.tableSearchSize"
-              clearable
-              @clear="clearHandle"
-            ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-select
-              v-model="tableSearchParams.status"
-              :placeholder="$t('sms.status')"
-              :size="tableConfig.tableSearchSize"
-              clearable
-              @clear="clearHandle"
-            >
-              <el-option v-for="(item, index) in smsStatus" :key="index" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
           <!-- 查询 -->
-          <el-form-item>
-            <el-button :size="tableConfig.tableSearchSize" @click="searchHandle()">{{ $t('query') }}</el-button>
-          </el-form-item>
-          <!-- 创建 -->
-          <el-form-item>
-            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="smsConfigHandle()">
-              {{ $t('sms.config') }}
+          <!-- <el-form-item>
+            <el-button :size="tableConfig.tableSearchSize" @click="searchHandle()">
+              {{ $t('query') }}
             </el-button>
-          </el-form-item>
+          </el-form-item> -->
+          <!-- 上传文件 -->
           <el-form-item>
             <el-button type="primary" :size="tableConfig.tableSearchSize" @click="createHandle()">
-              {{ $t('sms.send') }}
+              {{ $t('oss.upload') }}
             </el-button>
           </el-form-item>
-
+          <!-- 云存储配置 -->
+          <el-form-item>
+            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="ossConfigHandle()">{{
+              $t('oss.config')
+            }}</el-button>
+          </el-form-item>
           <!-- 导出 -->
           <!-- <el-form-item>
             <el-button
+              v-if="filterPermission('xxx:xxx:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
@@ -87,7 +70,9 @@
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >{{ $t('update') }}</el-button>-->
+            >
+              {{ $t('update') }}
+            </el-button> -->
             <!-- 单个删除 -->
             <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle([scope.row.id])">
               {{ $t('delete') }}
@@ -97,7 +82,13 @@
       </template>
     </yunlin-table>
     <yunlin-drawer ref="yunlinDrawer" :config="drawerConfig" v-bind="$attrs" @drawer-closed="drawerClosed" v-on="$listeners">
-      <config-message :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild" v-on="$listeners"></config-message>
+      <component
+        :is="drawerComponent"
+        :drawer-data="drawerData"
+        @drawer-close-by-child="drawerCloseByChild"
+        v-on="$listeners"
+      ></component>
+      <!-- <xxx :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild" v-on="$listeners"></xxx> -->
     </yunlin-drawer>
   </div>
 </template>
@@ -107,15 +98,26 @@ import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
 import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
-import { getMessageSmsPageList, deleteMessageSms } from '@/api/message/sms'
-import configMessage from './config'
+import { getOssFilePage, deleteOssFile } from '@/api/oss/oss'
+import configOss from './config'
 
+// 1.修改查询条件
+// 2.修改授权标识
+// 3.修改列表相关事件行为
+// 4.配置接口
+// 5.添加table项配置
+// 6.放开pageSwitch的formDataUpdate配置用于检查详情接口
+// 7.删除此处注释信息
 export default {
   name: 'Tabel',
-  components: { configMessage },
+  components: { configOss },
   mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
   data() {
-    return {}
+    return {
+      drawerComponents: {
+        config: configOss
+      }
+    }
   },
   computed: {
     // 用于判断是否有权限的方法
@@ -130,7 +132,7 @@ export default {
   methods: {
     init() {
       // 配置查询区域i18n相关select数据
-      this.genrateI18nSearchItems()
+      // this.genrateI18nSearchItems()
       // console.log('table created')
       // 是否显示树形数据
       this.tableConfig.rowKey = 'id'
@@ -141,93 +143,33 @@ export default {
 
       // 设置获取列表信息
       this.tableConfig.tableHead = [
-        // 平台类型
-        {
-          prop: 'platform',
-          label: 'sms.platform',
-          width: '160',
-          align: 'center',
-          sortable: true,
-          component: 'toolTag',
-          componentConfig: {
-            prop: 'platform',
-            type: 'text',
-            tagSize: 'small',
-            tagConfig: [
-              {
-                value: 1,
-                name: this.$t('sms.platform1')
-              },
-              {
-                value: 2,
-                name: this.$t('sms.platform2')
-              }
-            ]
-          }
-        },
-        // 手机号
-        { prop: 'mobile', label: 'sms.mobile', width: '100', align: 'center' },
-        // 参数1
-        { prop: 'params1', label: 'sms.params1', align: 'center' },
-        // 参数2
-        { prop: 'params2', label: 'sms.params2', align: 'center' },
-        // 参数3
-        { prop: 'params3', label: 'sms.params3', align: 'center' },
-        // 参数4
-        { prop: 'params4', label: 'sms.params4', align: 'center' },
-        // 状态
-        {
-          prop: 'status',
-          label: 'sms.status',
-          width: '120',
-          align: 'center',
-          sortable: true,
-          component: 'toolTag',
-          componentConfig: {
-            prop: 'status',
-            tagSize: 'small',
-            tagConfig: [
-              {
-                value: 0,
-                type: 'danger',
-                name: this.$t('sms.status0')
-              },
-              {
-                value: 1,
-                type: 'success',
-                name: this.$t('sms.status1')
-              }
-            ]
-          }
-        },
-        // 发送时间
-        { prop: 'createDate', label: 'sms.createDate', width: '160', align: 'center', sortable: true }
+        // URL地址
+        { prop: 'url', label: 'oss.url', align: 'center' },
+        // 创建时间
+        { prop: 'createDate', label: 'oss.createDate', width: '160', align: 'center', sortable: true }
       ]
       // 是否填充查询条件为空
-      this.tableConfig.searchFillEmpty = true
-      this.tableSearchParams = {
-        mobile: '',
-        status: ''
-      }
+      // this.tableConfig.searchFillEmpty = true
+      // this.tableSearchParams = {}
       // 配置列表请求
-      this.tableHandle.list.api = getMessageSmsPageList
+      this.tableHandle.list.api = getOssFilePage
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
-      this.tableHandle.delete.api = deleteMessageSms
+      this.tableHandle.delete.api = deleteOssFile
       // this.tableHandle.delete.callback = this.deleteCallback
       // 配置节点懒加载功能
       // this.tableHandle.lazy.api = lazyXXX
       // 配置section删除功能
-      this.tableHandle.deleteSection.api = deleteMessageSms
+      this.tableHandle.deleteSection.api = deleteOssFile
       // console.log('table page created')
     },
     genrateI18nSearchItems() {
-      // 短信状态
-      this.smsStatus = [
-        { label: this.$t('sms.status0'), value: 0 },
-        { label: this.$t('sms.status1'), value: 1 }
-      ]
+      // XXX
+      // this.smsStatus = [
+      //   { label: this.$t('aaa'), value: 0 },
+      //   { label: this.$t('aaa'), value: 1 }
+      // ]
     },
     // 创建
     createHandle(options = { componentNames: ['yunlin-table'] }) {
@@ -236,11 +178,11 @@ export default {
     // 编辑
     // editHandle(item, options = { componentNames: ['yunlin-table'] }) {
     //   this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
-    // }
-    // 打开drawer组件方法
-    smsConfigHandle() {
-      this.setDrawerData({ data: { pageType: 'edit', formDataUpdate: true } })
-      this.setDrawerTitle(this.$t('sms.config'))
+    // },
+    ossConfigHandle() {
+      this.setDrawerComponent('config')
+      this.setDrawerData({ data: { pageType: 'create', formDataUpdate: true, t: new Date() } })
+      this.setDrawerTitle(this.$t('oss.config'))
       this.drawerVisibleHandle()
     }
     // drawerClosed() {
