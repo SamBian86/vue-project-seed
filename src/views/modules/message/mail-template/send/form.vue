@@ -61,7 +61,7 @@ export default {
       // 定义表单名称
       formTitle: {
         create: ''
-        // edit: this.$t('edit'),
+        // edit: this.$t('update'),
         // detail: this.$t('detail')
       },
       formGenerateTitle: {},

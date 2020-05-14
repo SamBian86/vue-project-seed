@@ -76,7 +76,7 @@
       "      // 定义表单名称\r",
       "      formTitle: {\r",
       "        create: this.$$t('add'),\r",
-      "        edit: this.$$t('edit'),\r",
+      "        edit: this.$$t('update'),\r",
       "        detail: this.$$t('detail')\r",
       "      },\r",
       "      formGenerateTitle: {},\r",

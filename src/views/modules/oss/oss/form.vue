@@ -60,7 +60,7 @@ export default {
       // 定义表单名称
       formTitle: {
         create: this.$t('oss.upload')
-        // edit: this.$t('edit'),
+        // edit: this.$t('update'),
         // detail: this.$t('detail')
       },
       formGenerateTitle: {},

@@ -60,6 +60,9 @@ export default {
     // console.log('form default mixin activated')
   },
   methods: {
+    beforeInit() {
+      // 需要一个页面初始化前获取异步数据的逻辑
+    },
     // 初始化页面数据
     generateFormData() {
       const pageInfoData = (this.$attrs.page_info && this.$attrs.page_info.data) || {}

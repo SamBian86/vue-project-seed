@@ -59,6 +59,7 @@
                 :class="item.className || ''"
                 :disabled="item.disabled"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请选择${$t(item.name)}`"
+                clearable
                 @change="formValueListener(item.prop, $event)"
               >
                 <el-option v-for="(ite, idx) in item.items" :key="idx" :label="$t(ite.label)" :value="ite.value"></el-option>
