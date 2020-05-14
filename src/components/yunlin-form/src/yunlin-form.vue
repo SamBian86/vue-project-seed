@@ -76,7 +76,7 @@
                 :placeholder="`请输入${$t(item.name)}`"
               ></el-input-number>
             </template>
-            <!-- 自定义组件 popover-tree popover-icon -->
+            <!-- 自定义组件 popover-tree popover-icon resource-selector editor file-upload -->
             <template v-if="item.component">
               <component
                 :is="ToolComponents[item.component]"
@@ -148,7 +148,10 @@ export default {
   },
   watch: {},
   breforeCreate() {},
-  created() {},
+  created() {
+    // console.log(ToolComponents)
+    // console.log(this)
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},

@@ -52,6 +52,7 @@ export function uploadOssFile(data = {}) {
   return request({
     url: `/oss/file/upload`,
     method: 'post',
+    dataType: 'uploadData',
     data
   })
 }

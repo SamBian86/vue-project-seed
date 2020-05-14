@@ -41,6 +41,8 @@ t.upload = {}
 t.upload.text = '將文件拖到此處，或<em>點擊上傳</em>'
 t.upload.tip = '只支持{format}格式文件！ '
 t.upload.button = '點擊上傳'
+t.upload.choose = '選擇文件'
+t.upload.uploading = '文件上傳中，稍後再試..'
 
 t.datePicker = {}
 t.datePicker.range = '至'

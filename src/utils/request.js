@@ -25,6 +25,17 @@ service.interceptors.request.use(
       }
     ]
 
+    const transformUploadRequest = [
+      function(data, headers) {
+        headers = { 'content-type': 'multipart/form-data' }
+        const formData = new FormData()
+        Object.keys(data).map(item => {
+          formData.set(item, data[item])
+        })
+        return formData
+      }
+    ]
+
     if (store.getters.app_token) {
       config.headers['Accept-Language'] = getLanguage()
       config.headers['token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
@@ -32,6 +43,10 @@ service.interceptors.request.use(
 
     if (config.dataType === 'formData') {
       config.transformRequest = transformRequest
+    }
+
+    if (config.dataType === 'uploadData') {
+      config.transformRequest = transformUploadRequest
     }
 
     if (config.method === 'get') {

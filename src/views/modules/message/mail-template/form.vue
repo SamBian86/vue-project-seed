@@ -118,10 +118,11 @@ export default {
           rules: [{ required: true }]
         },
         {
-          // 主题
+          // 内容
           span: 24,
           prop: 'content',
           name: 'mail.content',
+          type: 'editor',
           component: 'toolEditor',
           componentConfig: {
             propName: 'content',

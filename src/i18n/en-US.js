@@ -41,6 +41,8 @@ t.upload = {}
 t.upload.text = 'Drop files here, or <em>Click Upload</em>'
 t.upload.tip = 'Only support {format} format files! '
 t.upload.button = 'Click to upload'
+t.upload.choose = 'Choose file'
+t.upload.uploading = 'file uploading, try again later..'
 
 t.datePicker = {}
 t.datePicker.range = 'To'

@@ -37,6 +37,7 @@ export default {
     $attrs(newVal, oldVal) {
       const newPageDrawerData = (newVal.page_drawer_data && newVal.page_drawer_data.data) || ''
       const oldPageDrawerData = (oldVal.page_drawer_data && oldVal.page_drawer_data.data) || ''
+      console.log('检查page_drawer_data')
       // 检查page_drawer_data
       if (JSON.stringify(newPageDrawerData) !== JSON.stringify(oldPageDrawerData)) {
         // 组装表单初始数据
@@ -131,8 +132,8 @@ export default {
     // 生成校验规则, 用于普通添加校验规则，如果是动态添加请使用 generateRuleByProp
     generateRules(items) {
       const { formRules, formData } = this
-      const inputTypes = ['text', 'input-number']
-      const changeTypes = ['select', 'radio-group', 'popover-tree', 'popover-icon', 'resource-selector']
+      const inputTypes = ['text', 'input-number', 'editor']
+      const changeTypes = ['select', 'radio-group', 'popover-tree', 'popover-icon', 'resource-selector', 'file-upload']
       items.map(item => {
         const rules = []
         if (item.rules) {

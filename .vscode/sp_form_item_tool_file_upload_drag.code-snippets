@@ -1,0 +1,21 @@
+{
+  "form代码片段_tool_file_upload_drag": {
+    "prefix": "sp_form_item_tool_file_upload_drag",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'file-upload',\r",
+      "  component: 'toolFileUpload',\r",
+      "  componentConfig: {\r",
+      "    type: 'drag',\r",
+      "    mergeData: { target: '字段$4' }\r",
+      "  }\r",
+      "}\r",
+      "$5"
+    ],
+    "description": "form代码片段_tool_file_upload_drag"
+  }
+}

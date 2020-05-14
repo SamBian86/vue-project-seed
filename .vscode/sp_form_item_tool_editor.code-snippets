@@ -1,0 +1,21 @@
+{
+  "form代码片段_tool_editor": {
+    "prefix": "sp_form_item_tool_editor",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'editor',\r",
+      "  component: 'toolEditor',\r",
+      "  componentConfig: {\r",
+      "    propName: '字段$4',\r",
+      "    mergeData: { target: '字段$5' }\r",
+      "  }\r",
+      "}\r",
+      "$6"
+    ],
+    "description": "form代码片段_tool_editor"
+  }
+}

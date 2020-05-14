@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="10">
     <el-col :span="formConfig.formSpan" :lg="formConfig.formSpan" :md="formConfig.formSpan" :sm="24" :xs="24">
-      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">{{
-        formGenerateTitle[$attrs.page_info.data.pageType]
-      }}</div>
+      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">
+        {{ formGenerateTitle[$attrs.page_info.data.pageType] }}
+      </div>
       <yunlin-form
         ref="yunlinForm"
         :config="formConfig"
@@ -28,7 +28,7 @@
             </el-button>
             <!-- <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
               {{ $t('add') }}
-            </el-button> -->
+            </el-button>-->
             <!-- <el-button
               v-if="containsPageType(['edit'])"
               type="primary"
@@ -36,7 +36,7 @@
               @click.stop="submitHandle"
             >
               {{ $t('update') }}
-            </el-button> -->
+            </el-button>-->
           </div>
         </template>
       </yunlin-form>
@@ -105,7 +105,20 @@ export default {
     },
     init() {
       // 设置表单内容
-      this.formConfig.formItemsReadOnly = []
+      this.formConfig.formItemsReadOnly = [
+        {
+          // 文件上传
+          span: 24,
+          prop: 'file',
+          name: 'upload.choose',
+          type: 'file-upload',
+          component: 'toolFileUpload',
+          componentConfig: {
+            type: 'drag',
+            mergeData: { target: 'file' }
+          }
+        }
+      ]
 
       // 组装表单初始数据
       this.generateFormData()
