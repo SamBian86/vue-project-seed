@@ -51,6 +51,7 @@ import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
 import drawerMixin from '@/mixins/drawer-mixin'
 import { sendMessageMailtemplate } from '@/api/message/mailtemplate'
+import { validateEmail } from '@/utils/validator'
 
 export default {
   name: 'Form',
@@ -114,7 +115,7 @@ export default {
           prop: 'mailTo',
           name: 'mail.mailTo',
           type: 'text',
-          rules: [{ required: true }]
+          rules: [{ required: true }, { validator: validateEmail, trigger: 'blur' }]
         },
         {
           // 抄送
@@ -140,11 +141,9 @@ export default {
       this.generateForm()
     },
     cancleHandle() {
-      this.resetHandle()
       this.$drawerCloseByChild()
     },
     sendMessageMailtemplateCallback() {
-      this.resetHandle()
       this.$drawerCloseByChild()
     }
   }

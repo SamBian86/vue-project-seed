@@ -8,6 +8,7 @@
       "  prop: '字段$2',\r",
       "  name: '国际化$3',\r",
       "  type: 'select',\r",
+      "  className: 'select-block',\r",
       "  placeholder: '国际化$4',\r",
       "  className: 'select-block',\r",
       "  rules: [{ required: true }],\r",

@@ -55,11 +55,11 @@
             <template v-if="item.type === 'select'">
               <el-select
                 v-model="$attrs.data[item.prop]"
-                :type="item.type"
                 :class="item.className || ''"
                 :disabled="item.disabled"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请选择${$t(item.name)}`"
                 clearable
+                filterable
                 @change="formValueListener(item.prop, $event)"
               >
                 <el-option v-for="(ite, idx) in item.items" :key="idx" :label="$t(ite.label)" :value="ite.value"></el-option>
@@ -222,6 +222,7 @@ export default {
           break
       }
       const callback = handle[pageType]['callback'] || null
+      const failCallBack = handle[pageType]['failCallBack'] || null
       this.formMethordHandle({ ...data })
         .then(response => {
           this.$message({
@@ -239,6 +240,9 @@ export default {
           }
         })
         .catch(message => {
+          if (failCallBack) {
+            failCallBack()
+          }
           this.$message({
             message,
             type: 'error',

@@ -207,7 +207,7 @@
       "      this.drawerVisibleHandle()\r",
       "    }\r",
       "    // drawerClosed() {\r",
-      "      // 关闭以后需要刷新列表\r",
+      "      // drawer关闭以后父页面需要的操作\r",
       "      // this.searchHandle()\r",
       "    // }\r",
       "  }\r",

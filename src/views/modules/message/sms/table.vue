@@ -244,7 +244,7 @@ export default {
       this.drawerVisibleHandle()
     }
     // drawerClosed() {
-    // 关闭以后需要刷新列表
+    // drawer关闭以后父页面需要的操作
     // this.searchHandle()
     // }
   }

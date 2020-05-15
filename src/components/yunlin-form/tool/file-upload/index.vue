@@ -37,11 +37,12 @@ export default {
         return {
           type: '', // 上传组件类型
           propName: '', // 初始化用于显示的键名 页面数据键名
-          mergeData: { target: '' }
+          mergeData: { target: '' },
           // mergeData: [
           // { source: 'name', target: 'parentName' },
           // { source: 'id', target: 'pid' }
           // ]
+          componentNames: [] // 组件更新成功以后连带的需要重新获取数据的组件
         }
       }
     },

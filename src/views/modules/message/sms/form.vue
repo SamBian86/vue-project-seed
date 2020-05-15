@@ -48,6 +48,7 @@ import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
 import { sendMessageSms } from '@/api/message/sms'
+import { validateMobile } from '@/utils/validator'
 
 export default {
   name: 'Form',
@@ -65,7 +66,8 @@ export default {
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
-          api: sendMessageSms
+          api: sendMessageSms,
+          failCallBack: this.sendMessageSmsFailCallBack
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
@@ -110,7 +112,7 @@ export default {
           prop: 'mobile',
           name: 'sms.mobile',
           type: 'text',
-          rules: [{ required: true }]
+          rules: [{ required: true }, { validator: validateMobile, trigger: 'blur' }]
         },
         {
           // 参数
@@ -129,7 +131,7 @@ export default {
       // 生成表单及验证规则
       this.generateForm()
     },
-    beforeCancleHandle() {
+    sendMessageSmsFailCallBack() {
       const { componentNames } = this.$attrs.page_info.data
       this.$pageUpdateListAdd(componentNames)
     }

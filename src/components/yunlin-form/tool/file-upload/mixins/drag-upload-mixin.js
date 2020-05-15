@@ -63,7 +63,7 @@ export default {
         this.resourcesList = resourcesList
         this.uploadQueue = uploadQueue
 
-        this.$pageUpdateListAdd(componentNames)
+        this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
         this.formDataMerge()
         // console.log('远程文件列表---')
         // console.log(this.resourcesList)
@@ -123,7 +123,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$pageUpdateListAdd(componentNames)
+            this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
             this.formDataMerge()
           })
           .catch(message => {

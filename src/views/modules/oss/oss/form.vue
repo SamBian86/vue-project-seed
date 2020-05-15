@@ -115,7 +115,8 @@ export default {
           component: 'toolFileUpload',
           componentConfig: {
             type: 'drag',
-            mergeData: { target: 'file' }
+            mergeData: { target: 'file' },
+            componentNames: this.$attrs.page_info.data.componentNames
           }
         }
       ]
@@ -126,10 +127,6 @@ export default {
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
-    },
-    beforeCancleHandle() {
-      const { componentNames } = this.$attrs.page_info.data
-      this.$pageUpdateListAdd(componentNames)
     }
   }
 }

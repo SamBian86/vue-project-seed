@@ -55,7 +55,8 @@ export default {
             // { source: 'name', target: 'parentName' },
             // { source: 'id', target: 'pid' }
           ],
-          compareKey: '' // 用于设置用于比较的list中的key
+          compareKey: '', // 用于设置用于比较的list中的key
+          componentNames: [] // 组件更新成功以后连带的需要重新获取数据的组件
         }
       }
     },

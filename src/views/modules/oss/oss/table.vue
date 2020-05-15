@@ -185,10 +185,6 @@ export default {
       this.setDrawerTitle(this.$t('oss.config'))
       this.drawerVisibleHandle()
     }
-    // drawerClosed() {
-    // 关闭以后需要刷新列表
-    // this.searchHandle()
-    // }
   }
 }
 </script>

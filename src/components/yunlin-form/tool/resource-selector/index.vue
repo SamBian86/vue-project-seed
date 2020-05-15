@@ -2,18 +2,8 @@
   <div>
     <el-row v-if="resources.length !== 0">
       <div v-for="(item, index) in resources" :key="index" class="resource-selector-item">
-        <el-col
-          :span="disabled? 24 :22"
-          :lg="disabled? 24 :22"
-          :md="disabled? 24 :22"
-          :sm="24"
-          :xs="24"
-        >
-          <el-input
-            v-model="item.resourceUrl"
-            :disabled="disabled"
-            :placeholder="$t('menu.resourceUrl')"
-          >
+        <el-col :span="disabled ? 24 : 22" :lg="disabled ? 24 : 22" :md="disabled ? 24 : 22" :sm="24" :xs="24">
+          <el-input v-model="item.resourceUrl" :disabled="disabled" :placeholder="$t('menu.resourceUrl')">
             <el-select
               slot="prepend"
               v-model="item.resourceMethod"
@@ -21,35 +11,18 @@
               class="resource-selector"
               :placeholder="$t('menu.resourceMethod')"
             >
-              <el-option
-                v-for="(ite, idx) in list"
-                :key="idx"
-                :label="ite.label"
-                :value="ite.value"
-              ></el-option>
+              <el-option v-for="(ite, idx) in list" :key="idx" :label="ite.label" :value="ite.value"></el-option>
             </el-select>
           </el-input>
         </el-col>
-        <el-col
-          v-if="!disabled"
-          :span="2"
-          :lg="2"
-          :md="2"
-          :sm="24"
-          :xs="24"
-          class="resource-selector-button"
-        >
+        <el-col v-if="!disabled" :span="2" :lg="2" :md="2" :sm="24" :xs="24" class="resource-selector-button">
           <el-button size="small" type="text" @click="deleteHandle(index)">{{ $t('delete') }}</el-button>
         </el-col>
       </div>
     </el-row>
     <el-row>
       <el-col :span="24">
-        <el-button
-          style="width: 100%;"
-          :disabled="disabled"
-          @click="addHandle()"
-        >{{ $t('menu.resourceAddItem') }}</el-button>
+        <el-button style="width: 100%;" :disabled="disabled" @click="addHandle()">{{ $t('menu.resourceAddItem') }}</el-button>
       </el-col>
     </el-row>
   </div>
@@ -72,7 +45,8 @@ export default {
           requestParams: {},
           propName: '', // 初始化用于显示的键名 页面数据键名
           defaultItem: {}, // 单条数据的数据结构
-          mergeData: { target: '' } // 对应页面的数据的键名
+          mergeData: { target: '' }, // 对应页面的数据的键名
+          componentNames: [] // 组件更新成功以后连带的需要重新获取数据的组件
         }
       }
     },

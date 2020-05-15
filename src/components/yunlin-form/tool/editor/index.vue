@@ -18,7 +18,8 @@ export default {
       default: () => {
         return {
           propName: '', // 初始化用于显示的键名 页面数据键名
-          mergeData: { target: '' } // 对应页面的数据的键名
+          mergeData: { target: '' }, // 对应页面的数据的键名
+          componentNames: [] // 组件更新成功以后连带的需要重新获取数据的组件
         }
       }
     },

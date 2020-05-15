@@ -14,11 +14,11 @@ export default {
       },
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
-        create: { api: null, callback: null },
+        create: { api: null, callback: null, failCallBack: null },
         // 修改抽象方法，用修改接口方法覆盖
-        edit: { api: null, callback: null },
+        edit: { api: null, callback: null, failCallBack: null },
         // 详情抽象方法，用详情接口方法覆盖
-        detail: { api: null, callback: null }
+        detail: { api: null, callback: null, failCallBack: null }
       },
       formData: {}, // 存放表单数据
       formDefaultData: {}, // 存放表单默认数据
@@ -136,7 +136,15 @@ export default {
     generateRules(items) {
       const { formRules, formData } = this
       const inputTypes = ['text', 'input-number', 'editor']
-      const changeTypes = ['select', 'radio-group', 'popover-tree', 'popover-icon', 'resource-selector', 'file-upload']
+      const changeTypes = [
+        'select',
+        'select-dynamic',
+        'radio-group',
+        'popover-tree',
+        'popover-icon',
+        'resource-selector',
+        'file-upload'
+      ]
       items.map(item => {
         const rules = []
         if (item.rules) {
