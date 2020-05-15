@@ -26,9 +26,9 @@
             >
               {{ $t('back') }}
             </el-button>
-            <!-- <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
-              {{ $t('add') }}
-            </el-button>-->
+            <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
+              {{ $t('confirm') }}
+            </el-button>
             <!-- <el-button
               v-if="containsPageType(['edit'])"
               type="primary"
@@ -49,18 +49,19 @@ import { mapGetters } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
-import { uploadOssFile, deleteOssFile } from '@/api/oss/oss'
-// import { createXXX, editXXX, getXXXById } from '@/api/XXX'
+import drawerMixin from '@/mixins/drawer-mixin'
+import { sendMessageDingtalk, getMessageDingtalkTemplateTypeList } from '@/api/message/dingtalk'
+import { validateMobile } from '@/utils/validator'
 
 export default {
   name: 'Form',
   components: {},
-  mixins: [commonMixin, pageMixin, formDefaultMixin],
+  mixins: [commonMixin, pageMixin, formDefaultMixin, drawerMixin],
   data() {
     return {
       // 定义表单名称
       formTitle: {
-        create: this.$t('oss.upload')
+        create: ''
         // edit: this.$t('update'),
         // detail: this.$t('detail')
       },
@@ -68,11 +69,13 @@ export default {
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
-          // api: createXXX
+          api: sendMessageDingtalk,
+          callback: this.sendMessageDingtalkCallback
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
-          // api: editXXX
+          // api: editXXX,
+          // callback: this.XXXCallback
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
@@ -97,7 +100,7 @@ export default {
     // console.log('form created')
 
     // 设置整体表单栅格列数
-    this.formConfig.formSpan = 24
+    this.formConfig.formSpan = 12
   },
   methods: {
     generateTitle() {
@@ -108,19 +111,68 @@ export default {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
-          // 文件上传
+          // 钉钉用户手机
           span: 24,
-          prop: 'file',
-          name: 'upload.choose',
-          type: 'file-upload',
-          component: 'toolFileUpload',
+          prop: 'phoneNumber',
+          name: 'dingtalk.phoneNumber',
+          type: 'text',
+          rules: [{ required: true }, { validator: validateMobile, trigger: 'blur' }]
+        },
+        {
+          // 通知类型
+          span: 24,
+          prop: 'sendType',
+          name: 'dingtalk.sendType',
+          type: 'select-dynamic',
+          rules: [{ required: true }],
+          component: 'toolSelectDynamic',
           componentConfig: {
-            type: 'drag',
-            uploadRequest: uploadOssFile,
-            deleteRequest: deleteOssFile,
-            mergeData: { target: 'file' },
-            componentNames: this.$attrs.page_info.data.componentNames
+            request: getMessageDingtalkTemplateTypeList,
+            requestParams: {},
+            itemProps: {
+              label: 'dictLabel',
+              value: 'dictValue'
+            },
+            propName: 'sendType',
+            placeholder: 'dingtalk.sendType',
+            className: 'select-block',
+            mergeData: { target: 'sendType' }
           }
+        },
+        {
+          // 参数值1
+          span: 24,
+          prop: 'value1',
+          name: 'dingtalk.value1',
+          type: 'text'
+        },
+        {
+          // 参数值2
+          span: 24,
+          prop: 'value2',
+          name: 'dingtalk.value2',
+          type: 'text'
+        },
+        {
+          // 参数值3
+          span: 24,
+          prop: 'value3',
+          name: 'dingtalk.value3',
+          type: 'text'
+        },
+        {
+          // 参数值4
+          span: 24,
+          prop: 'value4',
+          name: 'dingtalk.value4',
+          type: 'text'
+        },
+        {
+          // 参数值5
+          span: 24,
+          prop: 'value5',
+          name: 'dingtalk.value5',
+          type: 'text'
         }
       ]
 
@@ -130,6 +182,13 @@ export default {
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
+    },
+    cancleHandle() {
+      this.$drawerCloseByChild()
+    },
+    sendMessageDingtalkCallback() {
+      this.resetHandle()
+      this.$drawerCloseByChild()
     }
   }
 }

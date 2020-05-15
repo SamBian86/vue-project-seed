@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="10">
     <el-col :span="formConfig.formSpan" :lg="formConfig.formSpan" :md="formConfig.formSpan" :sm="24" :xs="24">
-      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">
-        {{ formGenerateTitle[$attrs.page_info.data.pageType] }}
-      </div>
+      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">{{
+        formGenerateTitle[$attrs.page_info.data.pageType]
+      }}</div>
       <yunlin-form
         ref="yunlinForm"
         :config="formConfig"
@@ -26,17 +26,12 @@
             >
               {{ $t('back') }}
             </el-button>
-            <!-- <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
+            <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
               {{ $t('add') }}
-            </el-button>-->
-            <!-- <el-button
-              v-if="containsPageType(['edit'])"
-              type="primary"
-              :size="formConfig.formSize"
-              @click.stop="submitHandle"
-            >
+            </el-button>
+            <el-button v-if="containsPageType(['edit'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
               {{ $t('update') }}
-            </el-button>-->
+            </el-button>
           </div>
         </template>
       </yunlin-form>
@@ -49,8 +44,7 @@ import { mapGetters } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
-import { uploadOssFile, deleteOssFile } from '@/api/oss/oss'
-// import { createXXX, editXXX, getXXXById } from '@/api/XXX'
+import { createMessageDingtalk, editMessageDingtalk } from '@/api/message/dingtalk'
 
 export default {
   name: 'Form',
@@ -60,19 +54,19 @@ export default {
     return {
       // 定义表单名称
       formTitle: {
-        create: this.$t('oss.upload')
-        // edit: this.$t('update'),
-        // detail: this.$t('detail')
+        create: this.$t('add'),
+        edit: this.$t('update'),
+        detail: this.$t('detail')
       },
       formGenerateTitle: {},
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
-          // api: createXXX
+          api: createMessageDingtalk
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
-          // api: editXXX
+          api: editMessageDingtalk
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
@@ -97,7 +91,7 @@ export default {
     // console.log('form created')
 
     // 设置整体表单栅格列数
-    this.formConfig.formSpan = 24
+    this.formConfig.formSpan = 12
   },
   methods: {
     generateTitle() {
@@ -108,19 +102,54 @@ export default {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
-          // 文件上传
+          // 审批类型
           span: 24,
-          prop: 'file',
-          name: 'upload.choose',
-          type: 'file-upload',
-          component: 'toolFileUpload',
-          componentConfig: {
-            type: 'drag',
-            uploadRequest: uploadOssFile,
-            deleteRequest: deleteOssFile,
-            mergeData: { target: 'file' },
-            componentNames: this.$attrs.page_info.data.componentNames
-          }
+          prop: 'type',
+          name: 'dingtalk.type',
+          type: 'select',
+          className: 'select-block',
+          rules: [{ required: true }],
+          items: [
+            { label: 'dingtalk.type0', value: 0 },
+            { label: 'dingtalk.type1', value: 1 },
+            { label: 'dingtalk.type2', value: 2 },
+            { label: 'dingtalk.type3', value: 3 }
+          ]
+        },
+        {
+          // 消息链接路径
+          span: 24,
+          prop: 'messageUrl',
+          name: 'dingtalk.messageUrl',
+          type: 'text'
+        },
+        {
+          // 参数1
+          span: 24,
+          prop: 'params1',
+          name: 'dingtalk.params1',
+          type: 'text'
+        },
+        {
+          // 参数2
+          span: 24,
+          prop: 'params2',
+          name: 'dingtalk.params2',
+          type: 'text'
+        },
+        {
+          // 参数3
+          span: 24,
+          prop: 'params3',
+          name: 'dingtalk.params3',
+          type: 'text'
+        },
+        {
+          // 参数4
+          span: 24,
+          prop: 'params4',
+          name: 'dingtalk.params4',
+          type: 'text'
         }
       ]
 

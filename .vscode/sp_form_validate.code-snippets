@@ -1,0 +1,11 @@
+{
+  "form代码片段_validate_添加额外表单验证": {
+    "prefix": "sp_form_item_input",
+    "body": [
+      "import { $1XXX } from '@/utils/validator'\r",
+      "// { validator: $2XXX, trigger: 'blur' }\r",
+      "$3"
+    ],
+    "description": "form代码片段_validate_添加额外表单验证"
+  }
+}

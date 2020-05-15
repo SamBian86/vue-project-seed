@@ -1,4 +1,3 @@
-import { uploadOssFile, deleteOssFile } from '@/api/oss/oss'
 export default {
   data() {
     return {
@@ -35,11 +34,11 @@ export default {
       this.uploadQueue = uploadQueue
 
       this.timer = setTimeout(() => {
-        this.uploadOssFile() // 开始进行上传
+        this.uploadRequest() // 开始进行上传
       }, 200)
     },
     // 文件上传
-    uploadOssFile() {
+    uploadRequest() {
       const { uploadQueue, componentNames } = this
       if (uploadQueue.length === 0) {
         this.uploading = false
@@ -47,29 +46,31 @@ export default {
         return false
       }
       const file = uploadQueue.shift()
-      uploadOssFile({
-        file: file.raw
-      }).then(response => {
-        const { dragList, resourcesList } = this
-        resourcesList.push(response)
-        dragList.forEach(item => {
-          if (item.uid === file.uid) {
-            item.success = true
-            // console.log(file.uid + '上传成功')
-          }
+      this.config
+        .uploadRequest({
+          file: file.raw
         })
-        this.uploadStore['file_' + file.uid] = response
-        this.dragList = dragList
-        this.resourcesList = resourcesList
-        this.uploadQueue = uploadQueue
+        .then(response => {
+          const { dragList, resourcesList } = this
+          resourcesList.push(response)
+          dragList.forEach(item => {
+            if (item.uid === file.uid) {
+              item.success = true
+              // console.log(file.uid + '上传成功')
+            }
+          })
+          this.uploadStore['file_' + file.uid] = response
+          this.dragList = dragList
+          this.resourcesList = resourcesList
+          this.uploadQueue = uploadQueue
 
-        this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
-        this.formDataMerge()
-        // console.log('远程文件列表---')
-        // console.log(this.resourcesList)
-        // console.log('本地剩余列表---')
-        // console.log(this.uploadQueue)
-      })
+          this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
+          this.formDataMerge()
+          // console.log('远程文件列表---')
+          // console.log(this.resourcesList)
+          // console.log('本地剩余列表---')
+          // console.log(this.uploadQueue)
+        })
     },
     // 拖拽文件检查
     dragChangeHandle(file, fileList) {
@@ -108,7 +109,8 @@ export default {
       const resource = uploadStore['file_' + file.uid]
 
       if (resource) {
-        deleteOssFile([resource.id])
+        this.config
+          .deleteRequest([resource.id])
           .then(response => {
             delete uploadStore['file_' + file.uid]
             dragList = dragList.filter(item => item.uid !== file.uid)

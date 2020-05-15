@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="10">
     <el-col :span="formConfig.formSpan" :lg="formConfig.formSpan" :md="formConfig.formSpan" :sm="24" :xs="24">
-      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">
-        {{ formGenerateTitle[$attrs.page_info.data.pageType] }}
-      </div>
+      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">{{
+        formGenerateTitle[$attrs.page_info.data.pageType]
+      }}</div>
       <yunlin-form
         ref="yunlinForm"
         :config="formConfig"
@@ -28,15 +28,10 @@
             </el-button>
             <!-- <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
               {{ $t('add') }}
-            </el-button>-->
-            <!-- <el-button
-              v-if="containsPageType(['edit'])"
-              type="primary"
-              :size="formConfig.formSize"
-              @click.stop="submitHandle"
-            >
-              {{ $t('update') }}
-            </el-button>-->
+            </el-button> -->
+            <el-button v-if="containsPageType(['edit'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
+              {{ $t('confirm') }}
+            </el-button>
           </div>
         </template>
       </yunlin-form>
@@ -49,19 +44,19 @@ import { mapGetters } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
-import { uploadOssFile, deleteOssFile } from '@/api/oss/oss'
-// import { createXXX, editXXX, getXXXById } from '@/api/XXX'
+import drawerMixin from '@/mixins/drawer-mixin'
+import { saveMessageDingtalkConfig, getMessageDingtalkConfig } from '@/api/message/dingtalk'
 
 export default {
   name: 'Form',
   components: {},
-  mixins: [commonMixin, pageMixin, formDefaultMixin],
+  mixins: [commonMixin, pageMixin, formDefaultMixin, drawerMixin],
   data() {
     return {
       // 定义表单名称
       formTitle: {
-        create: this.$t('oss.upload')
-        // edit: this.$t('update'),
+        // create: this.$t('add'),
+        edit: ''
         // detail: this.$t('detail')
       },
       formGenerateTitle: {},
@@ -72,11 +67,12 @@ export default {
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
-          // api: editXXX
+          api: saveMessageDingtalkConfig,
+          callback: this.saveMessageDingtalkConfigCallback
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
-          // api: getXXXById
+          api: getMessageDingtalkConfig
         }
       },
       // 初始化数据定义
@@ -97,7 +93,7 @@ export default {
     // console.log('form created')
 
     // 设置整体表单栅格列数
-    this.formConfig.formSpan = 24
+    this.formConfig.formSpan = 12
   },
   methods: {
     generateTitle() {
@@ -108,19 +104,28 @@ export default {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
-          // 文件上传
+          // agentId
           span: 24,
-          prop: 'file',
-          name: 'upload.choose',
-          type: 'file-upload',
-          component: 'toolFileUpload',
-          componentConfig: {
-            type: 'drag',
-            uploadRequest: uploadOssFile,
-            deleteRequest: deleteOssFile,
-            mergeData: { target: 'file' },
-            componentNames: this.$attrs.page_info.data.componentNames
-          }
+          prop: 'agentId',
+          name: 'dingtalk.agentId',
+          type: 'text',
+          rules: [{ required: true }]
+        },
+        {
+          // appKey
+          span: 24,
+          prop: 'appKey',
+          name: 'dingtalk.appKey',
+          type: 'text',
+          rules: [{ required: true }]
+        },
+        {
+          // appSecret
+          span: 24,
+          prop: 'appSecret',
+          name: 'dingtalk.appSecret',
+          type: 'text',
+          rules: [{ required: true }]
         }
       ]
 
@@ -130,6 +135,12 @@ export default {
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
+    },
+    cancleHandle() {
+      this.$drawerCloseByChild()
+    },
+    saveMessageDingtalkConfigCallback() {
+      this.$drawerCloseByChild()
     }
   }
 }

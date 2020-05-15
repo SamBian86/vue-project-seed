@@ -36,6 +36,8 @@ export default {
       default: () => {
         return {
           type: '', // 上传组件类型
+          uploadRequest: null,
+          deleteRequest: null,
           propName: '', // 初始化用于显示的键名 页面数据键名
           mergeData: { target: '' },
           // mergeData: [
