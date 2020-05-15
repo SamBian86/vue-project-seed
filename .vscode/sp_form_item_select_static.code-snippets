@@ -10,7 +10,6 @@
       "  type: 'select',\r",
       "  className: 'select-block',\r",
       "  placeholder: '国际化$4',\r",
-      "  className: 'select-block',\r",
       "  rules: [{ required: true }],\r",
       "  items: [\r",
       "    { label: 'oss.qcloudRegionBeijing1', value: 1 },\r",

@@ -4,6 +4,7 @@ import toolResourceSelector from './resource-selector'
 import toolEditor from './editor'
 import toolFileUpload from './file-upload'
 import toolSelectDynamic from './select-dynamic'
+import toolTreeDynamic from './tree-dynamic'
 
 export default {
   toolPopoverTree,
@@ -11,5 +12,6 @@ export default {
   toolResourceSelector,
   toolEditor,
   toolFileUpload,
-  toolSelectDynamic
+  toolSelectDynamic,
+  toolTreeDynamic
 }

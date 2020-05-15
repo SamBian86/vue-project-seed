@@ -143,7 +143,8 @@ export default {
         'popover-tree',
         'popover-icon',
         'resource-selector',
-        'file-upload'
+        'file-upload',
+        'tree-dynamic'
       ]
       items.map(item => {
         const rules = []

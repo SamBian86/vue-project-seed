@@ -1,0 +1,30 @@
+{
+  "form代码片段_select_dynamic": {
+    "prefix": "sp_form_item_select_dynamic",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'select-dynamic',\r",
+      "  rules: [{ required: true }],\r",
+      "  component: 'toolSelectDynamic',\r",
+      "  componentConfig: {\r",
+      "    request: null$4,\r",
+      "    requestParams: {},\r",
+      "    itemProps: {\r",
+      "      label: '$5',\r",
+      "      value: '$6'\r",
+      "    },\r",
+      "    propName: '字段$7',\r",
+      "    placeholder: '国际化$8',\r",
+      "    className: 'select-block',\r",
+      "    mergeData: { target: '$9' }\r",
+      "  }\r",
+      "},\r",
+      "$10"
+    ],
+    "description": "form代码片段_select_dynamic"
+  }
+}

@@ -101,13 +101,6 @@ import { getMessageDingtalkPageList, deleteMessageDingtalk } from '@/api/message
 import configDingtalk from './config'
 import sendDingtalk from './send'
 
-// 1.修改查询条件
-// 2.修改授权标识
-// 3.修改列表相关事件行为
-// 4.配置接口
-// 5.添加table项配置
-// 6.放开pageSwitch的formDataUpdate配置用于检查详情接口
-// 7.删除此处注释信息
 export default {
   name: 'Tabel',
   components: { configDingtalk, sendDingtalk },

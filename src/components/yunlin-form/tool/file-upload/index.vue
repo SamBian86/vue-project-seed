@@ -88,7 +88,7 @@ export default {
   methods: {
     init() {
       this.dragUploadInit()
-      // if (this.isPromise(this.config.request())) {
+      // if (this.config.request) {
       //   this.config
       //     .request(this.config.requestParams)
       //     .then(response => {

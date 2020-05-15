@@ -84,7 +84,7 @@ export default {
     init() {
       this.resources = this.pageData[this.config.propName] || []
 
-      if (this.isPromise(this.config.request())) {
+      if (this.config.request) {
         this.config
           .request(this.config.requestParams)
           .then(response => {

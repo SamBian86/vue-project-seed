@@ -103,7 +103,7 @@ export default {
   methods: {
     init() {
       const { treeDataTranslate } = this.config
-      if (this.isPromise(this.config.request())) {
+      if (this.config.request) {
         this.config
           .request(this.config.requestParams)
           .then(response => {

@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     init() {
-      if (this.isPromise(this.config.request())) {
+      if (this.config.request) {
         this.config
           .request(this.config.requestParams)
           .then(response => {
