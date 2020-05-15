@@ -27,7 +27,7 @@
               {{ $t('back') }}
             </el-button>
             <el-button
-              v-if="containsPageType(['create']) && filterPermission('sys:role:save')"
+              v-if="containsPageType(['create']) && filterPermission('sys:dept:save')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
@@ -35,7 +35,7 @@
               {{ $t('add') }}
             </el-button>
             <el-button
-              v-if="containsPageType(['edit']) && filterPermission('sys:role:update')"
+              v-if="containsPageType(['edit']) && filterPermission('sys:dept:update')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
@@ -54,9 +54,7 @@ import { mapGetters } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
-import { createSysRole, editSysRole, getSysRoleById } from '@/api/sys/role'
-import { getMenuSelectList } from '@/api/sys/menu'
-import { getSysDeptListAll } from '@/api/sys/dept'
+import { createSysDept, editSysDept, getSysDeptById, getSysDeptListAll } from '@/api/sys/dept'
 
 export default {
   name: 'Form',
@@ -74,19 +72,22 @@ export default {
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
-          api: createSysRole
+          api: createSysDept
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
-          api: editSysRole
+          api: editSysDept
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
-          api: null
+          api: getSysDeptById
         }
       },
       // 初始化数据定义
-      formDefaultData: {},
+      formDefaultData: {
+        pid: 0,
+        sort: 0
+      },
       // 用于处理表单的隐藏与显示禁用行为
       formAction: []
     }
@@ -103,7 +104,7 @@ export default {
     // console.log('form created')
 
     // 设置整体表单栅格列数
-    this.formConfig.formSpan = 18
+    this.formConfig.formSpan = 12
   },
   methods: {
     generateTitle() {
@@ -117,62 +118,45 @@ export default {
           // 名称
           span: 24,
           prop: 'name',
-          name: 'role.name',
+          name: 'dept.name',
           type: 'text',
           rules: [{ required: true }]
         },
         {
-          // 备注
+          // 上级部门
           span: 24,
-          prop: 'remark',
-          name: 'role.remark',
-          type: 'textarea',
-          attrs: { autosize: { minRows: 6, maxRows: 10 } }
-        },
-        {
-          // 菜单权限
-          span: 12,
-          prop: 'menuIdList',
-          name: 'role.menuList',
-          type: 'tree-dynamic',
-          component: 'toolTreeDynamic',
+          prop: 'parentName',
+          name: 'dept.parentName',
+          type: 'popover-tree',
+          rules: [{ required: true }],
+          component: 'toolPopoverTree',
           componentConfig: {
-            treeRequest: getMenuSelectList,
-            treeRequestParams: {},
-            treeResultRequest: getSysRoleById,
-            treeResultRequestParams: {},
-            treeResultRequestPropParams: ['id'],
-            treeResultKey: 'menuIdList',
-            propName: 'menuIdList',
-            nodeKey: 'id',
+            request: getSysDeptListAll,
+            requestParams: {},
+            // treeDataTranslate,
+            // treeDataFilter: true,
+            // treeDataFilterKey: '',
+            i18nDefault: 'dept.parentNameDefault',
+            propName: 'parentName',
+            sourceName: 'name',
             treeProps: { label: 'name', children: 'children' },
-            mergeData: { target: 'menuIdList' },
-            accordion: true,
-            showCheckbox: true,
-            componentNames: ['tree-dynamic-1']
+            treeNodeKey: 'id',
+            mergeData: [
+              { source: 'name', target: 'parentName', default: '' },
+              { source: 'id', target: 'pid', default: 0 }
+            ],
+            componentNames: ['popover-tree']
           }
         },
         {
-          // 数据授权
-          span: 12,
-          prop: 'deptIdList',
-          name: 'role.deptList',
-          type: 'tree-dynamic',
-          component: 'toolTreeDynamic',
-          componentConfig: {
-            treeRequest: getSysDeptListAll,
-            treeRequestParams: {},
-            treeResultRequest: getSysRoleById,
-            treeResultRequestParams: {},
-            treeResultRequestPropParams: ['id'],
-            treeResultKey: 'deptIdList',
-            propName: 'deptIdList',
-            nodeKey: 'id',
-            treeProps: { label: 'name', children: 'children' },
-            mergeData: { target: 'deptIdList' },
-            accordion: true,
-            showCheckbox: true,
-            componentNames: ['tree-dynamic-2']
+          // 排序
+          span: 24,
+          prop: 'sort',
+          name: 'dept.sort',
+          type: 'input-number',
+          attrs: {
+            controlsPosition: 'right',
+            min: 0
           }
         }
       ]
@@ -183,10 +167,6 @@ export default {
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
-    },
-    // 关闭前回调
-    beforeCancleHandle() {
-      this.$pageUpdateListAdd(['tree-dynamic-1', 'tree-dynamic-2'])
     }
   }
 }

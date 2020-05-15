@@ -12,7 +12,12 @@
     ></el-input>
     <el-popover ref="popover-tree" v-model="popoverStatus" placement="bottom-start" trigger="click">
       <div class="popover-tree-out">
-        <el-input v-model="filterText" size="small" :placeholder="$t('keywordFilterSearch')"></el-input>
+        <el-input
+          v-if="config.treeDataFilter"
+          v-model="filterText"
+          size="small"
+          :placeholder="$t('keywordFilterSearch')"
+        ></el-input>
         <div class="popover-tree-in">
           <el-tree
             ref="tree"
