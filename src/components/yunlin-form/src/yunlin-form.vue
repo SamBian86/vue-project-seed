@@ -48,7 +48,9 @@
                 :disabled="item.disabled"
                 @change="formValueListener(item.prop, $event)"
               >
-                <el-radio v-for="(ite, idx) in item.items" :key="idx" :label="ite.label">{{ $t(ite.name) }}</el-radio>
+                <el-radio v-for="(ite, idx) in item.items" :key="idx" :label="ite.label">{{
+                  ite.i18n === false ? ite.name : $t(ite.name)
+                }}</el-radio>
               </el-radio-group>
             </template>
             <!-- select -->
@@ -179,6 +181,7 @@ export default {
     // 表单校验
     submitHandle() {
       const { formName } = this.$attrs.config
+      console.log(this.$attrs.data)
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.formSubmitHandle()

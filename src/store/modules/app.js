@@ -133,6 +133,18 @@ export default {
   getters: {
     filterPermission: state => value => {
       return state.permissionStore.findIndex(item => item === value) !== -1 || false
+    },
+    getDictByType: state => type => {
+      const items = state.dictStore[type]
+      items.forEach(item => {
+        item.dictValue = parseInt(item.dictValue)
+      })
+      return items || []
+    },
+    getDictNameByValue: state => (type, value) => {
+      const dicts = state.dictStore[type] || []
+      const items = dicts.filter(item => item.dictValue === value)
+      return items.length === 1 ? items[0]['dictLabel'] : ''
     }
   }
 }

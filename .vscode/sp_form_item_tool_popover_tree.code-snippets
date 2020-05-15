@@ -11,8 +11,8 @@
       "  rules: [{ required: true }],\r",
       "  component: 'toolPopoverTree',\r",
       "  componentConfig: {\r",
-      "    // request: 获取数据接口$4,\r",
-      "    // requestParams: { 传参$5 },\r",
+      "    request: null$4,\r",
+      "    requestParams: {},\r",
       "    // treeDataTranslate,\r",
       "    // treeDataFilter: true,\r",
       "    // treeDataFilterKey: '',\r",
@@ -28,7 +28,7 @@
       "    componentNames: ['popover-tree']\r",
       "  }\r",
       "},\r",
-      "$6"
+      "$5"
     ],
     "description": "form代码片段_tool_popover_tree"
   }

@@ -1,5 +1,6 @@
+import commonMixin from '@/mixins/common-mixin'
 export default {
-  mixins: [],
+  mixins: [commonMixin],
   data() {
     return {
       componentNames: ['table'], // 用于检查pageMixin中pageUpdateList是否存在componentNames中存在的项，如果存在需要重新获取数据
@@ -125,8 +126,8 @@ export default {
     detailHandle(item, options = {}) {
       this.$pageSwitch('form', { ...item, pageType: 'detail', formDataUpdate: true, ...options })
     },
-
     // yunlin-table组件 事件监听器 --------------------------------------------------------
+
     // 接收section的值
     tableSelectionListener(values) {
       this.tableSections = values

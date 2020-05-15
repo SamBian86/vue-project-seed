@@ -101,7 +101,7 @@
       "    }\r",
       "  },\r",
       "  computed: {\r",
-      "    ...mapGetters('app', ['filterPermission'])\r",
+      "    ...mapGetters('app', ['filterPermission', 'getDictByType', 'getDictNameByValue'])\r",
       "  },\r",
       "  activated() {\r",
       "    // console.log('form activated')\r",

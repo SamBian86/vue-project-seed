@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { exportFile } from '@/utils'
 
 // POST
 // /sys/user
@@ -40,8 +41,7 @@ export function getUserById(params = {}) {
   const { id } = params
   return request({
     url: `/sys/user/${id}`,
-    method: 'get',
-    params
+    method: 'get'
   })
 }
 
@@ -49,11 +49,7 @@ export function getUserById(params = {}) {
 // /sys/user/export
 // 导出
 export function exportUser(params = {}) {
-  return request({
-    url: `/sys/user/export`,
-    method: 'get',
-    params
-  })
+  exportFile(`/sys/user/export`, params)
 }
 
 // GET

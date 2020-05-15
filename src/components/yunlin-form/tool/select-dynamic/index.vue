@@ -5,6 +5,7 @@
       :class="config.className || ''"
       :placeholder="config.placeholderText || `请选择${$t(config.placeholder)}`"
       :disabled="disabled"
+      :multiple="config.multiple"
       clearable
       filterable
       @change="changeHandle"
@@ -31,6 +32,7 @@ export default {
       type: Object,
       default: () => {
         return {
+          multiple: false, // 是否多选
           request: null, // el-tree 获取数据的方法
           requestParams: {}, // 获取数据方法传参
           itemProps: {
@@ -67,9 +69,16 @@ export default {
   },
   computed: {},
   watch: {
-    // filterText(val) {
-    //   this.$refs.tree.filter(val)
-    // }
+    pageData(newVal, oldVal) {
+      const { propName } = this.config
+      const newData = newVal[propName] || ''
+      const oldData = oldVal[propName] || ''
+
+      // 检查prop_data数据是否变动
+      if (JSON.stringify(newData) !== JSON.stringify(oldData)) {
+        this.selected = newData
+      }
+    }
   },
   activated() {
     // console.log('select-dynamic activated')

@@ -69,9 +69,15 @@ export default {
     }
   },
   watch: {
-    pageData() {
-      this.init()
-      // console.log('pageData change')
+    pageData(newVal, oldVal) {
+      const { propName } = this.config
+      const newData = newVal[propName] || ''
+      const oldData = oldVal[propName] || ''
+
+      // 检查prop_data数据是否变动
+      if (JSON.stringify(newData) !== JSON.stringify(oldData)) {
+        this.resources = newData || []
+      }
     }
   },
   activated() {
@@ -82,8 +88,6 @@ export default {
   },
   methods: {
     init() {
-      this.resources = this.pageData[this.config.propName] || []
-
       if (this.config.request) {
         this.config
           .request(this.config.requestParams)

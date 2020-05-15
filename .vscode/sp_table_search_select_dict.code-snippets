@@ -1,0 +1,25 @@
+{
+  "table代码片段_字典查询条件_select_dict": {
+    "prefix": "sp_table_search_select_dict",
+    "body": [
+      "<el-form-item>\r",
+      "  <el-select\r",
+      "    v-model=\"tableSearchParams.字段名$1\"\r",
+      "    :placeholder=\"$$t('国际化$2')\"\r",
+      "    :size=\"tableConfig.tableSearchSize\"\r",
+      "    clearable\r",
+      "    @clear=\"clearHandle\"\r",
+      "  >\r",
+      "    <el-option\r",
+      "      v-for=\"(item, index) in getDictByType('xxxx')\"\r",
+      "      :key=\"index\"\r",
+      "      :label=\"item.dictLabel\"\r",
+      "      :value=\"item.dictValue\"\r",
+      "    ></el-option>\r",
+      "  </el-select>\r",
+      "</el-form-item>\r",
+      "$3"
+    ],
+    "description": "table代码片段_字典查询条件_select_dict"
+  }
+}

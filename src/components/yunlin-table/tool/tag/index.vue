@@ -65,7 +65,7 @@ export default {
       const name = this.columnData[this.config.name]
 
       tagConfig.map(item => {
-        if (item.value === value) {
+        if (parseInt(item.value) === parseInt(value)) {
           this.tagItem.type = item.type
           this.tagItem.name = item.name || name // 默认用tagConfig中的name
         }

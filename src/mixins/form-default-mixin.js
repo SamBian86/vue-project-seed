@@ -1,5 +1,6 @@
+import commonMixin from '@/mixins/common-mixin'
 export default {
-  mixins: [],
+  mixins: [commonMixin],
   data() {
     return {
       componentNames: ['form'], // 用于检查pageMixin中pageUpdateList是否存在componentNames中存在的项，如果存在需要重新获取数据
