@@ -1,0 +1,24 @@
+{
+  "table代码片段_查询条件_search_tree": {
+    "prefix": "sp_table_search_tree",
+    "body": [
+      "<el-form-item>\r",
+      "  <search-tree :config=\"searchTreeConfig\" @table-params-merge=\"tableParamsMerge\"></search-tree>\r",
+      "  // import searchTree from '@/components/yunlin-table/search/search-tree'\r",
+      "</el-form-item>\r",
+      "this.searchTreeConfig = {\r",
+      "  request: null$1,\r",
+      "  requestParams: {},\r",
+      "  treeDataTranslate: null,\r",
+      "  treeDataFilter: true,\r",
+      "  treeDataFilterKey: '$2',\r",
+      "  i18nDefault: '国际化$3',\r",
+      "  treeProps: { label: 'name', children: 'children' },\r",
+      "  treeNodeKey: '$4',\r",
+      "  mergeData: [{ source: '源$4', target: '查询字段$5', name: '用于显示$6' }]\r",
+      "}\r",
+      "$7"
+    ],
+    "description": "table代码片段_查询条件_search_tree"
+  }
+}
