@@ -17,6 +17,9 @@ export default {
     },
     $tableLazyloadListener(fn, tree, treeNode, resolve) {
       this.$emit('table-lazyload-listener', fn, tree, treeNode, resolve)
+    },
+    $tableParamsMerge(params) {
+      this.$emit('table-params-merge', params)
     }
   }
 }

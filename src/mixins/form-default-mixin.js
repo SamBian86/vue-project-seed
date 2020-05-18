@@ -238,7 +238,12 @@ export default {
     // 通知组件更新表单数据
     formDataUpdate(data) {
       this.$set(this, 'formData', { ...this.formData, ...data })
+      this.afterFormDataUpdate()
       this.generateForm()
+    },
+    // 获取详情数据以后的处理
+    afterFormDataUpdate() {
+      // const { formData } = this
     }
     // yunlin-form组件 事件监听器 --------------------------------------------------------
   }

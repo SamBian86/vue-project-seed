@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
+import { exportFile, openNewTab } from '@/utils'
 // 模型管理
 
 // 新增模型
@@ -46,7 +46,6 @@ export function exportActivitiModel(params = {}) {
 // 查看流程图
 // GET
 // /activiti/model/image/{deploymentId}
-
 export function getActivitiModelImageById(params = {}) {
   const { deploymentId } = params
   return request({
@@ -64,4 +63,9 @@ export function getActivitiModelPageList(params = {}) {
     method: 'get',
     params
   })
+}
+
+// 在线设计
+export function designModelOnline(params = {}) {
+  openNewTab(`/activiti/modeler.html`, params)
 }

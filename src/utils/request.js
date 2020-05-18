@@ -68,7 +68,6 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const { code, data, msg } = response.data
-
     if (code === 0) {
       return data
     } else {

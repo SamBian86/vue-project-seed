@@ -142,6 +142,14 @@ export default {
         .catch(() => {
           Promise.reject('请配置列表懒加载方法')
         })
+    },
+    // 合并选择组件传递过来的查询数据
+    tableParamsMerge(params) {
+      Object.keys(params).map(item => {
+        this.$set(this.tableSearchParams, item, params[item])
+      })
+      console.log(this.tableSearchParams)
+      this.searchHandle()
     }
   }
 }

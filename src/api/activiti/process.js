@@ -1,5 +1,6 @@
 import request from '@/utils/request'
-
+import { openNewTab } from '@/utils'
+// import { getToken } from '@/utils/cookie'
 // 流程管理
 
 // 删除流程
@@ -31,7 +32,10 @@ export function deployActivitiProcess(data = {}) {
   return request({
     url: `/activiti/process/deploy`,
     method: 'post',
-    data
+    dataType: 'uploadData',
+    data: {
+      processFile: data.file
+    }
   })
 }
 
@@ -94,12 +98,9 @@ export function getActivitiProcessPageList(params = {}) {
 // GET
 // /activiti/process/resource
 export function getActivitiProcessResource(params = {}) {
-  return request({
-    url: `/activiti/process/resource`,
-    method: 'get',
-    params
-  })
+  openNewTab(`/activiti/process/resource`, params)
 }
+
 // 保存业务路由配置
 // POST
 // /activiti/process/saveProcBizRoute
@@ -129,6 +130,18 @@ export function suspendActivitiProcess(data = {}) {
   const { id } = data
   return request({
     url: `/activiti/process/suspend/${id}`,
+    method: 'put',
+    data
+  })
+}
+
+// 激活流程
+// PUT
+// /activiti/process/active/{id}
+export function activeActivitiProcess(data = {}) {
+  const { id } = data
+  return request({
+    url: `/activiti/process/active/${id}`,
     method: 'put',
     data
   })

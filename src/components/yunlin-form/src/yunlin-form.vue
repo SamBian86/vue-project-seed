@@ -83,6 +83,7 @@
             <template v-if="item.component">
               <component
                 :is="ToolComponents[item.component]"
+                :ref="item.type + '-' + item.prop"
                 :disabled="item.disabled"
                 :config="item.componentConfig"
                 :page-data="{ ...$attrs.data }"

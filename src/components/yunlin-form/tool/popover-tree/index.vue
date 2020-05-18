@@ -51,7 +51,7 @@ export default {
           requestParams: {}, // 获取数据方法传参
           treeDataTranslate: null, // 获取数据以后是否要进行数据处理
           treeDataFilter: false, // 是否开启过滤功能
-          treeDataFilterKey: '', // 根据那个key进行过滤
+          treeDataFilterKey: '', // 根据哪个key进行过滤
           i18nDefault: '', // 默认显示的placeholder内容
           propName: '', // 初始化用于显示的键名
           sourceName: '', // 修改后用于在本组件中显示文字的键名
@@ -173,5 +173,6 @@ export default {
   width: 250px;
   max-height: 300px;
   overflow: auto;
+  padding-top: 10px;
 }
 </style>

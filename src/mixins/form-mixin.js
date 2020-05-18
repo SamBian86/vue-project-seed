@@ -25,7 +25,7 @@ export default {
       this.$emit('form-value-listener', prop)
     },
     $formDataUpdate(data) {
-      this.$emit('form-data-update', data)
+      this.$emit('form-data-update', data || {})
     }
   }
 }

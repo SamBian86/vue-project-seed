@@ -71,6 +71,18 @@ export const exportFile = (url, params) => {
   window.location.href = process.env.VUE_APP_API_URL + url + _params
 }
 
+// 在线设计
+export const openNewTab = (url, params) => {
+  params._t = new Date().getTime()
+  params.token = getToken()
+  const _params = '?'.concat(
+    Object.entries(params)
+      .map(item => item.join('='))
+      .join('&')
+  )
+  window.open(process.env.VUE_APP_API_URL + url + _params, '_blank')
+}
+
 // 树形数据转换 用于行政区域
 export function treeDataTranslate(data, id = 'id', pid = 'pid') {
   var res = []

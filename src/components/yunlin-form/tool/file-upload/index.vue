@@ -17,7 +17,7 @@
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text" v-html="$t('upload.text')"></div>
-        <div slot="tip" class="el-upload__tip">{{ $t('upload.tip', { format: 'jpg、png、gif' }) }}</div>
+        <div slot="tip" class="el-upload__tip">{{ $t('upload.tip', { format: formats[config.format].join('、') }) }}</div>
       </el-upload>
     </div>
   </div>
@@ -36,6 +36,7 @@ export default {
       default: () => {
         return {
           type: '', // 上传组件类型
+          format: 0, // 校验规则查看下面formats
           uploadRequest: null,
           deleteRequest: null,
           propName: '', // 初始化用于显示的键名 页面数据键名
@@ -62,6 +63,10 @@ export default {
   },
   data() {
     return {
+      formats: [
+        ['jpge', 'jpg', 'png', 'gif'],
+        ['zip', 'xml', 'bar', 'bpmn']
+      ],
       timer: null,
       componentNames: ['file-upload'],
       uploadUrl: '',
@@ -72,6 +77,14 @@ export default {
   watch: {
     pageData() {
       // this.dragUploadInit()
+    },
+    $attrs(newVal, oldVal) {
+      const newPageDrawerData = (newVal.page_drawer_data && newVal.page_drawer_data.data) || ''
+      const oldPageDrawerData = (oldVal.page_drawer_data && oldVal.page_drawer_data.data) || ''
+      // 检查page_drawer_data
+      if (JSON.stringify(newPageDrawerData) !== JSON.stringify(oldPageDrawerData)) {
+        this.dragUploadInit()
+      }
     }
   },
   activated() {
@@ -102,20 +115,22 @@ export default {
       // }
     },
     // 上传前校验
-    beforeUploadHandle(file) {
-      const isJPG = file.type === 'image/jpg'
-      const isJPEG = file.type === 'image/jpeg'
-      const isPNG = file.type === 'image/png'
-      const isGIF = file.type === 'image/gif'
-      // const isLt2M = file.size / 1024 / 1024 < 2;
+    beforeUploadHandle(fileList) {
+      let checkType = true // 默认校验可以通过
+      const { formats } = this
+      const { format } = this.config
+      const reg = new RegExp('\(' + formats[format].join('|') + '\)')
+      fileList.map(item => {
+        if (!reg.test(item.raw.type)) {
+          checkType = reg.test(item.raw.type)
+        }
+      })
 
-      if (!isJPG && !isJPEG && !isPNG && !isGIF) {
-        this.$message.error(this.$t('upload.tip', { format: 'jpg、png、gif' }))
+      if (!checkType) {
+        this.$message.error(this.$t('upload.tip', { format: formats[format].join('、') }))
       }
-      // if (!isLt2M) {
-      //   this.$message.error('上传头像图片大小不能超过 2MB!');
-      // }
-      return isJPG || isJPEG || isPNG || isGIF
+
+      return checkType
     },
     formDataMerge() {
       const { resourcesList } = this

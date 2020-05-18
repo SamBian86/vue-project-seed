@@ -279,20 +279,33 @@ export default {
       //    request: pauseJobSchedule // 处理接口方法
       // }
       const { request } = opts
+      if (!opts.i18nRequestMessage) {
+        request()(opts.data)
+        return
+      }
+
       this.$confirm(`确认进行${this.$t(opts.i18nRequestMessage)}操作？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          request()(opts.data).then(response => {
-            this.$message({
-              message: this.$t('prompt.success'),
-              type: 'success',
-              duration: 2000
+          request()(opts.data)
+            .then(response => {
+              this.$message({
+                message: this.$t('prompt.success'),
+                type: 'success',
+                duration: 2000
+              })
+              this.searchHandle()
             })
-            this.searchHandle()
-          })
+            .catch(message => {
+              this.$message({
+                message,
+                type: 'error',
+                duration: 2000
+              })
+            })
         })
         .catch(() => {})
     },
@@ -310,17 +323,25 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.deleteSectionBridge(items).then(response => {
-            if (callback) {
-              callback()
-            }
-            this.$message({
-              message: this.$t('prompt.success'),
-              type: 'success',
-              duration: 2000
+          this.deleteSectionBridge(items)
+            .then(response => {
+              if (callback) {
+                callback()
+              }
+              this.$message({
+                message: this.$t('prompt.success'),
+                type: 'success',
+                duration: 2000
+              })
+              this.searchHandle()
             })
-            this.searchHandle()
-          })
+            .catch(message => {
+              this.$message({
+                message,
+                type: 'error',
+                duration: 2000
+              })
+            })
         })
         .catch(() => {})
     },
@@ -339,14 +360,22 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          request()(opts.data).then(response => {
-            this.$message({
-              message: this.$t('prompt.success'),
-              type: 'success',
-              duration: 2000
+          request()(opts.data)
+            .then(response => {
+              this.$message({
+                message: this.$t('prompt.success'),
+                type: 'success',
+                duration: 2000
+              })
+              this.searchHandle()
             })
-            this.searchHandle()
-          })
+            .catch(message => {
+              this.$message({
+                message,
+                type: 'error',
+                duration: 2000
+              })
+            })
         })
         .catch(() => {})
     },

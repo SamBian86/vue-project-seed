@@ -30,7 +30,7 @@ export default {
     $pageUpdateListContains(componentNames = []) {
       const { page_update_list } = this.$attrs
       let hasComponent = false
-      if (page_update_list.length !== 0) {
+      if (page_update_list && page_update_list.length !== 0) {
         page_update_list.map(item => {
           componentNames.map(ite => {
             if (item === ite) {

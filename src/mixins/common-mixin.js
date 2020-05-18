@@ -16,8 +16,10 @@ export default {
     },
     // 判断是不是某种页面
     containsPageType(types) {
-      const { pageType } = this.$attrs.page_info.data
-      return types.includes(pageType)
+      const pageInfoPageType = (this.$attrs.page_info && this.$attrs.page_info.data && this.$attrs.page_info.data.pageType) || ''
+      const pageDrawerPageType =
+        (this.$attrs.page_drawer_data && this.$attrs.page_drawer_data.data && this.$attrs.page_drawer_data.data.pageType) || ''
+      return types.includes(pageDrawerPageType || pageInfoPageType)
     },
     // 转换字典数据使其可以用于组件
     dictDataForComponent(type, format) {

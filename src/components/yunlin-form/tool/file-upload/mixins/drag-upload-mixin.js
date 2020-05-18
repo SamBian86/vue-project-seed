@@ -40,6 +40,7 @@ export default {
     // 文件上传
     uploadRequest() {
       const { uploadQueue, componentNames } = this
+
       if (uploadQueue.length === 0) {
         this.uploading = false
         clearTimeout(this.timer)
@@ -64,16 +65,35 @@ export default {
           this.resourcesList = resourcesList
           this.uploadQueue = uploadQueue
 
-          this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
+          if (!this.$attrs.page_drawer_data.data) {
+            this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
+          }
+
           this.formDataMerge()
           // console.log('远程文件列表---')
           // console.log(this.resourcesList)
           // console.log('本地剩余列表---')
           // console.log(this.uploadQueue)
         })
+        .catch(message => {
+          this.$message({
+            message,
+            type: 'error',
+            duration: 2000
+          })
+        })
     },
     // 拖拽文件检查
     dragChangeHandle(file, fileList) {
+      const checkType = this.beforeUploadHandle(fileList)
+
+      if (checkType) {
+        this.dragConstructorData(fileList)
+      } else {
+        this.$refs['file-upload-drag'] && this.$refs['file-upload-drag'].clearFiles()
+      }
+    },
+    dragConstructorData(fileList) {
       const { dragList } = this
       // 过滤出已有的文件uids，包含上传成功和未上传的文件
       const dragUids = dragList.map(item => item.uid)
@@ -125,7 +145,9 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
+            if (!this.$attrs.page_drawer_data.data) {
+              this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
+            }
             this.formDataMerge()
           })
           .catch(message => {

@@ -116,6 +116,7 @@ export default {
           component: 'toolFileUpload',
           componentConfig: {
             type: 'drag',
+            format: 0,
             uploadRequest: uploadOssFile,
             deleteRequest: deleteOssFile,
             mergeData: { target: 'file' },
