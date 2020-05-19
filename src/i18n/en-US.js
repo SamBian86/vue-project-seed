@@ -25,6 +25,9 @@ t.keywordFilterSearch = 'filter by keyword'
 t.choose = 'Please Choose'
 t.back = 'Back'
 
+t.search = {}
+t.search.phoneNumberOrName = '手机号或姓名'
+
 t.prompt = {}
 t.prompt.title = 'Prompt'
 t.prompt.info = 'Confirm to carry out [{handle}] operation?'
@@ -468,5 +471,22 @@ t.task.detailError = 'Business KEY is empty and processing details cannot be vie
 t.task.startTime = 'Task Begin Time'
 t.task.endTime = 'Task End Time'
 t.task.durationInSeconds = 'Task Duration (seconds)'
+
+t.joblist = {}
+t.joblist.jobName = '岗位名称'
+t.joblist.deptName = '部门名称'
+t.joblist.pjobName = '上级岗位'
+t.joblist.remark = '备注'
+
+t.employee = {}
+t.employee.deptName = '所属部门'
+t.employee.positionName = '岗位名称'
+t.employee.relationshipId = '是否兼职'
+t.employee.relationshipId0 = '全职'
+t.employee.relationshipId1 = '兼职'
+t.employee.name = '姓名'
+t.employee.phoneNumber = '手机号码'
+t.employee.sex = '性别'
+t.employee.status = '在职状态'
 
 export default t

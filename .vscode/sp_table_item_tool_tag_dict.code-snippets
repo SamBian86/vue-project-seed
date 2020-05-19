@@ -1,0 +1,21 @@
+{
+  "table代码片段_item_toolTag_dict": {
+    "prefix": "sp_table_item_tool_tag_dict",
+    "body": [
+      "{\r",
+      "  prop: '字段$1',\r",
+      "  label: '国际化$2',\r",
+      "  width: '80',\r",
+      "  align: 'center',\r",
+      "  component: 'toolTag',\r",
+      "  componentConfig: {\r",
+      "    prop: '对应下面value值的prop$3',\r",
+      "    type: 'text',\r",
+      "    tagConfig: this.dictDataForComponent('Key', { dictLabel: 'name', dictValue: 'value' })\r",
+      "  }\r",
+      "},\r",
+      "$4"
+    ],
+    "description": "table代码片段_item_toolTag_dict"
+  }
+}

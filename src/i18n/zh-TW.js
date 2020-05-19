@@ -25,6 +25,9 @@ t.keywordFilterSearch = '根據關鍵字檢索'
 t.choose = '請選擇'
 t.back = '返回'
 
+t.search = {}
+t.search.phoneNumberOrName = '手机号或姓名'
+
 t.prompt = {}
 t.prompt.title = '提示'
 t.prompt.info = '確定進行[{handle}]操作?'
@@ -467,5 +470,22 @@ t.task.detailError = '業務KEY為空，無法查看處理詳情'
 t.task.startTime = '任務開始時間'
 t.task.endTime = '任務結束時間'
 t.task.durationInSeconds = '任務時長 (秒)'
+
+t.joblist = {}
+t.joblist.jobName = '岗位名称'
+t.joblist.deptName = '部门名称'
+t.joblist.pjobName = '上级岗位'
+t.joblist.remark = '备注'
+
+t.employee = {}
+t.employee.deptName = '所属部门'
+t.employee.positionName = '岗位名称'
+t.employee.relationshipId = '是否兼职'
+t.employee.relationshipId0 = '全职'
+t.employee.relationshipId1 = '兼职'
+t.employee.name = '姓名'
+t.employee.phoneNumber = '手机号码'
+t.employee.sex = '性别'
+t.employee.status = '在职状态'
 
 export default t
