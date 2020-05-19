@@ -88,7 +88,7 @@
           </template>
           <!-- 操作区域 -->
           <template slot="operate">
-            <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="100">
+            <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="160">
               <template slot-scope="scope">
                 <!-- 修改 -->
                 <el-button
@@ -98,6 +98,15 @@
                   @click="editHandle(scope.row)"
                 >
                   {{ $t('update') }}
+                </el-button>
+                <!-- 详情 -->
+                <el-button
+                  v-if="filterPermission('engineering:joblist:view')"
+                  type="text"
+                  :size="tableConfig.tableSearchSize"
+                  @click="detailHandle(scope.row)"
+                >
+                  {{ $t('detail') }}
                 </el-button>
                 <!-- 单个删除 -->
                 <el-button
@@ -224,6 +233,10 @@ export default {
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table', 'select-dynamic'] }) {
       this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
+    },
+    // 详情
+    detailHandle(item, options = { componentNames: ['yunlin-table', 'select-dynamic'] }) {
+      this.$pageSwitch('form', { ...item, pageType: 'detail', formDataUpdate: true, ...options })
     }
   }
 }
