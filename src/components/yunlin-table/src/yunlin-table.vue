@@ -15,6 +15,13 @@
       @sort-change="tableSortChangeHandle"
     >
       <el-table-column
+        v-if="$attrs.config.tableType === 'index'"
+        type="index"
+        header-align="center"
+        align="center"
+        width="50"
+      ></el-table-column>
+      <el-table-column
         v-if="$attrs.config.tableType === 'selection'"
         type="selection"
         header-align="center"
@@ -152,7 +159,6 @@ export default {
   watch: {},
   breforeCreate() {},
   created() {
-    // console.log('table component created')
     this.generatePaginationConfig()
   },
   beforeMount() {},
@@ -185,6 +191,7 @@ export default {
       const { query } = this
       const { hasPagination, searchFillEmpty } = this.$attrs.config
       const searchParams = this.$attrs.searchparams
+
       const _query = {}
       const _searchParams = {}
       let params = {}
@@ -211,6 +218,8 @@ export default {
 
       if (hasPagination) {
         params = { ..._query, ..._searchParams }
+      } else {
+        params = { ..._searchParams }
       }
 
       // 检查是否覆盖获取列表方法

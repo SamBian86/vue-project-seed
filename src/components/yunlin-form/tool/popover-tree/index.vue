@@ -10,7 +10,7 @@
       clearable
       @clear="clearHandle"
     ></el-input>
-    <el-popover ref="popover-tree" v-model="popoverStatus" placement="bottom-start" trigger="click">
+    <el-popover v-if="!disabled" ref="popover-tree" v-model="popoverStatus" placement="bottom-start" trigger="click">
       <div class="popover-tree-out">
         <el-input
           v-if="config.treeDataFilter"

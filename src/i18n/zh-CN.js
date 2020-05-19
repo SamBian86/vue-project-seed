@@ -466,4 +466,10 @@ t.task.startTime = '任务开始时间'
 t.task.endTime = '任务结束时间'
 t.task.durationInSeconds = '任务时长（秒）'
 
+t.joblist = {}
+t.joblist.jobName = '岗位名称'
+t.joblist.deptName = '部门名称'
+t.joblist.pjobName = '上级岗位'
+t.joblist.remark = '备注'
+
 export default t

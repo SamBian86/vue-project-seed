@@ -78,6 +78,13 @@ export default {
       if (JSON.stringify(newData) !== JSON.stringify(oldData)) {
         this.selected = newData
       }
+    },
+    config(newVal, oldVal) {
+      const newRequestParams = newVal.requestParams
+      const oldRequestParams = oldVal.requestParams
+      if (JSON.stringify(newRequestParams) !== JSON.stringify(oldRequestParams)) {
+        this.init()
+      }
     }
   },
   activated() {

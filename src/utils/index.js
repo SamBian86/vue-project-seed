@@ -83,6 +83,18 @@ export const openNewTab = (url, params) => {
   window.open(process.env.VUE_APP_API_URL + url + _params, '_blank')
 }
 
+// 生成url
+export const generateUrl = (url, params) => {
+  params._t = new Date().getTime()
+  params.token = getToken()
+  const _params = '?'.concat(
+    Object.entries(params)
+      .map(item => item.join('='))
+      .join('&')
+  )
+  return process.env.VUE_APP_API_URL + url + _params
+}
+
 // 树形数据转换 用于行政区域
 export function treeDataTranslate(data, id = 'id', pid = 'pid') {
   var res = []

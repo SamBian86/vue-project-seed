@@ -147,7 +147,7 @@
       "  },\r",
       "  methods: {\r",
       "    init() {\r",
-      "      const { id } = this.$attrs.page_drawer_data\r",
+      "      const { id } = this.$$attrs.page_drawer_data\r",
       "      // 配置查询区域i18n相关select数据\r",
       "      // this.genrateI18nSearchItems()\r",
       "      // console.log('table created')\r",

@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { generateUrl } from '@/utils'
 
 // 流程历史
 
@@ -17,11 +18,7 @@ export function getHistoryProcessInstancePage(params = {}) {
 // GET
 // /activiti/his/getInstImage
 export function getInstImage(params = {}) {
-  return request({
-    url: `/activiti/his/getInstImage`,
-    method: 'get',
-    params
-  })
+  return generateUrl(`/activiti/his/getInstImage`, params)
 }
 
 // 已办任务：根据登录账号查询用户已办任务

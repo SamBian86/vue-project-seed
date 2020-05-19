@@ -65,9 +65,16 @@ export default {
       const name = this.columnData[this.config.name]
 
       tagConfig.map(item => {
-        if (parseInt(item.value) === parseInt(value)) {
-          this.tagItem.type = item.type
-          this.tagItem.name = item.name || name // 默认用tagConfig中的name
+        if (typeof item.value === typeof value && typeof item.value === 'boolean') {
+          if (item.value === value) {
+            this.tagItem.type = item.type
+            this.tagItem.name = item.name || name // 默认用tagConfig中的name
+          }
+        } else {
+          if (parseInt(item.value) === parseInt(value)) {
+            this.tagItem.type = item.type
+            this.tagItem.name = item.name || name // 默认用tagConfig中的name
+          }
         }
       })
     }

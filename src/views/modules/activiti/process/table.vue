@@ -247,7 +247,6 @@ export default {
         // 版本
         { prop: 'version', label: 'process.version', align: 'center' },
         // XML
-        // { prop: 'resourceName', label: 'process.resourceName', align: 'center' },
         {
           prop: 'resourceName',
           label: 'process.resourceName',
@@ -257,7 +256,6 @@ export default {
           componentConfig: { prop: 'resourceName', buttonType: 'text', clickHandle: this.resourceNameClickHandle }
         },
         // 图片
-        // { prop: 'diagramResourceName', label: 'process.diagramResourceName', align: 'center' },
         {
           prop: 'diagramResourceName',
           label: 'process.diagramResourceName',

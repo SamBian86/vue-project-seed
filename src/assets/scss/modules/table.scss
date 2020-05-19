@@ -12,7 +12,28 @@
 }
 
 .drawer-text {
-  padding: 0px 20px 20px;
+  padding: 0px 20px 70px;
   height: 100vh !important;
   overflow: auto;
+  box-sizing: border-box;
+  word-break: break-word;
+}
+
+.drawer-container {
+  padding: 0px 0px 70px;
+  height: 100vh !important;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.table_h4 {
+  margin-bottom: 10px;
+}
+
+.table_process_image img {
+  width: 100%;
+}
+
+.el-message-box__btns button:nth-child(2) {
+  margin-left: 0px !important;
 }
