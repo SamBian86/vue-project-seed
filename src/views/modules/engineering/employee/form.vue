@@ -131,7 +131,7 @@ export default {
           rules: [{ required: true }],
           component: 'toolFileUpload',
           componentConfig: {
-            type: 'single',
+            type: 'single-image',
             propName: 'headPhoto',
             format: 0,
             mergeData: { target: 'headPhoto' }

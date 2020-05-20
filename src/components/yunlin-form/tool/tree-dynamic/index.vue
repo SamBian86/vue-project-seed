@@ -7,9 +7,9 @@
       :node-key="config.nodeKey"
       :accordion="config.accordion"
       :show-checkbox="config.showCheckbox"
+      :default-expand-all="config.defaultExpandAll"
       @check="checkHandle"
-    >
-    </el-tree>
+    ></el-tree>
   </div>
 </template>
 
@@ -130,6 +130,7 @@ export default {
       const { mergeData } = this.config
       const newData = {}
       newData[mergeData.target] = selected
+      console.log(newData)
       this.$formDataMerge(newData)
       if (auto !== undefined) {
         this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))

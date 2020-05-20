@@ -1,0 +1,31 @@
+{
+  "form代码片段_tool_tree_dynamic": {
+    "prefix": "sp_form_item_tool_tree_dynamic",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'tree-dynamic',\r",
+      "  component: 'toolTreeDynamic',\r",
+      "  componentConfig: {\r",
+      "    treeRequest: null$4,\r",
+      "    treeRequestParams: {},\r",
+      "    // treeResultRequest: null,\r",
+      "    // treeResultRequestParams: {},\r",
+      "    // treeResultRequestPropParams: ['id'],\r",
+      "    // treeResultKey: '',\r",
+      "    propName: '字段$5',\r",
+      "    nodeKey: 'id',\r",
+      "    treeProps: { label: 'name', children: 'children' },\r",
+      "    mergeData: { target: '字段$6' },\r",
+      "    accordion: true,\r",
+      "    showCheckbox: true,\r",
+      "    componentNames: ['tree-dynamic']\r",
+      "  }\r",
+      "},$7"
+    ],
+    "description": "form代码片段_tool_tree_dynamic"
+  }
+}

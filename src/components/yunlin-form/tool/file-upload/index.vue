@@ -24,12 +24,12 @@
       </el-upload>
     </div>
     <!-- 单张上传控件 -->
-    <div v-if="config.type === 'single'" class="file-upload-single">
+    <div v-if="config.type === 'single-image'" class="file-upload-single">
       <el-upload
         ref="file-upload-single"
         list-type="picture-card"
         :class="resourcesList.length === 1 ? 'hide-upload-file' : ''"
-        :file-list="singleList"
+        :file-list="resourcesList"
         :action="uploadUrl"
         :auto-upload="false"
         :http-request="singleHttpRequestHandle"
@@ -45,6 +45,28 @@
         <img width="100%" :src="dialogImageUrl" alt />
       </el-dialog>
     </div>
+    <!-- 多张图片上传 -->
+    <div v-if="config.type === 'multiple-image'" class="file-upload-multiple">
+      <el-upload
+        ref="file-upload-multiple"
+        list-type="picture-card"
+        :class="resourcesList.length === config.limit ? 'hide-upload-file' : ''"
+        :file-list="resourcesList"
+        :action="uploadUrl"
+        :auto-upload="false"
+        :http-request="multipleHttpRequestHandle"
+        :on-change="multipleChangeHandle"
+        :before-upload="beforeUploadHandle"
+        :before-remove="multipleBeforeRemoveHandle"
+        :on-preview="multiplePreviewHandle"
+        :on-remove="multipleRemoveHandle"
+      >
+        <i class="el-icon-plus"></i>
+      </el-upload>
+      <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl" alt />
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -53,10 +75,11 @@ import pageMixin from '@/mixins/page-mixin'
 import formMixin from '@/mixins/form-mixin'
 import dragUploadMixin from './mixins/drag-upload-mixin'
 import singleUploadMixin from './mixins/single-upload-mixin'
+import multipleUploadMixin from './mixins/multiple-upload-mixin'
 
 export default {
   name: 'ToolFileUpload',
-  mixins: [commonMixin, pageMixin, formMixin, dragUploadMixin, singleUploadMixin],
+  mixins: [commonMixin, pageMixin, formMixin, dragUploadMixin, singleUploadMixin, multipleUploadMixin],
   props: {
     config: {
       type: Object,
@@ -67,6 +90,7 @@ export default {
           uploadRequest: null,
           deleteRequest: null,
           propName: '', // 初始化用于显示的键名 页面数据键名
+          limit: 2, // 用于multiple-image组件
           mergeData: { target: '' },
           // mergeData: [
           // { source: 'name', target: 'parentName' },
@@ -109,8 +133,8 @@ export default {
 
       // 检查prop_data数据是否变动
       if (JSON.stringify(newData) !== JSON.stringify(oldData)) {
-        if (type === 'single') {
-          console.log(newData === '')
+        // 单个上传组件
+        if (type === 'single-image') {
           if (newData === '') {
             this.singleList = []
             this.resourcesList = []
@@ -125,6 +149,14 @@ export default {
                 url: newData
               }
             ]
+          }
+        }
+        // 多个图片上传
+        if (type === 'multiple-image') {
+          if (newData && newData.length !== 0) {
+            this.resourcesList = [...newData]
+          } else {
+            this.resourcesList = []
           }
         }
       }
@@ -173,10 +205,12 @@ export default {
       const { formats } = this
       const { format } = this.config
       const reg = new RegExp('(' + formats[format].join('|') + ')')
-
+      console.log(fileList)
       fileList.map(item => {
-        if (!reg.test(item.raw.type)) {
-          checkType = reg.test(item.raw.type)
+        if (item.raw) {
+          if (!reg.test(item.raw.type)) {
+            checkType = reg.test(item.raw.type)
+          }
         }
       })
 
@@ -190,10 +224,10 @@ export default {
       const { resourcesList } = this
       const { mergeData, type } = this.config
       const newData = {}
-      if (type === 'drag') {
+      if (type === 'drag' || type === 'multiple-image') {
         newData[mergeData.target] = resourcesList
       }
-      if (type === 'single') {
+      if (type === 'single-image') {
         newData[mergeData.target] = resourcesList.length !== 0 ? resourcesList[0]['url'] : ''
       }
       console.log(newData)

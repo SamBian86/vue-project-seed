@@ -505,4 +505,26 @@ t.employee.companyInfo = '员工单位信息'
 t.employee.personalInfo = '员工个人信息'
 t.employee.deptNameDefault = '请选择部门'
 
+t.projectarea = {}
+t.projectarea.name = '区域名称'
+t.projectarea.subProjectNum = '下属项目个数'
+t.projectarea.deptName = '所属部门'
+
+t.project = {}
+t.project.name = '项目名称'
+t.project.projectAddress = '项目地址'
+t.project.areaName = '所属区域'
+t.project.areaId = '所属区域'
+t.project.deptIds = '所属部门'
+t.project.projectStatus = '项目状态'
+t.project.projectType = '项目类型'
+t.project.projectTotalArea = '总占地面积'
+t.project.projectConstructionLandArea = '建筑用地面积'
+t.project.projectTotalBuildingArea = '总建筑面积'
+t.project.projectBuildingDensity = '建筑密度'
+t.project.projectGreenArea = '绿化面积'
+t.project.projectGreenRate = '绿地率'
+t.project.projectPropertyCompany = '物业公司'
+t.project.uploadDTOs = '项目详情信息'
+
 export default t

@@ -1,0 +1,24 @@
+{
+  "form代码片段_tool_file_upload_multiple_image": {
+    "prefix": "sp_form_item_tool_file_upload_multiple_image",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'file-upload',\r",
+      "  component: 'toolFileUpload',\r",
+      "  rules: [{ required: true }],\r",
+      "  componentConfig: {\r",
+      "    type: 'multiple-image',\r",
+      "    propName: '字段$4',\r",
+      "    format: 0,\r",
+      "    limit: 1,\r",
+      "    mergeData: { target: '字段$5' }\r",
+      "  }\r",
+      "},$5"
+    ],
+    "description": "form代码片段_tool_file_upload_multiple_image"
+  }
+}

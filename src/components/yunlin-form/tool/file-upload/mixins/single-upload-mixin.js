@@ -27,7 +27,7 @@ export default {
       this.resourcesList = []
       this.singleList = []
       this.uploadQueue = []
-      this.uploadStore = []
+      this.uploadStore = {}
     },
     // 覆盖默认提交行为
     singleHttpRequestHandle() {

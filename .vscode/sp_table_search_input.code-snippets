@@ -10,8 +10,7 @@
       "    clearable\r",
       "    @clear=\"clearHandle\"\r",
       "  ></el-input>\r",
-      "</el-form-item>\r",
-      "$3"
+      "</el-form-item>$3"
     ],
     "description": "table代码片段_查询条件_input"
   }
