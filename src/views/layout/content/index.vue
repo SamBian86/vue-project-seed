@@ -120,6 +120,7 @@ export default {
       }
 
       const tabs = this.filterTabExceptName(tabName)
+      this.tabs = tabs
       this.setTabs(tabs)
     },
     // tabs, 关闭其它
