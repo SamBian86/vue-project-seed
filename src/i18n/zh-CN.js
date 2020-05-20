@@ -503,4 +503,10 @@ t.employee.companyInfo = '员工单位信息'
 t.employee.personalInfo = '员工个人信息'
 t.employee.deptNameDefault = '请选择部门'
 
+t.projectarea = {}
+t.projectarea.name = '区域名称'
+t.projectarea.subProjectNum = '下属项目个数'
+t.projectarea.deptName = '所属部门'
+t.projectarea.deptId = '所属部门'
+
 export default t
