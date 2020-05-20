@@ -2,8 +2,18 @@
   <div>
     <el-row v-if="resources.length !== 0">
       <div v-for="(item, index) in resources" :key="index" class="resource-selector-item">
-        <el-col :span="disabled ? 24 : 22" :lg="disabled ? 24 : 22" :md="disabled ? 24 : 22" :sm="24" :xs="24">
-          <el-input v-model="item.resourceUrl" :disabled="disabled" :placeholder="$t('menu.resourceUrl')">
+        <el-col
+          :span="disabled ? 24 : 22"
+          :lg="disabled ? 24 : 22"
+          :md="disabled ? 24 : 22"
+          :sm="24"
+          :xs="24"
+        >
+          <el-input
+            v-model="item.resourceUrl"
+            :disabled="disabled"
+            :placeholder="$t('menu.resourceUrl')"
+          >
             <el-select
               slot="prepend"
               v-model="item.resourceMethod"
@@ -11,18 +21,35 @@
               class="resource-selector"
               :placeholder="$t('menu.resourceMethod')"
             >
-              <el-option v-for="(ite, idx) in list" :key="idx" :label="ite.label" :value="ite.value"></el-option>
+              <el-option
+                v-for="(ite, idx) in list"
+                :key="idx"
+                :label="ite.label"
+                :value="ite.value"
+              ></el-option>
             </el-select>
           </el-input>
         </el-col>
-        <el-col v-if="!disabled" :span="2" :lg="2" :md="2" :sm="24" :xs="24" class="resource-selector-button">
+        <el-col
+          v-if="!disabled"
+          :span="2"
+          :lg="2"
+          :md="2"
+          :sm="24"
+          :xs="24"
+          class="resource-selector-button"
+        >
           <el-button size="small" type="text" @click="deleteHandle(index)">{{ $t('delete') }}</el-button>
         </el-col>
       </div>
     </el-row>
     <el-row>
       <el-col :span="24">
-        <el-button style="width: 100%;" :disabled="disabled" @click="addHandle()">{{ $t('menu.resourceAddItem') }}</el-button>
+        <el-button
+          style="width: 100%;"
+          :disabled="disabled"
+          @click="addHandle()"
+        >{{ $t('menu.resourceAddItem') }}</el-button>
       </el-col>
     </el-row>
   </div>
@@ -69,6 +96,7 @@ export default {
     }
   },
   watch: {
+    // 用于检查表单赋值时对应数据修改
     pageData(newVal, oldVal) {
       const { propName } = this.config
       const newData = newVal[propName] || ''

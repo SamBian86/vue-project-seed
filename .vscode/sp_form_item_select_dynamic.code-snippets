@@ -20,7 +20,8 @@
       "    propName: '字段$7',\r",
       "    placeholder: '国际化$8',\r",
       "    className: 'select-block',\r",
-      "    mergeData: { target: '$9' }\r",
+      "    mergeData: { target: '$9' },\r",
+      "    componentNames: ['select-dynamic']\r",
       "  }\r",
       "},\r",
       "$10"

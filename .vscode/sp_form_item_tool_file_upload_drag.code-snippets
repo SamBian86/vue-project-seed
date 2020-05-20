@@ -11,6 +11,7 @@
       "  component: 'toolFileUpload',\r",
       "  componentConfig: {\r",
       "    type: 'drag',\r",
+      "    format: 0,,\r",
       "    uploadRequest: XXX,\r",
       "    deleteRequest: XXX,\r",
       "    mergeData: { target: '字段$4' },\r",

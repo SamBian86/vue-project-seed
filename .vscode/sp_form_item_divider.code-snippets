@@ -1,0 +1,14 @@
+{
+  "form代码片段_分割线": {
+    "prefix": "sp_form_item_divider",
+    "body": [
+      "{\r",
+      "  // 分割线\r",
+      "  span: 24,\r",
+      "  name: '国际化$1',\r",
+      "  type: 'divider'\r",
+      "},$2"
+    ],
+    "description": "form代码片段_分割线"
+  }
+}

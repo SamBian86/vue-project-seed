@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- 拖拽型上传空间 -->
+    <!-- 拖拽型上传控件 -->
     <div v-if="config.type === 'drag'" class="file-upload-drag">
       <el-upload
         ref="file-upload-drag"
@@ -17,8 +17,33 @@
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text" v-html="$t('upload.text')"></div>
-        <div slot="tip" class="el-upload__tip">{{ $t('upload.tip', { format: formats[config.format].join('、') }) }}</div>
+        <div
+          slot="tip"
+          class="el-upload__tip"
+        >{{ $t('upload.tip', { format: formats[config.format].join('、') }) }}</div>
       </el-upload>
+    </div>
+    <!-- 单张上传控件 -->
+    <div v-if="config.type === 'single'" class="file-upload-single">
+      <el-upload
+        ref="file-upload-single"
+        list-type="picture-card"
+        :class="resourcesList.length === 1 ? 'hide-upload-file' : ''"
+        :file-list="singleList"
+        :action="uploadUrl"
+        :auto-upload="false"
+        :http-request="singleHttpRequestHandle"
+        :on-change="singleChangeHandle"
+        :before-upload="beforeUploadHandle"
+        :before-remove="singleBeforeRemoveHandle"
+        :on-preview="singlePreviewHandle"
+        :on-remove="singleRemoveHandle"
+      >
+        <i class="el-icon-plus"></i>
+      </el-upload>
+      <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl" alt />
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -27,9 +52,11 @@ import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formMixin from '@/mixins/form-mixin'
 import dragUploadMixin from './mixins/drag-upload-mixin'
+import singleUploadMixin from './mixins/single-upload-mixin'
+
 export default {
   name: 'ToolFileUpload',
-  mixins: [commonMixin, pageMixin, formMixin, dragUploadMixin],
+  mixins: [commonMixin, pageMixin, formMixin, dragUploadMixin, singleUploadMixin],
   props: {
     config: {
       type: Object,
@@ -64,7 +91,7 @@ export default {
   data() {
     return {
       formats: [
-        ['jpge', 'jpg', 'png', 'gif'],
+        ['jpeg', 'jpg', 'png', 'gif'],
         ['zip', 'xml', 'bar', 'bpmn']
       ],
       timer: null,
@@ -75,10 +102,36 @@ export default {
     }
   },
   watch: {
-    pageData() {
+    pageData(newVal, oldVal) {
+      const { propName, type } = this.config
+      const newData = newVal[propName] || ''
+      const oldData = oldVal[propName] || ''
+
+      // 检查prop_data数据是否变动
+      if (JSON.stringify(newData) !== JSON.stringify(oldData)) {
+        if (type === 'single') {
+          console.log(newData === '')
+          if (newData === '') {
+            this.singleList = []
+            this.resourcesList = []
+          } else {
+            this.singleList = [
+              {
+                url: newData
+              }
+            ]
+            this.resourcesList = [
+              {
+                url: newData
+              }
+            ]
+          }
+        }
+      }
       // this.dragUploadInit()
     },
     $attrs(newVal, oldVal) {
+      // 检查drawer打开时drawerData数据是否改变，如果改变就重新初始化控件
       const newPageDrawerData = (newVal.page_drawer_data && newVal.page_drawer_data.data) || ''
       const oldPageDrawerData = (oldVal.page_drawer_data && oldVal.page_drawer_data.data) || ''
       // 检查page_drawer_data
@@ -119,7 +172,8 @@ export default {
       let checkType = true // 默认校验可以通过
       const { formats } = this
       const { format } = this.config
-      const reg = new RegExp('\(' + formats[format].join('|') + '\)')
+      const reg = new RegExp('(' + formats[format].join('|') + ')')
+
       fileList.map(item => {
         if (!reg.test(item.raw.type)) {
           checkType = reg.test(item.raw.type)
@@ -134,9 +188,14 @@ export default {
     },
     formDataMerge() {
       const { resourcesList } = this
-      const { mergeData } = this.config
+      const { mergeData, type } = this.config
       const newData = {}
-      newData[mergeData.target] = resourcesList
+      if (type === 'drag') {
+        newData[mergeData.target] = resourcesList
+      }
+      if (type === 'single') {
+        newData[mergeData.target] = resourcesList.length !== 0 ? resourcesList[0]['url'] : ''
+      }
       console.log(newData)
       this.$formDataMerge(newData)
     }
@@ -146,5 +205,9 @@ export default {
 <style lang="scss">
 .file-upload-drag {
   width: fit-content;
+}
+
+.hide-upload-file .el-upload {
+  display: none;
 }
 </style>

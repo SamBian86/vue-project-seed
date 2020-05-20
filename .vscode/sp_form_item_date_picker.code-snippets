@@ -1,0 +1,20 @@
+{
+  "form代码片段_date_pick_日期选择": {
+    "prefix": "sp_form_item_date_picker",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'date-picker',\r",
+      "  className: 'select-block',\r",
+      "  format: 'yyyy-MM-dd',\r",
+      "  valueFormat: 'yyyy-MM-dd',\r",
+      "  rules: [{ required: true }],\r",
+      "  pickerOptions: {}\r",
+      "},$4"
+    ],
+    "description": "form代码片段_date_pick_日期选择"
+  }
+}

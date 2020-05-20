@@ -1,0 +1,32 @@
+{
+  "form代码片段_date_pick_options_日期选择联动控制": {
+    "prefix": "sp_form_item_date_picker_options",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'date-picker',\r",
+      "  className: 'select-block',\r",
+      "  format: 'yyyy-MM-dd',\r",
+      "  valueFormat: 'yyyy-MM-dd',\r",
+      "  rules: [{ required: true }],\r",
+      "  afterChange: () => {\r",
+      "    const { 变动的prop$4 } = this.formData\r",
+      "    const props = []\r",
+      "    const item = {}\r",
+      "    item.prop = '需要联动的prop'\r",
+      "    item.pickerOptions = {\r",
+      "      disabledDate(time) {\r",
+      "        return time.getTime() < new Date(变动的prop + ' 00:00:00').getTime()\r",
+      "      }\r",
+      "    }\r",
+      "    props.push(item)\r",
+      "    return props\r",
+      "  }\r",
+      "},$5"
+    ],
+    "description": "form代码片段_date_pick_options_日期选择联动控制"
+  }
+}

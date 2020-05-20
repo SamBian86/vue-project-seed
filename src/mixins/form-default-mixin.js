@@ -11,7 +11,8 @@ export default {
         formSize: 'small', // 控件尺寸
         formSpan: 12, // 整体表单栅格占据列数 默认12列
         labelPosition: '',
-        labelWidth: '120px' // 标签宽度
+        labelWidth: '120px', // 标签宽度
+        validateOnRuleChange: false
       },
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
@@ -36,6 +37,7 @@ export default {
   computed: {},
   watch: {
     $attrs(newVal, oldVal) {
+      // 检查drawer打开时drawerData数据是否改变，如果改变就重新初始化控件
       const newPageDrawerData = (newVal.page_drawer_data && newVal.page_drawer_data.data) || ''
       const oldPageDrawerData = (oldVal.page_drawer_data && oldVal.page_drawer_data.data) || ''
       console.log('检查page_drawer_data')
@@ -140,6 +142,7 @@ export default {
       const changeTypes = [
         'select',
         'select-dynamic',
+        'date-picker',
         'radio-group',
         'popover-tree',
         'popover-icon',
@@ -240,6 +243,21 @@ export default {
       this.$set(this, 'formData', { ...this.formData, ...data })
       this.afterFormDataUpdate()
       this.generateForm()
+    },
+    // 选择值以后需要重新修改某些组件的选取范围,比如date-time
+    formResetConfigItem(props = []) {
+      const { formItemsReadOnly } = this.formConfig
+      formItemsReadOnly.forEach(item => {
+        props.map(ite => {
+          if (item.prop === ite.prop) {
+            Object.keys(ite).map(i => {
+              item[i] = ite[i]
+            })
+            console.log('修改' + item.prop)
+          }
+        })
+      })
+      this.formConfig.formItemsReadOnly = formItemsReadOnly
     },
     // 获取详情数据以后的处理
     afterFormDataUpdate() {

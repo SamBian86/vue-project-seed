@@ -7,6 +7,7 @@
       :label-width="$attrs.config.labelWidth"
       :size="$attrs.config.formSize"
       :label-position="$attrs.config.labelPosition"
+      :validate-on-rule-change="$attrs.config.validateOnRuleChange"
       @keyup.enter.native="submitHandle()"
     >
       <slot name="content" />
@@ -48,9 +49,11 @@
                 :disabled="item.disabled"
                 @change="formValueListener(item.prop, $event)"
               >
-                <el-radio v-for="(ite, idx) in item.items" :key="idx" :label="ite.label">{{
-                  ite.i18n === false ? ite.name : $t(ite.name)
-                }}</el-radio>
+                <el-radio
+                  v-for="(ite, idx) in item.items"
+                  :key="idx"
+                  :label="ite.label"
+                >{{ ite.i18n === false ? ite.name : $t(ite.name) }}</el-radio>
               </el-radio-group>
             </template>
             <!-- select -->
@@ -64,8 +67,36 @@
                 filterable
                 @change="formValueListener(item.prop, $event)"
               >
-                <el-option v-for="(ite, idx) in item.items" :key="idx" :label="$t(ite.label)" :value="ite.value"></el-option>
+                <template v-if="item.itemType === 'dict'">
+                  <el-option
+                    v-for="(ite, idx) in item.items"
+                    :key="idx"
+                    :label="ite.dictLabel"
+                    :value="ite.dictValue"
+                  ></el-option>
+                </template>
+                <template v-else>
+                  <el-option
+                    v-for="(ite, idx) in item.items"
+                    :key="idx"
+                    :label="$t(ite.label)"
+                    :value="ite.value"
+                  ></el-option>
+                </template>
               </el-select>
+            </template>
+            <!-- date-picker -->
+            <template v-if="item.type === 'date-picker'">
+              <el-date-picker
+                v-model="$attrs.data[item.prop]"
+                :class="item.className || ''"
+                type="date"
+                :format="item.format"
+                :value-format="item.valueFormat"
+                :placeholder="$t(item.placeholder) || item.placeholderText || `请选择${$t(item.name)}`"
+                :picker-options="item.pickerOptions"
+                @change="formValueListener(item.prop, $event, item.afterChange)"
+              ></el-date-picker>
             </template>
             <!-- input-number -->
             <template v-if="item.type === 'input-number'">
@@ -91,6 +122,10 @@
               ></component>
             </template>
           </el-form-item>
+          <el-form-item v-else-if="item.type === 'empty'"></el-form-item>
+          <div v-else-if="item.type === 'divider'">
+            <el-divider :content-position="item.contentPosition || 'left'">{{ $t(item.name) }}</el-divider>
+          </div>
         </el-col>
       </el-row>
       <el-row :gutter="10">
@@ -260,7 +295,10 @@ export default {
       })
     },
     // 表单元素处理,控制隐藏显示
-    formValueListener(prop) {
+    formValueListener(prop, $event, $afterChange) {
+      if ($afterChange) {
+        this.$formResetConfigItem($afterChange())
+      }
       this.$formValueListener(prop)
     }
   }

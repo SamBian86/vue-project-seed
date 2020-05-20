@@ -49,6 +49,7 @@ export default {
     }
   },
   watch: {
+    // 用于检查列表对应column数据修改，重新初始化
     columnData(newVal, oldVal) {
       const { prop } = this.config
       if (newVal[prop] !== oldVal[prop]) {

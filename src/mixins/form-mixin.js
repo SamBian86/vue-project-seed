@@ -24,8 +24,13 @@ export default {
     $formValueListener(prop = '') {
       this.$emit('form-value-listener', prop)
     },
+    // 数据更新
     $formDataUpdate(data) {
       this.$emit('form-data-update', data || {})
+    },
+    // 更新formItemsReadOnly中的某项配置
+    $formResetConfigItem(props) {
+      this.$emit('form-reset-config-item', props || [])
     }
   }
 }

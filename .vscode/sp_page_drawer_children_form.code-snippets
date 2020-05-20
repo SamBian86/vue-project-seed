@@ -26,6 +26,7 @@
       "        @form-generate-rule-by-props=\"formGenerateRuleByProps\"\r",
       "        @form-value-listener=\"formValueListener\"\r",
       "        @form-data-update=\"formDataUpdate\"\r",
+      "        @form-reset-config-item=\"formResetConfigItem\"\r",
       "        v-on=\"$$listeners\"\r",
       "      >\r",
       "        <template slot=\"footer\">\r",

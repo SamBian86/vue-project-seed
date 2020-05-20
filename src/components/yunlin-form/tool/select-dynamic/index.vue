@@ -69,6 +69,7 @@ export default {
   },
   computed: {},
   watch: {
+    // 用于检查表单赋值时对应数据修改
     pageData(newVal, oldVal) {
       const { propName } = this.config
       const newData = newVal[propName] || ''
@@ -79,6 +80,7 @@ export default {
         this.selected = newData
       }
     },
+    // 用于检查每次config中某些数据是否改变，是否需要重新获取数据
     config(newVal, oldVal) {
       const newRequestParams = newVal.requestParams
       const oldRequestParams = oldVal.requestParams
