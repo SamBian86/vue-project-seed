@@ -178,7 +178,7 @@ export default {
       this.init()
       // console.log('重新获取file-upload组件数据')
     })
-    console.log('file-upload activated')
+    // console.log('file-upload activated')
   },
   created() {
     this.init()

@@ -62,12 +62,18 @@ export default {
   },
   computed: {},
   watch: {
-    // filterText(val) {
-    //   this.$refs.tree.filter(val)
-    // }
+    pageData(newVal, oldVal) {
+      const { propName } = this.config
+      const newData = newVal[propName] || []
+      const oldData = oldVal[propName] || []
+
+      if (JSON.stringify(Array.from(newData).sort()) !== JSON.stringify(Array.from(oldData).sort())) {
+        this.autoCheckedByPropName()
+        // console.log('watch autoCheckedByPropName')
+      }
+    }
   },
   activated() {
-    // console.log('tree-dynamic activated')
     // 检查是否需要重新获取数据
     this.$pageCheckUpdateWhenActivated(() => {
       this.init()
@@ -76,7 +82,6 @@ export default {
   },
   created() {
     this.componentNames = [...this.componentNames, ...this.config.componentNames]
-    // console.log('tree-dynamic created')
     this.init()
   },
   methods: {
@@ -88,8 +93,10 @@ export default {
             this.items = response
             if (this.config.treeResultRequest) {
               this.treeResultRequest()
+              // console.log('treeResultRequest')
             } else {
-              this.setChecked()
+              this.autoCheckedByPropName()
+              // console.log('init autoCheckedByPropName')
             }
           })
           .catch(error => {
@@ -113,28 +120,40 @@ export default {
       if (Object.keys(params).length) {
         treeResultRequest(params).then(response => {
           this.selected = response[treeResultKey]
-          this.setChecked()
+          this.autoChecked()
+          this.formDataMerge()
         })
       }
     },
-    setChecked() {
-      const { selected } = this
-      selected.map(item => {
-        this.$refs['treeDynamic'].setChecked(item, true)
-      })
-      this.checkHandle()
+    autoCheckedByPropName() {
+      const { pageData } = this
+      const { propName } = this.config
+      this.selected = pageData[propName] || []
+      this.autoChecked()
     },
-    checkHandle(auto) {
+    autoChecked() {
+      const { selected } = this
+      if (selected.length !== 0) {
+        this.$refs['treeDynamic'].setCheckedKeys([])
+        selected.map(item => {
+          this.$refs['treeDynamic'].setChecked(item, true)
+        })
+      } else {
+        this.$refs['treeDynamic'].setCheckedKeys([])
+      }
+    },
+    checkHandle() {
       const { componentNames } = this
+      this.formDataMerge()
+      this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
+    },
+    formDataMerge() {
       const selected = [...this.$refs['treeDynamic'].getCheckedKeys(), ...this.$refs['treeDynamic'].getHalfCheckedKeys()]
       const { mergeData } = this.config
       const newData = {}
       newData[mergeData.target] = selected
       console.log(newData)
       this.$formDataMerge(newData)
-      if (auto !== undefined) {
-        this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
-      }
     }
   }
 }

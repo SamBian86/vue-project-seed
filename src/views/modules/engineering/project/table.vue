@@ -170,7 +170,7 @@ export default {
         // 所属区域
         { prop: 'areaName', label: 'project.areaName', width: '160', align: 'center', sortable: true },
         // 所属部门
-        { prop: 'deptIds', label: 'project.deptIds', align: 'center', sortable: true }
+        { prop: 'deptName', label: 'project.deptName', align: 'center', sortable: true }
       ]
       // 是否填充查询条件为空
       // this.tableConfig.searchFillEmpty = true
