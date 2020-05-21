@@ -95,8 +95,10 @@ export default {
               this.treeResultRequest()
               // console.log('treeResultRequest')
             } else {
-              this.autoCheckedByPropName()
-              // console.log('init autoCheckedByPropName')
+              this.$nextTick(() => {
+                this.autoCheckedByPropName()
+                // console.log('init autoCheckedByPropName')
+              })
             }
           })
           .catch(error => {
@@ -129,18 +131,14 @@ export default {
       const { pageData } = this
       const { propName } = this.config
       this.selected = pageData[propName] || []
+      this.$refs['treeDynamic'].setCheckedKeys([])
       this.autoChecked()
     },
     autoChecked() {
       const { selected } = this
-      if (selected.length !== 0) {
-        this.$refs['treeDynamic'].setCheckedKeys([])
-        selected.map(item => {
-          this.$refs['treeDynamic'].setChecked(item, true)
-        })
-      } else {
-        this.$refs['treeDynamic'].setCheckedKeys([])
-      }
+      selected.map(item => {
+        this.$refs['treeDynamic'].setChecked(item, true)
+      })
     },
     checkHandle() {
       const { componentNames } = this
