@@ -1,5 +1,5 @@
 {
-  "api代码片段getList分页列表": {
+  "api代码片段getList获取所有数据": {
     "prefix": "sp_api_getList",
     "body": [
       "export function get$1List(params = {}) {\r",
@@ -11,6 +11,6 @@
       "}",
       ""
     ],
-    "description": "api代码片段getList分页列表"
+    "description": "api代码片段getList获取所有数据"
   }
 }

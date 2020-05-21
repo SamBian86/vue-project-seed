@@ -21,7 +21,7 @@
           <el-form-item>
             <el-input
               v-model="tableSearchParams.name"
-              :placeholder="$t('project.name')"
+              :placeholder="$t('building.projectName')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -30,7 +30,7 @@
           <!-- 查询 -->
           <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:project:view')"
+              v-if="filterPermission('engineering:building:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
             >{{ $t('query') }}</el-button>
@@ -38,7 +38,7 @@
           <!-- 创建 -->
           <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:project:save')"
+              v-if="filterPermission('engineering:building:save')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
@@ -47,7 +47,7 @@
           <!-- 导出 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:project:export')"
+              v-if="filterPermission('engineering:building:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
@@ -56,7 +56,7 @@
           <!-- 批量删除 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:project:delete')"
+              v-if="filterPermission('engineering:building:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
@@ -65,7 +65,7 @@
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:project:xxx')"
+              v-if="filterPermission('engineering:building:xxx')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="customSectionHandle({
@@ -89,21 +89,21 @@
           <template slot-scope="scope">
             <!-- 修改 -->
             <el-button
-              v-if="filterPermission('engineering:project:update')"
+              v-if="filterPermission('engineering:building:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
             <el-button
-              v-if="filterPermission('engineering:project:delete')"
+              v-if="filterPermission('engineering:building:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
             >{{ $t('delete') }}</el-button>
             <!-- 单个操作 -->
             <!-- <el-button
-              v-if="filterPermission('engineering:project:xxx')"
+              v-if="filterPermission('engineering:building:xxx')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="customHandle({
@@ -123,7 +123,7 @@
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
-import { getEngineeringProjectPageList, deleteEngineeringProject } from '@/api/engineering/project'
+import { getEngineeringBuildingPageList, deleteEngineeringBuilding } from '@/api/engineering/building'
 
 export default {
   name: 'Tabel',
@@ -157,28 +157,28 @@ export default {
       // 设置获取列表信息
       this.tableConfig.tableHead = [
         // 项目名称
-        { prop: 'name', label: 'project.name', width: '200', align: 'center', sortable: true },
-        // 项目地址
-        { prop: 'projectAddress', label: 'project.projectAddress', align: 'center', sortable: true },
-        // 所属区域
-        { prop: 'areaName', label: 'project.areaName', width: '160', align: 'center', sortable: true },
-        // 所属部门
-        { prop: 'deptName', label: 'project.deptName', align: 'center', sortable: true }
+        { prop: 'projectName', label: 'building.projectName', width: '200', align: 'center', sortable: true },
+        // 楼栋号
+        { prop: 'buildingNumber', label: 'building.buildingNumber', width: '100', align: 'center', sortable: true },
+        // 楼栋总层数
+        { prop: 'buildingTotalFloor', label: 'building.buildingTotalFloor', align: 'center', sortable: true },
+        // 楼栋层高
+        { prop: 'projectFloorHeight', label: 'building.projectFloorHeight', align: 'center', sortable: true }
       ]
       // 是否填充查询条件为空
       // this.tableConfig.searchFillEmpty = true
       // this.tableSearchParams = {}
       // 配置列表请求
-      this.tableHandle.list.api = getEngineeringProjectPageList
+      this.tableHandle.list.api = getEngineeringBuildingPageList
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
-      this.tableHandle.delete.api = deleteEngineeringProject
+      this.tableHandle.delete.api = deleteEngineeringBuilding
       // this.tableHandle.delete.callback = this.deleteCallback
       // 配置节点懒加载功能
       // this.tableHandle.lazy.api = lazyXXX
       // 配置section删除功能
-      // this.tableHandle.deleteSection.api = deleteEngineeringProject
+      // this.tableHandle.deleteSection.api = deleteEngineeringBuilding
       // console.log('table page created')
     },
     genrateI18nSearchItems() {

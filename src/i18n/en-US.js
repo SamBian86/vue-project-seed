@@ -528,4 +528,12 @@ t.project.projectGreenRate = '绿地率'
 t.project.projectPropertyCompany = '物业公司'
 t.project.uploadDTOs = '项目详情信息'
 
+t.building = {}
+t.building.projectName = '项目名称'
+t.building.projectId = '项目名称'
+t.building.buildingNumber = '楼栋号'
+t.building.buildingTotalFloor = '楼栋总层数'
+t.building.projectFloorHeight = '楼栋层高'
+t.building.remark = '备注'
+
 export default t

@@ -30,18 +30,17 @@
             >
               <el-form-item>
                 <el-input
-                  v-model="tableSearchParams.name"
-                  :placeholder="$t('joblist.jobName')"
+                  v-model="tableSearchParams.typeName"
+                  :placeholder="$t('supplierType.typeName')"
                   :size="tableConfig.tableSearchSize"
                   clearable
                   @clear="clearHandle"
                 ></el-input>
               </el-form-item>
-
               <!-- 查询 -->
               <el-form-item>
                 <el-button
-                  v-if="filterPermission('engineering:joblist:view')"
+                  v-if="filterPermission('engineering:supplier:type:view')"
                   :size="tableConfig.tableSearchSize"
                   @click="searchHandle()"
                 >{{ $t('query') }}</el-button>
@@ -49,7 +48,7 @@
               <!-- 创建 -->
               <el-form-item>
                 <el-button
-                  v-if="filterPermission('engineering:joblist:save') && tableSearchParams.deptId"
+                  v-if="filterPermission('engineering:supplier:type:save')"
                   type="primary"
                   :size="tableConfig.tableSearchSize"
                   @click="createHandle()"
@@ -58,29 +57,25 @@
               <!-- 导出 -->
               <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:joblist:export')"
+              v-if="filterPermission('engineering:supplier:type:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
-            >
-              {{ $t('export') }}
-            </el-button>
+            >{{ $t('export') }}</el-button>
               </el-form-item>-->
               <!-- 批量删除 -->
               <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:joblist:delete')"
+              v-if="filterPermission('engineering:supplier:type:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
-            >
-              {{ $t('deleteBatch') }}
-            </el-button>
+            >{{ $t('deleteBatch') }}</el-button>
               </el-form-item>-->
               <!-- 批量操作 -->
               <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:joblist:xxx')"
+              v-if="filterPermission('engineering:supplier:type:xxx')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="customSectionHandle({
@@ -99,44 +94,34 @@
               align="center"
               header-align="center"
               fixed="right"
-              width="160"
+              width="100"
             >
               <template slot-scope="scope">
                 <!-- 修改 -->
                 <el-button
-                  v-if="filterPermission('engineering:joblist:update')"
+                  v-if="filterPermission('engineering:supplier:type:update')"
                   type="text"
                   :size="tableConfig.tableSearchSize"
                   @click="editHandle(scope.row)"
                 >{{ $t('update') }}</el-button>
-                <!-- 详情 -->
-                <el-button
-                  v-if="filterPermission('engineering:joblist:view')"
-                  type="text"
-                  :size="tableConfig.tableSearchSize"
-                  @click="detailHandle(scope.row)"
-                >{{ $t('detail') }}</el-button>
                 <!-- 单个删除 -->
                 <el-button
-                  v-if="filterPermission('engineering:joblist:delete')"
+                  v-if="filterPermission('engineering:supplier:type:delete')"
                   type="text"
                   :size="tableConfig.tableSearchSize"
                   @click="deleteHandle([scope.row.id])"
                 >{{ $t('delete') }}</el-button>
                 <!-- 单个操作 -->
                 <!-- <el-button
+                  v-if="filterPermission('engineering:supplier:type:xxx')"
                   type="text"
                   :size="tableConfig.tableSearchSize"
-                  @click="
-                    customHandle({
-                      data: [scope.row.id],
-                      i18nRequestMessage: '国际化',
-                      request: null
-                    })
-                  "
-                >
-                  {{ $t('ddd.ddd') }}
-                </el-button>-->
+                  @click="customHandle({
+                data: [scope.row.id],
+                i18nRequestMessage: '国际化',
+                request: null
+              })"
+                >{{ $t('ddd.ddd') }}</el-button>-->
               </template>
             </el-table-column>
           </template>
@@ -150,8 +135,11 @@
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
-import { getEngineeringJoblistPageList, deleteEngineeringJoblist } from '@/api/engineering/joblist'
-import { getSysDeptListAll } from '@/api/sys/dept'
+import {
+  getEngineeringSupplierTypePageList,
+  deleteEngineeringSupplierType,
+  getEngineeringSupplierTypeTree
+} from '@/api/engineering/supplierType'
 import componentTree from '@/components/yunlin-table/search/component-tree'
 
 export default {
@@ -180,62 +168,57 @@ export default {
       this.tableConfig.rowKey = 'id'
       // this.tableConfig.hasPagination = false
       // this.tableConfig.lazy = true
-      this.tableConfig.tableType = 'index'
+      // this.tableConfig.tableType = 'selection'
       // console.log(this.$attrs)
 
       // 设置获取列表信息
       this.tableConfig.tableHead = [
-        // 岗位名称
-        { prop: 'jobName', label: 'joblist.jobName', width: '200', align: 'center', sortable: true },
-        // 上级岗位
-        { prop: 'pjobName', label: 'joblist.pjobName', width: '200', align: 'center', sortable: true },
-        // 所属部门
-        { prop: 'deptName', label: 'joblist.deptName', align: 'left', sortable: true }
+        // 类别名称
+        { prop: 'typeName', label: 'supplierType.typeName', width: '200', align: 'center' },
+        // 上级类别
+        { prop: 'parentName', label: 'supplierType.parentName', align: 'center' }
       ]
       // 是否填充查询条件为空
       this.tableConfig.searchFillEmpty = true
       this.tableSearchParams = {
-        name: ''
+        pid: '',
+        typeName: ''
       }
       // 配置列表请求
-      this.tableHandle.list.api = getEngineeringJoblistPageList
+      this.tableHandle.list.api = getEngineeringSupplierTypePageList
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
-      this.tableHandle.delete.api = deleteEngineeringJoblist
+      this.tableHandle.delete.api = deleteEngineeringSupplierType
       // this.tableHandle.delete.callback = this.deleteCallback
       // 配置节点懒加载功能
       // this.tableHandle.lazy.api = lazyXXX
       // 配置section删除功能
-      this.tableHandle.deleteSection.api = deleteEngineeringJoblist
+      // this.tableHandle.deleteSection.api = deleteEngineeringSupplierType
       // console.log('table page created')
     },
     genrateI18nSearchItems() {
       // XXX
       this.componentTreeConfig = {
-        request: getSysDeptListAll,
+        request: getEngineeringSupplierTypeTree,
         requestParams: {},
         treeDataTranslate: null,
-        treeProps: { label: 'name', children: 'children' },
+        treeProps: { label: 'typeName', children: 'children' },
         treeNodeKey: 'id',
         mergeData: [
-          { source: 'id', target: 'deptId' },
-          { source: 'name', target: 'deptName' }
+          { source: 'id', target: 'pid' },
+          { source: 'typeName', target: 'parentName' }
         ]
       }
     },
     // 创建
-    createHandle(options = { componentNames: ['yunlin-table', 'select-dynamic'] }) {
-      const { deptId, deptName } = this.tableSearchParams
-      this.$pageSwitch('form', { pageType: 'create', ...options, deptId, deptName })
+    createHandle(options = { componentNames: ['yunlin-table', 'component-tree', 'popover-tree'] }) {
+      const { pid, parentName } = this.tableSearchParams
+      this.$pageSwitch('form', { pageType: 'create', ...options, pid, parentName })
     },
     // 编辑
-    editHandle(item, options = { componentNames: ['yunlin-table', 'select-dynamic'] }) {
+    editHandle(item, options = { componentNames: ['yunlin-table', 'component-tree', 'popover-tree'] }) {
       this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
-    },
-    // 详情
-    detailHandle(item, options = { componentNames: ['yunlin-table', 'select-dynamic'] }) {
-      this.$pageSwitch('form', { ...item, pageType: 'detail', formDataUpdate: true, ...options })
     }
   }
 }

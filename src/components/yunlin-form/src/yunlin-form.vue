@@ -216,7 +216,7 @@ export default {
     // 表单校验
     submitHandle() {
       const { formName } = this.$attrs.config
-      console.log(this.$attrs.data)
+      // console.log(this.$attrs.data)
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.formSubmitHandle()

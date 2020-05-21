@@ -33,7 +33,8 @@ export default {
           mergeData: [
             // 点击el-tree节点数据传递 source 被选中节点数据中用于取数据的键 target传递给父组件用于覆盖表单数据对应的键名
             // { source: 'pid', target: 'depId' }
-          ]
+          ],
+          componentNames: []
         }
       }
     }
@@ -47,11 +48,11 @@ export default {
   computed: {},
   watch: {},
   activated() {
-    // console.log('popover-tree activated')
+    // console.log('component-tree activated')
     // 检查是否需要重新获取数据
     this.$pageCheckUpdateWhenActivated(() => {
       this.init()
-      // console.log('重新获取popover-tree组件数据')
+      // console.log('重新获取component-tree组件数据')
     })
   },
   created() {

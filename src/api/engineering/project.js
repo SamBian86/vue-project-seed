@@ -35,6 +35,16 @@ export function deleteEngineeringProject(data = []) {
   })
 }
 
+// 列表
+// GET
+// /engineering/project/list
+export function getEngineeringProjectList() {
+  return request({
+    url: `/engineering/project/list`,
+    method: 'get'
+  })
+}
+
 // 分页,部门权限过滤
 // GET
 // /engineering/project/page
