@@ -62,6 +62,11 @@ export default {
       const { tableName } = this.tableConfig
       this.$refs[tableName].clearHandle()
     },
+    // 重置
+    searchResetHandle() {
+      const { tableName } = this.tableConfig
+      this.$refs[tableName].searchResetHandle()
+    },
     // 删除
     deleteHandle(item) {
       const { tableName } = this.tableConfig

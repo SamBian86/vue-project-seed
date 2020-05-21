@@ -3,6 +3,7 @@
     <el-row :gutter="10">
       <el-col :span="6" :lg="6" :md="6" :sm="24" :xs="24">
         <component-tree
+          ref="componentTree"
           :config="componentTreeConfig"
           v-bind="$attrs"
           @table-params-merge="tableParamsMerge"
@@ -44,6 +45,14 @@
                   :size="tableConfig.tableSearchSize"
                   @click="searchHandle()"
                 >{{ $t('query') }}</el-button>
+              </el-form-item>
+              <!-- 充值 -->
+              <el-form-item>
+                <el-button
+                  v-if="filterPermission('engineering:supplier:type:view')"
+                  :size="tableConfig.tableSearchSize"
+                  @click="searchResetHandle()"
+                >{{ $t('reset') }}</el-button>
               </el-form-item>
               <!-- 创建 -->
               <el-form-item>
@@ -190,7 +199,7 @@ export default {
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
       this.tableHandle.delete.api = deleteEngineeringSupplierType
-      // this.tableHandle.delete.callback = this.deleteCallback
+      this.tableHandle.delete.callback = this.deleteCallback
       // 配置节点懒加载功能
       // this.tableHandle.lazy.api = lazyXXX
       // 配置section删除功能
@@ -219,6 +228,33 @@ export default {
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table', 'component-tree', 'popover-tree'] }) {
       this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
+    },
+    deleteCallback() {
+      this.$refs['componentTree'].init()
+    },
+    // 清除
+    clearHandle() {
+      const { tableName } = this.tableConfig
+      this.tableSearchParams = {
+        pid: '',
+        typeName: ''
+      }
+      this.$nextTick(() => {
+        this.$refs['componentTree'].init()
+        this.$refs[tableName].clearHandle()
+      })
+    },
+    // 重置
+    searchResetHandle() {
+      const { tableName } = this.tableConfig
+      this.tableSearchParams = {
+        pid: '',
+        typeName: ''
+      }
+      this.$nextTick(() => {
+        this.$refs['componentTree'].init()
+        this.$refs[tableName].clearHandle()
+      })
     }
   }
 }

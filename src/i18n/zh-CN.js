@@ -10,6 +10,7 @@ t.add = '新增'
 t.delete = '删除'
 t.deleteBatch = '删除'
 t.update = '修改'
+t.reset = '重置'
 t.detail = '详情'
 t.query = '查询'
 t.export = '导出'
@@ -534,14 +535,12 @@ t.building.buildingTotalFloor = '楼栋总层数'
 t.building.projectFloorHeight = '楼栋层高'
 t.building.remark = '备注'
 
-// 供应商类别
 t.supplierType = {}
 t.supplierType.typeName = '类别名称'
 t.supplierType.pid = '上级类别'
 t.supplierType.parentName = '上级类别'
 t.supplierType.parentNameDefault = '顶级供应商'
 
-// 供应商人资质
 t.supplierQualifications = {}
 t.supplierQualifications.name = '资质名称'
 t.supplierQualifications.qualificationsType = '资质类别'
@@ -550,14 +549,12 @@ t.supplierQualifications.qualificationsDetail = '资质备注信息'
 t.supplierQualifications.isBlacklist = '拉黑状态'
 t.supplierQualifications.qualificationsOssIds = '资质文件'
 
-// 供应商联系人变更记录
 t.supplierLinkhis = {}
 t.supplierLinkhis.supplierLinkman = '联系人'
 t.supplierLinkhis.supplierLinkphone = '联系电话'
 t.supplierLinkhis.createDate = '创建时间'
 t.supplierLinkhis.updateDate = '更新时间'
 
-// 供应商管理
 t.supplier = {}
 t.supplier.name = '供应商名称'
 t.supplier.supplierLinkman = '联系人'

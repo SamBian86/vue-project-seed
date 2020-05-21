@@ -246,6 +246,7 @@ export default {
     },
     // 重置查询条件
     searchResetHandle() {
+      this.query.page = 1
       this.searchHandle()
     },
     // 触发删除

@@ -10,6 +10,7 @@ t.add = 'Add'
 t.delete = 'Delete'
 t.deleteBatch = 'Delete'
 t.update = 'Edit'
+t.reset = 'Reset'
 t.detail = 'Detail'
 t.manage = 'Manage'
 t.query = 'Query'
@@ -536,4 +537,36 @@ t.building.buildingTotalFloor = '楼栋总层数'
 t.building.projectFloorHeight = '楼栋层高'
 t.building.remark = '备注'
 
+t.supplierType = {}
+t.supplierType.typeName = '类别名称'
+t.supplierType.pid = '上级类别'
+t.supplierType.parentName = '上级类别'
+t.supplierType.parentNameDefault = '顶级供应商'
+
+t.supplierQualifications = {}
+t.supplierQualifications.name = '资质名称'
+t.supplierQualifications.qualificationsType = '资质类别'
+t.supplierQualifications.qualificationsGrade = '资质评级'
+t.supplierQualifications.qualificationsDetail = '资质备注信息'
+t.supplierQualifications.isBlacklist = '拉黑状态'
+t.supplierQualifications.qualificationsOssIds = '资质文件'
+
+t.supplierLinkhis = {}
+t.supplierLinkhis.supplierLinkman = '联系人'
+t.supplierLinkhis.supplierLinkphone = '联系电话'
+t.supplierLinkhis.createDate = '创建时间'
+t.supplierLinkhis.updateDate = '更新时间'
+
+t.supplier = {}
+t.supplier.name = '供应商名称'
+t.supplier.supplierLinkman = '联系人'
+t.supplier.supplierLinkphone = '联系电话'
+t.supplier.supplierGrade = '供货商评级'
+t.supplier.aaaa = '供应商类别???'
+t.supplier.isRely = '是否挂靠'
+t.supplier.supplierCorporation = '法人代表'
+t.supplier.supplierCorporationPhone = '法人电话号码'
+t.supplier.supplierAddress = '注册地址'
+t.supplier.supplierDetail = '供货商备注'
+t.supplier.supplierOssIds = '供货商文件'
 export default t
