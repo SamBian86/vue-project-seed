@@ -253,7 +253,7 @@ export default {
       }
       this.$nextTick(() => {
         this.$refs['componentTree'].init()
-        this.$refs[tableName].clearHandle()
+        this.$refs[tableName].searchResetHandle()
       })
     }
   }
