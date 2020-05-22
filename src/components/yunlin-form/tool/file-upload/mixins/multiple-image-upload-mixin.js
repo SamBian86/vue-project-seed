@@ -3,7 +3,7 @@ export default {
   data() {
     return {
       // 上传成功的本地文件list
-      multipleList: [],
+      multipleImageList: [],
       // 上传文件队列
       uploadQueue: [],
       // 本地与远程对应仓库
@@ -18,18 +18,25 @@ export default {
     // console.log('file-upload mixin activated')
   },
   methods: {
-    multipleUploadInit() {
-      this.$refs['file-upload-multiple'] && this.$refs['file-upload-multiple'].clearFiles()
+    multipleImageUploadInit() {
+      console.log('multipleImageUploadInit')
+      const { propName } = this.config
+      const { pageData } = this
+      this.$refs['file-upload-multiple-image'] && this.$refs['file-upload-multiple-image'].clearFiles()
+      if (pageData[propName] && pageData[propName].length !== 0) {
+        this.resourcesList = [...pageData[propName]]
+      } else {
+        this.resourcesList = []
+      }
       this.uploading = false
-      this.resourcesList = []
-      this.multipleList = []
+      this.multipleImageList = []
       this.uploadQueue = []
       this.uploadStore = {}
     },
     // 覆盖默认提交行为
-    multipleHttpRequestHandle() {
-      const { multipleList } = this
-      const uploadQueue = multipleList.filter(item => !item.success)
+    multipleImageHttpRequestHandle() {
+      const { multipleImageList } = this
+      const uploadQueue = multipleImageList.filter(item => !item.success)
       // 锁定为上传状态，保存需要上传的队列
       this.uploading = true
       this.uploadQueue = uploadQueue
@@ -52,8 +59,8 @@ export default {
         file: file.raw
       })
         .then(response => {
-          const { multipleList, resourcesList } = this
-          multipleList.forEach(item => {
+          const { multipleImageList, resourcesList } = this
+          multipleImageList.forEach(item => {
             if (item.uid === file.uid) {
               item.success = true
               // console.log(file.uid + '上传成功')
@@ -61,7 +68,7 @@ export default {
           })
 
           this.uploadStore['file_' + file.uid] = response
-          this.multipleList = multipleList
+          this.multipleImageList = multipleImageList
           this.resourcesList = [...resourcesList, { ...response }]
           this.uploadQueue = uploadQueue
 
@@ -80,49 +87,49 @@ export default {
         })
     },
     // 文件检查
-    multipleChangeHandle(file, fileList) {
+    multipleImageChangeHandle(file, fileList) {
       const checkType = this.beforeUploadHandle(fileList)
 
       if (checkType) {
-        this.multipleConstructorData(fileList)
+        this.multipleImageConstructorData(fileList)
       } else {
-        this.$refs['file-upload-multiple'] && this.$refs['file-upload-multiple'].clearFiles()
+        this.$refs['file-upload-multiple-image'] && this.$refs['file-upload-multiple-image'].clearFiles()
       }
     },
-    multipleConstructorData(fileList) {
-      const { multipleList } = this
+    multipleImageConstructorData(fileList) {
+      const { multipleImageList } = this
       // 过滤出已有的文件uids，包含上传成功和未上传的文件
-      const multipleUids = multipleList.map(item => item.uid)
+      const multipleImageUids = multipleImageList.map(item => item.uid)
       // 新添加的图片uid
-      const addUids = fileList.map(item => item.uid).filter(item => !multipleUids.includes(item))
+      const addUids = fileList.map(item => item.uid).filter(item => !multipleImageUids.includes(item))
 
-      const multipleAddList = [] // 新增的图片
+      const multipleImageAddList = [] // 新增的图片
       fileList.map(item => {
         if (addUids.includes(item.uid)) {
           item.success = false
-          multipleAddList.push(item)
+          multipleImageAddList.push(item)
         }
       })
 
       // 用于上传的队列
-      this.multipleList = [...multipleAddList]
+      this.multipleImageList = [...multipleImageAddList]
       // 开始载入上传队列
-      this.multipleHttpRequestHandle()
+      this.multipleImageHttpRequestHandle()
     },
     // 删除前回调
-    multipleBeforeRemoveHandle(file, fileList) {
-      const { multipleList } = this
-      const items = multipleList.filter(item => item.uid === file.uid)
+    multipleImageBeforeRemoveHandle(file, fileList) {
+      const { multipleImageList } = this
+      const items = multipleImageList.filter(item => item.uid === file.uid)
 
       if (items.length === 0) {
         // console.log('删除失败')
         return false
       }
-      // console.log('multipleBeforeRemoveHandle')
+      // console.log('multipleImageBeforeRemoveHandle')
     },
     // 删除回调
-    multipleRemoveHandle(file, fileList) {
-      let { multipleList, resourcesList } = this
+    multipleImageRemoveHandle(file, fileList) {
+      let { multipleImageList, resourcesList } = this
       const { uploadStore } = this
       const resource = uploadStore['file_' + file.uid]
 
@@ -131,11 +138,11 @@ export default {
           .deleteRequest([resource.id])
           .then(response => {
             delete uploadStore['file_' + file.uid]
-            multipleList = multipleList.filter(item => item.uid !== file.uid)
+            multipleImageList = multipleImageList.filter(item => item.uid !== file.uid)
             resourcesList = resourcesList.filter(item => item.id !== resource.id)
 
             this.uploadStore = uploadStore
-            this.multipleList = multipleList
+            this.multipleImageList = multipleImageList
             this.resourcesList = resourcesList
 
             this.$message({
@@ -155,10 +162,10 @@ export default {
       } else {
         console.log('删除的资源不存在')
       }
-      console.log('multipleRemoveHandle')
+      console.log('multipleImageRemoveHandle')
     },
     // 预览
-    multiplePreviewHandle(file) {
+    multipleImagePreviewHandle(file) {
       this.dialogImageUrl = file.url
       this.dialogVisible = true
     }

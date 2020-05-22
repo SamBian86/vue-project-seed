@@ -1,8 +1,9 @@
+import { uploadOssFile } from '@/api/oss/oss'
 export default {
   data() {
     return {
       // 上传成功的本地文件list
-      dragList: [],
+      multipleFileList: [],
       // 上传文件队列
       uploadQueue: [],
       // 本地与远程对应仓库
@@ -17,19 +18,25 @@ export default {
     // console.log('file-upload mixin activated')
   },
   methods: {
-    dragUploadInit() {
-      console.log('dragUploadInit')
-      this.$refs['file-upload-drag'] && this.$refs['file-upload-drag'].clearFiles()
+    multipleFileUploadInit() {
+      console.log('multipleFileUploadInit')
+      const { propName } = this.config
+      const { pageData } = this
+      this.$refs['file-upload-multiple-file'] && this.$refs['file-upload-multiple-file'].clearFiles()
+      if (pageData[propName] && pageData[propName].length !== 0) {
+        this.resourcesList = [...pageData[propName]]
+      } else {
+        this.resourcesList = []
+      }
       this.uploading = false
-      this.resourcesList = []
-      this.dragList = []
+      this.multipleFileList = []
       this.uploadQueue = []
       this.uploadStore = {}
     },
     // 覆盖默认提交行为
-    dragHttpRequestHandle() {
-      const { dragList } = this
-      const uploadQueue = dragList.filter(item => !item.success)
+    multipleFileHttpRequestHandle() {
+      const { multipleFileList } = this
+      const uploadQueue = multipleFileList.filter(item => !item.success)
       // 锁定为上传状态，保存需要上传的队列
       this.uploading = true
       this.uploadQueue = uploadQueue
@@ -40,7 +47,7 @@ export default {
     },
     // 文件上传
     uploadRequest() {
-      const { uploadQueue, componentNames } = this
+      const { uploadQueue } = this
 
       if (uploadQueue.length === 0) {
         this.uploading = false
@@ -48,27 +55,22 @@ export default {
         return false
       }
       const file = uploadQueue.shift()
-      this.config
-        .uploadRequest({
-          file: file.raw
-        })
+      uploadOssFile({
+        file: file.raw
+      })
         .then(response => {
-          const { dragList, resourcesList } = this
-          resourcesList.push(response)
-          dragList.forEach(item => {
+          const { multipleFileList, resourcesList } = this
+          multipleFileList.forEach(item => {
             if (item.uid === file.uid) {
               item.success = true
               // console.log(file.uid + '上传成功')
             }
           })
-          this.uploadStore['file_' + file.uid] = response
-          this.dragList = dragList
-          this.resourcesList = resourcesList
-          this.uploadQueue = uploadQueue
 
-          if (!this.$attrs.page_drawer_data.data) {
-            this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
-          }
+          this.uploadStore['file_' + file.uid] = response
+          this.multipleFileList = multipleFileList
+          this.resourcesList = [...resourcesList, { ...response }]
+          this.uploadQueue = uploadQueue
 
           this.formDataMerge()
           // console.log('远程文件列表---')
@@ -84,49 +86,51 @@ export default {
           })
         })
     },
-    // 拖拽文件检查
-    dragChangeHandle(file, fileList) {
+    // 文件检查
+    multipleFileChangeHandle(file, fileList) {
       const checkType = this.beforeUploadHandle(fileList)
 
       if (checkType) {
-        this.dragConstructorData(fileList)
+        this.multipleFileConstructorData(fileList)
       } else {
-        this.$refs['file-upload-drag'] && this.$refs['file-upload-drag'].clearFiles()
+        this.$refs['file-upload-multiple-file'] && this.$refs['file-upload-multiple-file'].clearFiles()
       }
     },
-    dragConstructorData(fileList) {
-      const { dragList } = this
+    multipleFileConstructorData(fileList) {
+      const { multipleFileList } = this
       // 过滤出已有的文件uids，包含上传成功和未上传的文件
-      const dragUids = dragList.map(item => item.uid)
+      const multipleFileUids = multipleFileList.map(item => item.uid)
       // 新添加的图片uid
-      const addUids = fileList.map(item => item.uid).filter(item => !dragUids.includes(item))
+      const addUids = fileList.map(item => item.uid).filter(item => !multipleFileUids.includes(item))
 
-      const dragAddList = [] // 新增的图片
+      const multipleFileAddList = [] // 新增的图片
       fileList.map(item => {
         if (addUids.includes(item.uid)) {
           item.success = false
-          dragAddList.push(item)
+          multipleFileAddList.push(item)
         }
       })
-      this.dragList = [...dragList, ...dragAddList]
+
+      // 用于上传的队列
+      this.multipleFileList = [...multipleFileAddList]
       // 开始载入上传队列
-      this.dragHttpRequestHandle()
+      this.multipleFileHttpRequestHandle()
     },
     // 删除前回调
-    dragBeforeRemoveHandle(file, fileList) {
-      const { dragList } = this
-      const items = dragList.filter(item => item.uid === file.uid && item.success)
+    multipleFileBeforeRemoveHandle(file, fileList) {
+      const { multipleFileList } = this
+      const items = multipleFileList.filter(item => item.uid === file.uid)
 
       if (items.length === 0) {
         // console.log('删除失败')
         return false
       }
-      // console.log('dragBeforeRemoveHandle')
+      // console.log('multipleFileBeforeRemoveHandle')
     },
     // 删除回调
-    dragRemoveHandle(file, fileList) {
-      let { dragList, resourcesList } = this
-      const { uploadStore, componentNames } = this
+    multipleFileRemoveHandle(file, fileList) {
+      let { multipleFileList, resourcesList } = this
+      const { uploadStore } = this
       const resource = uploadStore['file_' + file.uid]
 
       if (resource) {
@@ -134,11 +138,11 @@ export default {
           .deleteRequest([resource.id])
           .then(response => {
             delete uploadStore['file_' + file.uid]
-            dragList = dragList.filter(item => item.uid !== file.uid)
+            multipleFileList = multipleFileList.filter(item => item.uid !== file.uid)
             resourcesList = resourcesList.filter(item => item.id !== resource.id)
 
             this.uploadStore = uploadStore
-            this.dragList = dragList
+            this.multipleFileList = multipleFileList
             this.resourcesList = resourcesList
 
             this.$message({
@@ -146,9 +150,6 @@ export default {
               type: 'success',
               duration: 2000
             })
-            if (!this.$attrs.page_drawer_data.data) {
-              this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
-            }
             this.formDataMerge()
           })
           .catch(message => {
@@ -161,7 +162,12 @@ export default {
       } else {
         console.log('删除的资源不存在')
       }
-      console.log('dragRemoveHandle')
+      console.log('multipleFileRemoveHandle')
     }
+    // 预览
+    // multipleFilePreviewHandle(file) {
+    //   this.dialogImageUrl = file.url
+    //   this.dialogVisible = true
+    // }
   }
 }
