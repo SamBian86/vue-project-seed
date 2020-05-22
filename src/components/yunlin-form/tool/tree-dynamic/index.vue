@@ -37,6 +37,7 @@ export default {
           mergeData: { target: '' },
           accordion: true,
           showCheckbox: true,
+          defaultExpandAll: false,
           componentNames: [] // 组件更新成功以后连带的需要重新获取数据的组件
         }
       }

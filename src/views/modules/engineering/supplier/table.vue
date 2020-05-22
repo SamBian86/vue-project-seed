@@ -28,29 +28,23 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input
-              v-model="tableSearchParams.supplierGradeName"
-              :placeholder="$t('supplier.supplierGradeName')"
-              :size="tableConfig.tableSearchSize"
-              clearable
-              @clear="clearHandle"
-            ></el-input>
-          </el-form-item>
-          <el-form-item>
             <el-select
-              v-model="tableSearchParams.supplierTypeId"
-              :placeholder="$t('supplier.supplierTypeId')"
+              v-model="tableSearchParams.supplierGrade"
+              :placeholder="$t('supplier.supplierGrade')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
             >
               <el-option
-                v-for="(item, index) in getDictByType('supplier_qualifications_grade')"
+                v-for="(item, index) in getDictByType('supplier_grade')"
                 :key="index"
                 :label="item.dictLabel"
                 :value="item.dictValue"
               ></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item>
+            <search-tree :config="searchTreeConfig" @table-params-merge="tableParamsMerge"></search-tree>
           </el-form-item>
 
           <!-- 查询 -->
@@ -91,7 +85,6 @@
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:supplier:xxx')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="customSectionHandle({
@@ -107,10 +100,10 @@
       <template slot="operate">
         <el-table-column
           :label="$t('handle')"
-          align="center"
+          align="left"
           header-align="center"
           fixed="right"
-          width="100"
+          width="350"
         >
           <template slot-scope="scope">
             <!-- 修改 -->
@@ -120,6 +113,36 @@
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>
+            <!-- 修改联系人 -->
+            <el-button
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="supplierLinkmanHandle(scope.row)"
+            >{{ $t('supplier.hisSupplierLinkman') }}</el-button>
+            <!-- 资质 -->
+            <el-button
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="qualificationsHandle(scope.row)"
+            >{{ $t('supplier.qualifications') }}</el-button>
+            <!-- 单个拉黑 -->
+            <el-button
+              v-if="scope.row.isBlacklist !== 1"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="customHandle({
+                data: { blackType: 1, id: scope.row.id},
+                i18nRequestMessage: 'supplier.blackCurrent',
+                request: setEngineeringSupplierBlack
+              })"
+            >{{ $t('supplier.black') }}</el-button>
+            <!-- 其他供应商拉黑列表 -->
+            <el-button
+              v-if="scope.row.isBlacklist !== 1"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="blackOtherHandle(scope.row)"
+            >{{ $t('supplier.blackOther') }}</el-button>
             <!-- 单个删除 -->
             <el-button
               v-if="filterPermission('engineering:supplier:delete')"
@@ -127,9 +150,7 @@
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
             >{{ $t('delete') }}</el-button>
-            <!-- 单个操作 -->
             <!-- <el-button
-              v-if="filterPermission('engineering:supplier:xxx')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="customHandle({
@@ -142,6 +163,19 @@
         </el-table-column>
       </template>
     </yunlin-table>
+    <yunlin-drawer
+      ref="yunlinDrawer"
+      :config="drawerConfig"
+      v-bind="$attrs"
+      @drawer-closed="drawerClosed"
+      v-on="$listeners"
+    >
+      <component
+        :is="drawerComponent"
+        :drawer-data="drawerData"
+        @drawer-close-by-child="drawerCloseByChild"
+      ></component>
+    </yunlin-drawer>
   </div>
 </template>
 
@@ -149,18 +183,33 @@
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
-import { getEngineeringSupplierPageList, deleteEngineeringSupplier } from '@/api/engineering/supplier'
-
+import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
+import {
+  getEngineeringSupplierPageList,
+  deleteEngineeringSupplier,
+  setEngineeringSupplierBlack
+} from '@/api/engineering/supplier'
+import { getEngineeringSupplierTypeTree } from '@/api/engineering/supplierType'
+import searchTree from '@/components/yunlin-table/search/search-tree'
+import blackOther from './supplier/blackOther'
+import linkHis from './supplier/linkhis'
+import qualifications from './supplier/qualifications'
 export default {
   name: 'Tabel',
-  components: {},
-  mixins: [pageMixin, tableDefaultMixin],
+  components: { searchTree, blackOther, linkHis, qualifications },
+  mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
   data() {
-    return {}
+    return {
+      drawerComponents: {
+        black: blackOther,
+        linkhis: linkHis,
+        qualifications: qualifications
+      }
+    }
   },
   computed: {
     // 用于判断是否有权限的方法
-    ...mapGetters('app', ['filterPermission', 'getDictByType'])
+    ...mapGetters('app', ['filterPermission', 'getDictByType', 'getDictNameByValue'])
   },
   activated() {
     // console.log('table activated')
@@ -171,7 +220,7 @@ export default {
   methods: {
     init() {
       // 配置查询区域i18n相关select数据
-      // this.genrateI18nSearchItems()
+      this.genrateI18nSearchItems()
       // console.log('table created')
       // 是否显示树形数据
       this.tableConfig.rowKey = 'id'
@@ -189,7 +238,7 @@ export default {
         // 联系电话
         { prop: 'supplierLinkphone', label: 'supplier.supplierLinkphone', width: '160', align: 'center' },
         // 供应商类别
-        { prop: 'typeNames', label: 'supplier.typeNames', align: 'center' },
+        { prop: 'supplierTypeNames', label: 'supplier.supplierTypeNames', align: 'center' },
         // 供应商评级
         { prop: 'supplierGradeName', label: 'supplier.supplierGradeName', align: 'center' }
       ]
@@ -211,10 +260,17 @@ export default {
     },
     genrateI18nSearchItems() {
       // XXX
-      // this.smsStatus = [
-      //   { label: this.$t('aaa'), value: 0 },
-      //   { label: this.$t('aaa'), value: 1 }
-      // ]
+      this.searchTreeConfig = {
+        request: getEngineeringSupplierTypeTree,
+        requestParams: {},
+        treeDataTranslate: null,
+        treeDataFilter: true,
+        treeDataFilterKey: '',
+        i18nDefault: 'supplier.supplierTypeIds',
+        treeProps: { label: 'typeName', children: 'children' },
+        treeNodeKey: '',
+        mergeData: [{ source: 'id', target: 'supplierTypeId', name: 'typeName' }]
+      }
     },
     // 创建
     createHandle(options = { componentNames: ['yunlin-table'] }) {
@@ -222,7 +278,30 @@ export default {
     },
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
+    },
+    // 拉黑方法
+    setEngineeringSupplierBlack() {
+      return setEngineeringSupplierBlack
+    },
+    // 同一法人其他供应商列表
+    blackOtherHandle(row) {
+      this.setDrawerComponent('black')
+      this.setDrawerData(row)
+      this.setDrawerTitle(this.$t('supplier.blackOtherSame'))
+      this.drawerVisibleHandle()
+    },
+    supplierLinkmanHandle(row) {
+      this.setDrawerComponent('linkhis')
+      this.setDrawerData(row)
+      this.setDrawerTitle(this.$t('supplierLinkhis.title'))
+      this.drawerVisibleHandle()
+    },
+    qualificationsHandle(row) {
+      this.setDrawerComponent('qualifications')
+      this.setDrawerData(row)
+      this.setDrawerTitle(this.$t('supplierQualifications.title'))
+      this.drawerVisibleHandle()
     }
   }
 }

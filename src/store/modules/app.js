@@ -134,7 +134,7 @@ export default {
     filterPermission: state => value => {
       return state.permissionStore.findIndex(item => item === value) !== -1 || false
     },
-    getDictByType: state => type => {
+    getDictByType: state => (type, valueType) => {
       const items = state.dictStore[type]
       items.forEach(item => {
         item.dictValue = parseInt(item.dictValue)

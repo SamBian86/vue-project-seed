@@ -252,9 +252,9 @@ export default {
     // 触发删除
     deleteHandle(item) {
       const { callback } = this.$attrs.handle.delete
-      this.$confirm('确认删除？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('confirm')}${this.$t('delete')}`, this.$t('prompt.title'), {
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
         type: 'warning'
       })
         .then(() => {
@@ -294,9 +294,9 @@ export default {
         return
       }
 
-      this.$confirm(`确认进行${this.$t(opts.i18nRequestMessage)}操作？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('confirm')}${this.$t(opts.i18nRequestMessage)}？`, this.$t('prompt.title'), {
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
         type: 'warning'
       })
         .then(() => {
@@ -327,9 +327,9 @@ export default {
     // 批量删除操作
     deleteSectionHandle(items) {
       const { callback } = this.$attrs.handle.delete
-      this.$confirm(`确认删除这${items.length}项目？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('confirm')}${this.$t('delete')}`, this.$t('prompt.title'), {
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
         type: 'warning'
       })
         .then(() => {
@@ -364,9 +364,9 @@ export default {
       //    request: pauseJobSchedule // 处理接口方法
       // }
       const { request } = opts
-      this.$confirm(`确认进行${this.$t(opts.i18nRequestMessage)}操作？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('confirm')}${this.$t(opts.i18nRequestMessage)}?`, this.$t('prompt.title'), {
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
         type: 'warning'
       })
         .then(() => {

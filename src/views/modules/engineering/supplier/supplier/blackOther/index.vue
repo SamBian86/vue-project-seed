@@ -6,6 +6,7 @@
           :is="pageInfo.component"
           :page_info="pageInfo"
           :page_update_list="pageUpdateList"
+          :page_drawer_data="drawerData"
           v-bind="$attrs"
           @page-switch="pageSwitch"
           @page-update-list-add="pageUpdateListAdd"
@@ -20,11 +21,9 @@
 <script>
 import pageDefaultMixin from '@/mixins/page-default-mixin'
 import pageTable from './table'
-import pageForm from './form'
-
 // 页面根组件
 export default {
-  components: { pageTable, pageForm },
+  components: { pageTable },
   mixins: [pageDefaultMixin],
   data() {
     return {
@@ -32,10 +31,6 @@ export default {
         {
           name: 'table',
           component: pageTable
-        },
-        {
-          name: 'form',
-          component: pageForm
         }
       ],
       pageInfo: {},

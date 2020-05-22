@@ -137,7 +137,7 @@
       "  },\r",
       "  computed: {\r",
       "    // 用于判断是否有权限的方法\r",
-      "    ...mapGetters('app', ['filterPermission'])\r",
+      "    ...mapGetters('app', ['filterPermission', 'getDictByType', 'getDictNameByValue'])\r",
       "  },\r",
       "  activated() {\r",
       "    // console.log('table activated')\r",

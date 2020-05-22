@@ -165,7 +165,7 @@ export default {
     // 点击字典类型
     dictTypeClickHandle(row) {
       this.setDrawerData(row)
-      this.setDrawerTitle(row.dictName + '列表')
+      this.setDrawerTitle(row.dictName)
       this.drawerVisibleHandle()
     }
   }

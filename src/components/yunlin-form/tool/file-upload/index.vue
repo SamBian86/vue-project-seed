@@ -71,7 +71,6 @@
     <div v-if="config.type === 'multiple-file'" class="file-upload-multiple">
       <el-upload
         ref="file-upload-multiple-image"
-        :class="resourcesList.length === config.limit ? 'hide-upload-file' : ''"
         :file-list="resourcesList"
         :action="uploadUrl"
         :auto-upload="false"
@@ -79,6 +78,7 @@
         :on-change="multipleFileChangeHandle"
         :before-upload="beforeUploadHandle"
         :before-remove="multipleFileBeforeRemoveHandle"
+        :on-preview="multipleFilePreviewHandle"
         :on-remove="multipleFileRemoveHandle"
       >
         <el-button size="small" type="primary">点击上传</el-button>
@@ -224,6 +224,9 @@ export default {
       if (type === 'multiple-image') {
         this.multipleImageUploadInit()
       }
+      if (type === 'multiple-file') {
+        this.multipleFileUploadInit()
+      }
 
       // if (this.config.request) {
       //   this.config
@@ -244,7 +247,6 @@ export default {
       const { formats } = this
       const { format } = this.config
       const reg = new RegExp('(' + formats[format].join('|') + ')')
-      console.log(fileList)
       fileList.map(item => {
         if (item.raw) {
           const fileSuffix = item.raw.type === '' ? item.raw.name.replace(/\.(\w+)/, '$1') : item.raw.type
@@ -289,5 +291,9 @@ export default {
 
 .hide-upload-file .el-upload {
   display: none;
+}
+
+.el-upload-list__item {
+  transition: all 0s;
 }
 </style>

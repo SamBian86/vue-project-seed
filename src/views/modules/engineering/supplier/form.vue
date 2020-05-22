@@ -33,13 +33,13 @@
               @click.stop="cancleHandle"
             >{{ $t('back') }}</el-button>
             <el-button
-              v-if="containsPageType(['create']) && filterPermission('xxx:xxx:save')"
+              v-if="containsPageType(['create']) && filterPermission('engineering:supplier:save')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
             >{{ $t('add') }}</el-button>
             <el-button
-              v-if="containsPageType(['edit']) && filterPermission('xxx:xxx:update')"
+              v-if="containsPageType(['edit']) && filterPermission('engineering:supplier:update')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
@@ -57,6 +57,7 @@ import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
 import { createEngineeringSupplier, editEngineeringSupplier, getEngineeringSupplierById } from '@/api/engineering/supplier'
+import { getEngineeringSupplierTypeTree } from '@/api/engineering/supplierType'
 
 export default {
   name: 'Form',
@@ -88,7 +89,10 @@ export default {
       // 初始化数据定义
       formDefaultData: {},
       // 用于处理表单的隐藏与显示禁用行为
-      formAction: []
+      formAction: [
+        // { prop: 'supplierLinkman', disabledPageType: ['edit'] },
+        // { prop: 'supplierLinkphone', disabledPageType: ['edit'] }
+      ]
     }
   },
   computed: {
@@ -121,18 +125,29 @@ export default {
           type: 'text',
           rules: [{ required: true }]
         },
-        // {
-        //   // 供应商类别
-        //   span: 12,
-        //   prop: '字段',
-        //   name: '国际化',
-        //   type: 'select',
-        //   className: 'select-block',
-        //   placeholder: '国际化',
-        //   rules: [{ required: true }],
-        //   items: this.getDictByType('gender'),
-        //   itemType: 'dict'
-        // },
+        {
+          // 供应商类别
+          span: 24,
+          prop: 'supplierTypeIds',
+          name: 'supplier.supplierTypeIds',
+          type: 'tree-dynamic',
+          component: 'toolTreeDynamic',
+          componentConfig: {
+            treeRequest: getEngineeringSupplierTypeTree,
+            treeRequestParams: {},
+            // treeResultRequest: null,
+            // treeResultRequestParams: {},
+            // treeResultRequestPropParams: ['id'],
+            // treeResultKey: '',
+            propName: 'supplierTypeIds',
+            nodeKey: 'id',
+            treeProps: { label: 'typeName', children: 'children' },
+            mergeData: { target: 'supplierTypeIds' },
+            accordion: true,
+            showCheckbox: true,
+            componentNames: ['tree-dynamic']
+          }
+        },
         {
           // 是否挂靠
           span: 12,
@@ -208,16 +223,16 @@ export default {
         {
           // 供货商文件
           span: 24,
-          prop: 'supplierOssIds',
-          name: 'supplier.supplierOssIds',
+          prop: 'ossEntityList',
+          name: 'supplier.ossEntityList',
           type: 'file-upload',
           rules: [{ required: true }],
           component: 'toolFileUpload',
           componentConfig: {
             type: 'multiple-file',
-            propName: 'supplierOssIds',
+            propName: 'ossEntityList',
             format: 2,
-            mergeData: { target: 'supplierOssIds' }
+            mergeData: { target: 'ossEntityList' }
           }
         }
       ]
@@ -228,6 +243,10 @@ export default {
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
+    },
+    afterFormDataUpdate() {
+      const { supplierGrade } = this.formData
+      this.$set(this.formData, 'supplierGrade', parseInt(supplierGrade))
     }
   }
 }
