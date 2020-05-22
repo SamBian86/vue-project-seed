@@ -243,11 +243,11 @@ export default {
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
-    },
-    afterFormDataUpdate() {
-      const { supplierGrade } = this.formData
-      this.$set(this.formData, 'supplierGrade', parseInt(supplierGrade))
     }
+    // afterFormDataUpdate() {
+    //   const { supplierGrade } = this.formData
+    //   this.$set(this.formData, 'supplierGrade', parseInt(supplierGrade))
+    // }
   }
 }
 </script>

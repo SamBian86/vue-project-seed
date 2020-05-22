@@ -548,7 +548,7 @@ t.supplierQualifications.qualificationsType = '资质类别'
 t.supplierQualifications.qualificationsGrade = '资质级别'
 t.supplierQualifications.qualificationsDetail = '资质备注信息'
 t.supplierQualifications.isBlacklist = '拉黑状态'
-t.supplierQualifications.qualificationsOssIds = '资质文件'
+t.supplierQualifications.ossEntityList = '资质文件'
 
 t.supplierLinkhis = {}
 t.supplierLinkhis.title = '联系人变更记录'

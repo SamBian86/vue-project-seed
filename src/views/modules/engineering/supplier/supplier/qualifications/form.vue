@@ -156,16 +156,16 @@ export default {
         {
           // 资质文件
           span: 24,
-          prop: 'qualificationsOssIds',
-          name: 'supplierQualifications.qualificationsOssIds',
+          prop: 'ossEntityList',
+          name: 'supplierQualifications.ossEntityList',
           type: 'file-upload',
           rules: [{ required: true }],
           component: 'toolFileUpload',
           componentConfig: {
             type: 'multiple-file',
-            propName: 'qualificationsOssIds',
+            propName: 'ossEntityList',
             format: 2,
-            mergeData: { target: 'qualificationsOssIds' }
+            mergeData: { target: 'ossEntityList' }
           }
         }
       ]
