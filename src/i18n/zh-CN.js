@@ -594,4 +594,13 @@ t.cost.costPrimitiveTarget = '原始指标'
 t.cost.isStrongControl = '是否强控'
 t.cost.remark = '备注'
 
+t.land = {}
+t.land.projectId = '项目名称'
+t.land.budgetSubjectName = '预算主题'
+t.land.landbudgetUserId = '预算人'
+t.land.landbudgetDeptId = '预算部门'
+t.land.landbudgetDeptName = '预算部门'
+t.land.landbudgetTime = '预算时间'
+t.land.landbudgetRemark = '预算说明'
+
 export default t

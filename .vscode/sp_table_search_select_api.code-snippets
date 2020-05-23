@@ -5,7 +5,7 @@
       "<el-form-item>\r",
       "  <el-select\r",
       "    v-model=\"tableSearchParams.字段名$1\"\r",
-      "    :placeholder=\"$t('国际化$2')\"\r",
+      "    :placeholder=\"$$t('国际化$2')\"\r",
       "    :size=\"tableConfig.tableSearchSize\"\r",
       "    clearable\r",
       "    @clear=\"clearHandle\"\r",

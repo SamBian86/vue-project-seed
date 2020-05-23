@@ -74,6 +74,16 @@ export function getUserAll(params = {}) {
   })
 }
 
+// GET
+// /sys/user/list
+// 获取所有用户
+export function getUserList() {
+  return request({
+    url: `/sys/user/list`,
+    method: 'get'
+  })
+}
+
 // PUT
 // /sys/user/password
 // 修改密码

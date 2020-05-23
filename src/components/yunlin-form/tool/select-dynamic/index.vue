@@ -44,6 +44,7 @@ export default {
           propName: '', // 初始化用于显示的键名
           className: '', // select控件class
           mergeData: { target: '' },
+          mergeOtherData: [], // 用于选中数据以后需要填充额外的数据
           componentNames: [] // 组件更新成功以后连带的需要重新获取数据的组件
         }
       }
@@ -117,11 +118,26 @@ export default {
       }
     },
     changeHandle(value) {
-      const { mergeData } = this.config
+      const { mergeData, itemProps } = this.config
       const newData = {}
       newData[mergeData.target] = value
-      console.log(newData)
       this.$formDataMerge(newData)
+
+      const item = this.items.find(item => item[itemProps.value] === value)
+      if (item) {
+        this.mergeOtherData(item)
+      }
+    },
+    mergeOtherData(obj) {
+      const { mergeOtherData } = this.config
+
+      if (mergeOtherData && mergeOtherData.length !== 0) {
+        const newData = {}
+        mergeOtherData.map(item => {
+          newData[item.target] = obj[item.source]
+        })
+        this.$formDataMerge(newData)
+      }
     }
   }
 }
