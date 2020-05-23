@@ -1,0 +1,18 @@
+{
+  "table代码片段_导入_button_import": {
+    "prefix": "sp_table_button_import",
+    "body": [
+      "<el-form-item>\r",
+      "  <button-import :config=\"importConfig\"></button-import>\r",
+      "  // import buttonImport from '@/components/yunlin-table/button/import'\r",
+      "</el-form-item>\r",
+      "this.importConfig = {\r",
+      "  format: 0,\r",
+      "  uploadRequest: null$1,\r",
+      "  uploadRequestCallBack: this.uploadRequestCallBack\r",
+      "}\r",
+      "$7"
+    ],
+    "description": "table代码片段_导入_button_import"
+  }
+}
