@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="drawer-container">
     <yunlin-table
       ref="yunlinTable"
       :config="tableConfig"

@@ -81,7 +81,7 @@
         :on-preview="multipleFilePreviewHandle"
         :on-remove="multipleFileRemoveHandle"
       >
-        <el-button size="small" type="primary">点击上传</el-button>
+        <el-button size="small" type="primary">{{ $t('upload.button') }}</el-button>
       </el-upload>
     </div>
   </div>
@@ -294,6 +294,6 @@ export default {
 }
 
 .el-upload-list__item {
-  transition: all 0s;
+  transition: none;
 }
 </style>

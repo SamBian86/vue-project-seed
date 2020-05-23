@@ -20,6 +20,9 @@ export default {
     },
     $tableParamsMerge(params) {
       this.$emit('table-params-merge', params)
+    },
+    $tableCurrentChangeListener(value) {
+      this.$emit('table-current-change-listener', value)
     }
   }
 }

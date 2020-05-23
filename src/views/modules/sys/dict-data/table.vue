@@ -11,7 +11,12 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableSearchParams"
+          @keyup.enter.native="searchHandle"
+        >
           <el-form-item>
             <el-input
               v-model="tableSearchParams.dictValue"
@@ -31,9 +36,11 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button v-if="filterPermission('sys:dict:view')" :size="tableConfig.tableSearchSize" @click="searchHandle()">{{
-              $t('query')
-            }}</el-button>
+            <el-button
+              v-if="filterPermission('sys:dict:view')"
+              :size="tableConfig.tableSearchSize"
+              @click="searchHandle()"
+            >{{ $t('query') }}</el-button>
           </el-form-item>
           <el-form-item>
             <el-button
@@ -41,9 +48,7 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
-            >
-              {{ $t('add') }}
-            </el-button>
+            >{{ $t('add') }}</el-button>
           </el-form-item>
           <el-form-item>
             <el-button
@@ -51,32 +56,32 @@
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
-            >
-              {{ $t('deleteBatch') }}
-            </el-button>
+            >{{ $t('deleteBatch') }}</el-button>
           </el-form-item>
         </el-form>
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="100">
+        <el-table-column
+          :label="$t('handle')"
+          align="center"
+          header-align="center"
+          fixed="right"
+          width="100"
+        >
           <template slot-scope="scope">
             <el-button
               v-if="filterPermission('sys:dict:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >
-              {{ $t('update') }}
-            </el-button>
+            >{{ $t('update') }}</el-button>
             <el-button
               v-if="filterPermission('sys:dict:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
-            >
-              {{ $t('delete') }}
-            </el-button>
+            >{{ $t('delete') }}</el-button>
           </template>
         </el-table-column>
       </template>
@@ -134,11 +139,13 @@ export default {
       // console.log('table page created')
     },
     createHandle(options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { pageType: 'create', ...options })
+      const { dictTypeId } = this.tableSearchParams
+      this.$pageSwitch('form', { pageType: 'create', ...options, dictTypeId })
     },
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
+      const { dictTypeId } = this.tableSearchParams
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options, dictTypeId })
     }
   }
 }

@@ -67,6 +67,7 @@
       "import pageMixin from '@/mixins/page-mixin'\r",
       "import formDefaultMixin from '@/mixins/form-default-mixin'\r",
       "// import { createXXX, editXXX, getXXXById } from '@/api/XXX'\r",
+      "// import { validateMobile } from '@/utils/validator'\r",
       "\r",
       "export default {\r",
       "  name: 'Form',\r",

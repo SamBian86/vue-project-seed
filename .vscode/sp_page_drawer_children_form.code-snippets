@@ -3,6 +3,7 @@
     "prefix": "sp_page_drawer_children_form",
     "body": [
       "<template>\r",
+      "  <div class=\"drawer-container\">\r",
       "  <el-row :gutter=\"10\">\r",
       "    <el-col\r",
       "      :span=\"formConfig.formSpan\"\r",
@@ -59,6 +60,7 @@
       "      </yunlin-form>\r",
       "    </el-col>\r",
       "  </el-row>\r",
+      "  </div>\r",
       "</template>\r",
       "\r",
       "<script>\r",
@@ -68,6 +70,7 @@
       "import formDefaultMixin from '@/mixins/form-default-mixin'\r",
       "import drawerMixin from '@/mixins/drawer-mixin'\r",
       "// import { createXXX, editXXX, getXXXById } from '@/api/XXX'\r",
+      "// import { validateMobile } from '@/utils/validator'\r",
       "\r",
       "export default {\r",
       "  name: 'Form',\r",

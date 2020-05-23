@@ -10,7 +10,13 @@
       clearable
       @clear="clearHandle"
     ></el-input>
-    <el-popover v-if="!disabled" ref="popover-tree" v-model="popoverStatus" placement="bottom-start" trigger="click">
+    <el-popover
+      v-if="!disabled"
+      ref="popover-tree"
+      v-model="popoverStatus"
+      placement="bottom-start"
+      trigger="click"
+    >
       <div class="popover-tree-out">
         <el-input
           v-if="config.treeDataFilter"
@@ -135,6 +141,7 @@ export default {
       mergeData.map(item => {
         newData[item.target] = e[item.source]
       })
+      console.log(e[sourceName])
       this.name = e[sourceName] || '请检查键名'
       this.togglePopoverHide()
       this.$formDataMerge(newData)

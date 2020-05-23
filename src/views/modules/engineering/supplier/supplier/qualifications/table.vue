@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="drawer-container">
     <yunlin-table
       ref="yunlinTable"
       :config="tableConfig"
@@ -148,7 +148,12 @@ export default {
         // 资质类别
         { prop: 'qualificationsType', label: 'supplierQualifications.qualificationsType', width: '160', align: 'center' },
         // 资质评级
-        { prop: 'qualificationsGrade', label: 'supplierQualifications.qualificationsGrade', width: '120', align: 'center' },
+        {
+          prop: 'qualificationsGradeName',
+          label: 'supplierQualifications.qualificationsGradeName',
+          width: '120',
+          align: 'center'
+        },
         // 备注
         { prop: 'qualificationsDetail', label: 'supplierQualifications.qualificationsDetail', align: 'center' }
       ]

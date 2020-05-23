@@ -2,17 +2,19 @@
   <div>
     <!-- 查询区域插槽 -->
     <slot name="search" />
-
     <el-table
+      :ref="$attrs.config.tableName"
       v-loading="loading"
       :data="tableData"
       :row-key="$attrs.config.rowKey"
       :lazy="$attrs.config.lazy"
       :load="lazyLoadHandle"
+      :highlight-current-row="$attrs.config.highlightCurrentRow"
       border
       style="width: 100%;"
       @selection-change="tableSelectionChangeHandle"
       @sort-change="tableSortChangeHandle"
+      @current-change="tableCurrentChangeHandle"
     >
       <el-table-column
         v-if="$attrs.config.tableType === 'index'"
@@ -308,6 +310,9 @@ export default {
                 duration: 2000
               })
               this.searchHandle()
+              if (opts.successCallBack) {
+                opts.successCallBack()
+              }
             })
             .catch(message => {
               this.$message({
@@ -448,6 +453,16 @@ export default {
         this.query.orderField = ''
       }
       this.searchHandle()
+    },
+    // 单选选中处理
+    tableCurrentChangeHandle(val) {
+      this.$tableCurrentChangeListener(val)
+    },
+    // 取消选中处理
+    tableCleanCurrentChangeHandle() {
+      const { tableName } = this.$attrs.config
+      this.$refs[tableName].setCurrentRow()
+      this.$tableCurrentChangeListener(null)
     },
     // 懒加载方法
     lazyLoadHandle(tree, treeNode, resolve) {

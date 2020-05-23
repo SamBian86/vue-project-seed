@@ -13,6 +13,7 @@ export default {
         searchFillEmpty: false, // 是否填充查询条件为空
         hasPagination: true, // 是否分页组件
         lazy: false, // 是否懒加载子节点
+        highlightCurrentRow: false, // 是否开启单选
         paginationConfig: {
           query: {
             page: 1, // 第几页
@@ -37,7 +38,8 @@ export default {
         // 懒加载列表数据
         lazy: { api: null, callback: null }
       },
-      tableSections: [] // 如果tableType是section类型勾选的值将会保存在这
+      tableSections: [], // 如果tableType是section类型勾选的值将会保存在这
+      tableCurrent: null // 如果highlightCurrentRow是true，开启单选，选中会将值保存在此处
     }
   },
   computed: {},
@@ -61,6 +63,26 @@ export default {
     clearHandle() {
       const { tableName } = this.tableConfig
       this.$refs[tableName].clearHandle()
+    },
+    // 清除单选
+    clearCurrentChangeHandle() {
+      const { tableName } = this.tableConfig
+      this.$refs[tableName].tableCleanCurrentChangeHandle()
+    },
+    // 下载功能
+    downloadHandle(opts) {
+      const { request } = opts
+      this.$confirm(`${this.$t('confirm')}${this.$t(opts.i18nRequestMessage)}？`, this.$t('prompt.title'), {
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
+        type: 'warning'
+      })
+        .then(() => {
+          if (request) {
+            request()(opts.data)
+          }
+        })
+        .catch(() => {})
     },
     // 重置
     searchResetHandle() {
@@ -155,6 +177,10 @@ export default {
       })
       console.log(this.tableSearchParams)
       this.searchHandle()
+    },
+    // 单选选中数据处理
+    tableCurrentChangeListener(value) {
+      this.tableCurrent = value
     }
   }
 }

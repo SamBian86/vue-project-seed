@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="drawer-container">
     <yunlin-table
       ref="yunlinTable"
       :config="tableConfig"
@@ -43,7 +43,15 @@
               @click="exportHandle()"
             >{{ $t('export') }}</el-button>
           </el-form-item>-->
-          <!-- 批量删除 -->
+          <!-- 拉黑当前供应商 -->
+          <el-form-item>
+            <el-button
+              type="danger"
+              :size="tableConfig.tableSearchSize"
+              @click="blackHandle()"
+            >{{ $t('supplier.blackCurrent') }}</el-button>
+          </el-form-item>
+          <!-- 全部拉黑 -->
           <el-form-item>
             <el-button
               type="danger"
@@ -105,19 +113,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
+import drawerMixin from '@/mixins/drawer-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
 import { getEngineeringSupplierListBySupplierId, setEngineeringSupplierBlack } from '@/api/engineering/supplier'
-// 1.修改查询条件
-// 2.修改授权标识
-// 3.修改列表相关事件行为
-// 4.配置接口
-// 5.添加table项配置
-// 6.放开pageSwitch的formDataUpdate配置用于检查详情接口
-// 7.删除此处注释信息
+
 export default {
   name: 'Tabel',
   components: {},
-  mixins: [pageMixin, tableDefaultMixin],
+  mixins: [pageMixin, drawerMixin, tableDefaultMixin],
   data() {
     return {}
   },
@@ -185,12 +188,24 @@ export default {
     // editHandle(item, options = { componentNames: ['yunlin-table'] }) {
     //   this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
     // }
+    // 拉黑当前供应商
+    blackHandle() {
+      const { supplierId } = this.tableSearchParams
+      this.customHandle({
+        data: { blackType: 1, id: supplierId },
+        i18nRequestMessage: 'supplier.blackCurrent',
+        request: this.setEngineeringSupplierBlack,
+        successCallBack: this.$drawerCloseByChild
+      })
+    },
+    // 拉黑同一法人供应商
     blackAllHandle() {
       const { supplierId } = this.tableSearchParams
       this.customHandle({
         data: { blackType: 0, id: supplierId },
         i18nRequestMessage: 'supplier.blackMessage',
-        request: this.setEngineeringSupplierBlack
+        request: this.setEngineeringSupplierBlack,
+        successCallBack: this.$drawerCloseByChild
       })
     },
     setEngineeringSupplierBlack() {

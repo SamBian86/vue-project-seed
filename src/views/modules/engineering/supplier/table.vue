@@ -103,7 +103,7 @@
           align="left"
           header-align="center"
           fixed="right"
-          width="350"
+          width="250"
         >
           <template slot-scope="scope">
             <!-- 修改 -->
@@ -125,24 +125,13 @@
               :size="tableConfig.tableSearchSize"
               @click="qualificationsHandle(scope.row)"
             >{{ $t('supplier.qualifications') }}</el-button>
-            <!-- 单个拉黑 -->
+            <!-- 拉黑列表 -->
             <el-button
-              v-if="scope.row.isBlacklist !== 1"
-              type="text"
-              :size="tableConfig.tableSearchSize"
-              @click="customHandle({
-                data: { blackType: 1, id: scope.row.id},
-                i18nRequestMessage: 'supplier.blackCurrent',
-                request: setEngineeringSupplierBlack
-              })"
-            >{{ $t('supplier.black') }}</el-button>
-            <!-- 其他供应商拉黑列表 -->
-            <el-button
-              v-if="scope.row.isBlacklist !== 1"
+              v-if="filterPermission('engineering:supplier:black') && scope.row.isBlacklist !== 1"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="blackOtherHandle(scope.row)"
-            >{{ $t('supplier.blackOther') }}</el-button>
+            >{{ $t('supplier.black') }}</el-button>
             <!-- 单个删除 -->
             <el-button
               v-if="filterPermission('engineering:supplier:delete')"
@@ -232,7 +221,7 @@ export default {
       // 设置获取列表信息
       this.tableConfig.tableHead = [
         // 供应商名称
-        { prop: 'name', label: 'supplier.name', align: 'center' },
+        { prop: 'name', label: 'supplier.name', width: '250', align: 'center' },
         // 联系人
         { prop: 'supplierLinkman', label: 'supplier.supplierLinkman', width: '120', align: 'center' },
         // 联系电话
@@ -302,6 +291,10 @@ export default {
       this.setDrawerData(row)
       this.setDrawerTitle(this.$t('supplierQualifications.title'))
       this.drawerVisibleHandle()
+    },
+    drawerCloseByChild() {
+      this.searchHandle()
+      this.drawerVisibleHandle(false)
     }
   }
 }

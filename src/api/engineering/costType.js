@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
+import { openNewTab } from '@/utils'
 // 成本科目表
 
 // 保存
@@ -38,9 +38,9 @@ export function deleteEngineeringCostType(data = []) {
 // 模板下载
 // GET
 // /engineering/cost/type/export/{excelType}
-export function exportEngineeringCostType(params = {}) {
-  const excelType = 2
-  exportFile(`/engineering/cost/type/export/${excelType}`, params)
+export function downloadEngineeringCostType(params = {}) {
+  const { excelType } = params
+  openNewTab(`/engineering/cost/type/export/${excelType}`, params)
 }
 
 // 导入
@@ -51,6 +51,7 @@ export function importEngineeringCostType(data = {}) {
     url: `/engineering/cost/type/import`,
     method: 'post',
     dataType: 'formData',
+    responseType: 'blob',
     data
   })
 }

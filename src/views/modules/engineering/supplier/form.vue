@@ -58,6 +58,7 @@ import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
 import { createEngineeringSupplier, editEngineeringSupplier, getEngineeringSupplierById } from '@/api/engineering/supplier'
 import { getEngineeringSupplierTypeTree } from '@/api/engineering/supplierType'
+import { validateMobile } from '@/utils/validator'
 
 export default {
   name: 'Form',
@@ -186,7 +187,7 @@ export default {
           prop: 'supplierCorporationPhone',
           name: 'supplier.supplierCorporationPhone',
           type: 'text',
-          rules: [{ required: true }]
+          rules: [{ required: true }, { validator: validateMobile, trigger: 'blur' }]
         },
         {
           // 联系人
@@ -202,7 +203,7 @@ export default {
           prop: 'supplierLinkphone',
           name: 'supplier.supplierLinkphone',
           type: 'text',
-          rules: [{ required: true }]
+          rules: [{ required: true }, { validator: validateMobile, trigger: 'blur' }]
         },
         {
           // 注册地址
