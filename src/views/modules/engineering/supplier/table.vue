@@ -115,12 +115,14 @@
             >{{ $t('update') }}</el-button>
             <!-- 修改联系人 -->
             <el-button
+              v-if="filterPermission('engineering:supplier:his:view')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="supplierLinkmanHandle(scope.row)"
             >{{ $t('supplier.hisSupplierLinkman') }}</el-button>
             <!-- 资质 -->
             <el-button
+              v-if="filterPermission('engineering:supplier:qualifications:view')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="qualificationsHandle(scope.row)"

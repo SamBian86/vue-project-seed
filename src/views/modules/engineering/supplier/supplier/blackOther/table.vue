@@ -46,6 +46,7 @@
           <!-- 拉黑当前供应商 -->
           <el-form-item>
             <el-button
+              v-if="filterPermission('engineering:supplier:black:one')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="blackHandle()"
@@ -54,6 +55,7 @@
           <!-- 全部拉黑 -->
           <el-form-item>
             <el-button
+              v-if="filterPermission('engineering:supplier:black:all')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="blackAllHandle()"

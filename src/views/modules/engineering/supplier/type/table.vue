@@ -46,7 +46,7 @@
                   @click="searchHandle()"
                 >{{ $t('query') }}</el-button>
               </el-form-item>
-              <!-- 充值 -->
+              <!-- 重置 -->
               <el-form-item>
                 <el-button
                   v-if="filterPermission('engineering:supplier:type:view')"

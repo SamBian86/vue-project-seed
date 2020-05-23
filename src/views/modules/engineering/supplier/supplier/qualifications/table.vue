@@ -25,6 +25,7 @@
           <!-- 创建 -->
           <el-form-item>
             <el-button
+              v-if="filterPermission('engineering:supplier:qualifications:save')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
@@ -74,12 +75,14 @@
           <template slot-scope="scope">
             <!-- 修改 -->
             <el-button
+              v-if="filterPermission('engineering:supplier:qualifications:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
             <el-button
+              v-if="filterPermission('engineering:supplier:qualifications:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
