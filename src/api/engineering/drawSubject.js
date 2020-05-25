@@ -76,3 +76,14 @@ export function getEngineeringDrawSubjectById(params = {}) {
     method: 'get'
   })
 }
+
+// 获取预算明细树
+// GET
+// /engineering/draw/subject/{id}/details
+export function getEngineeringDrawSubjectDetailTree(params = {}) {
+  const { id } = params
+  return request({
+    url: `/engineering/draw/subject/${id}/details`,
+    method: 'get'
+  })
+}

@@ -173,7 +173,7 @@ export default {
       this.tableConfig.highlightCurrentRow = true
       this.tableConfig.defaultExpandAll = true
       // this.tableConfig.lazy = true
-      // this.tableConfig.tableType = 'selection'
+      this.tableConfig.tableType = 'index'
       // console.log(this.$attrs)
 
       // 设置获取列表信息

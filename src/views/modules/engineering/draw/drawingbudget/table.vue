@@ -17,43 +17,36 @@
           <!-- 查询 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:land:detail:view')"
+              v-if="filterPermission('engineering:draw:detail:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
-            >
-              {{ $t('query') }}
-            </el-button>
+            >{{ $t('query') }}</el-button>
           </el-form-item> -->
           <!-- 创建 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:land:detail:save')"
+              v-if="filterPermission('engineering:draw:detail:save')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
-            >
-              {{ $t('add') }}
-            </el-button>
+            >{{ $t('add') }}</el-button>
           </el-form-item> -->
           <!-- 下载模板 -->
-          <el-form-item>
+          <!--<el-form-item>
             <el-button
+              v-if="filterPermission('engineering:draw:detail:save')"
               type="success"
               :size="tableConfig.tableSearchSize"
-              @click="
-                downloadHandle({
-                  i18nRequestMessage: 'downloadTemp',
-                  request: downloadEngineeringLandSubject,
-                  data: { excelType: 2 }
-                })
-              "
-            >
-              {{ $t('downloadTemp') }}
-            </el-button>
-          </el-form-item>
+              @click="downloadHandle({
+                i18nRequestMessage: 'downloadTemp',
+                request: null,
+                data: {excelType: 2}
+              })"
+            >{{ $t('downloadTemp') }}</el-button>
+          </el-form-item>-->
           <!-- 导入 -->
           <el-form-item>
-            <button-import v-if="filterPermission('engineering:land:detail:import')" :config="importConfig"></button-import>
+            <button-import v-if="filterPermission('engineering:draw:detail:import')" :config="importConfig"></button-import>
           </el-form-item>
           <!-- 清空选中 -->
           <!--<el-form-item>
@@ -66,18 +59,28 @@
           <!-- 导出 -->
           <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:land:detail:export')"
+              v-if="filterPermission('engineering:draw:detail:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
-              @click="exportHandle()"
+              @click="exportDetailHandle()"
             >
-              {{ $t('land.exportDetail') }}
+              {{ $t('draw.exportDetail') }}
+            </el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              v-if="filterPermission('engineering:draw:detail:export')"
+              type="primary"
+              :size="tableConfig.tableSearchSize"
+              @click="exportDifferenceHandle()"
+            >
+              {{ $t('draw.exportDifference') }}
             </el-button>
           </el-form-item>
           <!-- 批量删除 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:land:detail:delete')"
+              v-if="filterPermission('engineering:draw:detail:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
@@ -88,7 +91,7 @@
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:land:detail:xxx')"
+              v-if="filterPermission('engineering:draw:detail:xxx')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="customSectionHandle({
@@ -106,7 +109,7 @@
           <template slot-scope="scope">
             <!-- 修改 -->
             <el-button
-              v-if="filterPermission('engineering:land:detail:update')"
+              v-if="filterPermission('engineering:draw:detail:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
@@ -114,34 +117,23 @@
               {{ $t('update') }}
             </el-button>
             <!-- 单个删除 -->
-            <el-button
-              v-if="filterPermission('engineering:land:detail:delete')"
+            <!-- <el-button
+              v-if="filterPermission('engineering:draw:detail:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
-              @click="
-                deleteHandle({
-                  id: scope.row.costSubjectId,
-                  detailsId: scope.row.id
-                })
-              "
-            >
-              {{ $t('delete') }}
-            </el-button>
+              @click="deleteHandle([scope.row.id])"
+            >{{ $t('delete') }}</el-button> -->
             <!-- 单个操作 -->
             <!-- <el-button
-              v-if="filterPermission('engineering:land:detail:xxx')"
+              v-if="filterPermission('engineering:draw:detail:xxx')"
               type="text"
               :size="tableConfig.tableSearchSize"
-              @click="
-                customHandle({
-                  data: [scope.row.id],
-                  i18nRequestMessage: '国际化',
-                  request: null
-                })
-              "
-            >
-              {{ $t('ddd.ddd') }}
-            </el-button> -->
+              @click="customHandle({
+                data: [scope.row.id],
+                i18nRequestMessage: '国际化',
+                request: null
+              })"
+            >{{ $t('ddd.ddd') }}</el-button> -->
           </template>
         </el-table-column>
       </template>
@@ -154,12 +146,11 @@ import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
 import {
-  getEngineeringLandSubjectDetailTree,
-  downloadEngineeringLandSubject,
-  importEngineeringLandSubject,
-  deleteEngineeringLandSubjectDetail,
-  exportEngineeringLandSubjectDetail
-} from '@/api/engineering/landSubject'
+  getEngineeringDrawSubjectDetailTree,
+  importEngineeringDrawSubject,
+  exportEngineeringDrawSubjectDetail,
+  exportEngineeringDrawSubjectDifference
+} from '@/api/engineering/drawSubject'
 import buttonImport from '@/components/yunlin-table/button/import'
 
 export default {
@@ -197,32 +188,32 @@ export default {
       // 设置获取列表信息
       this.tableConfig.tableHead = [
         // 科目编号
-        { prop: 'costTypeCode', label: 'land.costTypeCode', width: '160' },
+        { prop: 'costTypeCode', label: 'draw.costTypeCode', width: '160' },
         // 科目名称
-        { prop: 'costTypeName', label: 'land.costTypeName' },
+        { prop: 'costTypeName', label: 'draw.costTypeName' },
         // 原始指标
-        { prop: 'costPrimitiveTarget', label: 'land.costPrimitiveTarget', width: '100' },
+        { prop: 'costPrimitiveTarget', label: 'draw.costPrimitiveTarget', width: '100' },
         // 建筑单价(元)
-        { prop: 'landbudgetUnivalence', label: 'land.landbudgetUnivalence', width: '120' },
-        // 拿地工程量
-        { prop: 'landbudgetQuantities', label: 'land.landbudgetQuantities', width: '120' },
+        { prop: 'drawingbudgetUnivalence', label: 'draw.drawingbudgetUnivalence', width: '120' },
+        // 施工图工程量
+        { prop: 'drawingbudgetQuantities', label: 'draw.drawingbudgetQuantities', width: '120' },
         // 建筑总价(元)
-        { prop: 'landbudgetTotalCost', label: 'land.landbudgetTotalCost', width: '120' },
+        { prop: 'drawingbudgetTotalCost', label: 'draw.drawingbudgetTotalCost', width: '120' },
         // 强控比例
-        { prop: 'landbudgetControlRate', label: 'land.landbudgetControlRate', width: '100' },
+        { prop: 'drawingbudgetControlRate', label: 'draw.drawingbudgetControlRate', width: '100' },
         // 单价说明
-        { prop: 'landbudgettQuantitiesRemark', label: 'land.landbudgettQuantitiesRemark' }
+        { prop: 'drawingbudgetQuantitiesRemark', label: 'draw.drawingbudgetQuantitiesRemark' }
       ]
       // 是否填充查询条件为空
       // this.tableConfig.searchFillEmpty = true
       // this.tableSearchParams = {}
       this.tableSearchParams.id = id
       // 配置列表请求
-      this.tableHandle.list.api = getEngineeringLandSubjectDetailTree
+      this.tableHandle.list.api = getEngineeringDrawSubjectDetailTree
       // 配置导出功能
-      this.tableHandle.export.api = exportEngineeringLandSubjectDetail
+      this.tableHandle.export.api = null
       // 配置删除功能
-      this.tableHandle.delete.api = deleteEngineeringLandSubjectDetail
+      // this.tableHandle.delete.api = deleteXXX
       // this.tableHandle.delete.callback = this.deleteCallback
       // 配置节点懒加载功能
       // this.tableHandle.lazy.api = lazyXXX
@@ -232,31 +223,29 @@ export default {
     },
     genrateI18nSearchItems() {
       const { id } = this.$attrs.page_drawer_data
-      // XXX
       this.importConfig = {
         format: 0,
-        uploadRequest: importEngineeringLandSubject,
+        uploadRequest: importEngineeringDrawSubject,
         uploadParams: { id },
         uploadRequestCallBack: this.uploadRequestCallBack
       }
     },
     // 创建
-    createHandle(options = { componentNames: ['yunlin-table'] }) {
-      const { id } = this.tableSearchParams
-      this.$pageSwitch('form', { pageType: 'create', ...options, costSubjectId: id })
-    },
+    // createHandle(options = { componentNames: ['yunlin-table'] }) {
+    //   this.$pageSwitch('form', { pageType: 'create', ...options })
+    // },
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-      const { id } = this.tableSearchParams
-      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options, costSubjectId: id })
+      console.log(item.id)
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
     },
-    // 下载模板
-    downloadEngineeringLandSubject() {
-      return downloadEngineeringLandSubject
+    exportDetailHandle() {
+      this.tableHandle.export.api = exportEngineeringDrawSubjectDetail
+      this.exportHandle()
     },
-    // 上传成功以后的回调
-    uploadRequestCallBack() {
-      this.searchHandle()
+    exportDifferenceHandle() {
+      this.tableHandle.export.api = exportEngineeringDrawSubjectDifference
+      this.exportHandle()
     }
   }
 }
