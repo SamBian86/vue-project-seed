@@ -59,8 +59,8 @@ export function exportEngineeringLandSubjectDetail(params = {}) {
 // 预算明细导入模板下载
 // GET
 // /engineering/land/subject/export/{excelType}
-export function exportEngineeringLandSubject(params = {}) {
-  const excelType = 2
+export function downloadEngineeringLandSubject(params = {}) {
+  const { excelType } = params
   exportFile(`/engineering/land/subject/export/${excelType}`, params)
 }
 
@@ -106,6 +106,28 @@ export function deleteEngineeringLandSubject(data = {}) {
   const { id } = data
   return request({
     url: `/engineering/land/subject/${id}`,
+    method: 'delete'
+  })
+}
+
+// 获取预算明细信息
+// GET
+// /engineering/land/subject/{id}/detail/tree
+export function getEngineeringLandSubjectDetailTree(params = {}) {
+  const { id } = params
+  return request({
+    url: `/engineering/land/subject/${id}/detail/tree`,
+    method: 'get'
+  })
+}
+
+// 删除预算明细
+// DELETE
+// /engineering/land/subject/{id}/detail/{detailsId}
+export function deleteEngineeringLandSubjectDetail(data = {}) {
+  const { id, detailsId } = data
+  return request({
+    url: `/engineering/land/subject/${id}/detail/${detailsId}`,
     method: 'delete'
   })
 }

@@ -134,8 +134,8 @@ export default {
     // 文件上传
     uploadRequest() {
       const { uploadQueue } = this
-      const { uploadRequest, uploadRequestCallBack } = this.config
-
+      const { uploadRequest, uploadRequestCallBack, uploadParams } = this.config
+      const extraParams = uploadParams || {}
       if (uploadQueue.length === 0) {
         this.uploading = false
         clearTimeout(this.timer)
@@ -143,7 +143,8 @@ export default {
       }
       const file = uploadQueue.shift()
       uploadRequest({
-        file: file.raw
+        file: file.raw,
+        ...extraParams
       })
         .then(response => {
           this.uploadFileList = []
@@ -159,10 +160,11 @@ export default {
           }
         })
         .catch(message => {
-          this.$message({
+          this.$notify({
             message,
-            type: 'error',
-            duration: 2000
+            type: 'warning',
+            dangerouslyUseHTMLString: true,
+            duration: 0
           })
         })
     }

@@ -51,7 +51,6 @@ export function importEngineeringCostType(data = {}) {
     url: `/engineering/cost/type/import`,
     method: 'post',
     dataType: 'formData',
-    responseType: 'blob',
     data
   })
 }

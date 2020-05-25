@@ -2,6 +2,7 @@
   <div>
     <yunlin-table
       ref="yunlinTable"
+      class="table-no-padding"
       :config="tableConfig"
       :handle="tableHandle"
       :searchparams="tableSearchParams"
@@ -12,12 +13,7 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form
-          class="table-search-form"
-          :inline="true"
-          :model="tableSearchParams"
-          @keyup.enter.native="searchHandle"
-        >
+        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
           <el-form-item>
             <el-input
               v-model="tableSearchParams.budgetSubjectName"
@@ -35,12 +31,7 @@
               clearable
               @clear="clearHandle"
             >
-              <el-option
-                v-for="(item, index) in projectList"
-                :key="index"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
+              <el-option v-for="(item, index) in projectList" :key="index" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <!-- 查询 -->
@@ -49,7 +40,9 @@
               v-if="filterPermission('engineering:land:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
-            >{{ $t('query') }}</el-button>
+            >
+              {{ $t('query') }}
+            </el-button>
           </el-form-item>
           <!-- 创建 -->
           <el-form-item>
@@ -58,7 +51,9 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
-            >{{ $t('add') }}</el-button>
+            >
+              {{ $t('add') }}
+            </el-button>
           </el-form-item>
           <!-- 下载模板 -->
           <!--<el-form-item>
@@ -120,28 +115,30 @@
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column
-          :label="$t('handle')"
-          align="center"
-          header-align="center"
-          fixed="right"
-          width="100"
-        >
+        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="200">
           <template slot-scope="scope">
+            <!-- 单个操作 -->
+            <el-button type="text" :size="tableConfig.tableSearchSize" @click="landbudgetHandle(scope.row)">{{
+              $t('land.landbudget')
+            }}</el-button>
             <!-- 修改 -->
             <el-button
               v-if="filterPermission('engineering:land:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >{{ $t('update') }}</el-button>
+            >
+              {{ $t('update') }}
+            </el-button>
             <!-- 单个删除 -->
             <el-button
               v-if="filterPermission('engineering:land:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
-              @click="deleteHandle({id : scope.row.id})"
-            >{{ $t('delete') }}</el-button>
+              @click="deleteHandle({ id: scope.row.id })"
+            >
+              {{ $t('delete') }}
+            </el-button>
             <!-- 单个操作 -->
             <!-- <el-button
               v-if="filterPermission('engineering:land:xxx')"
@@ -157,6 +154,9 @@
         </el-table-column>
       </template>
     </yunlin-table>
+    <yunlin-drawer ref="yunlinDrawer" :config="drawerConfig" v-bind="$attrs" @drawer-closed="drawerClosed" v-on="$listeners">
+      <component :is="drawerComponent" :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild"></component>
+    </yunlin-drawer>
   </div>
 </template>
 
@@ -164,16 +164,21 @@
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
+import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
 import { getEngineeringProjectList } from '@/api/engineering/project'
 import { getEngineeringLandSubjectPageList, deleteEngineeringLandSubject } from '@/api/engineering/landSubject'
+import landbudget from './landbudget'
 
 export default {
   name: 'Tabel',
-  components: {},
-  mixins: [pageMixin, tableDefaultMixin],
+  components: { landbudget },
+  mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
   data() {
     return {
-      projectList: []
+      projectList: [],
+      drawerComponents: {
+        landbudget: landbudget
+      }
     }
   },
   computed: {
@@ -195,6 +200,7 @@ export default {
       this.tableConfig.rowKey = 'id'
       // this.tableConfig.hasPagination = false
       // this.tableConfig.highlightCurrentRow = true
+      // this.tableConfig.defaultExpandAll = true
       // this.tableConfig.lazy = true
       // this.tableConfig.tableType = 'selection'
       // console.log(this.$attrs)
@@ -202,15 +208,15 @@ export default {
       // 设置获取列表信息
       this.tableConfig.tableHead = [
         // 项目名称
-        { prop: 'projectId', label: 'land.projectId', width: '160' },
+        { prop: 'projectName', label: 'land.projectName', width: '160' },
         // 预算主题
-        { prop: 'budgetSubjectName', label: 'land.budgetSubjectName' },
+        { prop: 'budgetSubjectName', label: 'land.budgetSubjectName', width: '160' },
         // 预算人
         { prop: 'landbudgetUserName', label: 'land.landbudgetUserId', width: '100' },
         // 预算部门
         { prop: 'landbudgetDeptName', label: 'land.landbudgetDeptId', width: '100' },
         // 预算时间
-        { prop: 'landbudgetTime', label: 'land.landbudgetTime', width: '120' },
+        { prop: 'landbudgetTime', label: 'land.landbudgetTime', width: '160' },
         // 预算说明
         { prop: 'landbudgetRemark', label: 'land.landbudgetRemark' }
       ]
@@ -232,6 +238,8 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteEngineeringLandSubject
       // console.log('table page created')
+
+      this.drawerConfig.size = '95%'
     },
     genrateI18nSearchItems() {
       getEngineeringProjectList().then(response => {
@@ -250,6 +258,12 @@ export default {
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
       this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
+    },
+    landbudgetHandle(row) {
+      this.setDrawerComponent('landbudget')
+      this.setDrawerData(row)
+      this.setDrawerTitle(row.budgetSubjectName)
+      this.drawerVisibleHandle()
     }
   }
 }

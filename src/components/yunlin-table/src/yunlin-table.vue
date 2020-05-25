@@ -10,6 +10,7 @@
       :lazy="$attrs.config.lazy"
       :load="lazyLoadHandle"
       :highlight-current-row="$attrs.config.highlightCurrentRow"
+      :default-expand-all="$attrs.config.defaultExpandAll"
       border
       style="width: 100%;"
       @selection-change="tableSelectionChangeHandle"
@@ -191,7 +192,7 @@ export default {
     searchHandle() {
       // 获取列表数据
       const { query } = this
-      const { hasPagination, searchFillEmpty } = this.$attrs.config
+      const { hasPagination, searchFillEmpty, tableDataFrom } = this.$attrs.config
       const searchParams = this.$attrs.searchparams
 
       const _query = {}
@@ -228,10 +229,18 @@ export default {
       this.getListBridge({ ...params })
         .then(response => {
           if (hasPagination) {
-            this.tableData = response.list
+            if (tableDataFrom) {
+              this.tableData = tableDataFrom(response)
+            } else {
+              this.tableData = response.list
+            }
             this.pagination.total = response.total
           } else {
-            this.tableData = response
+            if (tableDataFrom) {
+              this.tableData = tableDataFrom(response)
+            } else {
+              this.tableData = response
+            }
           }
 
           this.loading = false

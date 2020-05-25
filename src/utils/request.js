@@ -81,7 +81,7 @@ service.interceptors.response.use(
         router.replace({ name: 'login' })
       } else {
         // 调用方在页面处理
-        if (code === 10004 || code === 10007 || code === 10008 || code === 10018) {
+        if (code === 10004 || code === 10007 || code === 10008 || code === 10018 || code === 100006025) {
           return Promise.reject(msg)
         }
 

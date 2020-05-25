@@ -53,7 +53,7 @@ export default {
     }
   },
   created() {
-    // console.log('form default mixin created')
+    // console.log('form-default-mixin created')
   },
   activated() {
     // 重新获取数据以后需要管理pagemixin中的pageUpdateList

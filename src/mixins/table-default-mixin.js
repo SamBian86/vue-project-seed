@@ -9,11 +9,13 @@ export default {
         tableSearchSize: 'small',
         tableHead: [], // 表格表头
         tableType: '', // 表格类型
+        tableDataFrom: null,
         rowKey: '', // 支持多层显示
         searchFillEmpty: false, // 是否填充查询条件为空
         hasPagination: true, // 是否分页组件
         lazy: false, // 是否懒加载子节点
         highlightCurrentRow: false, // 是否开启单选
+        defaultExpandAll: false, // 默认是否展开所有项
         paginationConfig: {
           query: {
             page: 1, // 第几页

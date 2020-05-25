@@ -6,7 +6,7 @@ export default {
   },
   computed: {},
   created() {
-    // console.log('form mixin created')
+    // console.log('form-mixin created')
   },
   activated() {
     // console.log('form mixin activated')

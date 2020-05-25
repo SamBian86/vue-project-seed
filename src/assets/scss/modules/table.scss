@@ -6,6 +6,11 @@
   margin-right: 0px;
 }
 
+.table-no-padding .el-table td,
+.table-no-padding .el-table th {
+  padding: 0px 0;
+}
+
 .el-pagination {
   margin-top: 15px;
   text-align: right;

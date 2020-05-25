@@ -49,11 +49,9 @@
                 :disabled="item.disabled"
                 @change="formValueListener(item.prop, $event)"
               >
-                <el-radio
-                  v-for="(ite, idx) in item.items"
-                  :key="idx"
-                  :label="ite.label"
-                >{{ ite.i18n === false ? ite.name : $t(ite.name) }}</el-radio>
+                <el-radio v-for="(ite, idx) in item.items" :key="idx" :label="ite.label">{{
+                  ite.i18n === false ? ite.name : $t(ite.name)
+                }}</el-radio>
               </el-radio-group>
             </template>
             <!-- select -->
@@ -76,12 +74,7 @@
                   ></el-option>
                 </template>
                 <template v-else>
-                  <el-option
-                    v-for="(ite, idx) in item.items"
-                    :key="idx"
-                    :label="$t(ite.label)"
-                    :value="ite.value"
-                  ></el-option>
+                  <el-option v-for="(ite, idx) in item.items" :key="idx" :label="$t(ite.label)" :value="ite.value"></el-option>
                 </template>
               </el-select>
             </template>
@@ -187,6 +180,7 @@ export default {
   watch: {},
   breforeCreate() {},
   created() {
+    // console.log('yunlin-form created')
     // console.log(ToolComponents)
     // console.log(this)
   },
@@ -295,9 +289,9 @@ export default {
       })
     },
     // 表单元素处理,控制隐藏显示
-    formValueListener(prop, $event, $afterChange) {
-      if ($afterChange) {
-        this.$formResetConfigItem($afterChange())
+    formValueListener(prop, $event, afterChange) {
+      if (afterChange) {
+        this.$formResetConfigItem(afterChange())
       }
       this.$formValueListener(prop)
     }
