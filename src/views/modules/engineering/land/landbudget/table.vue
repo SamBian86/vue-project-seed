@@ -64,7 +64,7 @@
             >{{ t('clearCurrent') }}</el-button>
           </el-form-item>-->
           <!-- 导出 -->
-          <!-- <el-form-item>
+          <el-form-item>
             <el-button
               v-if="filterPermission('engineering:land:detail:export')"
               type="primary"
@@ -73,7 +73,7 @@
             >
               {{ $t('export') }}
             </el-button>
-          </el-form-item> -->
+          </el-form-item>
           <!-- 批量删除 -->
           <!-- <el-form-item>
             <el-button
@@ -157,7 +157,8 @@ import {
   getEngineeringLandSubjectDetailTree,
   downloadEngineeringLandSubject,
   importEngineeringLandSubject,
-  deleteEngineeringLandSubjectDetail
+  deleteEngineeringLandSubjectDetail,
+  exportEngineeringLandSubjectDetail
 } from '@/api/engineering/landSubject'
 import buttonImport from '@/components/yunlin-table/button/import'
 
@@ -219,7 +220,7 @@ export default {
       // 配置列表请求
       this.tableHandle.list.api = getEngineeringLandSubjectDetailTree
       // 配置导出功能
-      // this.tableHandle.export.api = exportXXX
+      this.tableHandle.export.api = exportEngineeringLandSubjectDetail
       // 配置删除功能
       this.tableHandle.delete.api = deleteEngineeringLandSubjectDetail
       // this.tableHandle.delete.callback = this.deleteCallback

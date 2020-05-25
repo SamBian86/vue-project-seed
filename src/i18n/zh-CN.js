@@ -613,4 +613,5 @@ t.land.landbudgetQuantities = '工程量'
 t.land.landbudgetTotalCost = '建筑总价(元)'
 t.land.landbudgetControlRate = '强控比例'
 t.land.landbudgettQuantitiesRemark = '单价说明'
+
 export default t
