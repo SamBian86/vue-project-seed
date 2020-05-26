@@ -38,11 +38,10 @@ export function deleteEngineeringSupplier(data = []) {
 // 列表查询
 // GET
 // /engineering/supplier/list
-export function getEngineeringSupplierList(params = {}) {
+export function getEngineeringSupplierList() {
   return request({
     url: `/engineering/supplier/list`,
-    method: 'get',
-    params
+    method: 'get'
   })
 }
 

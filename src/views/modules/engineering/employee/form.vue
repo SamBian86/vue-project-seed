@@ -237,7 +237,7 @@ export default {
             item.prop = 'constractEndTime'
             item.pickerOptions = {
               disabledDate(time) {
-                return time.getTime() < new Date(contractStartTime + ' 00:00:00').getTime()
+                return time.getTime() < new Date(contractStartTime.replace('-', '/') + ' 00:00:00').getTime()
               }
             }
             props.push(item)

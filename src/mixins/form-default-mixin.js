@@ -141,8 +141,10 @@ export default {
       const inputTypes = ['text', 'input-number', 'editor']
       const changeTypes = [
         'select',
+        'button',
         'select-dynamic',
         'date-picker',
+        'date-time-picker',
         'radio-group',
         'popover-tree',
         'popover-icon',

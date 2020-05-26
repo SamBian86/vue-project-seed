@@ -41,6 +41,17 @@ export default {
         // 懒加载列表数据
         lazy: { api: null, callback: null }
       },
+      tableColumnAction: [
+        // {
+        //   searchParam: 'contractStatus', // 被检查的查询字段
+        //   exclude: [
+        //     { value: 0, props: ['currentExaminer'] }, // 当前查询字段
+        //     { value: 1, props: [] },
+        //     { value: 2, props: ['currentExaminer'] },
+        //     { value: 3, props: ['currentExaminer'] }
+        //   ]
+        // }
+      ], // 不同查询条件列显示控制
       tableSections: [], // 如果tableType是section类型勾选的值将会保存在这
       tableCurrent: null // 如果highlightCurrentRow是true，开启单选，选中会将值保存在此处
     }
@@ -58,14 +69,56 @@ export default {
   },
   methods: {
     generateTable() {
+      const { tableSearchParams, tableColumnAction } = this
       const { tableHeadReadOnly } = this.tableConfig
-      let generateProps = [] // 存放需要生成的props
-      generateProps = tableHeadReadOnly.filter(item => item.show !== false)
+      const generateProps = [] // 存放需要生成的props
+      let excludeProps = []
+
+      tableColumnAction.map(ite => {
+        const value = tableSearchParams[ite.searchParam]
+        const exclude = ite.exclude.find(e => e.value === value)
+        excludeProps = excludeProps.concat(exclude.props)
+      })
+      excludeProps = Array.from(new Set([...excludeProps]))
+      tableHeadReadOnly.forEach(item => {
+        if (excludeProps.includes(item.prop)) {
+          item.show = false
+        } else {
+          item.show = true
+        }
+        generateProps.push(item)
+      })
+      // console.log(generateProps)
       // 开始渲染页面
       this.tableConfig.tableHead = generateProps
     },
+    // 时间控件联动处理
+    dateHandle(param, value) {
+      this.$set(this.tableSearchParams, param, '')
+      if (!value) {
+        this[`${param}PickerOptions`] = {}
+      } else {
+        let _value = value.replace('-', '/')
+        if (!/:/.test(_value)) {
+          _value += ' 00:00:00'
+        }
+        this[`${param}PickerOptions`] = {
+          disabledDate(time) {
+            return time.getTime() < new Date(_value)
+          }
+        }
+      }
+      // console.log(param, value)
+    },
+    generateColumn() {
+      const { tableColumnAction } = this
+      if (tableColumnAction.length !== 0) {
+        this.generateTable()
+      }
+    },
     // 查询
     searchHandle() {
+      this.generateColumn()
       const { tableName } = this.tableConfig
       this.$refs[tableName].searchHandle()
     },

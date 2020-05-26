@@ -49,9 +49,11 @@
                 :disabled="item.disabled"
                 @change="formValueListener(item.prop, $event)"
               >
-                <el-radio v-for="(ite, idx) in item.items" :key="idx" :label="ite.label">{{
-                  ite.i18n === false ? ite.name : $t(ite.name)
-                }}</el-radio>
+                <el-radio
+                  v-for="(ite, idx) in item.items"
+                  :key="idx"
+                  :label="ite.label"
+                >{{ ite.i18n === false ? ite.name : $t(ite.name) }}</el-radio>
               </el-radio-group>
             </template>
             <!-- select -->
@@ -74,9 +76,21 @@
                   ></el-option>
                 </template>
                 <template v-else>
-                  <el-option v-for="(ite, idx) in item.items" :key="idx" :label="$t(ite.label)" :value="ite.value"></el-option>
+                  <el-option
+                    v-for="(ite, idx) in item.items"
+                    :key="idx"
+                    :label="$t(ite.label)"
+                    :value="ite.value"
+                  ></el-option>
                 </template>
               </el-select>
+            </template>
+            <!-- button -->
+            <template v-if="item.type === 'button'">
+              <el-button
+                :type="item.buttonType"
+                @click.stop.prevent="item.clickHandle"
+              >{{ $t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}` }}</el-button>
             </template>
             <!-- date-picker -->
             <template v-if="item.type === 'date-picker'">
@@ -84,6 +98,19 @@
                 v-model="$attrs.data[item.prop]"
                 :class="item.className || ''"
                 type="date"
+                :format="item.format"
+                :value-format="item.valueFormat"
+                :placeholder="$t(item.placeholder) || item.placeholderText || `请选择${$t(item.name)}`"
+                :picker-options="item.pickerOptions"
+                @change="formValueListener(item.prop, $event, item.afterChange)"
+              ></el-date-picker>
+            </template>
+            <!-- date-time-picker -->
+            <template v-if="item.type === 'date-time-picker'">
+              <el-date-picker
+                v-model="$attrs.data[item.prop]"
+                :class="item.className || ''"
+                type="datetime"
                 :format="item.format"
                 :value-format="item.valueFormat"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请选择${$t(item.name)}`"

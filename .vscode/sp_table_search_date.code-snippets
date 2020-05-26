@@ -1,0 +1,22 @@
+{
+  "table代码片段_查询条件_date": {
+    "prefix": "sp_table_search_date",
+    "body": [
+      "<el-form-item>\r",
+      "  <el-date-picker\r",
+      "    v-model=\"tableSearchParams.字段名$1\"\r",
+      "    :placeholder=\"$t('国际化$2')\"\r",
+      "    :size=\"tableConfig.tableSearchSize\"\r",
+      "    type=\"date\"\r",
+      "    format=\"yyyy-MM-dd\"\r",
+      "    value-format=\"yyyy-MM-dd\"\r",
+      "    :picker-options=\"字段名$3PickerOptions\"\r",
+      "    clearable\r",
+      "    @change=\"dateHandle('字段名$4', $event)\"\r",
+      "    @clear=\"clearHandle\"\r",
+      "  ></el-date-picker>\r",
+      "</el-form-item>$3"
+    ],
+    "description": "table代码片段_查询条件_date"
+  }
+}

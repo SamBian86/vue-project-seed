@@ -1,0 +1,19 @@
+{
+  "form代码片段_button": {
+    "prefix": "sp_form_item_button",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  placeholder: '国际化$4',\r",
+      "  type: 'button',\r",
+      "  buttonType: 'text',\r",
+      "  clickHandle: this.XXXHandle,\r",
+      "  rules: [{ required: true }]\r",
+      "},$5"
+    ],
+    "description": "form代码片段_button"
+  }
+}
