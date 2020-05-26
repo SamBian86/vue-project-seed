@@ -8,6 +8,7 @@ export default {
         tableName: 'yunlinTable', // 表格名称，请与父组件ref名称相同
         tableSearchSize: 'small',
         tableHead: [], // 表格表头
+        tableHeadReadOnly: [], // 初始表单项
         tableType: '', // 表格类型
         tableDataFrom: null,
         rowKey: '', // 支持多层显示
@@ -56,6 +57,13 @@ export default {
     // console.log('table default mixin activated')
   },
   methods: {
+    generateTable() {
+      const { tableHeadReadOnly } = this.tableConfig
+      let generateProps = [] // 存放需要生成的props
+      generateProps = tableHeadReadOnly.filter(item => item.show !== false)
+      // 开始渲染页面
+      this.tableConfig.tableHead = generateProps
+    },
     // 查询
     searchHandle() {
       const { tableName } = this.tableConfig

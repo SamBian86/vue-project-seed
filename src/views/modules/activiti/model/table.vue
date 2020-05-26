@@ -48,12 +48,12 @@
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
             >{{ $t('export') }}</el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 批量删除 -->
           <el-form-item>
-            <el-button type="danger" :size="tableConfig.tableSearchSize" @click="deleteSectionHandle()">{{
-              $t('deleteBatch')
-            }}</el-button>
+            <el-button type="danger" :size="tableConfig.tableSearchSize" @click="deleteSectionHandle()">
+              {{ $t('deleteBatch') }}
+            </el-button>
           </el-form-item>
           <!-- 批量操作 -->
           <!-- <el-form-item>
@@ -106,7 +106,7 @@
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >{{ $t('update') }}</el-button> -->
+            >{{ $t('update') }}</el-button>-->
             <!-- 导出 -->
             <el-button
               type="text"
@@ -121,9 +121,9 @@
               {{ $t('export') }}
             </el-button>
             <!-- 单个删除 -->
-            <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle([scope.row.id])">{{
-              $t('delete')
-            }}</el-button>
+            <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle([scope.row.id])">
+              {{ $t('delete') }}
+            </el-button>
           </template>
         </el-table-column>
       </template>
@@ -173,7 +173,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 名称
         { prop: 'name', label: 'model.name', width: '140', align: 'center' },
         // 标识 key
@@ -200,6 +200,7 @@ export default {
       // 配置section删除功能
       this.tableHandle.deleteSection.api = deleteActivitiModel
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

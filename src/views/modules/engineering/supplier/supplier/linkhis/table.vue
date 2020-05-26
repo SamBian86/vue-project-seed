@@ -134,7 +134,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 联系人
         { prop: 'supplierLinkman', label: 'supplierLinkhis.supplierLinkman', width: '160', align: 'center' },
         // 联系电话
@@ -158,6 +158,7 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteXXX
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

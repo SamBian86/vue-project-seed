@@ -12,24 +12,37 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableSearchParams"
+          @keyup.enter.native="searchHandle"
+        >
           <!-- 查询 -->
           <!-- <el-form-item>
             <el-button :size="tableConfig.tableSearchSize" @click="searchHandle()">
               {{ $t('query') }}
             </el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 上传文件 -->
           <el-form-item>
-            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="createHandle()">
-              {{ $t('oss.upload') }}
-            </el-button>
+            <el-button
+              type="primary"
+              :size="tableConfig.tableSearchSize"
+              @click="createHandle()"
+            >{{ $t('oss.upload') }}</el-button>
           </el-form-item>
           <!-- 云存储配置 -->
           <el-form-item>
-            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="ossConfigHandle()">{{
+            <el-button
+              type="primary"
+              :size="tableConfig.tableSearchSize"
+              @click="ossConfigHandle()"
+            >
+              {{
               $t('oss.config')
-            }}</el-button>
+              }}
+            </el-button>
           </el-form-item>
           <!-- 导出 -->
           <!-- <el-form-item>
@@ -42,9 +55,11 @@
           </el-form-item>-->
           <!-- 批量删除 -->
           <el-form-item>
-            <el-button type="danger" :size="tableConfig.tableSearchSize" @click="deleteSectionHandle()">
-              {{ $t('deleteBatch') }}
-            </el-button>
+            <el-button
+              type="danger"
+              :size="tableConfig.tableSearchSize"
+              @click="deleteSectionHandle()"
+            >{{ $t('deleteBatch') }}</el-button>
           </el-form-item>
           <!-- 批量操作 -->
           <!-- <el-form-item>
@@ -63,7 +78,13 @@
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="100">
+        <el-table-column
+          :label="$t('handle')"
+          align="center"
+          header-align="center"
+          fixed="right"
+          width="100"
+        >
           <template slot-scope="scope">
             <!-- 修改 -->
             <!-- <el-button
@@ -72,16 +93,24 @@
               @click="editHandle(scope.row)"
             >
               {{ $t('update') }}
-            </el-button> -->
+            </el-button>-->
             <!-- 单个删除 -->
-            <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle([scope.row.id])">
-              {{ $t('delete') }}
-            </el-button>
+            <el-button
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="deleteHandle([scope.row.id])"
+            >{{ $t('delete') }}</el-button>
           </template>
         </el-table-column>
       </template>
     </yunlin-table>
-    <yunlin-drawer ref="yunlinDrawer" :config="drawerConfig" v-bind="$attrs" @drawer-closed="drawerClosed" v-on="$listeners">
+    <yunlin-drawer
+      ref="yunlinDrawer"
+      :config="drawerConfig"
+      v-bind="$attrs"
+      @drawer-closed="drawerClosed"
+      v-on="$listeners"
+    >
       <component
         :is="drawerComponent"
         :drawer-data="drawerData"
@@ -142,7 +171,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // URL地址
         { prop: 'url', label: 'oss.url', align: 'center' },
         // 创建时间
@@ -163,6 +192,7 @@ export default {
       // 配置section删除功能
       this.tableHandle.deleteSection.api = deleteOssFile
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

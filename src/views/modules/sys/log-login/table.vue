@@ -133,7 +133,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 用户名
         { prop: 'creatorName', label: 'logLogin.creatorName', width: '160', align: 'center' },
         // 操作类型
@@ -212,6 +212,7 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteXXX
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // 登录日志状态

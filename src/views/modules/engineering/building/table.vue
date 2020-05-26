@@ -155,7 +155,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 项目名称
         { prop: 'projectName', label: 'building.projectName', width: '200', align: 'center', sortable: true },
         // 楼栋号
@@ -180,6 +180,7 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteEngineeringBuilding
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

@@ -112,7 +112,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         { prop: 'paramCode', label: 'params.paramCode', minWidth: '200', align: 'center' },
         { prop: 'paramValue', label: 'params.paramValue', minWidth: '200', align: 'center' },
         { prop: 'remark', label: 'params.remark', width: '300', align: 'center' }
@@ -124,6 +124,7 @@ export default {
       // 配置section删除功能
       this.tableHandle.deleteSection.api = deleteParams
       // console.log('table page created')
+      this.generateTable()
     },
     createHandle(options = { componentNames: ['yunlin-table'] }) {
       this.$pageSwitch('form', { pageType: 'create', ...options })

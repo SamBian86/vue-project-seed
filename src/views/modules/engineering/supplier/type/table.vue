@@ -181,7 +181,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 类别名称
         { prop: 'typeName', label: 'supplierType.typeName', width: '200', align: 'center' },
         // 上级类别
@@ -205,6 +205,7 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteEngineeringSupplierType
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

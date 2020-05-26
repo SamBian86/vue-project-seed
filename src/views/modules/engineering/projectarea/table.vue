@@ -155,7 +155,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 区域名称
         { prop: 'name', label: 'projectarea.name', width: '160', align: 'center', sortable: true },
         // 下属项目个数
@@ -178,6 +178,7 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteEngineeringProjectarea
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

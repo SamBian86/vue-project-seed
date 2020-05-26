@@ -229,7 +229,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // bean名称
         { prop: 'beanName', label: 'schedule.beanName', align: 'center' },
         // 参数
@@ -278,6 +278,7 @@ export default {
       // 配置section删除功能
       this.tableHandle.deleteSection.api = deleteJobSchedule
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {},
     // 创建

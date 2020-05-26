@@ -44,12 +44,12 @@
             >
               {{ $t('add') }}
             </el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 打开draw -->
           <el-form-item>
-            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="deployFileHandle()">{{
-              $t('process.deployFile')
-            }}</el-button>
+            <el-button type="primary" :size="tableConfig.tableSearchSize" @click="deployFileHandle()">
+              {{ $t('process.deployFile') }}
+            </el-button>
           </el-form-item>
           <!-- 导出 -->
           <!-- <el-form-item>
@@ -62,9 +62,9 @@
           </el-form-item>-->
           <!-- 批量删除 -->
           <el-form-item>
-            <el-button type="danger" :size="tableConfig.tableSearchSize" @click="deleteSectionHandle()">
-              {{ $t('deleteBatch') }}
-            </el-button>
+            <el-button type="danger" :size="tableConfig.tableSearchSize" @click="deleteSectionHandle()">{{
+              $t('deleteBatch')
+            }}</el-button>
           </el-form-item>
           <!-- 批量操作 -->
           <!-- <el-form-item>
@@ -122,11 +122,11 @@
               @click="editHandle(scope.row)"
             >
               {{ $t('update') }}
-            </el-button> -->
+            </el-button>-->
             <!-- 单个删除 -->
-            <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle([scope.row.deploymentId])">
-              {{ $t('delete') }}
-            </el-button>
+            <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle([scope.row.deploymentId])">{{
+              $t('delete')
+            }}</el-button>
             <!-- 转换为模型 -->
             <el-button
               type="text"
@@ -142,9 +142,9 @@
               {{ $t('process.convertToModel') }}
             </el-button>
             <!-- 配置业务路由 -->
-            <el-button type="text" :size="tableConfig.tableSearchSize" @click="routeConfigHandle(scope.row)">
-              {{ $t('process.bizRouteSet') }}
-            </el-button>
+            <el-button type="text" :size="tableConfig.tableSearchSize" @click="routeConfigHandle(scope.row)">{{
+              $t('process.bizRouteSet')
+            }}</el-button>
             <!-- 单个操作 -->
             <!-- <el-button
               v-if="filterPermission('xxx:xxx:xxx')"
@@ -159,7 +159,7 @@
               "
             >
               {{ $t('ddd.ddd') }}
-            </el-button> -->
+            </el-button>-->
           </template>
         </el-table-column>
       </template>
@@ -235,7 +235,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 流程id
         { prop: 'id', label: 'process.id', width: '160', align: 'center' },
         // 部署id
@@ -282,6 +282,7 @@ export default {
       // 配置section删除功能
       this.tableHandle.deleteSection.api = deleteActivitiProcess
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

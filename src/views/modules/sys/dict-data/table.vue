@@ -123,7 +123,7 @@ export default {
       this.tableSearchParams.dictTypeId = id
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         { prop: 'dictValue', label: 'dict.dictValue', width: '80', align: 'center' },
         { prop: 'dictLabel', label: 'dict.dictLabel', width: '150', align: 'center' },
         { prop: 'sort', label: 'dict.sort', width: '50', align: 'center' },
@@ -137,6 +137,7 @@ export default {
       // 配置section删除功能
       this.tableHandle.deleteSection.api = deleteDictData
       // console.log('table page created')
+      this.generateTable()
     },
     createHandle(options = { componentNames: ['yunlin-table'] }) {
       const { dictTypeId } = this.tableSearchParams

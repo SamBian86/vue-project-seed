@@ -86,13 +86,13 @@
               @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>-->
             <!-- 单个删除 -->
-            <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle({ id: scope.row.id })">{{
-              $t('delete')
-            }}</el-button>
-            <!-- 查看流程图 -->
-            <el-button type="text" :size="tableConfig.tableSearchSize" @click="viewFlowImageHandle(scope.row)">
-              {{ $t('process.viewFlowImage') }}
+            <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle({ id: scope.row.id })">
+              {{ $t('delete') }}
             </el-button>
+            <!-- 查看流程图 -->
+            <el-button type="text" :size="tableConfig.tableSearchSize" @click="viewFlowImageHandle(scope.row)">{{
+              $t('process.viewFlowImage')
+            }}</el-button>
           </template>
         </el-table-column>
       </template>
@@ -150,7 +150,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 实例ID
         { prop: 'processInstanceId', label: 'running.id', width: '160', align: 'center' },
         // 定义KEY
@@ -201,6 +201,7 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteActivitiRunning
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

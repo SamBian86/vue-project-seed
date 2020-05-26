@@ -12,7 +12,12 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableSearchParams"
+          @keyup.enter.native="searchHandle"
+        >
           <el-form-item>
             <el-input
               v-model="tableSearchParams.name"
@@ -24,9 +29,15 @@
           </el-form-item>
           <!-- 查询 -->
           <el-form-item>
-            <el-button v-if="filterPermission('sys:role:view')" :size="tableConfig.tableSearchSize" @click="searchHandle()">{{
+            <el-button
+              v-if="filterPermission('sys:role:view')"
+              :size="tableConfig.tableSearchSize"
+              @click="searchHandle()"
+            >
+              {{
               $t('query')
-            }}</el-button>
+              }}
+            </el-button>
           </el-form-item>
           <!-- 创建 -->
           <el-form-item>
@@ -35,9 +46,7 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
-            >
-              {{ $t('add') }}
-            </el-button>
+            >{{ $t('add') }}</el-button>
           </el-form-item>
           <!-- 导出 -->
           <!-- <el-form-item>
@@ -49,7 +58,7 @@
             >
               {{ $t('export') }}
             </el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 批量删除 -->
           <el-form-item>
             <el-button
@@ -57,9 +66,7 @@
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
-            >
-              {{ $t('deleteBatch') }}
-            </el-button>
+            >{{ $t('deleteBatch') }}</el-button>
           </el-form-item>
           <!-- 批量操作 -->
           <!-- <el-form-item>
@@ -78,7 +85,13 @@
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="100">
+        <el-table-column
+          :label="$t('handle')"
+          align="center"
+          header-align="center"
+          fixed="right"
+          width="100"
+        >
           <template slot-scope="scope">
             <!-- 修改 -->
             <el-button
@@ -86,18 +99,14 @@
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >
-              {{ $t('update') }}
-            </el-button>
+            >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
             <el-button
               v-if="filterPermission('sys:role:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
-            >
-              {{ $t('delete') }}
-            </el-button>
+            >{{ $t('delete') }}</el-button>
           </template>
         </el-table-column>
       </template>
@@ -141,7 +150,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 名称
         { prop: 'name', label: 'role.name', width: '200', align: 'center' },
         // 备注
@@ -166,6 +175,7 @@ export default {
       // 配置section删除功能
       this.tableHandle.deleteSection.api = deleteSysRole
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

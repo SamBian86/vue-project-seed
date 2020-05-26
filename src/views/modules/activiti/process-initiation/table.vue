@@ -12,7 +12,12 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableSearchParams"
+          @keyup.enter.native="searchHandle"
+        >
           <el-form-item>
             <el-input
               v-model="tableSearchParams.processName"
@@ -38,17 +43,17 @@
           <!-- 创建 -->
           <!-- <el-form-item>
             <el-button type="primary" :size="tableConfig.tableSearchSize" @click="createHandle()">{{ $t('add') }}</el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 导出 -->
           <!-- <el-form-item>
             <el-button type="primary" :size="tableConfig.tableSearchSize" @click="exportHandle()">{{ $t('export') }}</el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 批量删除 -->
           <!-- <el-form-item>
             <el-button type="danger" :size="tableConfig.tableSearchSize" @click="deleteSectionHandle()">{{
               $t('deleteBatch')
             }}</el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
@@ -66,16 +71,22 @@
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="100">
+        <el-table-column
+          :label="$t('handle')"
+          align="center"
+          header-align="center"
+          fixed="right"
+          width="100"
+        >
           <template slot-scope="scope">
             <!-- 修改 -->
             <!-- <el-button type="text" :size="tableConfig.tableSearchSize" @click="editHandle(scope.row)">{{
               $t('update')
-            }}</el-button> -->
+            }}</el-button>-->
             <!-- 单个删除 -->
             <!-- <el-button type="text" :size="tableConfig.tableSearchSize" @click="deleteHandle([scope.row.id])">{{
               $t('delete')
-            }}</el-button> -->
+            }}</el-button>-->
             <!-- 单个操作 -->
             <el-button
               type="text"
@@ -87,9 +98,7 @@
                   request: getProcDefBizRouteById
                 })
               "
-            >
-              {{ $t('process.createInstance') }}
-            </el-button>
+            >{{ $t('process.createInstance') }}</el-button>
           </template>
         </el-table-column>
       </template>
@@ -140,7 +149,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 流程ID
         { prop: 'id', label: 'process.id', width: '160', align: 'center' },
         // 部署ID
@@ -187,6 +196,7 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteXXX
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

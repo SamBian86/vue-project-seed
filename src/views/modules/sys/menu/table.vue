@@ -84,7 +84,7 @@ export default {
       this.tableConfig.rowKey = 'id'
       this.tableConfig.hasPagination = false
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         { prop: 'name', label: 'menu.name', minWidth: '110' },
         {
           prop: 'icon',
@@ -126,6 +126,7 @@ export default {
       // 配置删除功能
       this.tableHandle.delete.api = deleteMenu
       // console.log('table page created')
+      this.generateTable()
     },
     createHandle(options = { componentNames: ['yunlin-table', 'popover-tree'] }) {
       this.$pageSwitch('form', { pageType: 'create', ...options })

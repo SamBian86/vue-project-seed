@@ -13,7 +13,12 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableSearchParams"
+          @keyup.enter.native="searchHandle"
+        >
           <el-form-item>
             <el-input
               v-model="tableSearchParams.budgetSubjectName"
@@ -31,7 +36,12 @@
               clearable
               @clear="clearHandle"
             >
-              <el-option v-for="(item, index) in projectList" :key="index" :label="item.name" :value="item.id"></el-option>
+              <el-option
+                v-for="(item, index) in projectList"
+                :key="index"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <!-- 查询 -->
@@ -40,9 +50,7 @@
               v-if="filterPermission('engineering:land:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
-            >
-              {{ $t('query') }}
-            </el-button>
+            >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
           <el-form-item>
@@ -51,9 +59,7 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
-            >
-              {{ $t('add') }}
-            </el-button>
+            >{{ $t('add') }}</el-button>
           </el-form-item>
           <!-- 下载模板 -->
           <!--<el-form-item>
@@ -115,30 +121,38 @@
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="200">
+        <el-table-column
+          :label="$t('handle')"
+          align="center"
+          header-align="center"
+          fixed="right"
+          width="200"
+        >
           <template slot-scope="scope">
             <!-- 单个操作 -->
-            <el-button type="text" :size="tableConfig.tableSearchSize" @click="landbudgetHandle(scope.row)">{{
+            <el-button
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="landbudgetHandle(scope.row)"
+            >
+              {{
               $t('land.landbudget')
-            }}</el-button>
+              }}
+            </el-button>
             <!-- 修改 -->
             <el-button
               v-if="filterPermission('engineering:land:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >
-              {{ $t('update') }}
-            </el-button>
+            >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
             <el-button
               v-if="filterPermission('engineering:land:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle({ id: scope.row.id })"
-            >
-              {{ $t('delete') }}
-            </el-button>
+            >{{ $t('delete') }}</el-button>
             <!-- 单个操作 -->
             <!-- <el-button
               v-if="filterPermission('engineering:land:xxx')"
@@ -154,8 +168,18 @@
         </el-table-column>
       </template>
     </yunlin-table>
-    <yunlin-drawer ref="yunlinDrawer" :config="drawerConfig" v-bind="$attrs" @drawer-closed="drawerClosed" v-on="$listeners">
-      <component :is="drawerComponent" :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild"></component>
+    <yunlin-drawer
+      ref="yunlinDrawer"
+      :config="drawerConfig"
+      v-bind="$attrs"
+      @drawer-closed="drawerClosed"
+      v-on="$listeners"
+    >
+      <component
+        :is="drawerComponent"
+        :drawer-data="drawerData"
+        @drawer-close-by-child="drawerCloseByChild"
+      ></component>
     </yunlin-drawer>
   </div>
 </template>
@@ -206,7 +230,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 项目名称
         { prop: 'projectName', label: 'land.projectName', width: '160' },
         // 预算主题
@@ -240,6 +264,7 @@ export default {
       // console.log('table page created')
 
       this.drawerConfig.size = '95%'
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       getEngineeringProjectList().then(response => {

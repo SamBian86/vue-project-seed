@@ -31,36 +31,38 @@
         align="center"
         width="50"
       ></el-table-column>
-      <el-table-column
-        v-for="item in $attrs.config.tableHead"
-        :key="item.id"
-        :prop="item.prop"
-        :label="$t(item.label)"
-        :align="item.align"
-        :header-align="item.headerAlign"
-        :fixed="item.fixed"
-        :width="item.width"
-        :min-width="item.minWidth"
-        :sortable="item.sortable === null || item.sortable === false ? false : item.sortable"
-        :show-overflow-tooltip="item.showOverFlowTooltip === undefined ? true : item.showOverFlowTooltip"
-      >
-        <!--
+      <template v-for="item in $attrs.config.tableHead">
+        <el-table-column
+          v-if="item.show !== false"
+          :key="item.id"
+          :prop="item.prop"
+          :label="$t(item.label)"
+          :align="item.align"
+          :header-align="item.headerAlign"
+          :fixed="item.fixed"
+          :width="item.width"
+          :min-width="item.minWidth"
+          :sortable="item.sortable === null || item.sortable === false ? false : item.sortable"
+          :show-overflow-tooltip="item.showOverFlowTooltip === undefined ? true : item.showOverFlowTooltip"
+        >
+          <!--
           item.component 是否使用table专用组件 /components/yunlin-table/tool
-        -->
-        <template slot-scope="scope">
-          <component
-            :is="ToolComponents[item.component]"
-            v-if="item.component"
-            :config="item.componentConfig"
-            :column-data="{ ...scope.row }"
-          ></component>
-          <span
-            v-else
-            @click="item.clickHandle ? item.clickHandle(scope.row) : () => {}"
-            v-html="item.preHandle ? item.preHandle(scope.row[item.prop], scope.row) : scope.row[item.prop]"
-          ></span>
-        </template>
-      </el-table-column>
+          -->
+          <template slot-scope="scope">
+            <component
+              :is="ToolComponents[item.component]"
+              v-if="item.component"
+              :config="item.componentConfig"
+              :column-data="{ ...scope.row }"
+            ></component>
+            <span
+              v-else
+              @click="item.clickHandle ? item.clickHandle(scope.row) : () => {}"
+              v-html="item.preHandle ? item.preHandle(scope.row[item.prop], scope.row) : scope.row[item.prop]"
+            ></span>
+          </template>
+        </el-table-column>
+      </template>
 
       <!-- 操作区域插槽 -->
       <slot name="operate" />

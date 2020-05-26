@@ -145,7 +145,7 @@ export default {
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 资质名称
         { prop: 'name', label: 'supplierQualifications.name', width: '160', align: 'center' },
         // 资质类别
@@ -176,6 +176,7 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteEngineeringSupplierQualifications
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

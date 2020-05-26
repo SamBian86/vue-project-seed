@@ -17,14 +17,19 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableSearchParams"
+          @keyup.enter.native="searchHandle"
+        >
           <!-- 查询 -->
           <!-- <el-form-item>
             <el-button
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
             >{{ $t('query') }}</el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 创建 -->
           <!-- <el-form-item>
             <el-button
@@ -32,7 +37,7 @@
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
             >{{ $t('add') }}</el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 导出 -->
           <!-- <el-form-item>
             <el-button
@@ -49,7 +54,7 @@
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
             >{{ $t('deleteBatch') }}</el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
@@ -96,7 +101,7 @@
             >{{ $t('ddd.ddd') }}</el-button>
           </template>
         </el-table-column>
-      </template> -->
+      </template>-->
     </yunlin-table>
   </div>
 </template>
@@ -141,7 +146,7 @@ export default {
       this.tableSearchParams.processInstanceId = processInstanceId
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         // 任务名称
         { prop: 'activityName', label: 'process.taskName', width: '220', align: 'center' },
         // 处理人
@@ -171,6 +176,7 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteXXX
       // console.log('table page created')
+      this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX

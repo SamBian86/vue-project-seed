@@ -132,7 +132,7 @@ export default {
       this.tableConfig.tableType = 'selection'
 
       // 设置获取列表信息
-      this.tableConfig.tableHead = [
+      this.tableConfig.tableHeadReadOnly = [
         { prop: 'dictName', label: 'dict.dictName', align: 'center', sortable: true },
         {
           prop: 'dictType',
@@ -154,6 +154,7 @@ export default {
       // 配置section删除功能
       this.tableHandle.deleteSection.api = deleteDictType
       // console.log('table page created')
+      this.generateTable()
     },
     createHandle(options = { componentNames: ['yunlin-table'] }) {
       this.$pageSwitch('form', { pageType: 'create', ...options })
