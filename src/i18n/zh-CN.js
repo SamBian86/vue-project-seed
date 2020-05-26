@@ -642,4 +642,11 @@ t.draw.drawingbudgetQuantitiesRemark = '单价说明'
 t.draw.exportDetail = '导出明细表'
 t.draw.exportDifference = '导出成本差异表'
 
+t.contractType = {}
+t.contractType.name = '类型名称'
+t.contractType.typeName = '类型名称'
+t.contractType.pid = '上级类别'
+t.contractType.ptypeName = '上级类别'
+t.contractType.parentNameDefault = '一级类型'
+
 export default t
