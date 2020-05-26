@@ -47,6 +47,19 @@
           </div>
         </template>
       </yunlin-form>
+      <yunlin-drawer
+        ref="yunlinDrawer"
+        :config="drawerConfig"
+        v-bind="$attrs"
+        @drawer-closed="drawerClosed"
+        v-on="$listeners"
+      >
+        <component
+          :is="drawerComponent"
+          :drawer-data="drawerData"
+          @drawer-close-by-child="drawerCloseByChild"
+        ></component>
+      </yunlin-drawer>
     </el-col>
   </el-row>
 </template>
@@ -56,18 +69,23 @@ import { mapGetters } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
+import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
 import { createEngineeringContract, editEngineeringContract, getEngineeringContractById } from '@/api/engineering/contract'
 import { getEngineeringProjectList } from '@/api/engineering/project'
 import { getEngineeringContractTypeTree } from '@/api/engineering/contractType'
 import { getEngineeringSupplierList } from '@/api/engineering/supplier'
+import costInfoList from './cost-info-list'
 // import { validateMobile } from '@/utils/validator'
 
 export default {
   name: 'Form',
-  components: {},
-  mixins: [commonMixin, pageMixin, formDefaultMixin],
+  components: { costInfoList },
+  mixins: [commonMixin, pageMixin, formDefaultMixin, drawerDefaultMixin],
   data() {
     return {
+      drawerComponents: {
+        cost: costInfoList
+      },
       // 定义表单名称
       formTitle: {
         create: this.$t('add'),
@@ -161,7 +179,7 @@ export default {
           name: 'contract.contractProperties',
           type: 'select',
           className: 'select-block',
-          placeholder: '国际化',
+          placeholder: 'contract.contractProperties',
           rules: [{ required: true }],
           items: this.getDictByType('contract_properties'),
           itemType: 'dict'
@@ -216,7 +234,7 @@ export default {
               value: 'id'
             },
             propName: 'supplierId',
-            placeholder: '国际化',
+            placeholder: 'contract.supplierId',
             className: 'select-block',
             mergeData: { target: 'supplierId' },
             componentNames: ['select-dynamic']
@@ -496,10 +514,24 @@ export default {
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
+
+      this.drawerConfig.size = '95%'
     },
     // 打开明细
     costInfoListHandle() {
-      console.log('明细')
+      const { costInfoList, projectId } = this.formData
+      if (!projectId) {
+        this.$message({
+          message: `${this.$t('choose')}${this.$t('contract.projectId')}`,
+          type: 'warning',
+          duration: 2000
+        })
+        return false
+      }
+      this.setDrawerComponent('cost')
+      this.setDrawerData({ list: costInfoList || [], projectId })
+      this.setDrawerTitle(this.$t('contract.costInfoList'))
+      this.drawerVisibleHandle()
     }
   }
 }

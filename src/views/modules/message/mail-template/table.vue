@@ -45,11 +45,7 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="mailConfigHandle()"
-            >
-              {{
-              $t('mail.config')
-              }}
-            </el-button>
+            >{{ $t('mail.config') }}</el-button>
           </el-form-item>
           <!-- 导出 -->
           <!-- <el-form-item>
@@ -65,11 +61,7 @@
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
-            >
-              {{
-              $t('deleteBatch')
-              }}
-            </el-button>
+            >{{ $t('deleteBatch') }}</el-button>
           </el-form-item>
           <!-- 批量操作 -->
           <!-- <el-form-item>
@@ -101,31 +93,19 @@
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >
-              {{
-              $t('update')
-              }}
-            </el-button>
+            >{{ $t('update') }}</el-button>
             <!-- 单个操作 -->
             <el-button
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="sendMailHandle(scope.row)"
-            >
-              {{
-              $t('mail.send')
-              }}
-            </el-button>
+            >{{ $t('mail.send') }}</el-button>
             <!-- 单个删除 -->
             <el-button
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
-            >
-              {{
-              $t('delete')
-              }}
-            </el-button>
+            >{{ $t('delete') }}</el-button>
           </template>
         </el-table-column>
       </template>
