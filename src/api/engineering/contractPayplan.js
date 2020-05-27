@@ -50,11 +50,10 @@ export function batchEngineeringContractPayplan(data = {}) {
 // 付款计划列表
 // GET
 // /engineering/contract/payplan/{contractId}/list
-export function getEngineeringContractPayplanListById(data = {}) {
-  const { contractId } = data
+export function getEngineeringContractPayplanListById(params = {}) {
+  const { contractId } = params
   return request({
     url: `/engineering/contract/payplan/${contractId}/list`,
-    method: 'post',
-    data
+    method: 'GET'
   })
 }

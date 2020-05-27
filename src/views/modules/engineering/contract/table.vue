@@ -12,7 +12,12 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableSearchParams"
+          @keyup.enter.native="searchHandle"
+        >
           <el-form-item>
             <el-input
               v-model="tableSearchParams.keyWord"
@@ -46,7 +51,12 @@
               clearable
               @clear="clearHandle"
             >
-              <el-option v-for="(item, index) in projectList" :key="index" :label="item.name" :value="item.id"></el-option>
+              <el-option
+                v-for="(item, index) in projectList"
+                :key="index"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -81,9 +91,7 @@
               v-if="filterPermission('engineering:contract:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
-            >
-              {{ $t('query') }}
-            </el-button>
+            >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
           <el-form-item>
@@ -92,14 +100,12 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
-            >
-              {{ $t('add') }}
-            </el-button>
+            >{{ $t('add') }}</el-button>
           </el-form-item>
           <!-- 打开draw -->
           <!-- <el-form-item>
             <el-button type="primary" :size="tableConfig.tableSearchSize" @click="XXXXXXHandle()">{{ $t('xxx') }}</el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 下载模板 -->
           <!--<el-form-item>
             <el-button
@@ -144,7 +150,7 @@
             >
               {{ $t('deleteBatch') }}
             </el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
@@ -162,26 +168,42 @@
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="100">
+        <el-table-column
+          :label="$t('handle')"
+          align="center"
+          header-align="center"
+          fixed="right"
+          width="200"
+        >
           <template slot-scope="scope">
+            <!-- 查看 -->
+            <el-button
+              v-if="filterPermission('engineering:contract:view')"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="detailHandle(scope.row)"
+            >{{ $t('detail') }}</el-button>
+            <!-- 付款计划 -->
+            <el-button
+              v-if="filterPermission('engineering:contract:update')"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="planHandle(scope.row)"
+            >{{ $t('contract.plan') }}</el-button>
             <!-- 修改 -->
             <el-button
               v-if="filterPermission('engineering:contract:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >
-              {{ $t('update') }}
-            </el-button>
+            >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
             <el-button
               v-if="filterPermission('engineering:contract:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
-            >
-              {{ $t('delete') }}
-            </el-button>
+            >{{ $t('delete') }}</el-button>
             <!-- 单个操作 -->
             <!-- <el-button
               v-if="filterPermission('engineering:contract:xxx')"
@@ -196,12 +218,18 @@
               "
             >
               {{ $t('ddd.ddd') }}
-            </el-button> -->
+            </el-button>-->
           </template>
         </el-table-column>
       </template>
     </yunlin-table>
-    <yunlin-drawer ref="yunlinDrawer" :config="drawerConfig" v-bind="$attrs" @drawer-closed="drawerClosed" v-on="$listeners">
+    <yunlin-drawer
+      ref="yunlinDrawer"
+      :config="drawerConfig"
+      v-bind="$attrs"
+      @drawer-closed="drawerClosed"
+      v-on="$listeners"
+    >
       <component
         :is="drawerComponent"
         :drawer-data="drawerData"
@@ -220,19 +248,19 @@ import tableDefaultMixin from '@/mixins/table-default-mixin'
 import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
 import { getEngineeringProjectList } from '@/api/engineering/project'
 import { getEngineeringContractPageList, deleteEngineeringContract } from '@/api/engineering/contract'
-// import xxxComponent from './xxx'
+import planComponent from './plan'
 
 export default {
   name: 'Tabel',
-  // components: { xxxComponent },
+  components: { planComponent },
   mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
   data() {
     return {
       contractTimeToPickerOptions: {},
-      projectList: []
-      // drawerComponents: {
-      //   xxx: xxxComponent
-      // }
+      projectList: [],
+      drawerComponents: {
+        plan: planComponent
+      }
     }
   },
   computed: {
@@ -308,7 +336,9 @@ export default {
           ]
         }
       ]
+
       this.generateTable()
+      this.drawerConfig.size = '90%'
     },
     genrateI18nSearchItems() {
       getEngineeringProjectList().then(response => {
@@ -322,16 +352,16 @@ export default {
     },
     // 创建
     createHandle(options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { pageType: 'create', ...options })
+      this.$pageSwitch('form', { pageType: 'create', ...options, projectId: '' })
     },
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
     },
-    XXXXXXHandle(row) {
-      this.setDrawerComponent('xxx')
-      this.setDrawerData({ data: { pageType: 'create', formDataUpdate: false, t: new Date() } })
-      this.setDrawerTitle(this.$t('xxxx'))
+    planHandle(row) {
+      this.setDrawerComponent('plan')
+      this.setDrawerData({ contractId: row.id })
+      this.setDrawerTitle(this.$t('contract.plan'))
       this.drawerVisibleHandle()
     }
     // drawerClosed() {

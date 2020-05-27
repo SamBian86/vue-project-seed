@@ -42,7 +42,7 @@ export default {
     },
     // 设置drawerData初始化数据
     setDrawerData(data) {
-      this.drawerData = data
+      this.$set(this, 'drawerData', data)
     },
     // 设置drawer标题
     setDrawerTitle(title) {

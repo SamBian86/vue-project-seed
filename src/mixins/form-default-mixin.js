@@ -223,7 +223,7 @@ export default {
     // yunlin-form组件 事件监听器 --------------------------------------------------------
     // 用于各类自定义组件修改数据
     formDataMerge(data) {
-      this.formData = { ...this.formData, ...data }
+      this.$set(this, 'formData', { ...this.formData, ...data })
     },
     // 重新生成对应的校验规则, 用于动态添加校验规则
     formGenerateRuleByProps(props = []) {

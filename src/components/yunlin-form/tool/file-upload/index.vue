@@ -81,7 +81,7 @@
         :on-preview="multipleFilePreviewHandle"
         :on-remove="multipleFileRemoveHandle"
       >
-        <el-button size="small" type="primary">{{ $t('upload.button') }}</el-button>
+        <el-button v-if="!disabled" size="small" type="primary">{{ $t('upload.button') }}</el-button>
       </el-upload>
     </div>
   </div>

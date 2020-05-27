@@ -35,6 +35,7 @@ export default {
           multiple: false, // 是否多选
           request: null, // el-tree 获取数据的方法
           requestParams: {}, // 获取数据方法传参
+          afterChange: null,
           itemProps: {
             label: '', // list中键名称
             value: '' // list中值名称
@@ -118,7 +119,7 @@ export default {
       }
     },
     changeHandle(value) {
-      const { mergeData, itemProps } = this.config
+      const { mergeData, itemProps, afterChange } = this.config
       const newData = {}
       newData[mergeData.target] = value
       this.$formDataMerge(newData)
@@ -126,6 +127,9 @@ export default {
       const item = this.items.find(item => item[itemProps.value] === value)
       if (item) {
         this.mergeOtherData(item)
+      }
+      if (afterChange) {
+        afterChange()
       }
     },
     mergeOtherData(obj) {

@@ -57,7 +57,9 @@
         <component
           :is="drawerComponent"
           :drawer-data="drawerData"
+          :disabled="containsPageType(['detail'])"
           @drawer-close-by-child="drawerCloseByChild"
+          @form-data-merge="formDataMerge"
         ></component>
       </yunlin-drawer>
     </el-col>
@@ -153,6 +155,7 @@ export default {
           componentConfig: {
             request: getEngineeringProjectList,
             requestParams: {},
+            afterChange: this.afterChange,
             itemProps: {
               label: 'name',
               value: 'id'
@@ -399,10 +402,10 @@ export default {
           span: 8,
           prop: 'contractInvoiceTime',
           name: 'contract.contractInvoiceTime',
-          type: 'date-time-picker',
+          type: 'date-picker',
           className: 'select-block',
-          format: 'yyyy-MM-dd HH:mm:ss',
-          valueFormat: 'yyyy-MM-dd HH:mm:ss'
+          format: 'yyyy-MM-dd',
+          valueFormat: 'yyyy-MM-dd'
         },
         {
           // 主体是否审核
@@ -454,6 +457,19 @@ export default {
           items: [
             { label: 'contract.isBothSignature0', value: 0 },
             { label: 'contract.isBothSignature1', value: 1 }
+          ]
+        },
+        {
+          // 是否商贸经办
+          span: 8,
+          prop: 'isBusinessHandle',
+          name: 'contract.isBusinessHandle',
+          type: 'select',
+          className: 'select-block',
+          placeholder: 'contract.isBusinessHandle',
+          items: [
+            { label: 'contract.isBusinessHandle0', value: 0 },
+            { label: 'contract.isBusinessHandle1', value: 1 }
           ]
         },
         {
@@ -515,7 +531,7 @@ export default {
       // 生成表单及验证规则
       this.generateForm()
 
-      this.drawerConfig.size = '95%'
+      this.drawerConfig.size = '90%'
     },
     // 打开明细
     costInfoListHandle() {
@@ -530,8 +546,23 @@ export default {
       }
       this.setDrawerComponent('cost')
       this.setDrawerData({ list: costInfoList || [], projectId })
-      this.setDrawerTitle(this.$t('contract.costInfoList'))
+      this.setDrawerTitle(this.$t('contract.costInfoListTitle'))
       this.drawerVisibleHandle()
+    },
+    // 修改项目以后的操作
+    afterChange() {
+      this.cleanForCostInfo()
+    },
+    beforeCancleHandle() {
+      this.cleanForCostInfo()
+    },
+    // 修改所属项目以后清除重置数据
+    cleanForCostInfo() {
+      this.setDrawerData({ projectId: '' })
+      this.formDataMerge({
+        costInfoList: [],
+        contractTotalPrice: ''
+      })
     }
   }
 }
