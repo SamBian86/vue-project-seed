@@ -138,7 +138,7 @@ export default {
     // 生成校验规则, 用于普通添加校验规则，如果是动态添加请使用 generateRuleByProp
     generateRules(items) {
       const { formRules, formData } = this
-      const inputTypes = ['text', 'input-number', 'editor']
+      const inputTypes = ['text', 'input-number', 'editor', 'textarea']
       const changeTypes = [
         'select',
         'button',

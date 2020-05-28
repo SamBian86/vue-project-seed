@@ -39,11 +39,11 @@ export function deleteEngineeringContractPayplan(data = []) {
 // POST
 // /engineering/contract/payplan/{contractId}/batch
 export function batchEngineeringContractPayplan(data = {}) {
-  const { contractId } = data
+  const { list, contractId } = data
   return request({
     url: `/engineering/contract/payplan/${contractId}/batch`,
     method: 'post',
-    data
+    data: list
   })
 }
 

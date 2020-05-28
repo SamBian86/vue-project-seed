@@ -26,8 +26,6 @@ export default {
     },
     // 数据更新
     $formDataUpdate(data) {
-      console.log('$formDataUpdate')
-      console.log(data)
       this.$emit('form-data-update', data || {})
     },
     // 更新formItemsReadOnly中的某项配置

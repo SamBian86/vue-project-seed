@@ -38,11 +38,11 @@ export function claimActivitiTask(data = {}) {
 // 任务处理（完成任务）
 // POST
 // /activiti/task/complete
-export function completeActivitiTask(data = {}) {
+export function completeActivitiTask(params = {}) {
   return request({
     url: `/activiti/task/complete`,
     method: 'post',
-    data
+    params
   })
 }
 
@@ -82,11 +82,11 @@ export function deleteVariable(params = {}) {
 // 终止流程
 // POST
 // /activiti/task/endProcess
-export function endProcessActivitiTask(data = {}) {
+export function endProcessActivitiTask(params = {}) {
   return request({
     url: `/activiti/task/endProcess`,
     method: 'post',
-    data
+    params
   })
 }
 

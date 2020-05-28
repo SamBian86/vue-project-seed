@@ -77,7 +77,7 @@ import { getEngineeringProjectList } from '@/api/engineering/project'
 import { getEngineeringContractTypeTree } from '@/api/engineering/contractType'
 import { getEngineeringSupplierList } from '@/api/engineering/supplier'
 import costInfoList from './cost-info-list'
-// import { validateMobile } from '@/utils/validator'
+import { validateMobile } from '@/utils/validator'
 
 export default {
   name: 'Form',
@@ -313,7 +313,7 @@ export default {
           prop: 'contractHandlemanPhone',
           name: 'contract.contractHandlemanPhone',
           type: 'text',
-          rules: [{ required: true }]
+          rules: [{ required: true }, { validator: validateMobile, trigger: 'blur' }]
         },
         {
           // 乙方联系人
@@ -329,7 +329,7 @@ export default {
           prop: 'contractSupplierLinkphone',
           name: 'contract.contractSupplierLinkphone',
           type: 'text',
-          rules: [{ required: true }]
+          rules: [{ required: true }, { validator: validateMobile, trigger: 'blur' }]
         },
         {
           // 备注
@@ -553,12 +553,8 @@ export default {
     afterChange() {
       this.cleanForCostInfo()
     },
-    beforeCancleHandle() {
-      this.cleanForCostInfo()
-    },
     // 修改所属项目以后清除重置数据
     cleanForCostInfo() {
-      this.setDrawerData({ projectId: '' })
       this.formDataMerge({
         costInfoList: [],
         contractTotalPrice: ''

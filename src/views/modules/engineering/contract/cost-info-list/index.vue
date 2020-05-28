@@ -190,21 +190,17 @@ export default {
   },
   watch: {
     drawerData(newVal, oldVal) {
-      if (newVal.projectId !== '' && newVal.projectId !== oldVal.projectId) {
-        // console.log('watch cost-info-list')
-        this.$set(this.drawerData, 'list', [])
-        this.$set(this, 'list', [])
-        this.$set(this, 'contractTotalPrice', 0)
-        this.init()
-      }
+      // console.log('watch cost-info-list')
+      this.init()
     }
   },
   activated() {
     // console.log('activated cost-info-list')
+    this.init()
   },
   created() {
-    this.init()
     // console.log('created cost-info-list')
+    this.init()
   },
   methods: {
     init() {
@@ -254,7 +250,10 @@ export default {
         response.forEach(item => {
           list.push({ ...defaultData, ...item, load: false, warning: false, save: false })
         })
-        this.list = list
+        this.$set(this, 'list', list)
+        this.$nextTick(() => {
+          this.countTotalPrice()
+        })
         // console.log(list)
       })
     },

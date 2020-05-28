@@ -108,6 +108,6 @@ export function submitEngineeringContractById(params = {}) {
   const { id } = params
   return request({
     url: `/engineering/contract/${id}/submit`,
-    method: 'get'
+    method: 'post'
   })
 }
