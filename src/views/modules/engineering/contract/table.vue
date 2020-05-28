@@ -173,7 +173,7 @@
           align="center"
           header-align="center"
           fixed="right"
-          width="250"
+          width="280"
         >
           <template slot-scope="scope">
             <!-- 查看 -->
@@ -192,14 +192,14 @@
             >{{ $t('contract.plan') }}</el-button>
             <!-- 修改 -->
             <el-button
-              v-if="filterPermission('engineering:contract:update')"
+              v-if="filterPermission('engineering:contract:update') && scope.row.contractStatus === 0"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>
             <!-- 提交审核 -->
             <el-button
-              v-if="filterPermission('engineering:contract:submit')"
+              v-if="filterPermission('engineering:contract:submit') && scope.row.contractStatus === 0"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="
@@ -212,7 +212,7 @@
             >{{ $t('contract.submit') }}</el-button>
             <!-- 单个删除 -->
             <el-button
-              v-if="filterPermission('engineering:contract:delete')"
+              v-if="filterPermission('engineering:contract:delete') && scope.row.contractStatus === 0"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
