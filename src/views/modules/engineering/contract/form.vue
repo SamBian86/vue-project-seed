@@ -467,6 +467,7 @@ export default {
           type: 'select',
           className: 'select-block',
           placeholder: 'contract.isBusinessHandle',
+          rules: [{ required: true }],
           items: [
             { label: 'contract.isBusinessHandle0', value: 0 },
             { label: 'contract.isBusinessHandle1', value: 1 }

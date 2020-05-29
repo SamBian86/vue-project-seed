@@ -310,11 +310,12 @@ export default {
         { prop: 'contractTime', label: 'contractExamine.contractTime', width: '160' },
         // 付款方式
         { prop: 'contractPayType', label: 'contractExamine.contractPayType', width: '100' },
-        // 经办人
-        { prop: 'contractHandleman', label: 'contractExamine.contractHandleman', width: '100' },
         // 审核时间
-        { prop: 'handleTime', label: 'contractExamine.handleTime', width: '160' }
+        { prop: 'handleTime', label: 'contractExamine.handleTime', width: '160' },
+        // 经办人
+        { prop: 'contractHandleman', label: 'contractExamine.contractHandleman', width: '100' }
       ]
+      this.tableConfig.rowKey = 'taskId'
       // 是否填充查询条件为空
       this.tableConfig.searchFillEmpty = true
       this.tableSearchParams = {
@@ -332,6 +333,16 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteXXX
       // console.log('table page created')
+      this.tableColumnAction = [
+        {
+          searchParam: 'examineStatus',
+          exclude: [
+            { value: 0, props: ['handleTime'] },
+            { value: 1, props: [] },
+            { value: 2, props: ['handleTime'] }
+          ]
+        }
+      ]
       this.generateTable()
     },
     genrateI18nSearchItems() {

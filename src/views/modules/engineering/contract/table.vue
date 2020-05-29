@@ -36,7 +36,7 @@
               @clear="clearHandle"
             >
               <el-option
-                v-for="(item, index) in getDictByType('contract_status')"
+                v-for="(item, index) in getDictByType('examine_status')"
                 :key="index"
                 :label="item.dictLabel"
                 :value="item.dictValue"
@@ -248,7 +248,8 @@ import { getEngineeringProjectList } from '@/api/engineering/project'
 import {
   getEngineeringContractPageList,
   deleteEngineeringContract,
-  submitEngineeringContractById
+  submitEngineeringContractById,
+  rejectinfoEngineeringContractById
 } from '@/api/engineering/contract'
 import planComponent from './plan'
 
@@ -302,7 +303,18 @@ export default {
         // 供应商
         { prop: 'supplierName', label: 'contract.supplierName', width: '200' },
         // 合同状态
-        { prop: 'contractStatusName', label: 'contract.contractStatusName', width: '100' },
+        {
+          prop: 'contractStatusName',
+          label: 'contract.contractStatusName',
+          width: '100',
+          clickHandle: this.contractStatusClickHandle,
+          preHandle: (value, row) => {
+            if (row.contractStatus === 3) {
+              return `<span class="contractStatusReject">${value}</span>`
+            }
+            return value
+          }
+        },
         // 当前审核人
         { prop: 'currentExaminer', label: 'contract.currentExaminer', width: '100' },
         // 签约时间
@@ -373,7 +385,30 @@ export default {
     drawerClosed() {
       // drawer关闭以后父页面需要的操作
       this.searchHandle()
+    },
+    // 点击已退回
+    contractStatusClickHandle(row) {
+      if (row.contractStatus !== 3) {
+        return
+      }
+      rejectinfoEngineeringContractById({ id: row.id }).then(response => {
+        const _html = `
+        <div>${this.$t('contract.comment')}：${response.comment}</div>
+        <div>${this.$t('contract.userName')}：${response.userName}</div>
+        `
+        this.$alert(_html, this.$t('info'), {
+          confirmButtonText: this.$t('confirm'),
+          dangerouslyUseHTMLString: true
+        })
+        console.log(response)
+      })
     }
   }
 }
 </script>
+<style lang="scss">
+.contractStatusReject {
+  color: #4381e6;
+  cursor: pointer;
+}
+</style>

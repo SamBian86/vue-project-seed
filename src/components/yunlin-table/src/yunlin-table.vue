@@ -31,10 +31,10 @@
         align="center"
         width="50"
       ></el-table-column>
-      <template v-for="item in $attrs.config.tableHead">
+      <template v-for="(item, index) in $attrs.config.tableHead">
         <el-table-column
           v-if="item.show !== false"
-          :key="item.id"
+          :key="index"
           :prop="item.prop"
           :label="$t(item.label)"
           :align="item.align"

@@ -78,6 +78,7 @@
                 <el-input
                   v-model="scope.row[scope.column.property]"
                   :disabled="disabled"
+                  :maxlength="30"
                   size="small"
                   :placeholder="$t('contractPayplan.paymentNode')"
                 ></el-input>

@@ -29,6 +29,7 @@ t.back = '返回'
 t.download = '下载'
 t.downloadTemp = '下载模板'
 t.import = '导入'
+t.info = '信息'
 
 t.search = {}
 t.search.phoneNumberOrName = '手机号或姓名'
@@ -708,6 +709,8 @@ t.contract.contractTransportStandard = '运输包装要求'
 t.contract.contractJurisdiction = '法律管辖地'
 t.contract.contractEffectStandard = '合同生效条件'
 t.contract.ossList = '合同附件'
+t.contract.comment = '退回理由'
+t.contract.userName = '退回人'
 
 t.contractCost = {}
 t.contractCost.costTypeId = '科目id'
@@ -767,6 +770,7 @@ t.activiti = {}
 t.activiti.comment = '退回理由'
 
 t.contractInvoice = {}
+t.contractInvoice.title = '新增票据'
 t.contractInvoice.keyWord = '关键字模糊查询'
 t.contractInvoice.projectId = '所属项目'
 t.contractInvoice.contractTimeFrom = '签约开始'
@@ -780,5 +784,41 @@ t.contractInvoice.supplierName = '供应商'
 t.contractInvoice.contractTime = '签约时间'
 t.contractInvoice.contractHandleman = '经办人'
 t.contractInvoice.receivedInvoiceAmount = '已收票据金额'
+
+t.contractCreateInvoice = {}
+t.contractCreateInvoice.planId = '对应款项'
+t.contractCreateInvoice.invoiceUnit = '开票单位'
+t.contractCreateInvoice.invoiceCode = '票据编码'
+t.contractCreateInvoice.invoiceSymbol = '票据代码'
+t.contractCreateInvoice.invoiceDate = '开票日期'
+t.contractCreateInvoice.invoiceType = '票据类型'
+t.contractCreateInvoice.invoiceAmount = '税额'
+t.contractCreateInvoice.contractTaxAmount = '含税金额'
+t.contractCreateInvoice.ossList = '附件'
+t.contractCreateInvoice.remark = '备注'
+t.contractCreateInvoice.addedAmountTitle = '新增票据金额：'
+t.contractCreateInvoice.totalAmountTitle = '合计票据金额：'
+t.contractCreateInvoice.add = '添加'
+t.contractCreateInvoice.save = '保存'
+t.contractCreateInvoice.cancel = '取消'
+
+t.applypayment = {}
+t.applypayment.projectId = '所属项目'
+t.applypayment.keyWord = '关键字模糊查询'
+t.applypayment.applyStatus = '申请状态'
+
+t.applypayment.contractCode = '合同编号'
+t.applypayment.contractName = '合同名称'
+t.applypayment.contractTypeName = '合同类别'
+t.applypayment.contractTotalPrice = '合同金额'
+t.applypayment.contractFinalPrice = '终审额'
+t.applypayment.supplierName = '供应商'
+t.applypayment.contractHandleman = '经办人'
+t.applypayment.costPayName = '款项名称'
+t.applypayment.needPayAmount = '应付金额'
+t.applypayment.havePayAmount = '已付金额'
+t.applypayment.thisAmount = '应付申请'
+t.applypayment.payStatusName = '请付状态'
+t.applypayment.applyDate = '申请日期'
 
 export default t

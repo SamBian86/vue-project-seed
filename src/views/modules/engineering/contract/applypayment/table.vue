@@ -21,7 +21,16 @@
           <el-form-item>
             <el-input
               v-model="tableSearchParams.keyWord"
-              :placeholder="$t('contractInvoice.keyWord')"
+              :placeholder="$t('applypayment.keyWord')"
+              :size="tableConfig.tableSearchSize"
+              clearable
+              @clear="clearHandle"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="tableSearchParams.contractHandleman"
+              :placeholder="$t('applypayment.contractHandleman')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -29,8 +38,24 @@
           </el-form-item>
           <el-form-item>
             <el-select
+              v-model="tableSearchParams.applyStatus"
+              :placeholder="$t('applypayment.applyStatus')"
+              :size="tableConfig.tableSearchSize"
+              clearable
+              @clear="clearHandle"
+            >
+              <el-option
+                v-for="(item, index) in getDictByType('examine_status')"
+                :key="index"
+                :label="item.dictLabel"
+                :value="item.dictValue"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select
               v-model="tableSearchParams.projectId"
-              :placeholder="$t('contractInvoice.projectId')"
+              :placeholder="$t('applypayment.projectId')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -43,61 +68,27 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item>
-            <el-date-picker
-              v-model="tableSearchParams.contractTimeFrom"
-              :placeholder="$t('contractInvoice.contractTimeFrom')"
-              :size="tableConfig.tableSearchSize"
-              type="date"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              clearable
-              @change="dateHandle('contractTimeTo', $event)"
-              @clear="clearHandle"
-            ></el-date-picker>
-          </el-form-item>
-          <el-form-item>
-            <el-date-picker
-              v-model="tableSearchParams.contractTimeTo"
-              :placeholder="$t('contractInvoice.contractTimeTo')"
-              :size="tableConfig.tableSearchSize"
-              type="date"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              :picker-options="contractTimeToPickerOptions"
-              clearable
-              @clear="clearHandle"
-            ></el-date-picker>
-          </el-form-item>
           <!-- 查询 -->
           <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:invoice:view')"
+              v-if="filterPermission('engineering:contract:applypayment:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
             >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
-          <!-- <el-form-item>
+          <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:invoice:save')"
+              v-if="filterPermission('engineering:contract:applypayment:save')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
             >{{ $t('add') }}</el-button>
-          </el-form-item>-->
-          <!-- 打开draw -->
-          <!-- <el-form-item>
-            <el-button
-              type="primary"
-              :size="tableConfig.tableSearchSize"
-              @click="XXXXXXHandle()"
-            >{{ $t('xxx') }}</el-button>
-          </el-form-item>-->
+          </el-form-item>
           <!-- 下载模板 -->
           <!--<el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:invoice:save')"
+              v-if="filterPermission('engineering:contract:applypayment:save')"
               type="success"
               :size="tableConfig.tableSearchSize"
               @click="downloadHandle({
@@ -122,7 +113,7 @@
           <!-- 导出 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:invoice:export')"
+              v-if="filterPermission('engineering:contract:applypayment:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
@@ -131,7 +122,7 @@
           <!-- 批量删除 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:invoice:delete')"
+              v-if="filterPermission('engineering:contract:applypayment:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
@@ -140,7 +131,7 @@
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:invoice:xxx')"
+              v-if="filterPermission('engineering:contract:applypayment:xxx')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="customSectionHandle({
@@ -159,56 +150,38 @@
           align="center"
           header-align="center"
           fixed="right"
-          width="160"
+          width="100"
         >
           <template slot-scope="scope">
-            <!-- 新增 -->
-            <el-button
-              v-if="filterPermission('engineering:contract:invoice:save')"
-              type="text"
-              :size="tableConfig.tableSearchSize"
-              @click="invoiceHandle(scope.row)"
-            >{{ $t('add') }}</el-button>
-            <!-- 查看 -->
-            <el-button
-              v-if="filterPermission('engineering:contract:invoice:view')"
-              type="text"
-              :size="tableConfig.tableSearchSize"
-              @click="detailHandle(scope.row)"
-            >{{ $t('detail') }}</el-button>
             <!-- 修改 -->
-            <!-- <el-button
-              v-if="filterPermission('engineering:contract:invoice:update')"
+            <el-button
+              v-if="filterPermission('engineering:contract:applypayment:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >{{ $t('update') }}</el-button>-->
+            >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
-            <!-- <el-button
-              v-if="filterPermission('engineering:contract:invoice:delete')"
+            <el-button
+              v-if="filterPermission('engineering:contract:applypayment:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
-            >{{ $t('delete') }}</el-button>-->
+            >{{ $t('delete') }}</el-button>
+            <!-- 单个操作 -->
+            <!-- <el-button
+              v-if="filterPermission('engineering:contract:applypayment:xxx')"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="customHandle({
+                data: [scope.row.id],
+                i18nRequestMessage: '国际化',
+                request: null
+              })"
+            >{{ $t('ddd.ddd') }}</el-button>-->
           </template>
         </el-table-column>
       </template>
     </yunlin-table>
-    <yunlin-drawer
-      ref="yunlinDrawer"
-      :config="drawerConfig"
-      v-bind="$attrs"
-      @drawer-closed="drawerClosed"
-      v-on="$listeners"
-    >
-      <component
-        :is="drawerComponent"
-        :drawer-data="drawerData"
-        @drawer-close-by-child="drawerCloseByChild"
-        v-on="$listeners"
-      ></component>
-      <!-- <xxx :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild" v-on="$listeners"></xxx> -->
-    </yunlin-drawer>
   </div>
 </template>
 
@@ -216,21 +189,19 @@
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
-import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
 import { getEngineeringProjectList } from '@/api/engineering/project'
-import { getEngineeringContractInvoicePageList } from '@/api/engineering/contract'
-import createComponent from './create'
+import {
+  getEngineeringContractApplypaymentPageList,
+  deleteEngineeringContractApplypayment
+} from '@/api/engineering/contractApplypayment'
 
 export default {
   name: 'Tabel',
-  mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
+  components: {},
+  mixins: [pageMixin, tableDefaultMixin],
   data() {
     return {
-      contractTimeToPickerOptions: {},
-      projectList: [],
-      drawerComponents: {
-        create: createComponent
-      }
+      projectList: []
     }
   },
   computed: {
@@ -260,76 +231,66 @@ export default {
       // 设置获取列表信息
       this.tableConfig.tableHeadReadOnly = [
         // 合同编号
-        { prop: 'contractCode', label: 'contractInvoice.contractCode', width: '160' },
+        { prop: 'contractCode', label: 'applypayment.contractCode', width: '160' },
         // 合同名称
-        { prop: 'contractName', label: 'contractInvoice.contractName', width: '200' },
-        // 合同分类
-        { prop: 'contractTypeName', label: 'contractInvoice.contractTypeName' },
-        // 合同金额(元)
-        { prop: 'contractTotalPrice', label: 'contractInvoice.contractTotalPrice', width: '160' },
+        { prop: 'contractName', label: 'applypayment.contractName', width: '200' },
+        // 合同类别
+        { prop: 'contractTypeName', label: 'applypayment.contractTypeName' },
+        // 合同金额
+        { prop: 'contractTotalPrice', label: 'applypayment.contractTotalPrice', width: '160' },
         // 终审额
-        { prop: 'contractFinalPrice', label: 'contractInvoice.contractFinalPrice' },
+        { prop: 'contractFinalPrice', label: 'applypayment.contractFinalPrice', width: '160' },
         // 供应商
-        { prop: 'supplierName', label: 'contractInvoice.supplierName', width: '200' },
-        // 签约时间
-        { prop: 'contractTime', label: 'contractInvoice.contractTime', width: '160' },
+        { prop: 'supplierName', label: 'applypayment.supplierName', width: '200' },
         // 经办人
-        { prop: 'contractHandleman', label: 'contractInvoice.contractHandleman', width: '100' },
-        // 已收票据金额
-        { prop: 'receivedInvoiceAmount', label: 'contractInvoice.receivedInvoiceAmount', width: '140' }
+        { prop: 'contractHandleman', label: 'applypayment.contractHandleman', width: '160' },
+        // 款项名称
+        { prop: 'costPayName', label: 'applypayment.costPayName', width: '160' },
+        // 应付金额
+        { prop: 'needPayAmount', label: 'applypayment.needPayAmount', width: '160' },
+        // 已付金额
+        { prop: 'havePayAmount', label: 'applypayment.havePayAmount', width: '160' },
+        // 应付申请
+        { prop: 'thisAmount', label: 'applypayment.thisAmount', width: '100' },
+        // 请付状态
+        { prop: 'payStatusName', label: 'applypayment.payStatusName', width: '160' },
+        // 申请日期
+        { prop: 'applyDate', label: 'applypayment.applyDate', width: '160' }
       ]
       // 是否填充查询条件为空
-      this.tableConfig.searchFillEmpty = true
-      this.tableSearchParams = {
-        examineStatus: 0
-      }
+      // this.tableConfig.searchFillEmpty = true
+      // this.tableSearchParams = {}
       // 配置列表请求
-      this.tableHandle.list.api = getEngineeringContractInvoicePageList
+      this.tableHandle.list.api = getEngineeringContractApplypaymentPageList
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
-      // this.tableHandle.delete.api = deleteXXX
+      this.tableHandle.delete.api = deleteEngineeringContractApplypayment
       // this.tableHandle.delete.callback = this.deleteCallback
       // 配置节点懒加载功能
       // this.tableHandle.lazy.api = lazyXXX
       // 配置section删除功能
-      // this.tableHandle.deleteSection.api = deleteXXX
+      // this.tableHandle.deleteSection.api = deleteEngineeringContractApplypayment
       // console.log('table page created')
       this.generateTable()
-      this.drawerConfig.size = '95%'
     },
     genrateI18nSearchItems() {
       getEngineeringProjectList().then(response => {
         this.projectList = response
       })
+      // XXX
+      // this.smsStatus = [
+      //   { label: this.$t('aaa'), value: 0 },
+      //   { label: this.$t('aaa'), value: 1 }
+      // ]
     },
     // 创建
-    // createHandle(options = { componentNames: ['yunlin-table'] }) {
-    //   this.$pageSwitch('form', { pageType: 'create', ...options })
-    // },
-    // 编辑
-    // editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-    //   this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
-    // },
-    // XXXXXXHandle(row) {
-    //   this.setDrawerComponent('xxx')
-    //   this.setDrawerData({ data: { pageType: 'create', formDataUpdate: false, t: new Date() } })
-    //   this.setDrawerTitle(this.$t('xxxx'))
-    //   this.drawerVisibleHandle()
-    // }
-    // drawerClosed() {
-    // drawer关闭以后父页面需要的操作
-    // this.searchHandle()
-    // }
-    invoiceHandle(row) {
-      this.setDrawerComponent('create')
-      this.setDrawerData({ contractId: row.id })
-      this.setDrawerTitle(this.$t('contractInvoice.title'))
-      this.drawerVisibleHandle()
+    createHandle(options = { componentNames: ['yunlin-table'] }) {
+      this.$pageSwitch('form', { pageType: 'create', ...options })
     },
-    drawerClosed() {
-      // drawer关闭以后父页面需要的操作
-      this.searchHandle()
+    // 编辑
+    editHandle(item, options = { componentNames: ['yunlin-table'] }) {
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
     }
   }
 }

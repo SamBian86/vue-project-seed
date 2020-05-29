@@ -40,11 +40,11 @@ export function saveEngineeringContractInvoiceById(data = {}) {
 // POST
 // /engineering/contract/invoice/{contractId}/batch
 export function batchEngineeringContractInvoiceById(data = {}) {
-  const { contractId } = data
+  const { contractId, list } = data
   return request({
     url: `/engineering/contract/invoice/${contractId}/batch`,
     method: 'post',
-    data
+    data: list
   })
 }
 
