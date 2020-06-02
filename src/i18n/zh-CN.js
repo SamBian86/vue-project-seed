@@ -883,4 +883,22 @@ t.applypaymentExamine.examineStatus2 = '全部'
 t.applypaymentExamine.pass = '通过'
 t.applypaymentExamine.reject = '退回'
 
+t.applypaymentPay = {}
+t.applypaymentPay.pay = '支付'
+t.applypaymentPay.payDetail = '合同支付详情'
+t.applypaymentPay.payStatus = '支付状态'
+t.applypaymentPay.keyWord = '关键字模糊查询'
+t.applypaymentPay.projectId = '所属项目'
+t.applypaymentPay.contractCode = '合同编号'
+t.applypaymentPay.contractName = '合同名称'
+t.applypaymentPay.contractTypeName = '合同类别'
+t.applypaymentPay.contractTypeId = '合同类别'
+t.applypaymentPay.supplierName = '供应商'
+t.applypaymentPay.supplierId = '供应商'
+t.applypaymentPay.costPayName = '款项名称'
+t.applypaymentPay.needPayAmount = '款项金额'
+t.applypaymentPay.thisAmount = '申请金额'
+t.applypaymentPay.applyDate = '申请日期'
+t.applypaymentPay.applier = '申请人'
+
 export default t
