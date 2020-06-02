@@ -114,10 +114,10 @@ export function rejectinfoEngineeringContractApplypaymentById(params = {}) {
 // 提交审核
 // POST
 // /engineering/contract/applypayment/{id}/submit
-export function submitEngineeringContractApplypaymentById(params = {}) {
-  const { id } = params
+export function submitEngineeringContractApplypaymentById(data = {}) {
+  const { id } = data
   return request({
     url: `/engineering/contract/applypayment/${id}/submit`,
-    method: 'get'
+    method: 'post'
   })
 }

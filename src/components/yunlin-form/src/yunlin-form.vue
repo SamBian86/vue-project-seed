@@ -65,7 +65,7 @@
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请选择${$t(item.name)}`"
                 clearable
                 filterable
-                @change="formValueListener(item.prop, $event)"
+                @change="formValueListener(item.prop, $event, item.afterChange)"
               >
                 <template v-if="item.itemType === 'dict'">
                   <el-option
@@ -79,7 +79,7 @@
                   <el-option
                     v-for="(ite, idx) in item.items"
                     :key="idx"
-                    :label="$t(ite.label)"
+                    :label="ite.placeholderText || $t(ite.label)"
                     :value="ite.value"
                   ></el-option>
                 </template>

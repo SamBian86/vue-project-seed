@@ -21,7 +21,7 @@
           <el-form-item>
             <el-input
               v-model="tableSearchParams.keyWord"
-              :placeholder="$t('contractExamine.keyWord')"
+              :placeholder="$t('applypaymentExamine.keyWord')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -30,7 +30,7 @@
           <el-form-item>
             <el-select
               v-model="tableSearchParams.examineStatus"
-              :placeholder="$t('contractExamine.examineStatus')"
+              :placeholder="$t('applypaymentExamine.examineStatus')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -46,7 +46,7 @@
           <el-form-item>
             <el-input
               v-model="tableSearchParams.contractHandleman"
-              :placeholder="$t('contractExamine.contractHandleman')"
+              :placeholder="$t('applypaymentExamine.contractHandleman')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -55,7 +55,7 @@
           <el-form-item>
             <el-select
               v-model="tableSearchParams.projectId"
-              :placeholder="$t('contractExamine.projectId')"
+              :placeholder="$t('applypaymentExamine.projectId')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -68,36 +68,10 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item>
-            <el-date-picker
-              v-model="tableSearchParams.contractTimeFrom"
-              :placeholder="$t('contractExamine.contractTimeFrom')"
-              :size="tableConfig.tableSearchSize"
-              type="date"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              clearable
-              @change="dateHandle('contractTimeTo', $event)"
-              @clear="clearHandle"
-            ></el-date-picker>
-          </el-form-item>
-          <el-form-item>
-            <el-date-picker
-              v-model="tableSearchParams.contractTimeTo"
-              :placeholder="$t('contractExamine.contractTimeTo')"
-              :size="tableConfig.tableSearchSize"
-              type="date"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              :picker-options="contractTimeToPickerOptions"
-              clearable
-              @clear="clearHandle"
-            ></el-date-picker>
-          </el-form-item>
           <!-- 查询 -->
           <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:examine:view')"
+              v-if="filterPermission('engineering:applypayment:examine:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
             >{{ $t('query') }}</el-button>
@@ -105,7 +79,7 @@
           <!-- 创建 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:examine:save')"
+              v-if="filterPermission('engineering:applypayment:examine:save')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
@@ -122,7 +96,7 @@
           <!-- 下载模板 -->
           <!--<el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:examine:save')"
+              v-if="filterPermission('engineering:applypayment:examine:save')"
               type="success"
               :size="tableConfig.tableSearchSize"
               @click="downloadHandle({
@@ -147,7 +121,7 @@
           <!-- 导出 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:examine:export')"
+              v-if="filterPermission('engineering:applypayment:examine:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
@@ -156,7 +130,7 @@
           <!-- 批量删除 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:examine:delete')"
+              v-if="filterPermission('engineering:applypayment:examine:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
@@ -165,7 +139,7 @@
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:examine:xxx')"
+              v-if="filterPermission('engineering:applypayment:examine:xxx')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="customSectionHandle({
@@ -189,43 +163,43 @@
           <template slot-scope="scope">
             <!-- 查看 -->
             <el-button
-              v-if="filterPermission('engineering:contract:examine:view')"
+              v-if="filterPermission('engineering:applypayment:examine:view')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="detailHandle(scope.row)"
             >{{ $t('detail') }}</el-button>
             <!-- 修改 -->
             <!-- <el-button
-              v-if="filterPermission('engineering:contract:examine:update')"
+              v-if="filterPermission('engineering:applypayment:examine:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>-->
             <!-- 单个删除 -->
             <!-- <el-button
-              v-if="filterPermission('engineering:contract:examine:delete')"
+              v-if="filterPermission('engineering:applypayment:examine:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
             >{{ $t('delete') }}</el-button>-->
             <!-- 通过 -->
             <el-button
-              v-if="filterPermission('engineering:contract:examine:pass') && scope.row.examineStatus === 0"
+              v-if="filterPermission('engineering:applypayment:examine:pass') && scope.row.examineStatus === 0"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="customHandle({
                 data: { taskId: scope.row.taskId , comment: ''},
-                i18nRequestMessage: 'contractExamine.pass',
+                i18nRequestMessage: 'applypaymentExamine.pass',
                 request: completeActivitiTask
               })"
-            >{{ $t('contractExamine.pass') }}</el-button>
+            >{{ $t('applypaymentExamine.pass') }}</el-button>
             <!-- 退回操作 -->
             <el-button
-              v-if="filterPermission('engineering:contract:examine:reject') && scope.row.examineStatus === 0"
+              v-if="filterPermission('engineering:applypayment:examine:reject') && scope.row.examineStatus === 0"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="rejectHandle(scope.row)"
-            >{{ $t('contractExamine.reject') }}</el-button>
+            >{{ $t('applypaymentExamine.reject') }}</el-button>
           </template>
         </el-table-column>
       </template>
@@ -254,7 +228,7 @@ import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
 import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
 import { getEngineeringProjectList } from '@/api/engineering/project'
-import { getEngineeringContractExaminePageList } from '@/api/engineering/contract'
+import { getEngineeringContractApplypaymentExaminePageList } from '@/api/engineering/contractApplypayment'
 import { completeActivitiTask } from '@/api/activiti/task'
 import rejectComponent from '@/views/modules/activiti/components/reject'
 
@@ -263,7 +237,6 @@ export default {
   mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
   data() {
     return {
-      contractTimeToPickerOptions: {},
       projectList: [],
       drawerComponents: {
         reject: rejectComponent
@@ -297,23 +270,25 @@ export default {
       // 设置获取列表信息
       this.tableConfig.tableHeadReadOnly = [
         // 合同编号
-        { prop: 'contractCode', label: 'contractExamine.contractCode', width: '160' },
+        { prop: 'contractCode', label: 'applypaymentExamine.contractCode', width: '160' },
         // 合同名称
-        { prop: 'contractName', label: 'contractExamine.contractName', width: '200' },
+        { prop: 'contractName', label: 'applypaymentExamine.contractName', width: '200' },
         // 合同分类
-        { prop: 'contractTypeName', label: 'contractExamine.contractTypeName' },
+        { prop: 'contractTypeName', label: 'applypaymentExamine.contractTypeName' },
         // 合同金额(元)
-        { prop: 'contractTotalPrice', label: 'contractExamine.contractTotalPrice', width: '160' },
+        { prop: 'contractTotalPrice', label: 'applypaymentExamine.contractTotalPrice', width: '160' },
         // 供应商
-        { prop: 'supplierName', label: 'contractExamine.supplierName', width: '200' },
-        // 签约时间
-        { prop: 'contractTime', label: 'contractExamine.contractTime', width: '160' },
-        // 付款方式
-        { prop: 'contractPayType', label: 'contractExamine.contractPayType', width: '100' },
-        // 审核时间
-        { prop: 'handleTime', label: 'contractExamine.handleTime', width: '160' },
+        { prop: 'supplierName', label: 'applypaymentExamine.supplierName', width: '200' },
         // 经办人
-        { prop: 'contractHandleman', label: 'contractExamine.contractHandleman', width: '100' }
+        { prop: 'contractHandleman', label: 'applypaymentExamine.contractHandleman', width: '100' },
+        // 款项名称
+        { prop: 'costPayName', label: 'applypaymentExamine.costPayName' },
+        // 应付金额
+        { prop: 'needPayAmount', label: 'applypaymentExamine.needPayAmount', width: '120' },
+        // 已付金额
+        { prop: 'havePayAmount', label: 'applypaymentExamine.havePayAmount', width: '120' },
+        // 申请金额
+        { prop: 'thisAmount', label: 'applypaymentExamine.thisAmount', width: '120' }
       ]
       this.tableConfig.rowKey = 'taskId'
       // 是否填充查询条件为空
@@ -322,7 +297,7 @@ export default {
         examineStatus: 0
       }
       // 配置列表请求
-      this.tableHandle.list.api = getEngineeringContractExaminePageList
+      this.tableHandle.list.api = getEngineeringContractApplypaymentExaminePageList
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
@@ -333,16 +308,6 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteXXX
       // console.log('table page created')
-      this.tableColumnAction = [
-        {
-          searchParam: 'examineStatus',
-          exclude: [
-            { value: 0, props: ['handleTime'] },
-            { value: 1, props: [] },
-            { value: 2, props: ['handleTime'] }
-          ]
-        }
-      ]
       this.generateTable()
     },
     genrateI18nSearchItems() {
@@ -357,23 +322,13 @@ export default {
       ]
     },
     // 创建
-    // createHandle(options = { componentNames: ['yunlin-table'] }) {
-    //   this.$pageSwitch('form', { pageType: 'create', ...options })
-    // },
+    createHandle(options = { componentNames: ['yunlin-table'] }) {
+      this.$pageSwitch('form', { pageType: 'create', ...options })
+    },
     // 编辑
-    // editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-    //   this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
-    // },
-    // XXXXXXHandle(row) {
-    //   this.setDrawerComponent('xxx')
-    //   this.setDrawerData({ data: { pageType: 'create', formDataUpdate: false, t: new Date() } })
-    //   this.setDrawerTitle(this.$t('xxxx'))
-    //   this.drawerVisibleHandle()
-    // }
-    // drawerClosed() {
-    // drawer关闭以后父页面需要的操作
-    // this.searchHandle()
-    // }
+    editHandle(item, options = { componentNames: ['yunlin-table'] }) {
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
+    },
     // 通过
     completeActivitiTask() {
       return completeActivitiTask

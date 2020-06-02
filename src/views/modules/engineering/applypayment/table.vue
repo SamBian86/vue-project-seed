@@ -71,7 +71,7 @@
           <!-- 查询 -->
           <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:applypayment:view')"
+              v-if="filterPermission('engineering:applypayment:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
             >{{ $t('query') }}</el-button>
@@ -79,7 +79,7 @@
           <!-- 创建 -->
           <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:applypayment:save')"
+              v-if="filterPermission('engineering:applypayment:save')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
@@ -88,7 +88,7 @@
           <!-- 下载模板 -->
           <!--<el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:applypayment:save')"
+              v-if="filterPermission('engineering:applypayment:save')"
               type="success"
               :size="tableConfig.tableSearchSize"
               @click="downloadHandle({
@@ -113,7 +113,7 @@
           <!-- 导出 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:applypayment:export')"
+              v-if="filterPermission('engineering:applypayment:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
@@ -122,7 +122,7 @@
           <!-- 批量删除 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:applypayment:delete')"
+              v-if="filterPermission('engineering:applypayment:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
@@ -131,7 +131,7 @@
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:applypayment:xxx')"
+              v-if="filterPermission('engineering:applypayment:xxx')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="customSectionHandle({
@@ -150,26 +150,39 @@
           align="center"
           header-align="center"
           fixed="right"
-          width="100"
+          width="200"
         >
           <template slot-scope="scope">
             <!-- 修改 -->
             <el-button
-              v-if="filterPermission('engineering:contract:applypayment:update')"
+              v-if="filterPermission('engineering:applypayment:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
             <el-button
-              v-if="filterPermission('engineering:contract:applypayment:delete')"
+              v-if="filterPermission('engineering:applypayment:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
             >{{ $t('delete') }}</el-button>
+            <!-- 提交审核 -->
+            <el-button
+              v-if="filterPermission('engineering:applypayment:submit') && scope.row.applyStatus === 0"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="
+                customHandle({
+                  data: { id : scope.row.id },
+                  i18nRequestMessage: 'applypayment.submit',
+                  request: submitEngineeringContractApplypaymentById
+                })
+              "
+            >{{ $t('applypayment.submit') }}</el-button>
             <!-- 单个操作 -->
             <!-- <el-button
-              v-if="filterPermission('engineering:contract:applypayment:xxx')"
+              v-if="filterPermission('engineering:applypayment:xxx')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="customHandle({
@@ -192,7 +205,9 @@ import tableDefaultMixin from '@/mixins/table-default-mixin'
 import { getEngineeringProjectList } from '@/api/engineering/project'
 import {
   getEngineeringContractApplypaymentPageList,
-  deleteEngineeringContractApplypayment
+  deleteEngineeringContractApplypayment,
+  submitEngineeringContractApplypaymentById,
+  rejectinfoEngineeringContractApplypaymentById
 } from '@/api/engineering/contractApplypayment'
 
 export default {
@@ -237,9 +252,9 @@ export default {
         // 合同类别
         { prop: 'contractTypeName', label: 'applypayment.contractTypeName' },
         // 合同金额
-        { prop: 'contractTotalPrice', label: 'applypayment.contractTotalPrice', width: '160' },
+        { prop: 'contractTotalPrice', label: 'applypayment.contractTotalPrice', width: '120' },
         // 终审额
-        { prop: 'contractFinalPrice', label: 'applypayment.contractFinalPrice', width: '160' },
+        { prop: 'contractFinalPrice', label: 'applypayment.contractFinalPrice', width: '120' },
         // 供应商
         { prop: 'supplierName', label: 'applypayment.supplierName', width: '200' },
         // 经办人
@@ -250,16 +265,29 @@ export default {
         { prop: 'needPayAmount', label: 'applypayment.needPayAmount', width: '160' },
         // 已付金额
         { prop: 'havePayAmount', label: 'applypayment.havePayAmount', width: '160' },
-        // 应付申请
-        { prop: 'thisAmount', label: 'applypayment.thisAmount', width: '100' },
+        // 本次申请金额
+        { prop: 'thisAmount', label: 'applypayment.thisAmount', width: '120' },
         // 请付状态
-        { prop: 'payStatusName', label: 'applypayment.payStatusName', width: '160' },
+        {
+          prop: 'applyStatusName',
+          label: 'applypayment.applyStatusName',
+          width: '160',
+          clickHandle: this.applyStatusClickHandle,
+          preHandle: (value, row) => {
+            if (row.applyStatus === 3) {
+              return `<span class="applyStatusReject">${value}</span>`
+            }
+            return value
+          }
+        },
         // 申请日期
         { prop: 'applyDate', label: 'applypayment.applyDate', width: '160' }
       ]
       // 是否填充查询条件为空
-      // this.tableConfig.searchFillEmpty = true
-      // this.tableSearchParams = {}
+      this.tableConfig.searchFillEmpty = true
+      this.tableSearchParams = {
+        applyStatus: 0
+      }
       // 配置列表请求
       this.tableHandle.list.api = getEngineeringContractApplypaymentPageList
       // 配置导出功能
@@ -290,8 +318,35 @@ export default {
     },
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
+    },
+    // 提交审核
+    submitEngineeringContractApplypaymentById() {
+      return submitEngineeringContractApplypaymentById
+    },
+    // 点击已退回
+    applyStatusClickHandle(row) {
+      if (row.applyStatus !== 3) {
+        return
+      }
+      rejectinfoEngineeringContractApplypaymentById({ id: row.id }).then(response => {
+        const _html = `
+        <div>${this.$t('applypayment.comment')}：${response.comment}</div>
+        <div>${this.$t('applypayment.userName')}：${response.userName}</div>
+        `
+        this.$alert(_html, this.$t('info'), {
+          confirmButtonText: this.$t('confirm'),
+          dangerouslyUseHTMLString: true
+        })
+        console.log(response)
+      })
     }
   }
 }
 </script>
+<style lang="scss">
+.applyStatusReject {
+  color: #4381e6;
+  cursor: pointer;
+}
+</style>

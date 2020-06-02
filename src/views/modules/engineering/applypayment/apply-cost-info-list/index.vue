@@ -1,77 +1,64 @@
 <template>
   <div class="draw-table-container">
     <div class="draw-table-count">
-      <span class="contractTotalPrice">
-        {{ $t('contractCost.amountAll') }}
-        <b>{{ contractTotalPrice }}</b>
+      <span class="currentTotalPrice">
+        {{ $t('applycostlist.currentTotalPrice') }}
+        <b>{{ currentTotalPrice }}</b>
       </span>
     </div>
     <div class="table-no-padding">
       <el-row :gutter="10">
         <el-col :span="24" :lg="24" :md="24" :sm="24" :xs="24">
           <el-table :data="list" border>
-            <el-table-column min-width="180" :label="$t('contractCost.costTypeName')">
+            <el-table-column min-width="180" :label="$t('applycostlist.costTypeName')">
               <template slot-scope="scope">
-                <span
-                  v-if="scope.row.save === false"
-                  class="table-column-line-through"
-                >{{ scope.row.costTypeName }}</span>
-                <span
-                  v-if="scope.row.save === true"
-                  class="table-column-save"
-                >{{ scope.row.costTypeName }}</span>
+                <span>{{ scope.row.costTypeName }}</span>
               </template>
             </el-table-column>
             <el-table-column
               prop="pcostTypeName"
-              :label="$t('contractCost.pcostTypeName')"
+              :label="$t('applycostlist.pcostTypeName')"
               width="180"
             ></el-table-column>
             <el-table-column
               prop="costPrimitiveTarget"
-              :label="$t('contractCost.costPrimitiveTarget')"
+              :label="$t('applycostlist.costPrimitiveTarget')"
               width="100"
             ></el-table-column>
             <el-table-column
-              prop="costControlRate"
-              :label="$t('contractCost.costControlRate')"
-              :formatter="costControlRateFormatter"
+              prop="contractTotalCost"
+              :label="$t('applycostlist.contractTotalCost')"
               width="100"
-            ></el-table-column>
-            <el-table-column
-              prop="drawingbudgetTotalCost"
-              :label="$t('contractCost.drawingbudgetTotalCost')"
-              min-width="140"
             >
               <template slot-scope="scope">
                 <div
                   v-if="scope.row.save === false && scope.row.warning === false"
-                >{{ scope.row.drawingbudgetTotalCost }}</div>
+                >{{ scope.row.contractTotalCost }}</div>
                 <div v-else-if="scope.row.save === true && scope.row.warning === true">
-                  {{ scope.row.drawingbudgetTotalCost }}
+                  {{ scope.row.contractTotalCost }}
                   <el-tooltip
                     class="range-warning"
                     effect="dark"
-                    :content="`${$t('contractCost.drawingbudgetTotalCostRange')}${scope.row.drawingbudgetTotalCostRange}`"
+                    :content="`${$t('applycostlist.applyAmountRange')}${scope.row.remain > 0 ? scope.row.remain : 0}`"
                     placement="top"
                   >
                     <span>
                       <i class="el-icon-warning-outline"></i>
-                      ({{ scope.row.drawingbudgetTotalCostRange }})
+                      ({{ scope.row.remain > 0 ? scope.row.remain : 0 }})
                     </span>
                   </el-tooltip>
                 </div>
                 <div v-else-if="scope.row.save === true && scope.row.warning === false">
-                  {{ scope.row.drawingbudgetTotalCost }}
+                  {{ scope.row.contractTotalCost }}
                   <el-tooltip
                     class="range-success"
                     effect="dark"
-                    :content="`${$t('contractCost.drawingbudgetTotalCostRange')}${scope.row.drawingbudgetTotalCostRange}`"
+                    :content="`${$t('applycostlist.applyAmountRange')}${scope.row.remain > 0 ? scope.row.remain : 0}`"
                     placement="top"
                   >
                     <span>
                       <i class="el-icon-circle-check"></i>
-                      ({{ scope.row.drawingbudgetTotalCostRange }})
+                      ({{ scope.row.remain > 0 ? scope.row.remain : 0 }})
                     </span>
                   </el-tooltip>
                 </div>
@@ -79,17 +66,12 @@
             </el-table-column>
             <el-table-column
               prop="contractGeneratedAmount"
-              :label="$t('contractCost.contractGeneratedAmount')"
-              width="140"
-            ></el-table-column>
-            <el-table-column
-              prop="changeGeneratedAmount"
-              :label="$t('contractCost.changeGeneratedAmount')"
-              width="140"
+              :label="$t('applycostlist.contractGeneratedAmount')"
+              width="100"
             ></el-table-column>
             <el-table-column
               v-if="!disabled"
-              :label="$t('contractCost.amount')"
+              :label="$t('applycostlist.applyAmount')"
               width="200"
               align="center"
               header-align="center"
@@ -100,15 +82,15 @@
                   v-if="scope.row.load === false && scope.row.save === false"
                   type="text"
                   size="small"
-                  @click="getEngineeringCost(scope.row.costTypeId)"
-                >{{ $t('contractCost.load') }}</el-button>
+                  @click="applyCost(scope.row.costTypeId)"
+                >{{ $t('applycostlist.apply') }}</el-button>
                 <div v-else-if="scope.row.load === true && scope.row.save === false">
                   <el-row :gutter="10">
                     <el-col :span="16" :lg="16" :md="16" :sm="24" :xs="24">
                       <el-input
-                        v-model="scope.row.amount"
+                        v-model="scope.row.applyAmount"
                         size="small"
-                        :placeholder="$t('contractCost.amountPlaceholder')"
+                        :placeholder="$t('applycostlist.amountPlaceholder')"
                         @keyup.enter.native="save(scope.row.costTypeId)"
                       ></el-input>
                     </el-col>
@@ -117,31 +99,31 @@
                         type="text"
                         size="small"
                         @click="save(scope.row.costTypeId)"
-                      >{{ $t('contractCost.save') }}</el-button>
+                      >{{ $t('applycostlist.save') }}</el-button>
                     </el-col>
                     <el-col :span="4" :lg="4" :md="4" :sm="24" :xs="24">
                       <el-button
                         type="text"
                         size="small"
                         @click="cancel(scope.row.costTypeId)"
-                      >{{ $t('contractCost.cancel') }}</el-button>
+                      >{{ $t('applycostlist.cancel') }}</el-button>
                     </el-col>
                   </el-row>
                 </div>
                 <div v-else-if="scope.row.load === true && scope.row.save === true">
-                  {{ scope.row.amount }}
+                  {{ scope.row.applyAmount }}
                   <el-button
                     type="text"
                     size="small"
                     @click="cancel(scope.row.costTypeId)"
-                  >{{ $t('contractCost.cancel') }}</el-button>
+                  >{{ $t('applycostlist.cancel') }}</el-button>
                 </div>
               </template>
             </el-table-column>
             <el-table-column
               v-else
-              prop="amount"
-              :label="$t('contractCost.amount')"
+              prop="applyAmount"
+              :label="$t('applycostlist.applyAmount')"
               width="200"
               align="center"
               header-align="center"
@@ -152,8 +134,8 @@
       </el-row>
     </div>
     <div v-if="!disabled" class="draw-table-submit">
-      <el-button size="small" @click="cancelAll">{{ $t('contractCost.cancel') }}</el-button>
-      <el-button type="primary" size="small" @click="saveAll">{{ $t('contractCost.save') }}</el-button>
+      <el-button size="small" @click="cancelAll">{{ $t('applycostlist.cancel') }}</el-button>
+      <el-button type="primary" size="small" @click="saveAll">{{ $t('applycostlist.save') }}</el-button>
     </div>
   </div>
 </template>
@@ -162,7 +144,10 @@ import { mapGetters } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 import formMixin from '@/mixins/form-mixin'
 import drawerMixin from '@/mixins/drawer-mixin'
-import { getEngineeringCostSelect, getEngineeringCost } from '@/api/engineering/contractCost'
+import {
+  getEngineeringContractApplycostListByApplyId,
+  getEngineeringContractApplycostListByContractId
+} from '@/api/engineering/contractApplycostList'
 export default {
   components: {},
   mixins: [commonMixin, formMixin, drawerMixin],
@@ -180,9 +165,11 @@ export default {
   },
   data() {
     return {
-      projectId: '',
+      contractId: '',
+      id: '',
       list: [],
-      contractTotalPrice: 0 // 合同金额
+      pageType: '',
+      currentTotalPrice: 0
     }
   },
   computed: {
@@ -204,100 +191,122 @@ export default {
   },
   methods: {
     init() {
-      const { list, projectId } = this.drawerData
-      this.projectId = projectId
+      const { id, list, contractId, pageType } = this.drawerData
+      this.id = id
+      this.contractId = contractId
+      this.pageType = pageType
 
       if (list.length === 0) {
-        // 获取详情预算科目列表
-        this.getEngineeringCostSelect()
+        if (pageType === 'create') {
+          this.getEngineeringContractApplycostListByContractId()
+        }
+
+        if (pageType === 'edit') {
+          this.getEngineeringContractApplycostListByApplyId()
+        }
       } else {
         list.forEach(item => {
-          if (item.amount === 0) {
+          if (item.applyAmount === 0) {
             item.load = false
             item.warning = false
             item.save = false
           } else {
             item.load = true
-            item.drawingbudgetTotalCostRange = item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate))
-            item.warning = item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate)) < item.amount || false
+            item.remain = item.contractTotalCost - item.contractGeneratedAmount
+            item.warning = item.remain < item.applyAmount || false
             item.save = true
           }
         })
         this.list = list
+        this.countTotalPrice()
       }
-      this.countTotalPrice()
     },
-    getEngineeringCostSelect() {
-      const { projectId } = this
-      getEngineeringCostSelect({ projectId }).then(response => {
+    getEngineeringContractApplycostListByContractId() {
+      const { contractId } = this
+      getEngineeringContractApplycostListByContractId({ contractId }).then(response => {
         const list = []
         const defaultData = {
-          amount: 0,
-          changeGeneratedAmount: '',
-          contractGeneratedAmount: '',
-          contractId: '',
-          costControlRate: '',
+          applyAmount: 0,
+          applyPaymentId: '',
+          contractGeneratedAmount: 0,
+          contractId,
+          contractTotalCost: 0,
+          costControlRate: 0,
           costPrimitiveTarget: '',
           costTypeCode: '',
           costTypeId: '',
           costTypeName: '',
-          drawingbudgetTotalCost: '',
           pcostTypeName: '',
           pid: '',
-          projectId,
           remark: ''
         }
         response.forEach(item => {
-          list.push({ ...defaultData, ...item, load: false, warning: false, save: false })
+          const remain = item.contractTotalCost - item.contractGeneratedAmount
+          list.push({ ...defaultData, ...item, remain, load: false, warning: false, save: false })
         })
         this.$set(this, 'list', list)
         this.$nextTick(() => {
           this.countTotalPrice()
         })
-        // console.log(list)
       })
     },
-    getEngineeringCost(costTypeId) {
-      const { projectId, list } = this
-      getEngineeringCost({
-        projectId,
-        costTypeId
-      }).then(response => {
-        const newList = []
-        list.forEach(item => {
-          response.amount = response.amount !== '' || response.amount !== null ? response.amount - 0 : 0
-          if (response.costControlRate !== '') {
-            response.drawingbudgetTotalCostRange = response.drawingbudgetTotalCost * (1 + parseFloat(response.costControlRate))
-          }
-          if (item.costTypeId === costTypeId) {
-            newList.push({ ...item, ...response, load: true, warning: false, save: false })
-          } else {
-            newList.push(item)
-          }
+    getEngineeringContractApplycostListByApplyId() {
+      const { contractId, id } = this
+      getEngineeringContractApplycostListByApplyId({ applyPaymentId: id }).then(response => {
+        const list = []
+        const defaultData = {
+          applyAmount: 0,
+          applyPaymentId: id,
+          contractGeneratedAmount: 0,
+          contractId,
+          contractTotalCost: 0,
+          costControlRate: 0,
+          costPrimitiveTarget: '',
+          costTypeCode: '',
+          costTypeId: '',
+          costTypeName: '',
+          pcostTypeName: '',
+          pid: '',
+          remark: ''
+        }
+        response.forEach(item => {
+          const remain = item.contractTotalCost - item.contractGeneratedAmount
+          list.push({
+            ...defaultData,
+            ...item,
+            remain,
+            load: item.applyAmount !== 0 || false,
+            warning: remain < item.applyAmount || false,
+            save: item.applyAmount !== 0 || false
+          })
         })
-        // console.log(newList)
-        this.$set(this, 'list', newList)
+        this.$set(this, 'list', list)
+        this.$nextTick(() => {
+          this.countTotalPrice()
+        })
       })
     },
-    // 强控比例格式化
-    costControlRateFormatter(row, column) {
-      if (row.costControlRate === '' || row.costControlRate === 0) {
-        return ''
-      } else {
-        return `${row.costControlRate * 100}%`
-      }
+    applyCost(costTypeId) {
+      const { list } = this
+      const newList = []
+      list.forEach(item => {
+        if (item.costTypeId === costTypeId) {
+          newList.push({ ...item, load: true, warning: false, save: false })
+        } else {
+          newList.push(item)
+        }
+      })
+      this.$set(this, 'list', newList)
     },
     // 保存
     save(costTypeId) {
       const { list } = this
       const newList = []
       list.forEach(item => {
-        item.amount = !isNaN(item.amount) && item.amount !== '' && item.amount !== null ? item.amount - 0 : 0
+        item.applyAmount =
+          !isNaN(item.applyAmount) && item.applyAmount !== '' && item.applyAmount !== null ? item.applyAmount - 0 : 0
         if (item.costTypeId === costTypeId) {
-          let warning = false
-          if (item.drawingbudgetTotalCostRange) {
-            warning = item.drawingbudgetTotalCostRange < item.amount || false
-          }
+          const warning = item.remain < item.applyAmount || item.remain < 0 || false
           newList.push({ ...item, warning, save: true })
         } else {
           newList.push(item)
@@ -313,22 +322,9 @@ export default {
     cancel(costTypeId) {
       const { list } = this
       const newList = []
-      const defaultData = {
-        amount: 0,
-        changeGeneratedAmount: '',
-        contractGeneratedAmount: '',
-        costControlRate: '',
-        costPrimitiveTarget: '',
-        drawingbudgetTotalCost: '',
-        drawingbudgetTotalCostRange: '',
-        pcostTypeName: '',
-        pid: '',
-        remark: ''
-      }
       list.forEach(item => {
         if (item.costTypeId === costTypeId) {
-          item.amount = 0
-          newList.push({ ...item, ...defaultData, load: false, warning: false, save: false })
+          newList.push({ ...item, load: false, warning: false, save: false })
         } else {
           newList.push(item)
         }
@@ -341,20 +337,20 @@ export default {
     },
     countTotalPrice() {
       const { list } = this
-      let contractTotalPrice = 0
+      let currentTotalPrice = 0
       list.map(item => {
         if (item.save) {
-          contractTotalPrice += item.amount
+          currentTotalPrice += item.applyAmount
         }
       })
-      this.contractTotalPrice = contractTotalPrice
+      this.currentTotalPrice = currentTotalPrice
     },
     // 保存所有
     saveAll() {
-      const { list, contractTotalPrice } = this
+      const { list, currentTotalPrice } = this
       const newData = {
-        contractTotalPrice,
-        costInfoList: list
+        thisAmount: currentTotalPrice,
+        applyCostinfoDto: list
       }
       this.$formDataMerge(newData)
       this.$drawerCloseByChild()
@@ -422,11 +418,11 @@ export default {
   color: #67c23a;
 }
 
-.contractTotalPrice {
+.currentTotalPrice {
   font-size: 18px;
 }
 
-.contractTotalPrice b {
+.currentTotalPrice b {
   color: #67c23a;
 }
 </style>

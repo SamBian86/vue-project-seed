@@ -114,10 +114,10 @@ export default {
     },
     // 删除前回调
     dragBeforeRemoveHandle(file, fileList) {
-      const { dragList } = this
+      const { dragList, disabled } = this
       const items = dragList.filter(item => item.uid === file.uid && item.success)
 
-      if (items.length === 0) {
+      if (items.length === 0 || disabled) {
         // console.log('删除失败')
         return false
       }

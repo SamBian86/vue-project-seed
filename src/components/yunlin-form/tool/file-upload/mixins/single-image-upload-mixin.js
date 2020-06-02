@@ -119,11 +119,11 @@ export default {
     },
     // 删除前回调
     singleImageBeforeRemoveHandle(file, fileList) {
-      const { singleImageList } = this
+      const { singleImageList, disabled } = this
       const items = singleImageList.filter(
         item => (item.uid === file.uid && item.success) || (item.uid === file.uid && item.status === 'success')
       )
-      if (items.length === 0) {
+      if (items.length === 0 || disabled) {
         // console.log('删除失败')
         return false
       }

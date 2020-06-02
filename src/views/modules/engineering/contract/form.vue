@@ -76,6 +76,7 @@ import { createEngineeringContract, editEngineeringContract, getEngineeringContr
 import { getEngineeringProjectList } from '@/api/engineering/project'
 import { getEngineeringContractTypeTree } from '@/api/engineering/contractType'
 import { getEngineeringSupplierList } from '@/api/engineering/supplier'
+import { getUserList } from '@/api/sys/user'
 import costInfoList from './cost-info-list'
 import { validateMobile } from '@/utils/validator'
 
@@ -304,8 +305,26 @@ export default {
           span: 8,
           prop: 'contractHandleman',
           name: 'contract.contractHandleman',
-          type: 'text',
-          rules: [{ required: true }]
+          type: 'select-dynamic',
+          rules: [{ required: true }],
+          component: 'toolSelectDynamic',
+          componentConfig: {
+            request: getUserList,
+            requestParams: {},
+            itemProps: {
+              label: 'realName',
+              value: 'realName'
+            },
+            propName: 'contractHandleman',
+            placeholder: 'contract.contractHandleman',
+            className: 'select-block',
+            mergeData: { target: 'contractHandleman' },
+            mergeOtherData: [
+              { source: 'realName', target: 'contractHandleman' },
+              { source: 'mobile', target: 'contractHandlemanPhone' }
+            ],
+            componentNames: ['select-dynamic']
+          }
         },
         {
           // 经办人电话
@@ -313,6 +332,7 @@ export default {
           prop: 'contractHandlemanPhone',
           name: 'contract.contractHandlemanPhone',
           type: 'text',
+          disabled: true,
           rules: [{ required: true }, { validator: validateMobile, trigger: 'blur' }]
         },
         {

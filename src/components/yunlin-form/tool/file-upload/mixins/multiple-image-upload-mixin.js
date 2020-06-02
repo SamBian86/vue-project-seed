@@ -98,9 +98,10 @@ export default {
     },
     // 删除前回调
     multipleImageBeforeRemoveHandle(file, fileList) {
+      const { disabled } = this
       const items = fileList.filter(item => item.uid === file.uid)
 
-      if (items.length === 0) {
+      if (items.length === 0 || disabled) {
         // console.log('删除失败')
         return false
       }

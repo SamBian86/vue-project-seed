@@ -1,0 +1,12 @@
+{
+  "form代码片段_empty": {
+    "prefix": "sp_form_item_empty",
+    "body": [
+      "{\r",
+      "  span: 8,\r",
+      "  type: 'empty'\r",
+      "},$1"
+    ],
+    "description": "form代码片段_empty"
+  }
+}
