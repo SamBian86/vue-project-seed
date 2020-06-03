@@ -908,4 +908,8 @@ t.applypaymentPay.handleman = '经办人'
 t.applypaymentPay.handleDate = '经办日期'
 t.applypaymentPay.applier = '申请人'
 
+t.contractChangeType = {}
+t.contractChangeType.changeTypeName = '变更类别名称'
+t.contractChangeType.remark = '备注'
+
 export default t
