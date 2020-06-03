@@ -1,8 +1,49 @@
 <template>
   <div class="drawer-container">
-    <el-row :gutter="10">
-      <el-col :span="8" :lg="8" :md="8" :sm="24" :xs="24"></el-col>
-    </el-row>
+    <el-form :model="detail" label-position="right" label-width="100px" size="small">
+      <el-row :gutter="10">
+        <el-col :span="8" :lg="8" :md="8" :sm="24" :xs="24">
+          <el-form-item :label="$t('applypaymentPay.contractName')">
+            <el-input :value="detail.contractName" :readonly="true"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8" :lg="8" :md="8" :sm="24" :xs="24">
+          <el-form-item :label="$t('applypaymentPay.contractCode')">
+            <el-input :value="detail.contractCode" :readonly="true"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8" :lg="8" :md="8" :sm="24" :xs="24">
+          <el-form-item :label="$t('applypaymentPay.costPayName')">
+            <el-input :value="detail.costPayName" :readonly="true"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8" :lg="8" :md="8" :sm="24" :xs="24">
+          <el-form-item :label="$t('applypaymentPay.haveApplyAmount')">
+            <el-input :value="detail.haveApplyAmount" :readonly="true"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8" :lg="8" :md="8" :sm="24" :xs="24">
+          <el-form-item :label="$t('applypaymentPay.havePayAmount')">
+            <el-input :value="detail.havePayAmount" :readonly="true"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8" :lg="8" :md="8" :sm="24" :xs="24">
+          <el-form-item :label="$t('applypaymentPay.needPayAmount')">
+            <el-input :value="detail.needPayAmount" :readonly="true"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8" :lg="8" :md="8" :sm="24" :xs="24">
+          <el-form-item :label="$t('applypaymentPay.supplierName')">
+            <el-input :value="detail.supplierName" :readonly="true"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8" :lg="8" :md="8" :sm="24" :xs="24">
+          <el-form-item :label="$t('applypaymentPay.thisAmount')">
+            <el-input :value="detail.thisAmount" :readonly="true"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
     <el-row :gutter="10">
       <el-col :span="24" :lg="24" :md="24" :sm="24" :xs="24">
         <yunlin-table
@@ -158,7 +199,17 @@ export default {
   mixins: [pageMixin, tableDefaultMixin],
   data() {
     return {
-      detail: {}
+      id: '',
+      detail: {
+        contractName: '',
+        contractCode: '',
+        costPayName: '',
+        haveApplyAmount: '',
+        havePayAmount: '',
+        needPayAmount: '',
+        supplierName: '',
+        thisAmount: ''
+      }
     }
   },
   computed: {
@@ -174,6 +225,7 @@ export default {
   methods: {
     init() {
       const { id } = this.$attrs.page_drawer_data
+      this.id = id
       // 配置查询区域i18n相关select数据
       // this.genrateI18nSearchItems()
       // console.log('table created')
@@ -183,31 +235,41 @@ export default {
       // this.tableConfig.highlightCurrentRow = true
       // this.tableConfig.defaultExpandAll = true
       // this.tableConfig.lazy = true
-      this.tableConfig.tableType = 'selection'
+      // this.tableConfig.tableType = 'selection'
       // console.log(this.$attrs)
 
       // 设置获取列表信息
-      this.tableConfig.tableHeadReadOnly = []
+      this.tableConfig.tableHeadReadOnly = [
+        // 供应商名称
+        { prop: 'supplierName', label: 'applypaymentPay.supplierName' },
+        // 实付金额
+        { prop: 'payAmount', label: 'applypaymentPay.payAmount', width: '120' },
+        // 支付方式
+        { prop: 'payType', label: 'applypaymentPay.payType', width: '120' },
+        // 经办人
+        { prop: 'handleman', label: 'applypaymentPay.handleman', width: '120' },
+        // 经办日期
+        { prop: 'handleDate', label: 'applypaymentPay.handleDate', width: '160' }
+      ]
       // 是否填充查询条件为空
-      // this.tableConfig.searchFillEmpty = true
-      // this.tableSearchParams = {}
-      this.tableSearchParams.applyPaymentId = id
+      this.tableConfig.searchFillEmpty = true
+      this.tableSearchParams = {
+        applyPaymentId: id
+      }
       // 配置列表请求
       this.tableHandle.list.api = getEngineeringContractApplypaymentDetailsPageList
+      this.tableHandle.list.callBack = this.afterGetList
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
       this.tableHandle.delete.api = deleteEngineeringContractApplypaymentDetails
-      // this.tableHandle.delete.callback = this.deleteCallback
+      this.tableHandle.delete.callback = this.afterGetList
       // 配置节点懒加载功能
       // this.tableHandle.lazy.api = lazyXXX
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteEngineeringContractApplypaymentDetails
       // console.log('table page created')
       this.generateTable()
-      this.getEngineeringContractApplypaymentForPayById({
-        id
-      })
     },
     genrateI18nSearchItems() {
       // XXX
@@ -218,7 +280,8 @@ export default {
     },
     // 创建
     createHandle(options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { pageType: 'create', ...options })
+      const { id } = this
+      this.$pageSwitch('form', { pageType: 'create', ...options, applyPaymentId: id })
     },
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
@@ -227,6 +290,12 @@ export default {
     getEngineeringContractApplypaymentForPayById(params) {
       getEngineeringContractApplypaymentForPayById(params).then(response => {
         this.detail = response
+      })
+    },
+    afterGetList() {
+      const { id } = this
+      this.getEngineeringContractApplypaymentForPayById({
+        id
       })
     }
   }

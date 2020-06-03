@@ -33,13 +33,13 @@
               @click.stop="cancleHandle"
             >{{ $t('back') }}</el-button>
             <el-button
-              v-if="containsPageType(['create']) && filterPermission('xxx:xxx:save')"
+              v-if="containsPageType(['create']) && filterPermission('engineering:pay:save')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
             >{{ $t('add') }}</el-button>
             <el-button
-              v-if="containsPageType(['edit']) && filterPermission('xxx:xxx:update')"
+              v-if="containsPageType(['edit']) && filterPermission('engineering:pay:update')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
@@ -56,7 +56,11 @@ import { mapGetters } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
-// import { createXXX, editXXX, getXXXById } from '@/api/XXX'
+import {
+  createEngineeringContractApplypaymentDetails,
+  editEngineeringContractApplypaymentDetails
+} from '@/api/engineering/contractApplypaymentDetails'
+import { getEngineeringSupplierList } from '@/api/engineering/supplier'
 // import { validateMobile } from '@/utils/validator'
 
 export default {
@@ -75,11 +79,11 @@ export default {
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
-          // api: createXXX
+          api: createEngineeringContractApplypaymentDetails
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
-          // api: editXXX
+          api: editEngineeringContractApplypaymentDetails
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
@@ -113,7 +117,62 @@ export default {
     },
     init() {
       // 设置表单内容
-      this.formConfig.formItemsReadOnly = []
+      this.formConfig.formItemsReadOnly = [
+        {
+          // 供应商
+          span: 24,
+          prop: 'supplierId',
+          name: 'applypaymentPay.supplierId',
+          type: 'select-dynamic',
+          rules: [{ required: true }],
+          component: 'toolSelectDynamic',
+          componentConfig: {
+            request: getEngineeringSupplierList,
+            requestParams: {},
+            itemProps: {
+              label: 'name',
+              value: 'id'
+            },
+            propName: 'supplierId',
+            placeholder: 'applypaymentPay.supplierId',
+            className: 'select-block',
+            mergeData: { target: 'supplierId' },
+            componentNames: ['select-dynamic']
+          }
+        },
+        {
+          // 实付金额
+          span: 24,
+          prop: 'payAmount',
+          name: 'applypaymentPay.payAmount',
+          type: 'text',
+          rules: [{ required: true }]
+        },
+        {
+          // 支付方式
+          span: 24,
+          prop: 'payType',
+          name: 'applypaymentPay.payType',
+          type: 'text'
+        },
+        {
+          // 经办人
+          span: 24,
+          prop: 'handleman',
+          name: 'applypaymentPay.handleman',
+          type: 'text'
+        },
+        {
+          // 经办日期
+          span: 24,
+          prop: 'handleDate',
+          name: 'applypaymentPay.handleDate',
+          type: 'date-picker',
+          className: 'select-block',
+          format: 'yyyy-MM-dd',
+          valueFormat: 'yyyy-MM-dd'
+        }
+      ]
 
       // 组装表单初始数据
       this.generateFormData()

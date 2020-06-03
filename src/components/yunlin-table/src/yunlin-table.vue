@@ -194,6 +194,7 @@ export default {
     searchHandle() {
       // 获取列表数据
       const { query } = this
+      const { callBack } = this.$attrs.handle.list
       const { hasPagination, searchFillEmpty, tableDataFrom } = this.$attrs.config
       const searchParams = this.$attrs.searchparams
 
@@ -226,7 +227,6 @@ export default {
       } else {
         params = { ..._searchParams }
       }
-
       // 检查是否覆盖获取列表方法
       this.getListBridge({ ...params })
         .then(response => {
@@ -245,6 +245,9 @@ export default {
             }
           }
 
+          if (callBack) {
+            callBack()
+          }
           this.loading = false
           this.reload = false // 用于控制在activated钩子上是否获取数据
         })

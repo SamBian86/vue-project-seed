@@ -65,7 +65,7 @@ export default {
   data() {
     return {
       componentNames: ['select-dynamic'],
-      selected: '',
+      selected: this.pageData[this.config.propName] || '',
       items: []
     }
   },
@@ -76,7 +76,6 @@ export default {
       const { propName } = this.config
       const newData = newVal[propName] || ''
       const oldData = oldVal[propName] || ''
-
       // 检查prop_data数据是否变动
       if (JSON.stringify(newData) !== JSON.stringify(oldData)) {
         this.selected = newData

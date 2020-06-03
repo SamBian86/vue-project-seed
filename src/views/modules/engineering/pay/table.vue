@@ -274,7 +274,7 @@ export default {
       // 是否填充查询条件为空
       this.tableConfig.searchFillEmpty = true
       this.tableSearchParams = {
-        payStatus: 0
+        payStatus: ''
       }
       // 配置列表请求
       this.tableHandle.list.api = getEngineeringContractApplypaymentPayPageList
@@ -289,6 +289,8 @@ export default {
       // this.tableHandle.deleteSection.api = deleteXXX
       // console.log('table page created')
       this.generateTable()
+
+      this.drawerConfig.size = '95%'
     },
     genrateI18nSearchItems() {
       getEngineeringProjectList().then(response => {

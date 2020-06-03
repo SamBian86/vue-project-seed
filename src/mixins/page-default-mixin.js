@@ -42,9 +42,10 @@ export default {
       if (pageInfo.length === 1) {
         this.pageInfo = pageInfo[0]
         this.pageInfo.data = data
-      } else {
-        Promise.reject(`请检查是否有${name}组件`)
       }
+      // else {
+      //   Promise.reject(`请检查是否有${name}组件`)
+      // }
     },
     // 用于当前页面数据变更后，进入下一个目标页面告知页面或组件是否需要在activated中重新获取数据
     pageUpdateListAdd(componentNames) {
@@ -73,6 +74,7 @@ export default {
         return item.name.toUpperCase()
       })
       this.include = include
-    }
+    },
+    afterPageSwitch() {}
   }
 }
