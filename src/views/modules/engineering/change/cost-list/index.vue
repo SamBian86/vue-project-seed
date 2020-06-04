@@ -153,21 +153,23 @@ export default {
       if (list.length === 0) {
         this.getEngineeringContractChangeContractCostById()
       } else {
-        // list.forEach(item => {
-        //   if (item.amount === 0) {
-        //     item.load = false
-        //     item.warning = false
-        //     item.save = false
-        //   } else {
-        //     item.load = true
-        //     item.drawingbudgetTotalCostRange = item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate))
-        //     item.warning = item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate)) < item.amount || false
-        //     item.save = true
-        //   }
-        // })
+        list.forEach(item => {
+          if (item.thisChangeAmount === 0) {
+            item.load = false
+            item.warning = false
+            item.save = false
+          } else {
+            item.load = true
+            item.drawingbudgetTotalCostRange = item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate))
+            item.warning =
+              item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate)) <
+                item.thisChangeAmount + item.contractGeneratedAmount + item.changeGeneratedAmount || false
+            item.save = true
+          }
+        })
         this.list = list
       }
-      // this.countTotalPrice()
+      this.countTotalPrice()
     },
     getEngineeringContractChangeContractCostById() {
       const { contractId } = this
