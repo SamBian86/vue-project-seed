@@ -13,7 +13,6 @@
       "    :picker-options=\"字段名$3PickerOptions\"\r",
       "    clearable\r",
       "    @change=\"dateHandle('字段名$4', $event)\"\r",
-      "    @clear=\"clearHandle\"\r",
       "  ></el-date-picker>\r",
       "</el-form-item>$3"
     ],

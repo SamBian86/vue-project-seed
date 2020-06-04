@@ -108,6 +108,7 @@ export default {
           }
         }
       }
+      this.searchHandle()
       // console.log(param, value)
     },
     generateColumn() {
@@ -115,6 +116,10 @@ export default {
       if (tableColumnAction.length !== 0) {
         this.generateTable()
       }
+    },
+    getTableData() {
+      const { tableName } = this.tableConfig
+      return this.$refs[tableName].getTableData()
     },
     // 查询
     searchHandle() {
@@ -131,6 +136,11 @@ export default {
     clearCurrentChangeHandle() {
       const { tableName } = this.tableConfig
       this.$refs[tableName].tableCleanCurrentChangeHandle()
+    },
+    // 清除多选
+    clearSelectionChangeHandle() {
+      const { tableName } = this.tableConfig
+      this.$refs[tableName].tableCleanSelectionChangeHandle()
     },
     // 下载功能
     downloadHandle(opts) {

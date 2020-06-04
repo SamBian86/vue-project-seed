@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     multipleFileUploadInit() {
-      console.log('multipleFileUploadInit')
+      // console.log('multipleFileUploadInit')
       const { propName } = this.config
       const { pageData } = this
       this.$refs['file-upload-multiple-file'] && this.$refs['file-upload-multiple-file'].clearFiles()

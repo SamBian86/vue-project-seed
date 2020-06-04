@@ -150,6 +150,7 @@
           </div>
         </el-col>
       </el-row>
+      <slot name="before-foot" />
       <el-row :gutter="10">
         <el-col>
           <el-form-item>

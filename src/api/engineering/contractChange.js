@@ -24,7 +24,18 @@ export function editEngineeringContractChange(data = {}) {
   })
 }
 
-// 获取科目明细
+// 获取合同科目明细
+// GET
+// /engineering/contract/change/contract/cost/{id}
+export function getEngineeringContractChangeContractCostById(params = {}) {
+  const { id } = params
+  return request({
+    url: `/engineering/contract/change/contract/cost/${id}`,
+    method: 'get'
+  })
+}
+
+// 获取变更科目明细
 // GET
 // /engineering/contract/change/cost/{id}
 export function getEngineeringContractChangeCostById(params = {}) {

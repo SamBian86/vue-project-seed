@@ -28,38 +28,6 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-select
-              v-model="tableSearchParams.contractStatus"
-              :placeholder="$t('contract.contractStatus')"
-              :size="tableConfig.tableSearchSize"
-              clearable
-              @clear="clearHandle"
-            >
-              <el-option
-                v-for="(item, index) in getDictByType('examine_status')"
-                :key="index"
-                :label="item.dictLabel"
-                :value="item.dictValue"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-select
-              v-model="tableSearchParams.projectId"
-              :placeholder="$t('contract.projectId')"
-              :size="tableConfig.tableSearchSize"
-              clearable
-              @clear="clearHandle"
-            >
-              <el-option
-                v-for="(item, index) in projectList"
-                :key="index"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
             <el-date-picker
               v-model="tableSearchParams.contractTimeFrom"
               :placeholder="$t('contract.contractTimeFrom')"
@@ -93,14 +61,14 @@
             >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
-          <el-form-item>
+          <!-- <el-form-item>
             <el-button
               v-if="filterPermission('engineering:contract:save')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
             >{{ $t('add') }}</el-button>
-          </el-form-item>
+          </el-form-item>-->
           <!-- 打开draw -->
           <!-- <el-form-item>
             <el-button type="primary" :size="tableConfig.tableSearchSize" @click="XXXXXXHandle()">{{ $t('xxx') }}</el-button>
@@ -151,90 +119,16 @@
             </el-button>
           </el-form-item>-->
           <!-- 批量操作 -->
-          <!-- <el-form-item>
+          <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:contract:xxx')"
-              type="danger"
+              type="primary"
               :size="tableConfig.tableSearchSize"
-              @click="customSectionHandle({
-                i18nMessage: 'prompt.customBatch',
-                i18nRequestMessage: 'bbb.bbb',
-                request: CCC
-              })"
-            >{{ $t('ddd.ddd') }}</el-button>
-          </el-form-item>-->
+              @click="batchSaveHandle"
+            >{{ $t('contractChange.batchSave') }}</el-button>
+          </el-form-item>
         </el-form>
       </template>
-      <!-- 操作区域 -->
-      <template slot="operate">
-        <el-table-column
-          :label="$t('handle')"
-          align="center"
-          header-align="center"
-          fixed="right"
-          width="280"
-        >
-          <template slot-scope="scope">
-            <!-- 查看 -->
-            <el-button
-              v-if="filterPermission('engineering:contract:view')"
-              type="text"
-              :size="tableConfig.tableSearchSize"
-              @click="detailHandle(scope.row)"
-            >{{ $t('detail') }}</el-button>
-            <!-- 付款计划 -->
-            <el-button
-              v-if="filterPermission('engineering:contract:update')"
-              type="text"
-              :size="tableConfig.tableSearchSize"
-              @click="planHandle(scope.row)"
-            >{{ $t('contract.plan') }}</el-button>
-            <!-- 修改 -->
-            <el-button
-              v-if="filterPermission('engineering:contract:update') && scope.row.contractStatus === 0"
-              type="text"
-              :size="tableConfig.tableSearchSize"
-              @click="editHandle(scope.row)"
-            >{{ $t('update') }}</el-button>
-            <!-- 提交审核 -->
-            <el-button
-              v-if="filterPermission('engineering:contract:submit') && scope.row.contractStatus === 0"
-              type="text"
-              :size="tableConfig.tableSearchSize"
-              @click="
-                customHandle({
-                  data: { id : scope.row.id },
-                  i18nRequestMessage: 'contract.submit',
-                  request: submitEngineeringContractById
-                })
-              "
-            >{{ $t('contract.submit') }}</el-button>
-            <!-- 单个删除 -->
-            <el-button
-              v-if="filterPermission('engineering:contract:delete') && scope.row.contractStatus === 0"
-              type="text"
-              :size="tableConfig.tableSearchSize"
-              @click="deleteHandle([scope.row.id])"
-            >{{ $t('delete') }}</el-button>
-          </template>
-        </el-table-column>
-      </template>
     </yunlin-table>
-    <yunlin-drawer
-      ref="yunlinDrawer"
-      :config="drawerConfig"
-      v-bind="$attrs"
-      @drawer-closed="drawerClosed"
-      v-on="$listeners"
-    >
-      <component
-        :is="drawerComponent"
-        :drawer-data="drawerData"
-        @drawer-close-by-child="drawerCloseByChild"
-        v-on="$listeners"
-      ></component>
-      <!-- <xxx :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild" v-on="$listeners"></xxx> -->
-    </yunlin-drawer>
   </div>
 </template>
 
@@ -242,27 +136,16 @@
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
-import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
-import { getEngineeringProjectList } from '@/api/engineering/project'
-import {
-  getEngineeringContractPageList,
-  deleteEngineeringContract,
-  submitEngineeringContractById,
-  rejectinfoEngineeringContractById
-} from '@/api/engineering/contract'
-import planComponent from './plan'
+import drawerMixin from '@/mixins/drawer-mixin'
+import { getEngineeringContractPageList } from '@/api/engineering/contract'
 
 export default {
   name: 'Tabel',
-  components: { planComponent },
-  mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
+  components: {},
+  mixins: [pageMixin, tableDefaultMixin, drawerMixin],
   data() {
     return {
-      contractTimeToPickerOptions: {},
-      projectList: [],
-      drawerComponents: {
-        plan: planComponent
-      }
+      contractTimeToPickerOptions: {}
     }
   },
   computed: {
@@ -277,6 +160,8 @@ export default {
   },
   methods: {
     init() {
+      const { projectId, contractStatus } = this.$attrs.page_drawer_data
+
       // 配置查询区域i18n相关select数据
       this.genrateI18nSearchItems()
       // console.log('table created')
@@ -286,7 +171,7 @@ export default {
       // this.tableConfig.highlightCurrentRow = true
       // this.tableConfig.defaultExpandAll = true
       // this.tableConfig.lazy = true
-      this.tableConfig.tableType = 'index'
+      this.tableConfig.tableType = 'selection'
       // console.log(this.$attrs)
 
       // 设置获取列表信息
@@ -305,14 +190,7 @@ export default {
         {
           prop: 'contractStatusName',
           label: 'contract.contractStatusName',
-          width: '100',
-          clickHandle: this.contractStatusClickHandle,
-          preHandle: (value, row) => {
-            if (row.contractStatus === 3) {
-              return `<span class="contractStatusReject">${value}</span>`
-            }
-            return value
-          }
+          width: '100'
         },
         // 当前审核人
         { prop: 'currentExaminer', label: 'contract.currentExaminer', width: '100' },
@@ -324,14 +202,15 @@ export default {
       // 是否填充查询条件为空
       this.tableConfig.searchFillEmpty = true
       this.tableSearchParams = {
-        contractStatus: 0
+        contractStatus,
+        projectId
       }
       // 配置列表请求
       this.tableHandle.list.api = getEngineeringContractPageList
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
-      this.tableHandle.delete.api = deleteEngineeringContract
+      // this.tableHandle.delete.api = deleteEngineeringContract
       // this.tableHandle.delete.callback = this.deleteCallback
       // 配置节点懒加载功能
       // this.tableHandle.lazy.api = lazyXXX
@@ -351,63 +230,39 @@ export default {
       ]
 
       this.generateTable()
-      this.drawerConfig.size = '90%'
     },
     genrateI18nSearchItems() {
-      getEngineeringProjectList().then(response => {
-        this.projectList = response
-      })
       // XXX
       // this.smsStatus = [
       //   { label: this.$t('aaa'), value: 0 },
       //   { label: this.$t('aaa'), value: 1 }
       // ]
     },
-    // 创建
-    createHandle(options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { pageType: 'create', ...options, projectId: '' })
-    },
-    // 编辑
-    editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
-    },
-    planHandle(row) {
-      this.setDrawerComponent('plan')
-      this.setDrawerData({ contractId: row.id, disabled: row.contractStatus === 2 })
-      this.setDrawerTitle(this.$t('contract.plan'))
-      this.drawerVisibleHandle()
-    },
-    // 提交审核
-    submitEngineeringContractById() {
-      return submitEngineeringContractById
-    },
-    drawerClosed() {
-      // drawer关闭以后父页面需要的操作
-      this.searchHandle()
-    },
-    // 点击已退回
-    contractStatusClickHandle(row) {
-      if (row.contractStatus !== 3) {
-        return
-      }
-      rejectinfoEngineeringContractById({ id: row.id }).then(response => {
-        const _html = `
-        <div>${this.$t('contract.comment')}：${response.comment}</div>
-        <div>${this.$t('contract.userName')}：${response.userName}</div>
-        `
-        this.$alert(_html, this.$t('info'), {
-          confirmButtonText: this.$t('confirm'),
-          dangerouslyUseHTMLString: true
-        })
-        console.log(response)
+    // 保存
+    batchSaveHandle() {
+      const ids = this.filterSectionData()
+      const tableData = this.getTableData()
+      const items = {}
+      tableData.map(item => {
+        if (ids.includes(item.id)) {
+          items['contract_' + item.id] = {}
+          items['contract_' + item.id]['changeAmount'] = 0
+          items['contract_' + item.id]['changeCostInfos'] = []
+          items['contract_' + item.id]['changeId'] = ''
+          items['contract_' + item.id]['contractCode'] = item.contractCode
+          items['contract_' + item.id]['contractHandleman'] = item.contractHandleman
+          items['contract_' + item.id]['contractId'] = item.id
+          items['contract_' + item.id]['contractName'] = item.contractName
+          items['contract_' + item.id]['contractTotalPrice'] = item.contractTotalPrice
+          items['contract_' + item.id]['id'] = ''
+        }
       })
+      // console.log(ids)
+      // console.log(items)
+      this.$emit('set-form-data', ids, items)
+      this.clearSelectionChangeHandle()
+      this.$drawerCloseByChild()
     }
   }
 }
 </script>
-<style lang="scss">
-.contractStatusReject {
-  color: #4381e6;
-  cursor: pointer;
-}
-</style>

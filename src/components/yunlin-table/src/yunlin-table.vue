@@ -191,6 +191,9 @@ export default {
   destroyed() {},
   errorCaptured() {},
   methods: {
+    getTableData() {
+      return this.tableData
+    },
     searchHandle() {
       // 获取列表数据
       const { query } = this
@@ -472,11 +475,16 @@ export default {
     tableCurrentChangeHandle(val) {
       this.$tableCurrentChangeListener(val)
     },
-    // 取消选中处理
+    // 取消选中处理 单选
     tableCleanCurrentChangeHandle() {
       const { tableName } = this.$attrs.config
       this.$refs[tableName].setCurrentRow()
       this.$tableCurrentChangeListener(null)
+    },
+    // 取消选中处理 多选
+    tableCleanSelectionChangeHandle() {
+      const { tableName } = this.$attrs.config
+      this.$refs[tableName].clearSelection()
     },
     // 懒加载方法
     lazyLoadHandle(tree, treeNode, resolve) {

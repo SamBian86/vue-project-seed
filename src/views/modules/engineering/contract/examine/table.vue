@@ -78,7 +78,6 @@
               value-format="yyyy-MM-dd"
               clearable
               @change="dateHandle('contractTimeTo', $event)"
-              @clear="clearHandle"
             ></el-date-picker>
           </el-form-item>
           <el-form-item>
@@ -91,7 +90,7 @@
               value-format="yyyy-MM-dd"
               :picker-options="contractTimeToPickerOptions"
               clearable
-              @clear="clearHandle"
+              @change="clearHandle"
             ></el-date-picker>
           </el-form-item>
           <!-- 查询 -->
