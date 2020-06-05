@@ -27,6 +27,7 @@
               <el-input
                 v-model="$attrs.data[item.prop]"
                 :disabled="item.disabled"
+                :readonly="item.readonly || false"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
                 clearable
               ></el-input>

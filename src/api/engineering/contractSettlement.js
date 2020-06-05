@@ -50,9 +50,9 @@ export function getEngineeringContractSettlementPageList(params = {}) {
 // GET
 // /engineering/contract/settlement/{id}
 export function getEngineeringContractSettlementById(params = {}) {
-  const { id } = params
+  const { contractId } = params
   return request({
-    url: `/engineering/contract/settlement/${id}`,
+    url: `/engineering/contract/settlement/${contractId}`,
     method: 'get'
   })
 }

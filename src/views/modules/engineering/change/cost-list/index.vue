@@ -31,7 +31,41 @@
               prop="drawingbudgetTotalCost"
               :label="$t('contractChange.drawingbudgetTotalCost')"
               min-width="140"
-            ></el-table-column>
+            >
+              <template slot-scope="scope">
+                <div
+                  v-if="scope.row.save === false && scope.row.warning === false"
+                >{{ scope.row.drawingbudgetTotalCost }}</div>
+                <div v-else-if="scope.row.save === true && scope.row.warning === true">
+                  {{ scope.row.drawingbudgetTotalCost }}
+                  <el-tooltip
+                    class="range-warning"
+                    effect="dark"
+                    :content="`${$t('contractChange.drawingbudgetTotalCostRange')}${scope.row.drawingbudgetTotalCostRange}`"
+                    placement="top"
+                  >
+                    <span>
+                      <i class="el-icon-warning-outline"></i>
+                      ({{ scope.row.drawingbudgetTotalCostRange }})
+                    </span>
+                  </el-tooltip>
+                </div>
+                <div v-else-if="scope.row.save === true && scope.row.warning === false">
+                  {{ scope.row.drawingbudgetTotalCost }}
+                  <el-tooltip
+                    class="range-success"
+                    effect="dark"
+                    :content="`${$t('contractChange.drawingbudgetTotalCostRange')}${scope.row.drawingbudgetTotalCostRange}`"
+                    placement="top"
+                  >
+                    <span>
+                      <i class="el-icon-circle-check"></i>
+                      ({{ scope.row.drawingbudgetTotalCostRange }})
+                    </span>
+                  </el-tooltip>
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="contractGeneratedAmount"
               :label="$t('contractChange.contractGeneratedAmount')"
@@ -43,16 +77,19 @@
               min-width="140"
             ></el-table-column>
             <el-table-column
-              prop="thisChangeAmount"
+              v-if="!disabled"
               :label="$t('contractChange.thisChangeAmount')"
-              min-width="140"
+              width="200"
+              align="center"
+              header-align="center"
+              fixed="right"
             >
               <template slot-scope="scope">
                 <el-button
                   v-if="scope.row.load === false && scope.row.save === false"
                   type="text"
                   size="small"
-                  @click="setThisChangeAmount(scope.row.id)"
+                  @click="setThisChangeAmount(scope.row.costTypeId)"
                 >{{ $t('contractChange.load') }}</el-button>
                 <div v-else-if="scope.row.load === true && scope.row.save === false">
                   <el-row :gutter="10">
@@ -61,21 +98,21 @@
                         v-model="scope.row.thisChangeAmount"
                         size="small"
                         :placeholder="$t('contractChange.thisChangeAmountPlaceholder')"
-                        @keyup.enter.native="save(scope.row.id)"
+                        @keyup.enter.native="save(scope.row.costTypeId)"
                       ></el-input>
                     </el-col>
                     <el-col :span="4" :lg="4" :md="4" :sm="24" :xs="24">
                       <el-button
                         type="text"
                         size="small"
-                        @click="save(scope.row.id)"
+                        @click="save(scope.row.costTypeId)"
                       >{{ $t('contractChange.save') }}</el-button>
                     </el-col>
                     <el-col :span="4" :lg="4" :md="4" :sm="24" :xs="24">
                       <el-button
                         type="text"
                         size="small"
-                        @click="cancel(scope.row.id)"
+                        @click="cancel(scope.row.costTypeId)"
                       >{{ $t('contractChange.cancel') }}</el-button>
                     </el-col>
                   </el-row>
@@ -85,11 +122,20 @@
                   <el-button
                     type="text"
                     size="small"
-                    @click="cancel(scope.row.id)"
+                    @click="cancel(scope.row.costTypeId)"
                   >{{ $t('contractCost.cancel') }}</el-button>
                 </div>
               </template>
             </el-table-column>
+            <el-table-column
+              v-else
+              prop="thisChangeAmount"
+              :label="$t('contractChange.thisChangeAmount')"
+              width="200"
+              align="center"
+              header-align="center"
+              fixed="right"
+            ></el-table-column>
           </el-table>
         </el-col>
       </el-row>
@@ -160,9 +206,10 @@ export default {
             item.save = false
           } else {
             item.load = true
-            item.drawingbudgetTotalCostRange = item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate))
+            item.drawingbudgetTotalCostRange =
+              item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate !== '' ? item.costControlRate : 0))
             item.warning =
-              item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate)) <
+              item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate !== '' ? item.costControlRate : 0)) <
                 item.thisChangeAmount + item.contractGeneratedAmount + item.changeGeneratedAmount || false
             item.save = true
           }
@@ -176,24 +223,25 @@ export default {
       getEngineeringContractChangeContractCostById({ id: contractId }).then(response => {
         const list = []
         response.forEach(item => {
-          list.push({ ...item, load: false, warning: false, save: false })
+          item.drawingbudgetTotalCostRange =
+            item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate !== '' ? item.costControlRate : 0))
+          list.push({ ...item, thisChangeAmount: 0, load: false, warning: false, save: false })
         })
+        console.log(list)
         this.$set(this, 'list', list)
         this.$nextTick(() => {
           this.countTotalPrice()
         })
-        // console.log(list)
       })
     },
-    setThisChangeAmount(id) {
+    setThisChangeAmount(costTypeId) {
       const { list } = this
       const newList = []
       list.forEach(item => {
         item.thisChangeAmount = item.thisChangeAmount !== '' || item.thisChangeAmount !== null ? item.thisChangeAmount - 0 : 0
-        if (item.costControlRate !== '') {
-          item.drawingbudgetTotalCostRange = item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate))
-        }
-        if (item.id === id) {
+        item.drawingbudgetTotalCostRange =
+          item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate !== '' ? item.costControlRate : 0))
+        if (item.costTypeId === costTypeId) {
           newList.push({ ...item, load: true, warning: false, save: false })
         } else {
           newList.push(item)
@@ -211,15 +259,15 @@ export default {
       }
     },
     // 保存
-    save(id) {
+    save(costTypeId) {
       const { list } = this
       const newList = []
       list.forEach(item => {
         item.thisChangeAmount =
-          !isNaN(item.thisChangeAmount) && item.thisChangeAmount !== '' && item.thisChangeAmount !== null
+          !isNaN(item.thisChangeAmount) || item.thisChangeAmount !== '' || item.thisChangeAmount !== null
             ? item.thisChangeAmount - 0
             : 0
-        if (item.id === id) {
+        if (item.costTypeId === costTypeId) {
           let warning = false
           if (item.drawingbudgetTotalCostRange) {
             warning =
@@ -238,11 +286,11 @@ export default {
       })
     },
     // 取消
-    cancel(id) {
+    cancel(costTypeId) {
       const { list } = this
       const newList = []
       list.forEach(item => {
-        if (item.id === id) {
+        if (item.costTypeId === costTypeId) {
           item.thisChangeAmount = 0
           newList.push({ ...item, load: false, warning: false, save: false })
         } else {
@@ -319,15 +367,15 @@ export default {
   text-align: right;
 }
 // 容器样式
-// .range-warning {
-//   color: red;
-//   float: right;
-// }
+.range-warning {
+  color: red;
+  float: right;
+}
 
-// .range-success {
-//   color: #67c23a;
-//   float: right;
-// }
+.range-success {
+  color: #67c23a;
+  float: right;
+}
 
 // .table-column-line-through {
 //   text-decoration: line-through;

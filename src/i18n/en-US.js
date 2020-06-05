@@ -959,5 +959,6 @@ t.contractChange.submit = '提交审核'
 t.contractChange.thisChangeAmountPlaceholder = '请输入变更金额'
 t.contractChange.comment = '退回理由'
 t.contractChange.userName = '退回人'
+t.contractChange.drawingbudgetTotalCostRange = '最大值建议不超过'
 
 export default t

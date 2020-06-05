@@ -218,8 +218,11 @@ export default {
             item.save = false
           } else {
             item.load = true
-            item.drawingbudgetTotalCostRange = item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate))
-            item.warning = item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate)) < item.amount || false
+            item.drawingbudgetTotalCostRange =
+              item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate !== '' ? item.costControlRate : 0))
+            item.warning =
+              item.drawingbudgetTotalCost * (1 + parseFloat(item.costControlRate !== '' ? item.costControlRate : 0)) <
+                item.amount || false
             item.save = true
           }
         })
@@ -266,9 +269,8 @@ export default {
         const newList = []
         list.forEach(item => {
           response.amount = response.amount !== '' || response.amount !== null ? response.amount - 0 : 0
-          if (response.costControlRate !== '') {
-            response.drawingbudgetTotalCostRange = response.drawingbudgetTotalCost * (1 + parseFloat(response.costControlRate))
-          }
+          response.drawingbudgetTotalCostRange =
+            response.drawingbudgetTotalCost * (1 + parseFloat(response.costControlRate !== '' ? response.costControlRate : 0))
           if (item.costTypeId === costTypeId) {
             newList.push({ ...item, ...response, load: true, warning: false, save: false })
           } else {
@@ -292,7 +294,7 @@ export default {
       const { list } = this
       const newList = []
       list.forEach(item => {
-        item.amount = !isNaN(item.amount) && item.amount !== '' && item.amount !== null ? item.amount - 0 : 0
+        item.amount = !isNaN(item.amount) || item.amount !== '' || item.amount !== null ? item.amount - 0 : 0
         if (item.costTypeId === costTypeId) {
           let warning = false
           if (item.drawingbudgetTotalCostRange) {

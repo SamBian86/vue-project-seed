@@ -153,8 +153,8 @@ import { getEngineeringProjectList } from '@/api/engineering/project'
 import { getEngineeringContractChangeTypeList } from '@/api/engineering/contractChangeType'
 import { getSysDeptListAll } from '@/api/sys/dept'
 import { getUserList } from '@/api/sys/user'
-import contractList from './list'
-import costList from './cost-list'
+import contractList from '../list'
+import costList from '../cost-list'
 // import { validateMobile } from '@/utils/validator'
 
 export default {
@@ -350,7 +350,7 @@ export default {
           rules: [{ required: true }]
         },
         {
-          // 申请人
+          // 经办人
           span: 8,
           prop: 'userId',
           name: 'contractChange.userId',
@@ -370,7 +370,7 @@ export default {
             mergeData: { target: 'userId' },
             mergeOtherData: [
               { source: 'deptName', target: 'deptName', default: '' },
-              { source: 'deptId', target: 'deptId', default: 0 }
+              { source: 'id', target: 'deptId', default: 0 }
             ],
             componentNames: ['select-dynamic']
           }

@@ -19,9 +19,18 @@
           @keyup.enter.native="searchHandle"
         >
           <el-form-item>
+            <el-input
+              v-model="tableSearchParams.contractCodeOrName"
+              :placeholder="$t('contractSettlement.contractCodeOrName')"
+              :size="tableConfig.tableSearchSize"
+              clearable
+              @clear="clearHandle"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
             <el-select
-              v-model="tableSearchParams.applyStatus"
-              :placeholder="$t('contractChange.applyStatus')"
+              v-model="tableSearchParams.settlementExamineStatus"
+              :placeholder="$t('contractSettlement.settlementExamineStatus')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -37,7 +46,7 @@
           <el-form-item>
             <el-select
               v-model="tableSearchParams.projectId"
-              :placeholder="$t('contractChange.projectId')"
+              :placeholder="$t('contractSettlement.projectId')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -51,51 +60,51 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-select
-              v-model="tableSearchParams.changeId"
-              :placeholder="$t('contractChange.changeId')"
+            <el-date-picker
+              v-model="tableSearchParams.contractTimeStart"
+              :placeholder="$t('contractSettlement.contractTimeStart')"
               :size="tableConfig.tableSearchSize"
+              type="date"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
               clearable
-              @clear="clearHandle"
-            >
-              <el-option
-                v-for="(item, index) in changeList"
-                :key="index"
-                :label="item.changeTypeName"
-                :value="item.id"
-              ></el-option>
-            </el-select>
+              @change="dateHandle('contractTimeEnd', $event)"
+            ></el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-input
-              v-model="tableSearchParams.changeName"
-              :placeholder="$t('contractChange.changeName')"
+            <el-date-picker
+              v-model="tableSearchParams.contractTimeEnd"
+              :placeholder="$t('contractSettlement.contractTimeEnd')"
               :size="tableConfig.tableSearchSize"
+              type="date"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              :picker-options="contractTimeEndPickerOptions"
               clearable
-              @clear="clearHandle"
-            ></el-input>
+              @change="clearHandle"
+            ></el-date-picker>
           </el-form-item>
           <!-- 查询 -->
           <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:change:view')"
+              v-if="filterPermission('engineering:settlement:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
             >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
-          <el-form-item>
+          <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:change:save')"
+              v-if="filterPermission('engineering:settlement:save')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
             >{{ $t('add') }}</el-button>
-          </el-form-item>
+          </el-form-item>-->
           <!-- 下载模板 -->
           <!--<el-form-item>
             <el-button
-              v-if="filterPermission('engineering:change:save')"
+              v-if="filterPermission('engineering:settlement:save')"
               type="success"
               :size="tableConfig.tableSearchSize"
               @click="downloadHandle({
@@ -118,27 +127,27 @@
             >{{ t('clearCurrent') }}</el-button>
           </el-form-item>-->
           <!-- 导出 -->
-          <!-- <el-form-item>
+          <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:change:export')"
+              v-if="filterPermission('engineering:settlement:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
             >{{ $t('export') }}</el-button>
-          </el-form-item>-->
+          </el-form-item>
           <!-- 批量删除 -->
-          <!-- <el-form-item>
+          <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:change:delete')"
+              v-if="filterPermission('engineering:settlement:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
             >{{ $t('deleteBatch') }}</el-button>
-          </el-form-item>-->
+          </el-form-item>
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:change:xxx')"
+              v-if="filterPermission('engineering:settlement:xxx')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="customSectionHandle({
@@ -157,46 +166,46 @@
           align="center"
           header-align="center"
           fixed="right"
-          width="200"
+          width="160"
         >
           <template slot-scope="scope">
             <!-- 查看 -->
             <el-button
-              v-if="filterPermission('engineering:change:view')"
+              v-if="filterPermission('engineering:settlement:view')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="detailHandle(scope.row)"
             >{{ $t('detail') }}</el-button>
             <!-- 修改 -->
             <el-button
-              v-if="filterPermission('engineering:change:update') && scope.row.applyStatus === 0"
+              v-if="filterPermission('engineering:settlement:update') && scope.row.settlementExamineStatus === 0"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >{{ $t('update') }}</el-button>
+            >{{ $t('contractSettlement.settlement') }}</el-button>
             <!-- 提交审核 -->
             <el-button
-              v-if="filterPermission('engineering:change:submit') && scope.row.applyStatus === 0"
+              v-if="filterPermission('engineering:settlement:submit') && scope.row.settlementExamineStatus === 0 && scope.row.settlementId"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="
                 customHandle({
                   data: { id : scope.row.id },
-                  i18nRequestMessage: 'contractChange.submit',
-                  request: submitEngineeringContractChange
+                  i18nRequestMessage: 'contractSettlement.submit',
+                  request: submitEngineeringContractSettlementById
                 })
               "
-            >{{ $t('contractChange.submit') }}</el-button>
+            >{{ $t('contract.submit') }}</el-button>
             <!-- 单个删除 -->
-            <el-button
-              v-if="filterPermission('engineering:change:delete') && scope.row.applyStatus === 0"
+            <!-- <el-button
+              v-if="filterPermission('engineering:settlement:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
-            >{{ $t('delete') }}</el-button>
+            >{{ $t('delete') }}</el-button>-->
             <!-- 单个操作 -->
             <!-- <el-button
-              v-if="filterPermission('engineering:change:xxx')"
+              v-if="filterPermission('engineering:settlement:xxx')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="customHandle({
@@ -217,13 +226,11 @@ import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
 import { getEngineeringProjectList } from '@/api/engineering/project'
-import { getEngineeringContractChangeTypeList } from '@/api/engineering/contractChangeType'
 import {
-  getEngineeringContractChangePageList,
-  deleteEngineeringContractChange,
-  submitEngineeringContractChange,
-  rejectEngineeringContractChange
-} from '@/api/engineering/contractChange'
+  getEngineeringContractSettlementPageList,
+  rejectEngineeringContractSettlementById,
+  submitEngineeringContractSettlementById
+} from '@/api/engineering/contractSettlement'
 
 export default {
   name: 'Tabel',
@@ -231,8 +238,8 @@ export default {
   mixins: [pageMixin, tableDefaultMixin],
   data() {
     return {
-      projectList: [],
-      changeList: []
+      contractTimeEndPickerOptions: {},
+      projectList: []
     }
   },
   computed: {
@@ -261,59 +268,58 @@ export default {
 
       // 设置获取列表信息
       this.tableConfig.tableHeadReadOnly = [
-        // 变更编号
-        { prop: 'changeCode', label: 'contractChange.changeCode', width: '120' },
-        // 专业
-        { prop: 'changeSpecialityName', label: 'contractChange.changeSpecialityName', width: '140' },
-        // 变更名称
-        { prop: 'changeName', label: 'contractChange.changeName', width: '140' },
-        // 变更类型
-        { prop: 'changeTypeName', label: 'contractChange.changeTypeName', width: '140' },
-        // 变更原因
-        { prop: 'changeReason', label: 'contractChange.changeReason' },
-        // 变更金额
-        { prop: 'changeAmount', label: 'contractChange.changeAmount', width: '120' },
-        // 经办人
-        { prop: 'userName', label: 'contractChange.userName', width: '80' },
-        // 签发日期
-        { prop: 'applyDate', label: 'contractChange.applyDate', width: '160' },
-        // 审批状态
+        // 合同编号
+        { prop: 'contractCode', label: 'contractSettlement.contractCode', width: '160' },
+        // 合同名称
+        { prop: 'contractName', label: 'contractSettlement.contractName', width: '200' },
+        // 合同分类
+        { prop: 'contractTypeName', label: 'contractSettlement.contractTypeName' },
+        // 合同金额(元)
+        { prop: 'contractTotalPrice', label: 'contractSettlement.contractTotalPrice', width: '160' },
+        // 终审额
+        { prop: 'contractFinalPrice', label: 'contractSettlement.contractFinalPrice', width: '160' },
+        // 供应商
+        { prop: 'supplierName', label: 'contractSettlement.supplierName', width: '200' },
+        // 结算状态
         {
-          prop: 'applyStatusName',
-          label: 'contractChange.applyStatusName',
-          width: '120',
-          clickHandle: this.applyStatusClickHandle,
+          prop: 'settlementExamineStatusName',
+          label: 'contractSettlement.settlementExamineStatusName',
+          width: '100',
+          clickHandle: this.settlementExamineStatusClickHandle,
           preHandle: (value, row) => {
-            if (row.applyStatus === 3) {
-              return `<span class="applyStatusReject">${value}</span>`
+            if (row.settlementExamineStatusName === 3) {
+              return `<span class="settlementExamineStatusReject">${value}</span>`
             }
             return value
           }
-        }
+        },
+        // 签约时间
+        { prop: 'contractTime', label: 'contractSettlement.contractTime', width: '160' },
+        // 经办人
+        { prop: 'contractHandleman', label: 'contractSettlement.contractHandleman', width: '100' }
       ]
       // 是否填充查询条件为空
-      // this.tableConfig.searchFillEmpty = true
-      // this.tableSearchParams = {}
+      this.tableConfig.searchFillEmpty = true
+      this.tableSearchParams = {
+        settlementExamineStatus: 0
+      }
       // 配置列表请求
-      this.tableHandle.list.api = getEngineeringContractChangePageList
+      this.tableHandle.list.api = getEngineeringContractSettlementPageList
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
-      this.tableHandle.delete.api = deleteEngineeringContractChange
+      // this.tableHandle.delete.api = deleteXXX
       // this.tableHandle.delete.callback = this.deleteCallback
       // 配置节点懒加载功能
       // this.tableHandle.lazy.api = lazyXXX
       // 配置section删除功能
-      // this.tableHandle.deleteSection.api = deleteEngineeringContractChange
+      // this.tableHandle.deleteSection.api = deleteXXX
       // console.log('table page created')
       this.generateTable()
     },
     genrateI18nSearchItems() {
       getEngineeringProjectList().then(response => {
         this.projectList = response
-      })
-      getEngineeringContractChangeTypeList().then(response => {
-        this.changeList = response
       })
       // XXX
       // this.smsStatus = [
@@ -322,41 +328,43 @@ export default {
       // ]
     },
     // 创建
-    createHandle(options = { componentNames: ['yunlin-table', 'select-dynamic', 'popover-tree'] }) {
-      this.$pageSwitch('form', { pageType: 'create', ...options })
-    },
+    // createHandle(options = { componentNames: ['yunlin-table'] }) {
+    //   this.$pageSwitch('form', { pageType: 'create', ...options })
+    // },
     // 编辑
-    editHandle(item, options = { componentNames: ['yunlin-table', 'select-dynamic', 'popover-tree'] }) {
-      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
+    editHandle(item, options = { componentNames: ['yunlin-table'] }) {
+      this.$pageSwitch('form', { ...item, pageType: !item.settlementId ? 'create' : 'edit', formDataUpdate: true, ...options })
     },
     // 提交审核
-    submitEngineeringContractChange() {
-      return submitEngineeringContractChange
+    submitEngineeringContractSettlementById() {
+      return submitEngineeringContractSettlementById
     },
     drawerClosed() {
       // drawer关闭以后父页面需要的操作
       this.searchHandle()
     },
-    applyStatusClickHandle(row) {
-      if (row.applyStatus !== 3) {
+    // 点击已退回
+    settlementExamineStatusClickHandle(row) {
+      if (row.contractStatus !== 3) {
         return
       }
-      rejectEngineeringContractChange({ id: row.id }).then(response => {
+      rejectEngineeringContractSettlementById({ id: row.id }).then(response => {
         const _html = `
-        <div>${this.$t('contractChange.comment')}：${response.comment}</div>
-        <div>${this.$t('contractChange.userName')}：${response.userName}</div>
+        <div>${this.$t('contractSettlement.comment')}：${response.comment}</div>
+        <div>${this.$t('contractSettlement.userName')}：${response.userName}</div>
         `
         this.$alert(_html, this.$t('info'), {
           confirmButtonText: this.$t('confirm'),
           dangerouslyUseHTMLString: true
         })
+        console.log(response)
       })
     }
   }
 }
 </script>
 <style lang="scss">
-.applyStatusReject {
+.settlementExamineStatusReject {
   color: #4381e6;
   cursor: pointer;
 }
