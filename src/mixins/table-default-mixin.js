@@ -68,6 +68,8 @@ export default {
     // console.log('table default mixin activated')
   },
   methods: {
+    // 渲染完列表执行的方法
+    afterGenerateTable() {},
     generateTable() {
       const { tableSearchParams, tableColumnAction } = this
       const { tableHeadReadOnly } = this.tableConfig
@@ -91,6 +93,7 @@ export default {
       // console.log(generateProps)
       // 开始渲染页面
       this.tableConfig.tableHead = generateProps
+      this.afterGenerateTable()
     },
     // 时间控件联动处理
     dateHandle(param, value) {
@@ -120,6 +123,10 @@ export default {
     getTableData() {
       const { tableName } = this.tableConfig
       return this.$refs[tableName].getTableData()
+    },
+    getResponseData() {
+      const { tableName } = this.tableConfig
+      return this.$refs[tableName].getResponseData()
     },
     // 查询
     searchHandle() {

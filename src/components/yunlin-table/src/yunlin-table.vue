@@ -2,6 +2,7 @@
   <div>
     <!-- 查询区域插槽 -->
     <slot name="search" />
+    <slot name="content" />
     <el-table
       :ref="$attrs.config.tableName"
       v-loading="loading"
@@ -92,6 +93,7 @@ export default {
   props: {},
   data() {
     return {
+      responseData: null,
       componentNames: ['yunlin-table'],
       ToolComponents, // 工具组件
       loading: true,
@@ -194,6 +196,9 @@ export default {
     getTableData() {
       return this.tableData
     },
+    getResponseData() {
+      return this.responseData
+    },
     searchHandle() {
       // 获取列表数据
       const { query } = this
@@ -251,6 +256,7 @@ export default {
           if (callBack) {
             callBack()
           }
+          this.responseData = response
           this.loading = false
           this.reload = false // 用于控制在activated钩子上是否获取数据
         })

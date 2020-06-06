@@ -134,6 +134,12 @@
           </el-form-item>-->
         </el-form>
       </template>
+      <template slot="content">
+        <div class="amount-message">
+          本周期合计计划付款:
+          <b>{{ totalAmount }}</b>元
+        </div>
+      </template>
     </yunlin-table>
   </div>
 </template>
@@ -152,7 +158,8 @@ export default {
   data() {
     return {
       dateToPickerOptions: {},
-      projectList: []
+      projectList: [],
+      totalAmount: 0
     }
   },
   computed: {
@@ -215,6 +222,12 @@ export default {
       // console.log('table page created')
       this.generateTable()
     },
+    afterGenerateTable() {
+      setTimeout(() => {
+        const tableData = this.getResponseData()
+        this.totalAmount = tableData.totalAmount
+      }, 200)
+    },
     genrateI18nSearchItems() {
       getEngineeringProjectList().then(response => {
         this.projectList = response
@@ -236,3 +249,12 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.amount-message {
+  padding-bottom: 10px;
+}
+
+.amount-message b {
+  color: #67c23a;
+}
+</style>
