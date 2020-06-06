@@ -184,7 +184,7 @@ export default {
     this.$pageCheckUpdateWhenActivated(() => {
       this.searchHandle()
     })
-    // console.log('table component activated')
+    console.log('table component activated')
   },
   deactivated() {},
   beforeDestroy() {},

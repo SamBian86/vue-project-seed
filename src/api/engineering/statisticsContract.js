@@ -1,17 +1,5 @@
 import request from '@/utils/request'
-
 // 统计报表管理
-
-// 项目成本变更
-// GET
-// /engineering/statistics/contract/change/page
-export function getEngineeringStatisticsContractChangePageList(params = {}) {
-  return request({
-    url: `/engineering/statistics/contract/change/page`,
-    method: 'get',
-    params
-  })
-}
 
 // 合同台账
 // GET
@@ -19,6 +7,17 @@ export function getEngineeringStatisticsContractChangePageList(params = {}) {
 export function getEngineeringStatisticsContractPageList(params = {}) {
   return request({
     url: `/engineering/statistics/contract/page`,
+    method: 'get',
+    params
+  })
+}
+
+// 项目成本变更
+// GET
+// /engineering/statistics/contract/change/page
+export function getEngineeringStatisticsContractChangePageList(params = {}) {
+  return request({
+    url: `/engineering/statistics/contract/change/page`,
     method: 'get',
     params
   })

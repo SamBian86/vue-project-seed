@@ -21,7 +21,7 @@
           <el-form-item>
             <el-input
               v-model="tableSearchParams.contractCodeOrName"
-              :placeholder="$t('contractSettlement.contractCodeOrName')"
+              :placeholder="$t('contractSettlementExamine.contractCodeOrName')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -29,8 +29,8 @@
           </el-form-item>
           <el-form-item>
             <el-select
-              v-model="tableSearchParams.settlementExamineStatus"
-              :placeholder="$t('contractSettlement.settlementExamineStatus')"
+              v-model="tableSearchParams.examineStatus"
+              :placeholder="$t('contractSettlementExamine.examineStatus')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -46,7 +46,7 @@
           <el-form-item>
             <el-select
               v-model="tableSearchParams.projectId"
-              :placeholder="$t('contractSettlement.projectId')"
+              :placeholder="$t('contractSettlementExamine.projectId')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -62,7 +62,7 @@
           <el-form-item>
             <el-date-picker
               v-model="tableSearchParams.contractTimeStart"
-              :placeholder="$t('contractSettlement.contractTimeStart')"
+              :placeholder="$t('contractSettlementExamine.contractTimeStart')"
               :size="tableConfig.tableSearchSize"
               type="date"
               format="yyyy-MM-dd"
@@ -74,7 +74,7 @@
           <el-form-item>
             <el-date-picker
               v-model="tableSearchParams.contractTimeEnd"
-              :placeholder="$t('contractSettlement.contractTimeEnd')"
+              :placeholder="$t('contractSettlementExamine.contractTimeEnd')"
               :size="tableConfig.tableSearchSize"
               type="date"
               format="yyyy-MM-dd"
@@ -87,24 +87,24 @@
           <!-- 查询 -->
           <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:settlement:view')"
+              v-if="filterPermission('engineering:settlement:examine:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
             >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
-          <!-- <el-form-item>
+          <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:settlement:save')"
+              v-if="filterPermission('engineering:settlement:examine:save')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
             >{{ $t('add') }}</el-button>
-          </el-form-item>-->
+          </el-form-item>
           <!-- 下载模板 -->
           <!--<el-form-item>
             <el-button
-              v-if="filterPermission('engineering:settlement:save')"
+              v-if="filterPermission('engineering:settlement:examine:save')"
               type="success"
               :size="tableConfig.tableSearchSize"
               @click="downloadHandle({
@@ -127,27 +127,27 @@
             >{{ t('clearCurrent') }}</el-button>
           </el-form-item>-->
           <!-- 导出 -->
-          <!-- <el-form-item>
+          <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:settlement:export')"
+              v-if="filterPermission('engineering:settlement:examine:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
             >{{ $t('export') }}</el-button>
-          </el-form-item>-->
+          </el-form-item>
           <!-- 批量删除 -->
-          <!-- <el-form-item>
+          <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:settlement:delete')"
+              v-if="filterPermission('engineering:settlement:examine:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
             >{{ $t('deleteBatch') }}</el-button>
-          </el-form-item>-->
+          </el-form-item>
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('engineering:settlement:xxx')"
+              v-if="filterPermission('engineering:settlement:examine:xxx')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="customSectionHandle({
@@ -171,41 +171,28 @@
           <template slot-scope="scope">
             <!-- 查看 -->
             <el-button
-              v-if="filterPermission('engineering:settlement:view')"
+              v-if="filterPermission('engineering:settlement:examine:view')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="detailHandle(scope.row)"
             >{{ $t('detail') }}</el-button>
             <!-- 修改 -->
-            <el-button
-              v-if="filterPermission('engineering:settlement:update') && scope.row.settlementExamineStatus === 0"
+            <!-- <el-button
+              v-if="filterPermission('engineering:settlement:examine:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >{{ $t('contractSettlement.settlement') }}</el-button>
-            <!-- 提交审核 -->
-            <el-button
-              v-if="filterPermission('engineering:settlement:submit') && scope.row.settlementExamineStatus === 0 && scope.row.settlementId"
-              type="text"
-              :size="tableConfig.tableSearchSize"
-              @click="
-                customHandle({
-                  data: { id : scope.row.settlementId },
-                  i18nRequestMessage: 'contractSettlement.submit',
-                  request: submitEngineeringContractSettlementById
-                })
-              "
-            >{{ $t('contract.submit') }}</el-button>
+            >{{ $t('update') }}</el-button>-->
             <!-- 单个删除 -->
             <!-- <el-button
-              v-if="filterPermission('engineering:settlement:delete')"
+              v-if="filterPermission('engineering:settlement:examine:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
             >{{ $t('delete') }}</el-button>-->
             <!-- 单个操作 -->
             <!-- <el-button
-              v-if="filterPermission('engineering:settlement:xxx')"
+              v-if="filterPermission('engineering:settlement:examine:xxx')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="customHandle({
@@ -214,10 +201,43 @@
                 request: null
               })"
             >{{ $t('ddd.ddd') }}</el-button>-->
+            <!-- 通过 -->
+            <el-button
+              v-if="filterPermission('engineering:settlement:examine:pass') && scope.row.settlementExamineStatus === 1"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="customHandle({
+                data: { taskId: scope.row.taskId , comment: ''},
+                i18nRequestMessage: 'contractSettlementExamine.pass',
+                request: completeActivitiTask
+              })"
+            >{{ $t('contractSettlementExamine.pass') }}</el-button>
+            <!-- 退回操作 -->
+            <el-button
+              v-if="filterPermission('engineering:settlement:examine:reject') && scope.row.settlementExamineStatus === 1"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="rejectHandle(scope.row)"
+            >{{ $t('contractSettlementExamine.reject') }}</el-button>
           </template>
         </el-table-column>
       </template>
     </yunlin-table>
+    <yunlin-drawer
+      ref="yunlinDrawer"
+      :config="drawerConfig"
+      v-bind="$attrs"
+      @drawer-closed="drawerClosed"
+      v-on="$listeners"
+    >
+      <component
+        :is="drawerComponent"
+        :drawer-data="drawerData"
+        @drawer-close-by-child="drawerCloseByChild"
+        v-on="$listeners"
+      ></component>
+      <!-- <xxx :drawer-data="drawerData" @drawer-close-by-child="drawerCloseByChild" v-on="$listeners"></xxx> -->
+    </yunlin-drawer>
   </div>
 </template>
 
@@ -225,21 +245,23 @@
 import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
+import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
 import { getEngineeringProjectList } from '@/api/engineering/project'
-import {
-  getEngineeringContractSettlementPageList,
-  rejectEngineeringContractSettlementById,
-  submitEngineeringContractSettlementById
-} from '@/api/engineering/contractSettlement'
+import { getEngineeringContractSettlementExaminePageList } from '@/api/engineering/contractSettlement'
+import { completeActivitiTask } from '@/api/activiti/task'
+import rejectComponent from '@/views/modules/activiti/components/reject'
 
 export default {
   name: 'Tabel',
   components: {},
-  mixins: [pageMixin, tableDefaultMixin],
+  mixins: [pageMixin, tableDefaultMixin, drawerDefaultMixin],
   data() {
     return {
       contractTimeEndPickerOptions: {},
-      projectList: []
+      projectList: [],
+      drawerComponents: {
+        reject: rejectComponent
+      }
     }
   },
   computed: {
@@ -269,42 +291,31 @@ export default {
       // 设置获取列表信息
       this.tableConfig.tableHeadReadOnly = [
         // 合同编号
-        { prop: 'contractCode', label: 'contractSettlement.contractCode', width: '160' },
+        { prop: 'contractCode', label: 'contractSettlementExamine.contractCode', width: '160' },
         // 合同名称
-        { prop: 'contractName', label: 'contractSettlement.contractName', width: '200' },
-        // 合同分类
-        { prop: 'contractTypeName', label: 'contractSettlement.contractTypeName' },
+        { prop: 'contractName', label: 'contractSettlementExamine.contractName', width: '200' },
+        // 合同类别
+        { prop: 'contractTypeName', label: 'contractSettlementExamine.contractTypeName' },
         // 合同金额(元)
-        { prop: 'contractTotalPrice', label: 'contractSettlement.contractTotalPrice', width: '160' },
+        { prop: 'contractTotalPrice', label: 'contractSettlementExamine.contractTotalPrice', width: '160' },
         // 终审额
-        { prop: 'contractFinalPrice', label: 'contractSettlement.contractFinalPrice', width: '160' },
+        { prop: 'contractFinalPrice', label: 'contractSettlementExamine.contractFinalPrice', width: '160' },
         // 供应商
-        { prop: 'supplierName', label: 'contractSettlement.supplierName', width: '200' },
-        // 结算状态
-        {
-          prop: 'settlementExamineStatusName',
-          label: 'contractSettlement.settlementExamineStatusName',
-          width: '100',
-          clickHandle: this.settlementExamineStatusClickHandle,
-          preHandle: (value, row) => {
-            if (row.settlementExamineStatus === 3) {
-              return `<span class="settlementExamineStatusReject">${value}</span>`
-            }
-            return value
-          }
-        },
+        { prop: 'supplierName', label: 'contractSettlementExamine.supplierName', width: '200' },
         // 签约时间
-        { prop: 'contractTime', label: 'contractSettlement.contractTime', width: '160' },
+        { prop: 'contractTime', label: 'contractSettlementExamine.contractTime', width: '160' },
+        // 审核时间
+        { prop: 'trialTime', label: 'contractSettlementExamine.trialTime', width: '160' },
         // 经办人
-        { prop: 'contractHandleman', label: 'contractSettlement.contractHandleman', width: '100' }
+        { prop: 'contractHandleman', label: 'contractSettlementExamine.contractHandleman', width: '100' }
       ]
       // 是否填充查询条件为空
       this.tableConfig.searchFillEmpty = true
       this.tableSearchParams = {
-        settlementExamineStatus: 0
+        examineStatus: 0
       }
       // 配置列表请求
-      this.tableHandle.list.api = getEngineeringContractSettlementPageList
+      this.tableHandle.list.api = getEngineeringContractSettlementExaminePageList
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
@@ -315,6 +326,17 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteXXX
       // console.log('table page created')
+      this.tableColumnAction = [
+        {
+          searchParam: 'examineStatus',
+          exclude: [
+            { value: 0, props: ['trialTime'] },
+            { value: 1, props: [] },
+            { value: 2, props: ['trialTime'] },
+            { value: 3, props: ['trialTime'] }
+          ]
+        }
+      ]
       this.generateTable()
     },
     genrateI18nSearchItems() {
@@ -332,40 +354,27 @@ export default {
     //   this.$pageSwitch('form', { pageType: 'create', ...options })
     // },
     // 编辑
-    editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { ...item, pageType: !item.settlementId ? 'create' : 'edit', formDataUpdate: true, ...options })
+    // editHandle(item, options = { componentNames: ['yunlin-table'] }) {
+    //   this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
+    // }
+    detailHandle(item, options = { componentNames: ['yunlin-table'] }) {
+      this.$pageSwitch('form', { ...item, pageType: 'detail', formDataUpdate: true, ...options })
     },
-    // 提交审核
-    submitEngineeringContractSettlementById() {
-      return submitEngineeringContractSettlementById
+    // 通过
+    completeActivitiTask() {
+      return completeActivitiTask
+    },
+    // 退回页面
+    rejectHandle(row) {
+      this.setDrawerComponent('reject')
+      this.setDrawerData({ data: { pageType: 'create', taskId: row.taskId } })
+      this.setDrawerTitle(this.$t('contractSettlementExamine.reject'))
+      this.drawerVisibleHandle()
     },
     drawerClosed() {
       // drawer关闭以后父页面需要的操作
       this.searchHandle()
-    },
-    // 点击已退回
-    settlementExamineStatusClickHandle(row) {
-      if (row.settlementExamineStatus !== 3) {
-        return
-      }
-      rejectEngineeringContractSettlementById({ id: row.settlementId }).then(response => {
-        const _html = `
-        <div>${this.$t('contractSettlement.comment')}：${response.comment}</div>
-        <div>${this.$t('contractSettlement.userName')}：${response.userName}</div>
-        `
-        this.$alert(_html, this.$t('info'), {
-          confirmButtonText: this.$t('confirm'),
-          dangerouslyUseHTMLString: true
-        })
-        console.log(response)
-      })
     }
   }
 }
 </script>
-<style lang="scss">
-.settlementExamineStatusReject {
-  color: #4381e6;
-  cursor: pointer;
-}
-</style>
