@@ -229,7 +229,7 @@ export default {
         // 联系电话
         { prop: 'supplierLinkphone', label: 'supplier.supplierLinkphone', width: '160', align: 'center' },
         // 供应商类别
-        { prop: 'supplierTypeNames', label: 'supplier.supplierTypeNames', align: 'center' },
+        { prop: 'typeNames', label: 'supplier.typeNames', align: 'center' },
         // 供应商评级
         { prop: 'supplierGradeName', label: 'supplier.supplierGradeName', align: 'center' }
       ]
@@ -265,11 +265,11 @@ export default {
       }
     },
     // 创建
-    createHandle(options = { componentNames: ['yunlin-table'] }) {
+    createHandle(options = { componentNames: ['yunlin-table', 'tree-dynamic'] }) {
       this.$pageSwitch('form', { pageType: 'create', ...options })
     },
     // 编辑
-    editHandle(item, options = { componentNames: ['yunlin-table'] }) {
+    editHandle(item, options = { componentNames: ['yunlin-table', 'tree-dynamic'] }) {
       this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
     },
     // 拉黑方法
