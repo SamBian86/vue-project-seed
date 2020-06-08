@@ -124,7 +124,7 @@ export default {
       //   item => (item.uid === file.uid && item.success) || (item.uid === file.uid && item.status === 'singleImageList')
       // )
       const items = singleImageList
-      if (items.length === 0 || disabled) {
+      if ((fileList.length === 0 && items.length === 0) || disabled) {
         // console.log('删除失败')
         return false
       }
