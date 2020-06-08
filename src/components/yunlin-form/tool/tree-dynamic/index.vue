@@ -3,10 +3,12 @@
     <el-tree
       ref="treeDynamic"
       :data="items"
+      :default-checked-keys="selected"
       :props="config.treeProps"
       :node-key="config.nodeKey"
       :accordion="config.accordion"
       :show-checkbox="config.showCheckbox"
+      :check-strictly="true"
       :default-expand-all="config.defaultExpandAll"
       @check="checkHandle"
     ></el-tree>
@@ -151,7 +153,7 @@ export default {
       const { mergeData } = this.config
       const newData = {}
       newData[mergeData.target] = selected
-      console.log(newData)
+      // console.log(newData)
       this.$formDataMerge(newData)
     }
   }
