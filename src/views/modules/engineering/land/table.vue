@@ -134,11 +134,7 @@
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="landbudgetHandle(scope.row)"
-            >
-              {{
-              $t('land.landbudget')
-              }}
-            </el-button>
+            >{{ $t('land.landbudget') }}</el-button>
             <!-- 修改 -->
             <el-button
               v-if="filterPermission('engineering:land:update')"

@@ -33,11 +33,7 @@
               v-if="filterPermission('sys:role:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
-            >
-              {{
-              $t('query')
-              }}
-            </el-button>
+            >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
           <el-form-item>

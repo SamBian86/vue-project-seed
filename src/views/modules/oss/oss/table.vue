@@ -38,11 +38,7 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="ossConfigHandle()"
-            >
-              {{
-              $t('oss.config')
-              }}
-            </el-button>
+            >{{ $t('oss.config') }}</el-button>
           </el-form-item>
           <!-- 导出 -->
           <!-- <el-form-item>

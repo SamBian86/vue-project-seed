@@ -142,11 +142,7 @@
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="drawingbudgetHandle(scope.row)"
-            >
-              {{
-              $t('draw.drawingbudget')
-              }}
-            </el-button>
+            >{{ $t('draw.drawingbudget') }}</el-button>
             <!-- 修改 -->
             <el-button
               v-if="filterPermission('engineering:draw:update')"

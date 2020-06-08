@@ -36,11 +36,7 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="dingtalkConfigHandle()"
-            >
-              {{
-              $t('dingtalk.config')
-              }}
-            </el-button>
+            >{{ $t('dingtalk.config') }}</el-button>
           </el-form-item>
           <!-- 导出 -->
           <!-- <el-form-item>
@@ -97,11 +93,7 @@
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="sendDingtalkHandle(scope.row)"
-            >
-              {{
-              $t('dingtalk.send')
-              }}
-            </el-button>
+            >{{ $t('dingtalk.send') }}</el-button>
             <!-- 单个删除 -->
             <el-button
               type="text"
