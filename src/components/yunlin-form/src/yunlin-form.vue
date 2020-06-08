@@ -260,6 +260,7 @@ export default {
     },
     // 取消按钮
     cancleHandle() {
+      this.submitTag = true
       this.$pageSwitch('table')
     },
     // 重置填充的数据
