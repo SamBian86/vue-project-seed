@@ -254,6 +254,7 @@ export default {
         if (valid) {
           this.formSubmitHandle()
         } else {
+          this.submitTag = true
           return false
         }
       })
