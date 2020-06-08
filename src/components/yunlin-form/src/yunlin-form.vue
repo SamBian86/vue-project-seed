@@ -174,6 +174,7 @@ export default {
   props: {},
   data() {
     return {
+      submitTag: true,
       componentNames: ['yunlin-form'],
       ToolComponents
     }
@@ -240,8 +241,15 @@ export default {
     },
     // 表单校验
     submitHandle() {
+      const { submitTag } = this
       const { formName } = this.$attrs.config
       // console.log(this.$attrs.data)
+      if (!submitTag) {
+        console.log('不要重复提交')
+        return false
+      } else {
+        this.submitTag = false
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.formSubmitHandle()
@@ -293,6 +301,7 @@ export default {
             type: 'success',
             duration: 2000
           })
+          this.submitTag = true
           // 此处回调用于不返回table组件的逻辑
           if (callback) {
             callback()
