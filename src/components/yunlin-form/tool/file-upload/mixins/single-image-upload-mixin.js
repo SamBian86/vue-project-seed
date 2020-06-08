@@ -26,7 +26,7 @@ export default {
       const { propName } = this.config
       const { pageData } = this
       this.$refs['file-upload-single-image'] && this.$refs['file-upload-single-image'].clearFiles()
-      if (pageData[propName] === '') {
+      if (pageData[propName] === '' || pageData[propName] === undefined) {
         this.resourcesList = []
       } else {
         this.resourcesList = [
@@ -120,9 +120,10 @@ export default {
     // 删除前回调
     singleImageBeforeRemoveHandle(file, fileList) {
       const { singleImageList, disabled } = this
-      const items = singleImageList.filter(
-        item => (item.uid === file.uid && item.success) || (item.uid === file.uid && item.status === 'success')
-      )
+      // const items = singleImageList.filter(
+      //   item => (item.uid === file.uid && item.success) || (item.uid === file.uid && item.status === 'singleImageList')
+      // )
+      const items = singleImageList
       if (items.length === 0 || disabled) {
         // console.log('删除失败')
         return false
@@ -131,7 +132,7 @@ export default {
     },
     // 删除回调
     singleImageRemoveHandle(file, fileList) {
-      this.singleImageUploadInit()
+      this.resourcesList = []
       this.formDataMerge()
     },
     // 预览功能

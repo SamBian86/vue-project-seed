@@ -128,7 +128,6 @@ export default {
           prop: 'headPhoto',
           name: 'employee.headPhoto',
           type: 'file-upload',
-          rules: [{ required: true }],
           component: 'toolFileUpload',
           componentConfig: {
             type: 'single-image',
