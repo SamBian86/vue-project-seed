@@ -308,7 +308,7 @@ export default {
         // 签约时间
         { prop: 'contractTime', label: 'contractExamine.contractTime', width: '160' },
         // 付款方式
-        { prop: 'contractPayType', label: 'contractExamine.contractPayType', width: '100' },
+        { prop: 'contractPayTypeName', label: 'contractExamine.contractPayTypeName', width: '100' },
         // 审核时间
         { prop: 'handleTime', label: 'contractExamine.handleTime', width: '160' },
         // 经办人
