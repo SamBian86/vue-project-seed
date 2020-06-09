@@ -322,6 +322,9 @@ export default {
             type: 'error',
             duration: 2000
           })
+          setTimeout(() => {
+            this.submitTag = true
+          }, 2000)
         })
     },
     // 更新数据
