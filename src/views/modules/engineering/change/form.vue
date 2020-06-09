@@ -407,7 +407,6 @@ export default {
           prop: 'remark',
           name: 'contractChange.remark',
           type: 'textarea',
-          rules: [{ required: true }],
           attrs: { autosize: { minRows: 4, maxRows: 6 } }
         },
         {
