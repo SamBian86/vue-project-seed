@@ -1,4 +1,5 @@
 import commonMixin from '@/mixins/common-mixin'
+import { getInstImage } from '@/api/activiti/his'
 export default {
   mixins: [commonMixin],
   data() {
@@ -127,6 +128,13 @@ export default {
     getResponseData() {
       const { tableName } = this.tableConfig
       return this.$refs[tableName].getResponseData()
+    },
+    // 活动流程图查看
+    instanceHandle(row) {
+      const { instanceId } = row
+      return getInstImage({
+        processInstanceId: instanceId
+      })
     },
     // 查询
     searchHandle() {

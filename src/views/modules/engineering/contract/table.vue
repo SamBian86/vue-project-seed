@@ -175,6 +175,29 @@
           width="280"
         >
           <template slot-scope="scope">
+            <!-- 活动流程图 -->
+            <el-popover
+              v-if="scope.row.instanceId"
+              placement="left-start"
+              :title="$t('instanceId')"
+              width="800"
+              trigger="hover"
+            >
+              <div>
+                <a :href="instanceHandle(scope.row)" target="_blank">
+                  <img
+                    style="width: 100%;"
+                    :src="instanceHandle(scope.row)"
+                    :alt="$t('instanceId')"
+                  />
+                </a>
+              </div>
+              <el-button
+                slot="reference"
+                type="text"
+                :size="tableConfig.tableSearchSize"
+              >{{ $t('instanceId') }}</el-button>
+            </el-popover>
             <!-- 查看 -->
             <el-button
               v-if="filterPermission('engineering:contract:view')"

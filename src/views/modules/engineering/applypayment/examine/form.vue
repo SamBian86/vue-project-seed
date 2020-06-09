@@ -546,7 +546,10 @@ export default {
     },
     // 切换款项
     afterPlanChange() {
-      const { planId } = this.formData
+      const { planId, pageType } = this.formData
+      if (pageType !== 'create') {
+        return false
+      }
       if (planId) {
         getEngineeringContractApplypaymentByPlanId({
           planId

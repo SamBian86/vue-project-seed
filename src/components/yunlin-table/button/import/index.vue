@@ -129,7 +129,8 @@ export default {
         this.$message.error(this.$t('upload.tip', { format: formats[format].join('、') }))
       }
 
-      return checkType
+      // return checkType
+      return true
     },
     // 文件上传
     uploadRequest() {
