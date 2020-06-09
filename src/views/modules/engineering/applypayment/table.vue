@@ -280,6 +280,8 @@ export default {
             return value
           }
         },
+        // 当前审核人
+        { prop: 'examiner', label: 'applypayment.examiner', width: '120' },
         // 申请日期
         { prop: 'applyDate', label: 'applypayment.applyDate', width: '160' }
       ]
@@ -300,6 +302,19 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteEngineeringContractApplypayment
       // console.log('table page created')
+
+      this.tableColumnAction = [
+        {
+          searchParam: 'applyStatus',
+          exclude: [
+            { value: 0, props: ['examiner'] },
+            { value: 1, props: [] },
+            { value: 2, props: ['examiner'] },
+            { value: 3, props: ['examiner'] }
+          ]
+        }
+      ]
+
       this.generateTable()
     },
     genrateI18nSearchItems() {
