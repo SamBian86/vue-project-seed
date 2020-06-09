@@ -118,8 +118,8 @@ export default {
       const reg = new RegExp('(' + formats[format].join('|') + ')')
       fileList.map(item => {
         if (item.raw) {
-          const fileSuffix = item.raw.type === '' ? item.raw.name.replace(/\.(\w+)/, '$1') : item.raw.type
-          if (!reg.test(item.raw.type || fileSuffix)) {
+          const fileSuffix = item.raw.name.toLowerCase().replace(/\.(\w+)/, '$1')
+          if (!reg.test(fileSuffix)) {
             checkType = reg.test(item.raw.type)
           }
         }
@@ -129,8 +129,7 @@ export default {
         this.$message.error(this.$t('upload.tip', { format: formats[format].join('、') }))
       }
 
-      // return checkType
-      return true
+      return checkType
     },
     // 文件上传
     uploadRequest() {
