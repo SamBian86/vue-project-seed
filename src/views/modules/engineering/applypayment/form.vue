@@ -547,7 +547,7 @@ export default {
     // 切换款项
     afterPlanChange() {
       const { planId, pageType } = this.formData
-      if (pageType === 'edit') {
+      if (pageType !== 'create') {
         return false
       }
       if (planId) {

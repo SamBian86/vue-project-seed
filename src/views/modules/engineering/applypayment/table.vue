@@ -153,16 +153,23 @@
           width="200"
         >
           <template slot-scope="scope">
+            <!-- 查看 -->
+            <el-button
+              v-if="filterPermission('engineering:applypayment:view')"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="detailHandle(scope.row)"
+            >{{ $t('detail') }}</el-button>
             <!-- 修改 -->
             <el-button
-              v-if="filterPermission('engineering:applypayment:update')"
+              v-if="filterPermission('engineering:applypayment:update') && scope.row.applyStatus === 0"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
             <el-button
-              v-if="filterPermission('engineering:applypayment:delete')"
+              v-if="filterPermission('engineering:applypayment:delete') && scope.row.applyStatus === 0"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
