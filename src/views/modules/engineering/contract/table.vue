@@ -198,7 +198,7 @@
             >{{ $t('update') }}</el-button>
             <!-- 提交审核 -->
             <el-button
-              v-if="filterPermission('engineering:contract:submit') && scope.row.contractStatus === 0"
+              v-if="filterPermission('engineering:contract:submit') && (scope.row.contractStatus === 0 || scope.row.contractStatus === 3)"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="

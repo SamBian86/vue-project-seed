@@ -169,7 +169,7 @@
             >{{ $t('delete') }}</el-button>
             <!-- 提交审核 -->
             <el-button
-              v-if="filterPermission('engineering:applypayment:submit') && scope.row.applyStatus === 0"
+              v-if="filterPermission('engineering:applypayment:submit') && (scope.row.applyStatus === 0 || scope.row.applyStatus === 3)"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="

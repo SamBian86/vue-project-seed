@@ -185,7 +185,7 @@
             >{{ $t('contractSettlement.settlement') }}</el-button>
             <!-- 提交审核 -->
             <el-button
-              v-if="filterPermission('engineering:settlement:submit') && scope.row.settlementExamineStatus === 0 && scope.row.settlementId"
+              v-if="filterPermission('engineering:settlement:submit') && (scope.row.settlementExamineStatus === 0 || scope.row.settlementExamineStatus === 3) && scope.row.settlementId"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="
