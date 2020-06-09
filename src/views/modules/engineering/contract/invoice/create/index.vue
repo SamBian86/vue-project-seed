@@ -354,14 +354,22 @@ export default {
     // 保存所有
     saveAll() {
       const { list, contractId } = this
-      batchEngineeringContractInvoiceById({ contractId, list }).then(response => {
-        this.$message({
-          message: this.$t('prompt.success'),
-          type: 'success',
-          duration: 2000
+      batchEngineeringContractInvoiceById({ contractId, list })
+        .then(response => {
+          this.$message({
+            message: this.$t('prompt.success'),
+            type: 'success',
+            duration: 2000
+          })
+          this.$drawerCloseByChild()
         })
-      })
-      this.$drawerCloseByChild()
+        .catch(message => {
+          this.$message({
+            message,
+            type: 'error',
+            duration: 2000
+          })
+        })
     },
     // 取消
     cancelAll() {
