@@ -78,7 +78,7 @@ import { getEngineeringContractTypeTree } from '@/api/engineering/contractType'
 import { getEngineeringSupplierList } from '@/api/engineering/supplier'
 import { getUserList } from '@/api/sys/user'
 import costInfoList from './cost-info-list'
-import { validateMobile } from '@/utils/validator'
+import { validateMobile, validateContractUnivalence } from '@/utils/validator'
 
 export default {
   name: 'Form',
@@ -268,7 +268,8 @@ export default {
           span: 8,
           prop: 'contractUnivalence',
           name: 'contract.contractUnivalence',
-          type: 'text'
+          type: 'text',
+          rules: [{ validator: validateContractUnivalence, trigger: 'blur' }]
         },
         {
           // 终审额

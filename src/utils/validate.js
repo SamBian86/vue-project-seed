@@ -29,3 +29,8 @@ export function validateMobileNumber(mobile) {
 export function validateEmailAddress(email) {
   return /^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(email)
 }
+
+// 检查单价
+export function validatePrice(price) {
+  return /\d+(\.\d{1,2})?/.test(price)
+}

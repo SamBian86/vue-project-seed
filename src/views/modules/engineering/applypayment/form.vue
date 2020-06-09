@@ -82,7 +82,7 @@ import { getEngineeringProjectList } from '@/api/engineering/project'
 import { getEngineeringContractList, getEngineeringContractById } from '@/api/engineering/contract'
 import { getEngineeringContractPayplanListById } from '@/api/engineering/contractPayplan'
 import applyCostInfoList from './apply-cost-info-list'
-// import { validateMobile } from '@/utils/validator'
+// import { validateContractUnivalence } from '@/utils/validator'
 
 export default {
   name: 'Form',
