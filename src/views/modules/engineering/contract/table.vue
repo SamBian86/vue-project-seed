@@ -373,7 +373,7 @@ export default {
     },
     planHandle(row) {
       this.setDrawerComponent('plan')
-      this.setDrawerData({ contractId: row.id, disabled: row.contractStatus === 2 })
+      this.setDrawerData({ contractId: row.id, disabled: row.contractStatus !== 0 })
       this.setDrawerTitle(this.$t('contract.plan'))
       this.drawerVisibleHandle()
     },
