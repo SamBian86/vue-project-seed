@@ -108,11 +108,11 @@ export default {
     },
     // 窗口resize
     windowResizeHandle() {
-      const status = windowResizeListen()
       // 提供一个防抖方法
       const debounceSetSidebarFold = debounce(this.setSidebarFold, 200)
 
       window.addEventListener('resize', () => {
+        const status = windowResizeListen()
         debounceSetSidebarFold(status)
       })
     }

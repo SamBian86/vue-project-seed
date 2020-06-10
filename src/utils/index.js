@@ -49,12 +49,12 @@ export function windowResizeListen() {
 export const debounce = (fn, time) => {
   let timer = null
   const content = this
-  return () => {
+  return (...args) => {
     if (timer) {
       clearTimeout(timer)
     }
     timer = setTimeout(() => {
-      fn.apply(content, arguments)
+      fn.apply(content, args)
     }, time)
   }
 }
