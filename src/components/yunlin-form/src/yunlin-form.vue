@@ -23,13 +23,23 @@
         >
           <el-form-item v-if="item.prop" :prop="item.prop" :label="$t(item.name)">
             <!-- input -->
-            <template v-if="item.type === 'text'">
+            <template v-if="item.type === 'text' && item.clearHandle === undefined">
               <el-input
                 v-model="$attrs.data[item.prop]"
-                :disabled="item.disabled"
+                :disabled="item.disabled || false"
                 :readonly="item.readonly || false"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
                 clearable
+              ></el-input>
+            </template>
+            <template v-if="item.type === 'text' && item.clearHandle !== undefined">
+              <el-input
+                v-model="$attrs.data[item.prop]"
+                :disabled="item.disabled || false"
+                :readonly="item.readonly || false"
+                :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
+                clearable
+                @clear="item.clearHandle"
               ></el-input>
             </template>
             <!-- textarea -->

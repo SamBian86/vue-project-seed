@@ -195,7 +195,8 @@ export default {
           prop: 'supplierLinkman',
           name: 'supplier.supplierLinkman',
           type: 'text',
-          rules: [{ required: true }]
+          rules: [{ required: true }],
+          clearHandle: this.supplierLinkmanClear
         },
         {
           // 联系电话
@@ -237,18 +238,20 @@ export default {
           }
         }
       ]
-
       // 组装表单初始数据
       this.generateFormData()
       // 生成标题
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
-    }
+    },
     // afterFormDataUpdate() {
     //   const { supplierGrade } = this.formData
     //   this.$set(this.formData, 'supplierGrade', parseInt(supplierGrade))
     // }
+    supplierLinkmanClear() {
+      this.$set(this.formData, 'supplierLinkphone', '')
+    }
   }
 }
 </script>
