@@ -26,7 +26,7 @@ export default {
       const { propName } = this.config
       const { pageData } = this
       this.$refs['file-upload-single-image'] && this.$refs['file-upload-single-image'].clearFiles()
-      if (pageData[propName] === '' || pageData[propName] === undefined) {
+      if (pageData[propName] === '' || pageData[propName] === undefined || pageData[propName] === null) {
         this.resourcesList = []
       } else {
         this.resourcesList = [

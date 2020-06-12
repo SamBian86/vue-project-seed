@@ -172,7 +172,7 @@
           align="center"
           header-align="center"
           fixed="right"
-          width="280"
+          min-width="280"
         >
           <template slot-scope="scope">
             <!-- 活动流程图 -->
@@ -214,7 +214,7 @@
             >{{ $t('contract.plan') }}</el-button>
             <!-- 修改 -->
             <el-button
-              v-if="filterPermission('engineering:contract:update') && scope.row.contractStatus === 0"
+              v-if="filterPermission('engineering:contract:update') && (scope.row.contractStatus === 0 || scope.row.contractStatus === 3)"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"

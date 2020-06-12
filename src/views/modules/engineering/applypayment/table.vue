@@ -150,7 +150,7 @@
           align="center"
           header-align="center"
           fixed="right"
-          width="200"
+          min-width="240"
         >
           <template slot-scope="scope">
             <!-- 活动流程图 -->
@@ -185,7 +185,7 @@
             >{{ $t('detail') }}</el-button>
             <!-- 修改 -->
             <el-button
-              v-if="filterPermission('engineering:applypayment:update') && scope.row.applyStatus === 0"
+              v-if="filterPermission('engineering:applypayment:update') && (scope.row.applyStatus === 0 || scope.row.applyStatus === 3)"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
