@@ -141,11 +141,13 @@ export default {
       this.generateColumn()
       const { tableName } = this.tableConfig
       this.$refs[tableName].searchHandle()
+      this.afterGenerateTable()
     },
     // 清除
     clearHandle() {
       const { tableName } = this.tableConfig
       this.$refs[tableName].clearHandle()
+      this.afterGenerateTable()
     },
     // 清除单选
     clearCurrentChangeHandle() {

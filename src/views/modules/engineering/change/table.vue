@@ -367,7 +367,7 @@ export default {
       rejectEngineeringContractChange({ id: row.id }).then(response => {
         const _html = `
         <div>${this.$t('contractChange.comment')}：${response.comment}</div>
-        <div>${this.$t('contractChange.userName')}：${response.userName}</div>
+        <div>${this.$t('contractChange.user')}：${response.userName}</div>
         `
         this.$alert(_html, this.$t('info'), {
           confirmButtonText: this.$t('confirm'),

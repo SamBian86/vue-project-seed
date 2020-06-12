@@ -225,7 +225,7 @@ export default {
     afterGenerateTable() {
       setTimeout(() => {
         const tableData = this.getResponseData()
-        this.totalAmount = tableData.totalAmount
+        this.totalAmount = tableData.totalAmount || 0
       }, 200)
     },
     genrateI18nSearchItems() {
