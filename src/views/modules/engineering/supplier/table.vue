@@ -20,6 +20,15 @@
         >
           <el-form-item>
             <el-input
+              v-model="tableSearchParams.keyWord"
+              :placeholder="$t('supplier.keyWord')"
+              :size="tableConfig.tableSearchSize"
+              clearable
+              @clear="clearHandle"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input
               v-model="tableSearchParams.supplierName"
               :placeholder="$t('supplier.name')"
               :size="tableConfig.tableSearchSize"

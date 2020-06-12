@@ -565,6 +565,7 @@ t.supplierLinkhis.updateDate = '修改时间'
 
 t.supplier = {}
 t.supplier.name = '供应商名称'
+t.supplier.keyWord = '关键字模糊查询'
 t.supplier.black = '拉黑'
 t.supplier.blackMessage = '拉黑同一法人的所有供应商'
 t.supplier.blackCurrent = '拉黑当前供应商'
