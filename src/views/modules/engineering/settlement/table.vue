@@ -319,7 +319,9 @@ export default {
         // 签约时间
         { prop: 'contractTime', label: 'contractSettlement.contractTime', width: '160' },
         // 经办人
-        { prop: 'contractHandleman', label: 'contractSettlement.contractHandleman', width: '100' }
+        { prop: 'contractHandleman', label: 'contractSettlement.contractHandleman', width: '100' },
+        // 审核人
+        { prop: 'currentExaminer', label: 'contractSettlement.currentExaminer', width: '100' }
       ]
       // 是否填充查询条件为空
       this.tableConfig.searchFillEmpty = true
@@ -338,6 +340,18 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteXXX
       // console.log('table page created')
+
+      this.tableColumnAction = [
+        {
+          searchParam: 'settlementExamineStatus',
+          exclude: [
+            { value: 0, props: ['currentExaminer'] },
+            { value: 1, props: [] },
+            { value: 2, props: ['currentExaminer'] },
+            { value: 3, props: ['currentExaminer'] }
+          ]
+        }
+      ]
       this.generateTable()
     },
     genrateI18nSearchItems() {

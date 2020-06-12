@@ -337,12 +337,12 @@ export default {
             return value
           }
         },
-        // 当前审核人
-        { prop: 'currentExaminer', label: 'contract.currentExaminer', width: '100' },
         // 签约时间
         { prop: 'contractTime', label: 'contract.contractTime', width: '160' },
         // 经办人
-        { prop: 'contractHandleman', label: 'contract.contractHandleman', width: '100' }
+        { prop: 'contractHandleman', label: 'contract.contractHandleman', width: '100' },
+        // 当前审核人
+        { prop: 'currentExaminer', label: 'contract.currentExaminer', width: '100' }
       ]
       // 是否填充查询条件为空
       this.tableConfig.searchFillEmpty = true

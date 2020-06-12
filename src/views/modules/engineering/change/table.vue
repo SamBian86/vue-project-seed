@@ -298,6 +298,8 @@ export default {
         { prop: 'changeAmount', label: 'contractChange.changeAmount', width: '120' },
         // 经办人
         { prop: 'userName', label: 'contractChange.userName', width: '80' },
+        // 审核人
+        { prop: 'currentExaminer', label: 'contractChange.currentExaminer', width: '100' },
         // 签发日期
         { prop: 'applyDate', label: 'contractChange.applyDate', width: '160' },
         // 审批状态
@@ -315,8 +317,10 @@ export default {
         }
       ]
       // 是否填充查询条件为空
-      // this.tableConfig.searchFillEmpty = true
-      // this.tableSearchParams = {}
+      this.tableConfig.searchFillEmpty = true
+      this.tableSearchParams = {
+        applyStatus: 0
+      }
       // 配置列表请求
       this.tableHandle.list.api = getEngineeringContractChangePageList
       // 配置导出功能
@@ -329,6 +333,17 @@ export default {
       // 配置section删除功能
       // this.tableHandle.deleteSection.api = deleteEngineeringContractChange
       // console.log('table page created')
+      this.tableColumnAction = [
+        {
+          searchParam: 'applyStatus',
+          exclude: [
+            { value: 0, props: ['currentExaminer'] },
+            { value: 1, props: [] },
+            { value: 2, props: ['currentExaminer'] },
+            { value: 3, props: ['currentExaminer'] }
+          ]
+        }
+      ]
       this.generateTable()
     },
     genrateI18nSearchItems() {
