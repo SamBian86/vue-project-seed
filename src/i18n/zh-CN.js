@@ -31,6 +31,7 @@ t.download = '下载'
 t.downloadTemp = '下载模板'
 t.import = '导入'
 t.info = '信息'
+t.money = '金额'
 
 t.search = {}
 t.search.phoneNumberOrName = '手机号或姓名'

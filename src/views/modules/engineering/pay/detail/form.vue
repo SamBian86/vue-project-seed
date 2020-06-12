@@ -97,6 +97,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['user_userInfo']),
     ...mapGetters('app', ['filterPermission', 'getDictByType', 'getDictNameByValue'])
   },
   activated() {
@@ -115,7 +116,16 @@ export default {
       const { formTitle } = this
       this.formGenerateTitle = formTitle
     },
+    beforeInit() {
+      const { pageType } = this.$attrs.page_info.data
+      const { realName } = this.user_userInfo
+      if (pageType === 'create') {
+        this.formDefaultData.handleman = realName || ''
+        this.formDefaultData.handleDate = new Date()
+      }
+    },
     init() {
+      this.beforeInit()
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {

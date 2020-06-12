@@ -32,3 +32,11 @@ export function validateContractUnivalence(rule, value, callback) {
     callback()
   }
 }
+
+export function validateMoney(rule, value, callback) {
+  if (value && !validatePrice(value)) {
+    callback(new Error(i18n.t('validate.format', { attr: i18n.t('money') })))
+  } else {
+    callback()
+  }
+}

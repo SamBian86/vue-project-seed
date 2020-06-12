@@ -309,7 +309,7 @@ export default {
       // 是否填充查询条件为空
       this.tableConfig.searchFillEmpty = true
       this.tableSearchParams = {
-        payStatus: ''
+        payStatus: 0
       }
       // 配置列表请求
       this.tableHandle.list.api = getEngineeringContractApplypaymentPayPageList

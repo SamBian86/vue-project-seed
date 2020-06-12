@@ -135,7 +135,7 @@ import {
   editEngineeringContractSettlement,
   getEngineeringContractSettlementById
 } from '@/api/engineering/contractSettlement'
-// import { validateMobile } from '@/utils/validator'
+import { validateMoney } from '@/utils/validator'
 
 export default {
   name: 'Form',
@@ -267,7 +267,9 @@ export default {
           span: 8,
           prop: 'settlementProvisionalAmount',
           name: 'contractSettlement.settlementProvisionalAmount',
-          type: 'text'
+          type: 'text',
+          rules: [{ validator: validateMoney, trigger: 'blur' }],
+          inputHandle: this.settlementProvisionalAmountInput
         },
         {
           // 实际金额
@@ -410,6 +412,14 @@ export default {
       const { changeCostInfos, changeTypeAmountList } = this.formData
       this.changeCostInfos = changeCostInfos
       this.changeTypeAmountList = changeTypeAmountList
+    },
+    settlementProvisionalAmountInput() {
+      const { contractTotalPrice, settlementProvisionalAmount } = this.formData
+      if (!isNaN(settlementProvisionalAmount)) {
+        this.$set(this.formData, 'settlementActualAmount', contractTotalPrice - settlementProvisionalAmount)
+      } else {
+        this.$set(this.formData, 'settlementActualAmount', contractTotalPrice)
+      }
     }
   }
 }
