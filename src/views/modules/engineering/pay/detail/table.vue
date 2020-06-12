@@ -75,7 +75,7 @@
               <!-- 创建 -->
               <el-form-item>
                 <el-button
-                  v-if="filterPermission('engineering:pay:save')"
+                  v-if="containsPageType(['table']) && filterPermission('engineering:pay:save')"
                   type="primary"
                   :size="tableConfig.tableSearchSize"
                   @click="createHandle()"
@@ -140,7 +140,7 @@
             </el-form>
           </template>
           <!-- 操作区域 -->
-          <template slot="operate">
+          <template v-if="containsPageType(['table'])" slot="operate">
             <el-table-column
               :label="$t('handle')"
               align="center"
@@ -199,6 +199,7 @@ export default {
   mixins: [pageMixin, tableDefaultMixin],
   data() {
     return {
+      pageType: '',
       id: '',
       detail: {
         contractName: '',
@@ -224,8 +225,9 @@ export default {
   },
   methods: {
     init() {
-      const { id } = this.$attrs.page_drawer_data
+      const { id, pageType } = this.$attrs.page_drawer_data
       this.id = id
+      this.pageType = pageType
       // 配置查询区域i18n相关select数据
       // this.genrateI18nSearchItems()
       // console.log('table created')

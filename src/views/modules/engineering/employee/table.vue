@@ -12,7 +12,12 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableSearchParams"
+          @keyup.enter.native="searchHandle"
+        >
           <el-form-item>
             <el-input
               v-model="tableSearchParams.phoneNumberOrName"
@@ -33,7 +38,12 @@
               clearable
               @clear="clearHandle"
             >
-              <el-option v-for="(item, index) in positionList" :key="index" :label="item.jobName" :value="item.id"></el-option>
+              <el-option
+                v-for="(item, index) in positionList"
+                :key="index"
+                :label="item.jobName"
+                :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -54,6 +64,22 @@
           </el-form-item>
           <el-form-item>
             <el-select
+              v-model="tableSearchParams.status"
+              :placeholder="$t('employee.status')"
+              :size="tableConfig.tableSearchSize"
+              clearable
+              @clear="clearHandle"
+            >
+              <el-option
+                v-for="(item, index) in getDictByType('employee_status')"
+                :key="index"
+                :label="item.dictLabel"
+                :value="item.dictValue"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select
               v-model="tableSearchParams.relationshipId"
               :placeholder="$t('employee.relationshipId')"
               :size="tableConfig.tableSearchSize"
@@ -61,10 +87,10 @@
               @clear="clearHandle"
             >
               <el-option
-                v-for="(item, index) in relationshipItems"
+                v-for="(item, index) in getDictByType('employee_relationship')"
                 :key="index"
-                :label="item.label"
-                :value="item.value"
+                :label="item.dictLabel"
+                :value="item.dictValue"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -74,9 +100,7 @@
               v-if="filterPermission('engineering:employee:view')"
               :size="tableConfig.tableSearchSize"
               @click="searchHandle()"
-            >
-              {{ $t('query') }}
-            </el-button>
+            >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
           <el-form-item>
@@ -85,9 +109,7 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
-            >
-              {{ $t('add') }}
-            </el-button>
+            >{{ $t('add') }}</el-button>
           </el-form-item>
           <!-- 导出 -->
           <!-- <el-form-item>
@@ -127,7 +149,13 @@
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="100">
+        <el-table-column
+          :label="$t('handle')"
+          align="center"
+          header-align="center"
+          fixed="right"
+          width="100"
+        >
           <template slot-scope="scope">
             <!-- 修改 -->
             <el-button
@@ -135,18 +163,14 @@
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >
-              {{ $t('update') }}
-            </el-button>
+            >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
             <el-button
               v-if="filterPermission('engineering:employee:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
-            >
-              {{ $t('delete') }}
-            </el-button>
+            >{{ $t('delete') }}</el-button>
             <!-- 单个操作 -->
             <!-- <el-button
               v-if="filterPermission('engineering:employee:xxx')"
@@ -280,11 +304,6 @@ export default {
       getEngineeringJoblist().then(response => {
         this.positionList = response
       })
-
-      this.relationshipItems = [
-        { label: this.$t('employee.relationshipId0'), value: 0 },
-        { label: this.$t('employee.relationshipId1'), value: 1 }
-      ]
     },
     // 创建
     createHandle(options = { componentNames: ['yunlin-table'] }) {

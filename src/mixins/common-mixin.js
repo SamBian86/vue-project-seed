@@ -19,7 +19,8 @@ export default {
       const pageInfoPageType = (this.$attrs.page_info && this.$attrs.page_info.data && this.$attrs.page_info.data.pageType) || ''
       const pageDrawerPageType =
         (this.$attrs.page_drawer_data && this.$attrs.page_drawer_data.data && this.$attrs.page_drawer_data.data.pageType) || ''
-      return types.includes(pageDrawerPageType || pageInfoPageType)
+      const pageType = this.pageType || ''
+      return types.includes(pageDrawerPageType || pageInfoPageType || pageType)
     },
     // 转换字典数据使其可以用于组件
     dictDataForComponent(type, format) {

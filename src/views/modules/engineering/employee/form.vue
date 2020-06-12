@@ -255,17 +255,15 @@ export default {
           pickerOptions: {}
         },
         {
-          // 是否兼职
+          // 是否在职
           span: 8,
           prop: 'relationshipId',
           name: 'employee.relationshipId',
           type: 'select',
           className: 'select-block',
           placeholder: 'employee.relationshipId',
-          items: [
-            { label: 'employee.relationshipId0', value: 0 },
-            { label: 'employee.relationshipId1', value: 1 }
-          ]
+          items: this.getDictByType('employee_relationship'),
+          itemType: 'dict'
         },
         {
           // 分割线

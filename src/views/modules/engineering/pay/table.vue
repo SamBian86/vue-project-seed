@@ -175,12 +175,22 @@
                 :size="tableConfig.tableSearchSize"
               >{{ $t('instanceId') }}</el-button>
             </el-popover>
+            <!-- 详情 -->
             <el-button
-              v-if="filterPermission('engineering:pay:pay')"
+              v-if="filterPermission('engineering:pay:view') && scope.row.payStatus === 2"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="detailHandle(scope.row)"
+            >{{ $t('detail') }}</el-button>
+            <el-button
+              v-if="filterPermission('engineering:pay:pay') && scope.row.payStatus !== 2"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="payHandle(scope.row)"
-            >{{ $t('applypaymentPay.pay') }}</el-button>
+            >
+              {{ scope.row.payStatus === 0 ? $t('applypaymentPay.pay') : '' }}
+              {{ scope.row.payStatus === 1 ? $t('applypaymentPay.payAll') : '' }}
+            </el-button>
             <!-- 修改 -->
             <!-- <el-button
               v-if="filterPermission('engineering:pay:update')"
@@ -289,6 +299,8 @@ export default {
         { prop: 'needPayAmount', label: 'applypaymentPay.needPayAmount', width: '100' },
         // 申请金额
         { prop: 'thisAmount', label: 'applypaymentPay.thisAmount', width: '100' },
+        // 支付状态
+        { prop: 'payStatusName', label: 'applypaymentPay.payStatusName', width: '100' },
         // 申请人
         { prop: 'applier', label: 'applypaymentPay.applier', width: '100' },
         // 申请日期
@@ -330,7 +342,13 @@ export default {
     // },
     payHandle(row) {
       this.setDrawerComponent('detail')
-      this.setDrawerData({ id: row.id })
+      this.setDrawerData({ id: row.id, pageType: 'table' })
+      this.setDrawerTitle(this.$t('applypaymentPay.payDetail'))
+      this.drawerVisibleHandle()
+    },
+    detailHandle(row) {
+      this.setDrawerComponent('detail')
+      this.setDrawerData({ id: row.id, pageType: 'detail' })
       this.setDrawerTitle(this.$t('applypaymentPay.payDetail'))
       this.drawerVisibleHandle()
     },
