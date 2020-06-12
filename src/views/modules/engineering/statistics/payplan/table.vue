@@ -210,6 +210,7 @@ export default {
       // this.tableSearchParams = {}
       // 配置列表请求
       this.tableHandle.list.api = getEngineeringStatisticsContractPayplanPageList
+      this.tableHandle.list.callback = this.listCallback
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
@@ -222,11 +223,9 @@ export default {
       // console.log('table page created')
       this.generateTable()
     },
-    afterGenerateTable() {
-      setTimeout(() => {
-        const tableData = this.getResponseData()
-        this.totalAmount = tableData.totalAmount || 0
-      }, 200)
+    listCallback() {
+      const tableData = this.getResponseData()
+      this.totalAmount = tableData.totalAmount || 0
     },
     genrateI18nSearchItems() {
       getEngineeringProjectList().then(response => {

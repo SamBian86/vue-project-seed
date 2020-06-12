@@ -258,7 +258,7 @@ export default {
       }
       // 配置列表请求
       this.tableHandle.list.api = getEngineeringContractApplypaymentDetailsPageList
-      this.tableHandle.list.callBack = this.afterGetList
+      this.tableHandle.list.callback = this.afterGetList
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能

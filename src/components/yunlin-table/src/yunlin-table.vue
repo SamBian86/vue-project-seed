@@ -202,7 +202,7 @@ export default {
     searchHandle() {
       // 获取列表数据
       const { query } = this
-      const { callBack } = this.$attrs.handle.list
+      const { callback } = this.$attrs.handle.list
       const { hasPagination, searchFillEmpty, tableDataFrom } = this.$attrs.config
       const searchParams = this.$attrs.searchparams
 
@@ -253,12 +253,12 @@ export default {
             }
           }
 
-          if (callBack) {
-            callBack()
-          }
           this.responseData = response
           this.loading = false
           this.reload = false // 用于控制在activated钩子上是否获取数据
+          if (callback) {
+            callback()
+          }
         })
         .catch(message => {
           console.log(message)
