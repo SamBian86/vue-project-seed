@@ -103,9 +103,16 @@
           align="left"
           header-align="center"
           fixed="right"
-          width="250"
+          width="280"
         >
           <template slot-scope="scope">
+            <!-- 查看 -->
+            <el-button
+              v-if="filterPermission('engineering:supplier:view')"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="detailHandle(scope.row)"
+            >{{ $t('detail') }}</el-button>
             <!-- 修改 -->
             <el-button
               v-if="filterPermission('engineering:supplier:update')"

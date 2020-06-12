@@ -19,6 +19,7 @@
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formMixin from '@/mixins/form-mixin'
+import { treeMergeData } from '@/utils'
 export default {
   name: 'ToolTreeDynamic',
   mixins: [commonMixin, pageMixin, formMixin],
@@ -89,11 +90,18 @@ export default {
   },
   methods: {
     init() {
+      const { disabled } = this
       if (this.config.treeRequest) {
         this.config
           .treeRequest(this.config.treeRequestParams)
           .then(response => {
-            this.items = response
+            if (disabled) {
+              this.items = treeMergeData(response, {
+                disabled
+              })
+            } else {
+              this.items = response
+            }
             if (this.config.treeResultRequest) {
               this.treeResultRequest()
               // console.log('treeResultRequest')

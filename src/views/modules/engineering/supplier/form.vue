@@ -142,7 +142,7 @@ export default {
             // treeResultKey: '',
             propName: 'supplierTypeIds',
             nodeKey: 'id',
-            treeProps: { label: 'typeName', children: 'children' },
+            treeProps: { label: 'typeName', children: 'children', disabled: 'disabled' },
             mergeData: { target: 'supplierTypeIds' },
             accordion: true,
             showCheckbox: true,

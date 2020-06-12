@@ -115,3 +115,16 @@ export function treeDataTranslate(data, id = 'id', pid = 'pid') {
   }
   return res
 }
+
+// 树形数据处理
+export function treeMergeData(trees, data) {
+  const newTrees = []
+  trees.map(item => {
+    item = { ...item, ...data }
+    if (item.children && item.children.length !== 0) {
+      item.children = treeMergeData(item.children, { ...data })
+    }
+    newTrees.push(item)
+  })
+  return newTrees
+}
