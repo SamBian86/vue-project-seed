@@ -299,6 +299,8 @@ export default {
         { prop: 'needPayAmount', label: 'applypaymentPay.needPayAmount', width: '100' },
         // 申请金额
         { prop: 'thisAmount', label: 'applypaymentPay.thisAmount', width: '100' },
+        // 已支付金额
+        { prop: 'havePayAmount', label: 'applypaymentPay.havePayAmount', width: '100' },
         // 支付状态
         { prop: 'payStatusName', label: 'applypaymentPay.payStatusName', width: '100' },
         // 申请人
