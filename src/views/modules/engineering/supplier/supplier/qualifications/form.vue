@@ -109,7 +109,7 @@ export default {
     // console.log('form created')
 
     // 设置整体表单栅格列数
-    this.formConfig.formSpan = 24
+    this.formConfig.formSpan = 12
   },
   methods: {
     generateTitle() {
