@@ -8,13 +8,7 @@
     </template>
     <sub-menu v-for="item in menu.children" :key="item.id" :menu="item"></sub-menu>
   </el-submenu>
-  <el-menu-item
-    v-else
-    :index="menu.id"
-    :data-id="menu.id"
-    :class="comparePath(menu.url) ? 'is-active' : ''"
-    @click="gotoRouteHandle(menu.id)"
-  >
+  <el-menu-item v-else :index="menu.id" @click="gotoRouteHandle(menu.id)">
     <svg class="icon-svg aui-sidebar__menu-icon" aria-hidden="true">
       <use :xlink:href="`#${menu.icon}`" />
     </svg>
@@ -74,11 +68,6 @@ export default {
       } else {
         console.log('没有此动态路由')
       }
-    },
-    comparePath(url) {
-      const { layout_tabActive } = this
-      const _url = url.replace('/', '_')
-      return _url === layout_tabActive
     }
   }
 }

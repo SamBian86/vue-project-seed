@@ -6,13 +6,13 @@
         :collapse-transition="false"
         :unique-opened="true"
         class="aui-sidebar__menu"
+        :default-active="defaultActive"
         :default-openeds="defaultOpeneds"
       >
         <sub-menu
           v-for="menu in layout_menuStore"
           :key="`${menu.id}`"
           :menu="menu"
-          :data-id="menu.id"
           :class="defaultOpeneds.includes(menu.id) ? 'is-active' : ''"
         />
       </el-menu>
@@ -31,7 +31,8 @@ export default {
   props: {},
   data() {
     return {
-      defaultOpeneds: []
+      defaultOpeneds: [],
+      defaultActive: ''
     }
   },
   computed: {
@@ -53,8 +54,18 @@ export default {
   methods: {
     ...mapMutations('layout', ['setTabActive', 'setMenuActive']),
     storeUpdate() {
-      const { layout_menuStore, layout_menuActive } = this
+      const { layout_menuStore, layout_menuActive, layout_tabActive } = this
       this.defaultOpeneds = [layout_menuStore[layout_menuActive]['id']]
+      layout_menuStore.map(item => {
+        if (item.children.length !== 0) {
+          item.children.map(ite => {
+            const _url = ite.url.replace('/', '_')
+            if (_url === layout_tabActive) {
+              this.defaultActive = ite.id
+            }
+          })
+        }
+      })
     }
   }
 }
