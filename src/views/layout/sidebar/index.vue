@@ -9,12 +9,7 @@
         :default-active="defaultActive"
         :default-openeds="defaultOpeneds"
       >
-        <sub-menu
-          v-for="menu in layout_menuStore"
-          :key="`${menu.id}`"
-          :menu="menu"
-          :class="defaultOpeneds.includes(menu.id) ? 'is-active' : ''"
-        />
+        <sub-menu v-for="menu in layout_menuStore" :key="`${menu.id}`" :menu="menu" />
       </el-menu>
     </div>
   </aside>
