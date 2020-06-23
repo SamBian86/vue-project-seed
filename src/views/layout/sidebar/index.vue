@@ -6,11 +6,14 @@
         :collapse-transition="false"
         :unique-opened="true"
         class="aui-sidebar__menu"
+        :default-openeds="defaultOpeneds"
       >
         <sub-menu
           v-for="menu in layout_menuStore"
           :key="`${menu.id}`"
           :menu="menu"
+          :data-id="menu.id"
+          :class="defaultOpeneds.includes(menu.id) ? 'is-active' : ''"
         />
       </el-menu>
     </div>
@@ -18,7 +21,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 import SubMenu from './sub-menu'
 export default {
@@ -28,26 +31,30 @@ export default {
   props: {},
   data() {
     return {
-      menuActive: ''
+      defaultOpeneds: []
     }
   },
   computed: {
     ...mapGetters([
       'layout_sidebar_layoutSkin',
       'layout_menuActive',
+      'layout_tabActive',
       'layout_menuStore',
-      'layout_sidebar_fold'
+      'layout_sidebar_fold',
+      'layout_tabs'
     ])
   },
   watch: {
     layout_tabActive: 'storeUpdate'
   },
-  created() {
+  mounted() {
     this.storeUpdate()
   },
   methods: {
+    ...mapMutations('layout', ['setTabActive', 'setMenuActive']),
     storeUpdate() {
-      this.menuActive = this.layout_menuActive
+      const { layout_menuStore, layout_menuActive } = this
+      this.defaultOpeneds = [layout_menuStore[layout_menuActive]['id']]
     }
   }
 }

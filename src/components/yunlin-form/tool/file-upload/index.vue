@@ -70,7 +70,7 @@
     <!-- 多个文件上传 multiple-file -->
     <div v-if="config.type === 'multiple-file'" class="file-upload-multiple">
       <el-upload
-        ref="file-upload-multiple-image"
+        ref="file-upload-multiple-file"
         :file-list="resourcesList"
         :action="uploadUrl"
         :auto-upload="false"

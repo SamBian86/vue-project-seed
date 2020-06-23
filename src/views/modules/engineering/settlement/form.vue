@@ -83,8 +83,8 @@
                     width="160"
                   ></el-table-column>
                   <el-table-column
-                    prop="changeGeneratedAmount"
-                    :label="$t('contractSettlement.changeGeneratedAmount')"
+                    prop="thisChangeAmount"
+                    :label="$t('contractSettlement.thisChangeAmount')"
                     width="160"
                   ></el-table-column>
                   <el-table-column

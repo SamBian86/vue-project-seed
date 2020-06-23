@@ -79,12 +79,16 @@ export default {
     },
     // 文件检查
     multipleFileChangeHandle(file, fileList) {
+      const { resourcesList } = this
       const checkType = this.beforeUploadHandle(fileList)
-
       if (checkType) {
         this.multipleFileConstructorData(fileList)
       } else {
-        this.$refs['file-upload-multiple-file'] && this.$refs['file-upload-multiple-file'].clearFiles()
+        if (resourcesList.length !== 0) {
+          this.resourcesList = fileList.slice(0, resourcesList.length)
+        } else {
+          this.$refs['file-upload-multiple-file'] && this.$refs['file-upload-multiple-file'].clearFiles()
+        }
       }
     },
     multipleFileConstructorData(fileList) {

@@ -200,7 +200,7 @@ export default {
             mergeData: { target: 'deptIds' },
             accordion: false,
             showCheckbox: true,
-            defaultExpandAll: false,
+            defaultExpandAll: true,
             componentNames: ['tree-dynamic']
           }
         },

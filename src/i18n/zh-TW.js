@@ -1034,6 +1034,7 @@ t.contractSettlement.drawingbudgetTotalCost = '预算金额'
 t.contractSettlement.costControlRate = '强控比例'
 t.contractSettlement.contractGeneratedAmount = '已发生金额'
 t.contractSettlement.changeGeneratedAmount = '已产生变更金额'
+t.contractSettlement.thisChangeAmount = '本次变更金额'
 t.contractSettlement.remark = '备注'
 
 t.contractSettlementExamine = {}

@@ -1,22 +1,20 @@
 <template>
-  <el-submenu
-    v-if="menu.children && menu.children.length >= 1"
-    :index="menu.id"
-    :popper-append-to-body="false"
-  >
+  <el-submenu v-if="menu.children && menu.children.length >= 1" :index="menu.id" :popper-append-to-body="false">
     <template slot="title">
       <svg class="icon-svg aui-sidebar__menu-icon" aria-hidden="true">
         <use :xlink:href="`#${menu.icon}`" />
       </svg>
       <span>{{ menu.name }}</span>
     </template>
-    <sub-menu
-      v-for="item in menu.children"
-      :key="item.id"
-      :menu="item"
-    ></sub-menu>
+    <sub-menu v-for="item in menu.children" :key="item.id" :menu="item"></sub-menu>
   </el-submenu>
-  <el-menu-item v-else :index="menu.id" @click="gotoRouteHandle(menu.id)">
+  <el-menu-item
+    v-else
+    :index="menu.id"
+    :data-id="menu.id"
+    :class="comparePath(menu.url) ? 'is-active' : ''"
+    @click="gotoRouteHandle(menu.id)"
+  >
     <svg class="icon-svg aui-sidebar__menu-icon" aria-hidden="true">
       <use :xlink:href="`#${menu.icon}`" />
     </svg>
@@ -39,15 +37,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'page_dynamicRoutes',
-      'layout_tabs',
-      'layout_menuActive',
-      'layout_tabActive'
-    ]),
+    ...mapGetters(['page_dynamicRoutes', 'layout_tabs', 'layout_menuActive', 'layout_tabActive']),
     ...mapGetters('page', ['filterMenuByMenuId']),
     ...mapGetters('layout', ['filterTabByName'])
   },
+  created() {},
   methods: {
     ...mapMutations('layout', ['setTabActive', 'setMenuActive', 'setTabs']),
     // 通过menuId与动态(菜单)路由进行匹配跳转至指定路由
@@ -80,6 +74,11 @@ export default {
       } else {
         console.log('没有此动态路由')
       }
+    },
+    comparePath(url) {
+      const { layout_tabActive } = this
+      const _url = url.replace('/', '_')
+      return _url === layout_tabActive
     }
   }
 }
