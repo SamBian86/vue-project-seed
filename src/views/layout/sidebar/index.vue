@@ -49,17 +49,22 @@ export default {
   methods: {
     ...mapMutations('layout', ['setTabActive', 'setMenuActive']),
     storeUpdate() {
-      const { layout_menuStore, layout_menuActive, layout_tabActive } = this
+      const { layout_menuStore, layout_tabActive } = this
+      let defaultOpenedsTag = false
       if (layout_tabActive !== 'home') {
-        this.defaultOpeneds = [layout_menuStore[layout_menuActive]['id']]
         layout_menuStore.map(item => {
           if (item.children.length !== 0) {
             item.children.map(ite => {
               const _url = ite.url.replace('/', '_')
               if (_url === layout_tabActive) {
                 this.defaultActive = ite.id
+                defaultOpenedsTag = true
               }
             })
+          }
+          if (defaultOpenedsTag) {
+            this.defaultOpeneds = [item.id]
+            defaultOpenedsTag = false
           }
         })
       }
