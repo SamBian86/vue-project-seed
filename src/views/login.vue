@@ -27,10 +27,7 @@
               </el-select>
               </el-form-item>-->
               <el-form-item prop="username">
-                <el-input
-                  v-model="postData.username"
-                  :placeholder="$t('login.username')"
-                >
+                <el-input v-model="postData.username" :placeholder="$t('login.username')">
                   <span slot="prefix" class="el-input__icon">
                     <svg class="icon-svg" aria-hidden="true">
                       <use xlink:href="#icon-user" />
@@ -54,10 +51,7 @@
               <el-form-item prop="captcha">
                 <el-row :gutter="20">
                   <el-col :span="14">
-                    <el-input
-                      v-model="postData.captcha"
-                      :placeholder="$t('login.captcha')"
-                    >
+                    <el-input v-model="postData.captcha" :placeholder="$t('login.captcha')">
                       <span slot="prefix" class="el-input__icon">
                         <svg class="icon-svg" aria-hidden="true">
                           <use xlink:href="#icon-safetycertificate" />
@@ -75,9 +69,7 @@
                   type="primary"
                   class="w-percent-100 el-button-login"
                   @click="postDataSubmitHandle()"
-                >
-                  {{ $t('login.title') }}
-                </el-button>
+                >{{ $t('login.title') }}</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -144,7 +136,7 @@ export default {
   },
   methods: {
     ...mapMutations('layout', ['setTabActive']),
-    ...mapActions('app', ['login']),
+    ...mapActions('app', ['login', 'logout']),
     // 获取验证码
     getCaptcha() {
       const uuid = getUUID()
@@ -159,7 +151,10 @@ export default {
         }
         this.login(this.postData)
           .then(response => {
-            this.$router.replace({ name: 'home' })
+            this.logout()
+            window.setTimeout(() => {
+              this.$router.replace({ name: 'home' })
+            }, 20)
           })
           .catch(error => {
             this.getCaptcha()
