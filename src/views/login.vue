@@ -136,7 +136,8 @@ export default {
   },
   methods: {
     ...mapMutations('layout', ['setTabActive']),
-    ...mapActions('app', ['login', 'logout']),
+    ...mapMutations('app', ['logout']),
+    ...mapActions('app', ['login']),
     // 获取验证码
     getCaptcha() {
       const uuid = getUUID()
@@ -149,12 +150,10 @@ export default {
         if (!valid) {
           return false
         }
+        this.logout() // 清除storage数据
         this.login(this.postData)
           .then(response => {
-            this.logout()
-            window.setTimeout(() => {
-              this.$router.replace({ name: 'home' })
-            }, 20)
+            this.$router.replace({ name: 'home' })
           })
           .catch(error => {
             this.getCaptcha()
