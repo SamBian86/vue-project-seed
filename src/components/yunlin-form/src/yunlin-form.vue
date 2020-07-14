@@ -280,14 +280,18 @@ export default {
         if (valid) {
           this.formSubmitHandle()
         } else {
-          this.submitTag = true
+          setTimeout(() => {
+            this.submitTag = true
+          }, 1000)
           return false
         }
       })
     },
     // 取消按钮
     cancleHandle() {
-      this.submitTag = true
+      setTimeout(() => {
+        this.submitTag = true
+      }, 1000)
       this.$pageSwitch('table')
     },
     // 重置填充的数据
@@ -329,7 +333,9 @@ export default {
             type: 'success',
             duration: 2000
           })
-          this.submitTag = true
+          setTimeout(() => {
+            this.submitTag = true
+          }, 1000)
           // 此处回调用于不返回table组件的逻辑
           if (callback) {
             callback()
@@ -350,7 +356,7 @@ export default {
           })
           setTimeout(() => {
             this.submitTag = true
-          }, 2000)
+          }, 1000)
         })
     },
     // 更新数据
