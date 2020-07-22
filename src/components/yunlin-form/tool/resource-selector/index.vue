@@ -110,9 +110,11 @@ export default {
   },
   activated() {
     // console.log('resource-selector activated')
+    this.init()
   },
   created() {
     // console.log('resource-selector created')
+    this.init()
   },
   methods: {
     init() {
