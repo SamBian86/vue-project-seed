@@ -26,7 +26,7 @@
         </el-menu-item>-->
       </el-menu>
       <el-menu class="aui-navbar__menu" mode="horizontal">
-        <el-menu-item index="1">
+        <!-- <el-menu-item index="1">
           <el-dropdown :show-timeout="0" placement="bottom">
             <el-button size="mini">{{ $t('_lang') }}</el-button>
             <el-dropdown-menu slot="dropdown">
@@ -44,7 +44,7 @@
               <use xlink:href="#icon-earth" />
             </svg>
           </a>
-        </el-menu-item>
+        </el-menu-item>-->
         <el-menu-item index="3" @click="fullscreenHandle()">
           <svg class="icon-svg aui-navbar__icon-menu" aria-hidden="true">
             <use xlink:href="#icon-fullscreen" />
