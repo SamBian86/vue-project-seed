@@ -1,4 +1,4 @@
-# yunlin-cloud-admin
+# vue-project-seed
 
 ## Project setup
 
