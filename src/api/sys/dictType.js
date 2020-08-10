@@ -34,17 +34,6 @@ export function deleteDictType(data = []) {
 }
 
 // GET
-// /sys/dict/type/{id}
-// 信息
-export function getDictTypeById(params = {}) {
-  const { id } = params
-  return request({
-    url: `/sys/dict/type/${id}`,
-    method: 'get'
-  })
-}
-
-// GET
 // /sys/dict/type/all
 // 所有字典数据
 export function getDictTypeListAll(params = {}) {
@@ -63,5 +52,16 @@ export function getDictTypeList(params = {}) {
     url: `/sys/dict/type/page`,
     method: 'get',
     params
+  })
+}
+
+// GET
+// /sys/dict/type/{id}
+// 信息
+export function getDictTypeById(params = {}) {
+  const { id } = params
+  return request({
+    url: `/sys/dict/type/${id}`,
+    method: 'get'
   })
 }

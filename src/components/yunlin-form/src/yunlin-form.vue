@@ -8,7 +8,6 @@
       :size="$attrs.config.formSize"
       :label-position="$attrs.config.labelPosition"
       :validate-on-rule-change="$attrs.config.validateOnRuleChange"
-      @keyup.enter.native="submitHandle()"
     >
       <slot name="content" />
       <el-row v-if="$attrs.config.formItems.length !== 0" :gutter="10">
@@ -23,35 +22,41 @@
         >
           <el-form-item v-if="item.prop" :prop="item.prop" :label="$t(item.name)">
             <!-- input -->
-            <template
-              v-if="item.type === 'text' && item.clearHandle === undefined && item.inputHandle === undefined"
-            >
+            <template v-if="item.type === 'text' && item.clearHandle === undefined && item.inputHandle === undefined">
               <el-input
                 v-model="$attrs.data[item.prop]"
                 :disabled="item.disabled || false"
+                :maxlength="item.attrs && item.attrs.maxlength ? item.attrs.maxlength : 200"
                 :readonly="item.readonly || false"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
                 clearable
-              ></el-input>
+              >
+                <el-button
+                  v-if="item.append && item.append.type === 'button'"
+                  slot="append"
+                  :icon="item.append && item.append.icon"
+                  @click="item.append && item.append.clickHandle()"
+                >
+                  {{ $t(item.append.text) || item.append.placeholderText }}
+                </el-button>
+              </el-input>
             </template>
-            <template
-              v-if="item.type === 'text' && item.clearHandle !== undefined && item.inputHandle === undefined"
-            >
+            <template v-if="item.type === 'text' && item.clearHandle !== undefined && item.inputHandle === undefined">
               <el-input
                 v-model="$attrs.data[item.prop]"
                 :disabled="item.disabled || false"
+                :maxlength="item.attrs && item.attrs.maxlength ? item.attrs.maxlength : 200"
                 :readonly="item.readonly || false"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
                 clearable
                 @clear="item.clearHandle"
               ></el-input>
             </template>
-            <template
-              v-if="item.type === 'text' && item.inputHandle !== undefined && item.clearHandle === undefined"
-            >
+            <template v-if="item.type === 'text' && item.inputHandle !== undefined && item.clearHandle === undefined">
               <el-input
                 v-model="$attrs.data[item.prop]"
                 :disabled="item.disabled || false"
+                :maxlength="item.attrs && item.attrs.maxlength ? item.attrs.maxlength : 200"
                 :readonly="item.readonly || false"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
                 clearable
@@ -64,6 +69,7 @@
                 v-model="$attrs.data[item.prop]"
                 :type="item.type"
                 :disabled="item.disabled"
+                :maxlength="item.attrs.maxlength || 200"
                 :autosize="item.attrs.autosize"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}`"
                 clearable
@@ -74,13 +80,11 @@
               <el-radio-group
                 v-model="$attrs.data[item.prop]"
                 :disabled="item.disabled"
-                @change="formValueListener(item.prop, $event)"
+                @change="formValueListener(item.prop, $event, item.afterChange)"
               >
-                <el-radio
-                  v-for="(ite, idx) in item.items"
-                  :key="idx"
-                  :label="ite.label"
-                >{{ ite.i18n === false ? ite.name : $t(ite.name) }}</el-radio>
+                <el-radio v-for="(ite, idx) in item.items" :key="idx" :label="ite.label">
+                  {{ ite.i18n === false ? ite.name : $t(ite.name) }}
+                </el-radio>
               </el-radio-group>
             </template>
             <!-- select -->
@@ -90,6 +94,7 @@
                 :class="item.className || ''"
                 :disabled="item.disabled"
                 :placeholder="$t(item.placeholder) || item.placeholderText || `请选择${$t(item.name)}`"
+                :multiple="item.multiple || false"
                 clearable
                 filterable
                 @change="formValueListener(item.prop, $event, item.afterChange)"
@@ -114,10 +119,9 @@
             </template>
             <!-- button -->
             <template v-if="item.type === 'button'">
-              <el-button
-                :type="item.buttonType"
-                @click.stop.prevent="item.clickHandle"
-              >{{ $t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}` }}</el-button>
+              <el-button :type="item.buttonType" :disabled="item.disabled" @click.stop.prevent="item.clickHandle">
+                {{ $attrs.data[item.prop] || $t(item.placeholder) || item.placeholderText || `请输入${$t(item.name)}` }}
+              </el-button>
             </template>
             <!-- date-picker -->
             <template v-if="item.type === 'date-picker'">
@@ -151,6 +155,7 @@
             <template v-if="item.type === 'input-number'">
               <el-input-number
                 v-model="$attrs.data[item.prop]"
+                :class="item.className || ''"
                 :disabled="item.disabled"
                 :controls-position="item.attrs.controlsPosition"
                 :min="item.attrs.min"
@@ -158,6 +163,17 @@
                 :step="item.attrs.step"
                 :placeholder="`请输入${$t(item.name)}`"
               ></el-input-number>
+            </template>
+            <!-- 自定义页面组件 -->
+            <template v-if="item.type === 'page-component'">
+              <component
+                :is="item.component"
+                :disabled="item.disabled"
+                :config="item.componentConfig"
+                :page-data="{ ...$attrs.data }"
+                v-bind="$attrs"
+                v-on="$listeners"
+              ></component>
             </template>
             <!-- 自定义组件 popover-tree popover-icon resource-selector editor file-upload -->
             <template v-if="item.component">

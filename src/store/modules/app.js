@@ -1,8 +1,10 @@
-import { login, logout } from '@/api/auth'
+import { logout } from '@/api/auth'
+import { authPlatformLogin } from '@/api/auth/platform'
+import { authPropertyLogin } from '@/api/auth/property'
 import { getDictTypeListAll } from '@/api/sys/dictType'
 import { getMenuPermissionsList } from '@/api/sys/menu'
 
-import { setToken, getToken } from '@/utils/cookie'
+import { setToken, getToken, setProjectId, getProjectId, setSystemType, getSystemType } from '@/utils/cookie'
 import { getDictStore, getPermissionStore } from '@/utils/localStorage'
 
 export default {
@@ -11,6 +13,8 @@ export default {
     emptyObj: {},
     emptyList: [],
     token: getToken(),
+    systemType: getSystemType(),
+    projectId: getProjectId(),
     version: process.env.VUE_APP_VERSION,
     env: process.env.VUE_APP_NODE_ENV,
     dictTag: false, // false代表需要获取数据
@@ -21,6 +25,12 @@ export default {
   mutations: {
     setToken: (state, token) => {
       state.token = token
+    },
+    setSystemType: (state, systemType) => {
+      state.systemType = systemType
+    },
+    setProjectId: (state, projectId) => {
+      state.projectId = projectId
     },
     setDictStore(state, dictStore) {
       state.dictStore = dictStore
@@ -44,17 +54,23 @@ export default {
     },
     logout(state) {
       state.token = ''
+      state.systemType = ''
       setToken() // 清除cookie的token
+      setSystemType() // 清除cookie的systemType
+      setProjectId() // 清除cookie的code
     }
   },
   actions: {
     login({ commit }, params) {
       return new Promise((resolve, reject) => {
+        const login = params.systemType === 'property' ? authPropertyLogin : authPlatformLogin
         login(params)
           .then(response => {
             const token = response.token
             commit('setToken', token)
+            commit('setSystemType', params.systemType)
             setToken(token) // 设置cookie
+            setSystemType(params.systemType)
             resolve(response)
           })
           .catch(error => {
@@ -67,7 +83,7 @@ export default {
         // 如果dictTag为false需要获取一次数据
         const dictStore = getDictStore()
         if (dictStore) {
-          console.log('从storage获取字典数据')
+          // console.log('从storage获取字典数据')
           commit('setDictStore', dictStore)
           commit('setDictTag', true)
           return Promise.resolve()
@@ -79,7 +95,7 @@ export default {
               response.map(item => {
                 dictStore[item.dictType] = item.dataList
               })
-              console.log('获取远程字典数据')
+              // console.log('获取远程字典数据')
               commit('setDictStore', dictStore)
               commit('setDictTag', true)
               resolve(response)
@@ -95,7 +111,7 @@ export default {
         // 如果permissionTag为false需要获取一次数据
         const permissionStore = getPermissionStore()
         if (permissionStore) {
-          console.log('从storage获取授权数据')
+          // console.log('从storage获取授权数据')
           commit('setPermissionStore', permissionStore)
           commit('setPermissionTag', true)
           return Promise.resolve()
@@ -104,7 +120,7 @@ export default {
           getMenuPermissionsList()
             .then(response => {
               const permissionStore = response
-              console.log('获取远程授权数据')
+              // console.log('获取远程授权数据')
               commit('setPermissionStore', permissionStore)
               commit('setPermissionTag', true)
               resolve(response)
@@ -138,6 +154,11 @@ export default {
       const items = state.dictStore[type]
       items.forEach(item => {
         item.dictValue = parseInt(item.dictValue)
+        if (valueType === 'radio') {
+          item.label = parseInt(item.dictValue)
+          item.name = item.dictLabel
+          item.i18n = false
+        }
       })
       return items || []
     },

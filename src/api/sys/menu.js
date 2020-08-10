@@ -23,28 +23,6 @@ export function editMenu(data = {}) {
 }
 
 // GET
-// /sys/menu/{id}
-// 信息
-export function getMenuById(params = {}) {
-  const { id } = params
-  return request({
-    url: `/sys/menu/${id}`,
-    method: 'get'
-  })
-}
-
-// DELETE
-// /sys/menu/{id}
-// 删除
-export function deleteMenu(data = {}) {
-  const { id } = data
-  return request({
-    url: `/sys/menu/${id}`,
-    method: 'delete'
-  })
-}
-
-// GET
 // /sys/menu/list
 // 列表
 export function getMenuList(params = {}) {
@@ -85,5 +63,27 @@ export function getMenuSelectList(params = {}) {
     url: `/sys/menu/select`,
     method: 'get',
     params
+  })
+}
+
+// GET
+// /sys/menu/{id}
+// 信息
+export function getMenuById(params = {}) {
+  const { id } = params
+  return request({
+    url: `/sys/menu/${id}`,
+    method: 'get'
+  })
+}
+
+// DELETE
+// /sys/menu/{id}
+// 删除
+export function deleteMenu(data = {}) {
+  const { id } = data
+  return request({
+    url: `/sys/menu/${id}`,
+    method: 'delete'
   })
 }

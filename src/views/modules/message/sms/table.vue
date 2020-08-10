@@ -18,7 +18,7 @@
           :model="tableSearchParams"
           @keyup.enter.native="searchHandle"
         >
-          <el-form-item>
+          <!-- <el-form-item>
             <el-input
               v-model="tableSearchParams.mobile"
               :placeholder="$t('sms.mobile')"
@@ -26,27 +26,11 @@
               clearable
               @clear="clearHandle"
             ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-select
-              v-model="tableSearchParams.status"
-              :placeholder="$t('sms.status')"
-              :size="tableConfig.tableSearchSize"
-              clearable
-              @clear="clearHandle"
-            >
-              <el-option
-                v-for="(item, index) in smsStatus"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+          </el-form-item>-->
           <!-- 查询 -->
-          <el-form-item>
+          <!-- <el-form-item>
             <el-button :size="tableConfig.tableSearchSize" @click="searchHandle()">{{ $t('query') }}</el-button>
-          </el-form-item>
+          </el-form-item>-->
           <!-- 创建 -->
           <el-form-item>
             <el-button
@@ -54,13 +38,6 @@
               :size="tableConfig.tableSearchSize"
               @click="smsConfigHandle()"
             >{{ $t('sms.config') }}</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button
-              type="primary"
-              :size="tableConfig.tableSearchSize"
-              @click="createHandle()"
-            >{{ $t('sms.send') }}</el-button>
           </el-form-item>
 
           <!-- 导出 -->
@@ -105,11 +82,11 @@
         >
           <template slot-scope="scope">
             <!-- 修改 -->
-            <!-- <el-button
+            <el-button
               type="text"
               :size="tableConfig.tableSearchSize"
-              @click="editHandle(scope.row)"
-            >{{ $t('update') }}</el-button>-->
+              @click="smsConfigEditHandle(scope.row)"
+            >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
             <el-button
               type="text"
@@ -153,7 +130,7 @@ export default {
   },
   computed: {
     // 用于判断是否有权限的方法
-    ...mapGetters('app', ['filterPermission'])
+    ...mapGetters('app', ['filterPermission', 'getDictByType'])
   },
   activated() {
     // console.log('table activated')
@@ -195,46 +172,30 @@ export default {
               {
                 value: 2,
                 name: this.$t('sms.platform2')
-              }
-            ]
-          }
-        },
-        // 手机号
-        { prop: 'mobile', label: 'sms.mobile', width: '100', align: 'center' },
-        // 参数1
-        { prop: 'params1', label: 'sms.params1', align: 'center' },
-        // 参数2
-        { prop: 'params2', label: 'sms.params2', align: 'center' },
-        // 参数3
-        { prop: 'params3', label: 'sms.params3', align: 'center' },
-        // 参数4
-        { prop: 'params4', label: 'sms.params4', align: 'center' },
-        // 状态
-        {
-          prop: 'status',
-          label: 'sms.status',
-          width: '120',
-          align: 'center',
-          sortable: true,
-          component: 'toolTag',
-          componentConfig: {
-            prop: 'status',
-            tagSize: 'small',
-            tagConfig: [
-              {
-                value: 0,
-                type: 'danger',
-                name: this.$t('sms.status0')
               },
               {
-                value: 1,
-                type: 'success',
-                name: this.$t('sms.status1')
+                value: 3,
+                name: this.$t('sms.platform3')
               }
             ]
           }
         },
-        // 发送时间
+        // 短信编码
+        {
+          prop: 'smsCode',
+          label: 'sms.smsCode',
+          width: '100',
+          align: 'center',
+          component: 'toolTag',
+          componentConfig: {
+            prop: 'smsCode',
+            type: 'text',
+            tagConfig: this.dictDataForComponent('smsType', { dictLabel: 'name', dictValue: 'value' })
+          }
+        },
+        // 备注
+        { prop: 'remark', label: 'sms.remark' },
+        // 创建时间
         { prop: 'createDate', label: 'sms.createDate', width: '160', align: 'center', sortable: true }
       ]
       // 是否填充查询条件为空
@@ -257,31 +218,30 @@ export default {
       // console.log('table page created')
       this.generateTable()
     },
-    genrateI18nSearchItems() {
-      // 短信状态
-      this.smsStatus = [
-        { label: this.$t('sms.status0'), value: 0 },
-        { label: this.$t('sms.status1'), value: 1 }
-      ]
-    },
+    genrateI18nSearchItems() {},
     // 创建
-    createHandle(options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { pageType: 'create', ...options })
-    },
+    // createHandle(options = { componentNames: ['yunlin-table'] }) {
+    //   this.$pageSwitch('form', { pageType: 'create', ...options })
+    // },
     // 编辑
     // editHandle(item, options = { componentNames: ['yunlin-table'] }) {
     //   this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
     // }
-    // 打开drawer组件方法
+    // 打开drawer组件方法 新增配置
     smsConfigHandle() {
-      this.setDrawerData({ data: { pageType: 'edit', formDataUpdate: true } })
+      this.setDrawerData({ data: { pageType: 'create', id: '', formDataUpdate: false } })
       this.setDrawerTitle(this.$t('sms.config'))
       this.drawerVisibleHandle()
+    },
+    smsConfigEditHandle(row) {
+      this.setDrawerData({ data: { pageType: 'edit', id: row.id, formDataUpdate: true } })
+      this.setDrawerTitle(this.$t('sms.editConfig'))
+      this.drawerVisibleHandle()
+    },
+    drawerClosed() {
+      // drawer关闭以后父页面需要的操作
+      this.searchHandle()
     }
-    // drawerClosed() {
-    // drawer关闭以后父页面需要的操作
-    // this.searchHandle()
-    // }
   }
 }
 </script>

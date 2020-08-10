@@ -20,7 +20,7 @@ export default {
     },
     setDynamicRoutesFinish: (state, dynamicRoutesFinish) => {
       state.dynamicRoutesFinish = dynamicRoutesFinish
-      console.log('修改路由初始化状态成功')
+      // console.log('修改路由初始化状态成功')
     },
     cleanDynamicRoutes(state) {
       state.dynamicRoutes = Array.from(state.emptyList)

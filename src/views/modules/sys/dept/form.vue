@@ -1,9 +1,16 @@
 <template>
   <el-row :gutter="10">
-    <el-col :span="formConfig.formSpan" :lg="formConfig.formSpan" :md="formConfig.formSpan" :sm="24" :xs="24">
-      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">{{
-        formGenerateTitle[$attrs.page_info.data.pageType]
-      }}</div>
+    <el-col
+      :span="formConfig.formSpan"
+      :lg="formConfig.formSpan"
+      :md="formConfig.formSpan"
+      :sm="24"
+      :xs="24"
+    >
+      <div
+        v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''"
+        class="form-title"
+      >{{ formGenerateTitle[$attrs.page_info.data.pageType] }}</div>
       <yunlin-form
         ref="yunlinForm"
         :config="formConfig"
@@ -15,6 +22,7 @@
         @form-generate-rule-by-props="formGenerateRuleByProps"
         @form-value-listener="formValueListener"
         @form-data-update="formDataUpdate"
+        @form-reset-config-item="formResetConfigItem"
         v-on="$listeners"
       >
         <template slot="footer">
@@ -23,25 +31,19 @@
               v-if="containsPageType(['create', 'edit', 'detail'])"
               :size="formConfig.formSize"
               @click.stop="cancleHandle"
-            >
-              {{ $t('back') }}
-            </el-button>
+            >{{ $t('back') }}</el-button>
             <el-button
               v-if="containsPageType(['create']) && filterPermission('sys:dept:save')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
-            >
-              {{ $t('add') }}
-            </el-button>
+            >{{ $t('add') }}</el-button>
             <el-button
               v-if="containsPageType(['edit']) && filterPermission('sys:dept:update')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
-            >
-              {{ $t('update') }}
-            </el-button>
+            >{{ $t('update') }}</el-button>
           </div>
         </template>
       </yunlin-form>
@@ -55,6 +57,7 @@ import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
 import { createSysDept, editSysDept, getSysDeptById, getSysDeptListAll } from '@/api/sys/dept'
+// import { validateMobile } from '@/utils/validator'
 
 export default {
   name: 'Form',
@@ -85,15 +88,14 @@ export default {
       },
       // 初始化数据定义
       formDefaultData: {
-        pid: 0,
-        sort: 0
+        pid: 0
       },
       // 用于处理表单的隐藏与显示禁用行为
       formAction: []
     }
   },
   computed: {
-    ...mapGetters('app', ['filterPermission'])
+    ...mapGetters('app', ['filterPermission', 'getDictByType', 'getDictNameByValue'])
   },
   activated() {
     // console.log('form activated')
@@ -115,18 +117,31 @@ export default {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
-          // 名称
+          // 组织类型
+          span: 24,
+          prop: 'type',
+          name: 'dept.type',
+          type: 'select',
+          className: 'select-block',
+          placeholder: 'dept.type',
+          rules: [{ required: true }],
+          items: this.getDictByType('deptType'),
+          itemType: 'dict'
+        },
+        {
+          // 组织名称
           span: 24,
           prop: 'name',
           name: 'dept.name',
           type: 'text',
-          rules: [{ required: true }]
+          rules: [{ required: true }],
+          attrs: { maxlength: 30 }
         },
         {
-          // 上级部门
+          // 上级组织
           span: 24,
-          prop: 'parentName',
-          name: 'dept.parentName',
+          prop: 'pid',
+          name: 'dept.pid',
           type: 'popover-tree',
           rules: [{ required: true }],
           component: 'toolPopoverTree',
@@ -136,7 +151,7 @@ export default {
             // treeDataTranslate,
             // treeDataFilter: true,
             // treeDataFilterKey: '',
-            i18nDefault: 'dept.parentNameDefault',
+            i18nDefault: 'menu.parentNameDefault',
             propName: 'parentName',
             sourceName: 'name',
             treeProps: { label: 'name', children: 'children' },
@@ -149,15 +164,28 @@ export default {
           }
         },
         {
-          // 排序
+          // 联系人
           span: 24,
-          prop: 'sort',
-          name: 'dept.sort',
-          type: 'input-number',
-          attrs: {
-            controlsPosition: 'right',
-            min: 0
-          }
+          prop: 'contactName',
+          name: 'dept.contactName',
+          type: 'text',
+          attrs: { maxlength: 15 }
+        },
+        {
+          // 联系电话
+          span: 24,
+          prop: 'contactPhone',
+          name: 'dept.contactPhone',
+          type: 'text',
+          attrs: { maxlength: 11 }
+        },
+        {
+          // 联系地址
+          span: 24,
+          prop: 'contactAddress',
+          name: 'dept.contactAddress',
+          type: 'textarea',
+          attrs: { autosize: { minRows: 6, maxRows: 10 }, maxlength: 50 }
         }
       ]
 

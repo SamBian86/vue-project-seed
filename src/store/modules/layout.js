@@ -67,7 +67,7 @@ export default {
         // 如果menuTag为false需要获取一次数据
         const menuStore = getMenuStore()
         if (menuStore) {
-          console.log('从storage获取菜单数据')
+          // console.log('从storage获取菜单数据')
           // 保存菜单数据到vuex
           commit('setMenuStore', menuStore)
           commit('setMenuTag', true)
@@ -77,7 +77,7 @@ export default {
           getMenuNavList()
             .then(response => {
               const menuStore = response
-              console.log('获取远程菜单数据')
+              // console.log('获取远程菜单数据')
               // 保存菜单数据到vuex
               commit('setMenuStore', menuStore)
               commit('setMenuTag', true)

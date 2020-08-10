@@ -3,12 +3,16 @@
 *:after {
   box-sizing: border-box;
 }
+html {
+  height: 100%;
+}
 body {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
   font-size: $--font-size-base;
   line-height: $base--line-height;
   color: $--color-text-primary;
   background-color: #fff;
+  height: 100%;
 }
 a {
   color: mix(#fff, $--color-primary, 20%);
@@ -200,6 +204,7 @@ img {
 .aui-wrapper {
   position: relative;
   padding-top: $navbar--height;
+  z-index: 10;
 }
 
 /* Sidebar fold

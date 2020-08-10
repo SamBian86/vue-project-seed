@@ -114,7 +114,7 @@ export default {
   },
   computed: {
     // 用于判断是否有权限的方法
-    ...mapGetters('app', ['filterPermission'])
+    ...mapGetters('app', ['filterPermission', 'getDictByType'])
   },
   activated() {
     // console.log('table activated')

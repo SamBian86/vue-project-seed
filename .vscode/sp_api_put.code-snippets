@@ -3,6 +3,7 @@
     "prefix": "sp_api_put",
     "body": [
       "export function XXX$1(data$2 = {}) {\r",
+      "  const { id } = data\r",
       "  return request({\r",
       "    url: `//`,\r",
       "    method: 'put',\r",

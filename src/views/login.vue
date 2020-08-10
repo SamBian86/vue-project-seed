@@ -1,87 +1,66 @@
 <template>
-  <div class="aui-wrapper aui-page__login">
-    <div class="aui-content__wrapper">
-      <div class="aui-content">
-        <div class="login-container">
-          <div class="login-body-left">
-            <div class="app-logo"></div>
-            <div class="app-name">{{ $t('login.sysname') }}</div>
+  <div class="wrapper wrapper_property">
+    <div class="login-container">
+      <div class="login-slogan"></div>
+      <div class="login-body">
+        <el-form
+          ref="form"
+          :model="postData"
+          :rules="dataRule"
+          label-position="top"
+          status-icon
+          @keyup.enter.native="postDataSubmitHandle()"
+        >
+          <el-form-item prop="tenantCode" :label="$t('login.tenantCode')">
+            <el-select v-model="postData.tenantCode" class="login_select" placeholder clearable>
+              <el-option
+                v-for="item in tenantList"
+                :key="item.value"
+                :label="item.tenantName"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="username" :label="$t('login.username')">
+            <el-input v-model="postData.username" class="login_input"></el-input>
+          </el-form-item>
+          <el-form-item v-if="mode === 'login'" prop="password" :label="$t('login.password')">
+            <el-input v-model="postData.password" class="login_input" type="password"></el-input>
+          </el-form-item>
+          <el-form-item
+            v-if="mode === 'forget'"
+            prop="newPassword"
+            :label="$t('login.newPassword')"
+          >
+            <el-input v-model="postData.newPassword" class="login_input" type="password"></el-input>
+          </el-form-item>
+          <el-form-item v-if="mode === 'forget'" prop="vcode" :label="$t('login.captcha')">
+            <div class="captcha_container">
+              <el-input v-model="postData.vcode" class="login_input"></el-input>
+              <img v-if="captchaPath !== ''" :src="captchaPath" @click="getCaptcha()" />
+            </div>
+          </el-form-item>
+          <div class="forget">
+            <el-button
+              type="text"
+              @click="changeMode"
+            >{{ mode === 'login' ? $t('login.forgetLabel') : $t('login.loginLabel') }}</el-button>
           </div>
-          <div class="login-body-right">
-            <h3 class="login-title">{{ $t('login.title') }}</h3>
-            <el-form
-              ref="postData"
-              :model="postData"
-              :rules="dataRule"
-              status-icon
-              @keyup.enter.native="postDataSubmitHandle()"
-            >
-              <!-- <el-form-item>
-              <el-select v-model="$i18n.locale" class="w-percent-100">
-                <el-option
-                  v-for="(val, key) in i18nMessages"
-                  :key="key"
-                  :label="val._lang"
-                  :value="key"
-                ></el-option>
-              </el-select>
-              </el-form-item>-->
-              <el-form-item prop="username">
-                <el-input v-model="postData.username" :placeholder="$t('login.username')">
-                  <span slot="prefix" class="el-input__icon">
-                    <svg class="icon-svg" aria-hidden="true">
-                      <use xlink:href="#icon-user" />
-                    </svg>
-                  </span>
-                </el-input>
-              </el-form-item>
-              <el-form-item prop="password">
-                <el-input
-                  v-model="postData.password"
-                  :placeholder="$t('login.password')"
-                  type="password"
-                >
-                  <span slot="prefix" class="el-input__icon">
-                    <svg class="icon-svg" aria-hidden="true">
-                      <use xlink:href="#icon-lock" />
-                    </svg>
-                  </span>
-                </el-input>
-              </el-form-item>
-              <el-form-item prop="captcha">
-                <el-row :gutter="20">
-                  <el-col :span="14">
-                    <el-input v-model="postData.captcha" :placeholder="$t('login.captcha')">
-                      <span slot="prefix" class="el-input__icon">
-                        <svg class="icon-svg" aria-hidden="true">
-                          <use xlink:href="#icon-safetycertificate" />
-                        </svg>
-                      </span>
-                    </el-input>
-                  </el-col>
-                  <el-col :span="10" class="login-captcha">
-                    <img :src="captchaPath" @click="getCaptcha()" />
-                  </el-col>
-                </el-row>
-              </el-form-item>
-              <el-form-item>
-                <el-button
-                  type="primary"
-                  class="w-percent-100 el-button-login"
-                  @click="postDataSubmitHandle()"
-                >{{ $t('login.title') }}</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
-        </div>
-        <div class="login-footer">
-          <p>
-            {{ $t('login.copyright.company') }}
-            {{ $t('login.copyright.phone') }}
-            {{ $t('login.copyright.address') }}
-          </p>
-        </div>
+          <el-form-item>
+            <el-button class="el-button-login" @click="postDataSubmitHandle()">
+              <div class="el-button-text">
+                <span>{{ mode === 'login' ? $t('login.loginBtn') : $t('login.forgetBtn') }}</span>
+                <i class="icon-arrow el-icon--right"></i>
+              </div>
+            </el-button>
+          </el-form-item>
+        </el-form>
       </div>
+    </div>
+    <div class="login-footer">
+      {{ $t('login.copyright.company') }}
+      {{ $t('login.copyright.phone') }}
+      {{ $t('login.copyright.address') }}
     </div>
   </div>
 </template>
@@ -90,54 +69,118 @@
 import { messages } from '@/i18n'
 import { getUUID } from '@/utils'
 import { getCaptcha } from '@/api/auth'
+import { authPropertyResetPassword } from '@/api/auth/property'
+import { getTenantList } from '@/api/tenant'
 import { mapActions, mapMutations } from 'vuex'
 export default {
   data() {
     return {
+      mode: 'login',
       i18nMessages: messages,
       captchaPath: '',
       postData: {
+        systemType: 'property',
+        tenantCode: '',
         username: '',
         password: '',
+        newPassword: '',
         uuid: '',
-        captcha: ''
-      }
+        vcode: ''
+      },
+      tenantList: []
     }
   },
   computed: {
     dataRule() {
-      return {
-        username: [
-          {
-            required: true,
-            message: this.$t('validate.required'),
-            trigger: 'blur'
-          }
-        ],
-        password: [
-          {
-            required: true,
-            message: this.$t('validate.required'),
-            trigger: 'blur'
-          }
-        ],
-        captcha: [
-          {
-            required: true,
-            message: this.$t('validate.required'),
-            trigger: 'blur'
-          }
-        ]
+      const { mode } = this
+      if (mode === 'login') {
+        return {
+          tenantCode: [
+            {
+              required: true,
+              message: this.$t('validate.required'),
+              trigger: 'change'
+            }
+          ],
+          username: [
+            {
+              required: true,
+              message: this.$t('validate.required'),
+              trigger: 'blur'
+            }
+          ],
+          password: [
+            {
+              required: true,
+              message: this.$t('validate.required'),
+              trigger: 'blur'
+            }
+          ]
+        }
+      } else {
+        return {
+          tenantCode: [
+            {
+              required: true,
+              message: this.$t('validate.required'),
+              trigger: 'change'
+            }
+          ],
+          username: [
+            {
+              required: true,
+              message: this.$t('validate.required'),
+              trigger: 'blur'
+            }
+          ],
+          newPassword: [
+            {
+              required: true,
+              message: this.$t('validate.required'),
+              trigger: 'blur'
+            }
+          ],
+          vcode: [
+            {
+              required: true,
+              message: this.$t('validate.required'),
+              trigger: 'blur'
+            }
+          ]
+        }
       }
     }
   },
   created() {
     this.getCaptcha()
+    this.getTenantList()
+    // this.checkType()
   },
   methods: {
     ...mapMutations('layout', ['setTabActive']),
     ...mapMutations('app', ['logout']),
     ...mapActions('app', ['login']),
+    changeMode() {
+      const { mode } = this
+      this.mode = mode === 'login' ? 'forget' : 'login'
+      this.captchaPath = ''
+      this.$set(this, 'postData', {
+        systemType: 'property',
+        tenantCode: '',
+        username: '',
+        password: '',
+        newPassword: '',
+        uuid: '',
+        vcode: ''
+      })
+      this.$nextTick(() => {
+        const { mode } = this
+        this.$refs['form'].clearValidate()
+        if (mode === 'forget') {
+          this.getCaptcha()
+        }
+      })
+    },
     // 获取验证码
     getCaptcha() {
       const uuid = getUUID()
@@ -146,19 +189,35 @@ export default {
     },
     // 表单提交
     postDataSubmitHandle() {
-      this.$refs['postData'].validate(valid => {
+      const { mode } = this
+      this.$refs['form'].validate((valid) => {
         if (!valid) {
           return false
         }
-        this.logout() // 清除storage数据
-        this.login(this.postData)
-          .then(response => {
-            this.$router.replace({ name: 'home' })
-          })
-          .catch(error => {
-            this.getCaptcha()
-            this.$message.error(error)
-          })
+        if (mode === 'login') {
+          this.logout() // 清除storage数据
+          this.login(this.postData)
+            .then((response) => {
+              this.$router.replace({ name: 'home' })
+            })
+            .catch((error) => {
+              this.getCaptcha()
+              this.$message.error(error)
+            })
+        } else {
+          authPropertyResetPassword(this.postData)
+            .then((response) => {
+              console.log(response)
+            })
+            .catch((error) => {
+              this.$message.error(error)
+            })
+        }
+      })
+    },
+    getTenantList() {
+      getTenantList().then((response) => {
+        this.tenantList = response
       })
     }
   }

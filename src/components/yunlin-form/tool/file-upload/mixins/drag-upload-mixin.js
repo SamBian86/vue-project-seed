@@ -41,7 +41,7 @@ export default {
     // 文件上传
     uploadRequest() {
       const { uploadQueue, componentNames } = this
-
+      const { requestParams } = this.config
       if (uploadQueue.length === 0) {
         this.uploading = false
         clearTimeout(this.timer)
@@ -50,7 +50,8 @@ export default {
       const file = uploadQueue.shift()
       this.config
         .uploadRequest({
-          file: file.raw
+          file: file.raw,
+          ...requestParams
         })
         .then(response => {
           const { dragList, resourcesList } = this

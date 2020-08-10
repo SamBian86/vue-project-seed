@@ -41,7 +41,7 @@
       >
         <i class="el-icon-plus"></i>
       </el-upload>
-      <el-dialog :visible.sync="dialogVisible">
+      <el-dialog :visible.sync="dialogVisible" :modal-append-to-body="modalAppendToBody">
         <img width="100%" :src="dialogImageUrl" alt />
       </el-dialog>
     </div>
@@ -50,7 +50,7 @@
       <el-upload
         ref="file-upload-multiple-image"
         list-type="picture-card"
-        :class="resourcesList.length === config.limit ? 'hide-upload-file' : ''"
+        :class="resourcesList.length === config.limit || disabled ? 'hide-upload-file' : ''"
         :file-list="resourcesList"
         :action="uploadUrl"
         :auto-upload="false"
@@ -63,7 +63,7 @@
       >
         <i class="el-icon-plus"></i>
       </el-upload>
-      <el-dialog :visible.sync="dialogVisible">
+      <el-dialog :visible.sync="dialogVisible" :modal-append-to-body="modalAppendToBody">
         <img width="100%" :src="dialogImageUrl" alt />
       </el-dialog>
     </div>
@@ -115,6 +115,7 @@ export default {
           format: 0, // 校验规则查看下面formats
           uploadRequest: null,
           deleteRequest: null,
+          requestParams: {},
           propName: '', // 初始化用于显示的键名 页面数据键名
           limit: 2, // 用于multiple-image组件
           mergeData: { target: '' },
@@ -140,10 +141,13 @@ export default {
   },
   data() {
     return {
+      modalAppendToBody: false,
       formats: [
         ['jpeg', 'jpg', 'png', 'gif'],
         ['zip', 'xml', 'bar', 'bpmn'],
-        ['jpeg', 'jpg', 'png', 'gif', 'zip', 'rar', 'pdf', 'xlsx', 'xls']
+        ['jpeg', 'jpg', 'png', 'gif', 'zip', 'rar', 'pdf', 'xlsx', 'xls'],
+        ['xlsx', 'xls'],
+        ['mp4', 'webm', 'ogg']
       ],
       timer: null,
       componentNames: ['file-upload'],
@@ -247,7 +251,7 @@ export default {
       const { formats } = this
       const { format } = this.config
       const reg = new RegExp('(' + formats[format].join('|') + ')')
-      fileList.map(item => {
+      fileList.map((item) => {
         if (item.raw) {
           const fileSuffix = item.raw.name.toLowerCase().replace(/\.(\w+)/, '$1')
           if (!reg.test(fileSuffix)) {

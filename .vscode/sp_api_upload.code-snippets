@@ -1,0 +1,17 @@
+{
+  "api代码片段upload上传": {
+    "prefix": "sp_api_upload",
+    "body": [
+      "export function import$1(data = {}) {\r",
+      "  return request({\r",
+      "    url: `$2`,\r",
+      "    method: 'post',\r",
+      "    dataType: 'uploadData',\r",
+      "    data\r",
+      "  })\r",
+      "}\r",
+      ""
+    ],
+    "description": "api代码片段upload上传"
+  }
+}

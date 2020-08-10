@@ -33,17 +33,6 @@ export function deleteDictData(data = []) {
   })
 }
 
-// 字典数据列表
-// GET
-// /sys/dict/data/list
-export function getDictDataListAll(params = {}) {
-  return request({
-    url: `/sys/dict/data/list`,
-    method: 'get',
-    params
-  })
-}
-
 // 字典数据分页列表
 // GET
 // /sys/dict/data/page

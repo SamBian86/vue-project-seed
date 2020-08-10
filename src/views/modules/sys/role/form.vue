@@ -22,6 +22,7 @@
         @form-generate-rule-by-props="formGenerateRuleByProps"
         @form-value-listener="formValueListener"
         @form-data-update="formDataUpdate"
+        @form-reset-config-item="formResetConfigItem"
         v-on="$listeners"
       >
         <template slot="footer">
@@ -57,7 +58,7 @@ import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
 import { createSysRole, editSysRole, getSysRoleById } from '@/api/sys/role'
 import { getMenuSelectList } from '@/api/sys/menu'
-import { getSysDeptListAll } from '@/api/sys/dept'
+// import { validateMobile } from '@/utils/validator'
 
 export default {
   name: 'Form',
@@ -83,7 +84,7 @@ export default {
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
-          api: null
+          api: getSysRoleById
         }
       },
       // 初始化数据定义
@@ -93,7 +94,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('app', ['filterPermission'])
+    ...mapGetters('app', ['filterPermission', 'getDictByType', 'getDictNameByValue'])
   },
   activated() {
     // console.log('form activated')
@@ -104,7 +105,7 @@ export default {
     // console.log('form created')
 
     // 设置整体表单栅格列数
-    this.formConfig.formSpan = 18
+    this.formConfig.formSpan = 12
   },
   methods: {
     generateTitle() {
@@ -115,65 +116,36 @@ export default {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
-          // 名称
+          // 岗位名称
           span: 24,
           prop: 'name',
           name: 'role.name',
           type: 'text',
-          rules: [{ required: true }]
+          rules: [{ required: true }],
+          attrs: { maxlength: 10 }
         },
         {
-          // 备注
+          // 企业后台权限
           span: 24,
-          prop: 'remark',
-          name: 'role.remark',
-          type: 'textarea',
-          attrs: { autosize: { minRows: 6, maxRows: 10 } }
-        },
-        {
-          // 菜单权限
-          span: 12,
           prop: 'menuIdList',
-          name: 'role.menuList',
+          name: 'role.menuIdList',
           type: 'tree-dynamic',
+          rules: [{ required: true }],
           component: 'toolTreeDynamic',
           componentConfig: {
             treeRequest: getMenuSelectList,
             treeRequestParams: {},
-            treeResultRequest: getSysRoleById,
-            treeResultRequestParams: {},
-            treeResultRequestPropParams: ['id'],
-            treeResultKey: 'menuIdList',
+            // treeResultRequest: null,
+            // treeResultRequestParams: {},
+            // treeResultRequestPropParams: ['id'],
+            // treeResultKey: '',
             propName: 'menuIdList',
             nodeKey: 'id',
             treeProps: { label: 'name', children: 'children' },
             mergeData: { target: 'menuIdList' },
             accordion: true,
             showCheckbox: true,
-            componentNames: ['tree-dynamic-1']
-          }
-        },
-        {
-          // 数据授权
-          span: 12,
-          prop: 'deptIdList',
-          name: 'role.deptList',
-          type: 'tree-dynamic',
-          component: 'toolTreeDynamic',
-          componentConfig: {
-            treeRequest: getSysDeptListAll,
-            treeRequestParams: {},
-            treeResultRequest: getSysRoleById,
-            treeResultRequestParams: {},
-            treeResultRequestPropParams: ['id'],
-            treeResultKey: 'deptIdList',
-            propName: 'deptIdList',
-            nodeKey: 'id',
-            treeProps: { label: 'name', children: 'children' },
-            mergeData: { target: 'deptIdList' },
-            accordion: true,
-            showCheckbox: true,
-            componentNames: ['tree-dynamic-2']
+            componentNames: ['tree-dynamic']
           }
         }
       ]
@@ -184,10 +156,6 @@ export default {
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
-    },
-    // 关闭前回调
-    beforeCancleHandle() {
-      this.$pageUpdateListAdd(['tree-dynamic-1', 'tree-dynamic-2'])
     }
   }
 }

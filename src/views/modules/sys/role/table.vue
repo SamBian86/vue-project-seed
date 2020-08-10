@@ -44,26 +44,49 @@
               @click="createHandle()"
             >{{ $t('add') }}</el-button>
           </el-form-item>
+          <!-- 下载模板 -->
+          <!--<el-form-item>
+            <el-button
+              v-if="filterPermission('sys:role:save')"
+              type="success"
+              :size="tableConfig.tableSearchSize"
+              @click="downloadHandle({
+                i18nRequestMessage: 'downloadTemp',
+                request: null,
+                data: {excelType: 2}
+              })"
+            >{{ $t('downloadTemp') }}</el-button>
+          </el-form-item>-->
+          <!-- 导入 -->
+          <!--<el-form-item>
+            <button-import :config="importConfig"></button-import>
+          </el-form-item>-->
+          <!-- 清空选中 -->
+          <!--<el-form-item>
+            <el-button
+              v-if="tableCurrent !== null"
+              :size="tableConfig.tableSearchSize"
+              @click="clearCurrentChange()"
+            >{{ t('clearCurrent') }}</el-button>
+          </el-form-item>-->
           <!-- 导出 -->
-          <!-- <el-form-item>
+          <!--<el-form-item>
             <el-button
               v-if="filterPermission('sys:role:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
-            >
-              {{ $t('export') }}
-            </el-button>
+            >{{ $t('export') }}</el-button>
           </el-form-item>-->
           <!-- 批量删除 -->
-          <el-form-item>
+          <!-- <el-form-item>
             <el-button
               v-if="filterPermission('sys:role:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
             >{{ $t('deleteBatch') }}</el-button>
-          </el-form-item>
+          </el-form-item>-->
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
@@ -89,6 +112,20 @@
           width="100"
         >
           <template slot-scope="scope">
+            <!-- 上下架 -->
+            <!--<el-button
+              v-if="filterPermission('sys:role:display')"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="customHandle({
+                data: {
+                  id: scope.row.id,
+                  display: scope.row.XXX === 0 ? 1 : 0
+                },
+                i18nRequestMessage: scope.row.XXX === 0 ? 'on' : 'off',
+                request: displayHandle
+              })"
+            >{{ scope.row.XXX === 0 ? $t('on') : $t('off') }}</el-button>-->
             <!-- 修改 -->
             <el-button
               v-if="filterPermission('sys:role:update')"
@@ -101,8 +138,36 @@
               v-if="filterPermission('sys:role:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
-              @click="deleteHandle([scope.row.id])"
+              @click="deleteHandle({
+                id: scope.row.id,
+                i18nMessage: 'role.deleteMessage'
+              })"
             >{{ $t('delete') }}</el-button>
+            <!-- 上移 -->
+            <!--<el-button
+              v-if="filterPermission('sys:role:exchange') && scope.$index !== 0"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="upHandle(scope.row, scope.$index)"
+            >{{ $t('up') }}</el-button>-->
+            <!-- 下移 -->
+            <!--<el-button
+              v-if="filterPermission('sys:role:exchange') && scope.$index !== limit - 1"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="downHandle(scope.row, scope.$index)"
+            >{{ $t('down') }}</el-button>-->
+            <!-- 单个操作 -->
+            <!--<el-button
+              v-if="filterPermission('sys:role:xxx')"
+              type="text"
+              :size="tableConfig.tableSearchSize"
+              @click="customHandle({
+                data: [scope.row.id],
+                i18nRequestMessage: '国际化',
+                request: null
+              })"
+            >{{ $t('ddd.ddd') }}</el-button>-->
           </template>
         </el-table-column>
       </template>
@@ -121,11 +186,13 @@ export default {
   components: {},
   mixins: [pageMixin, tableDefaultMixin],
   data() {
-    return {}
+    return {
+      // limit: 0
+    }
   },
   computed: {
     // 用于判断是否有权限的方法
-    ...mapGetters('app', ['filterPermission'])
+    ...mapGetters('app', ['filterPermission', 'getDictByType', 'getDictNameByValue'])
   },
   activated() {
     // console.log('table activated')
@@ -134,6 +201,10 @@ export default {
     this.init()
   },
   methods: {
+    // listCallback() {
+    //   const list = this.getTableData()
+    //   this.limit = list.length
+    // },
     init() {
       // 配置查询区域i18n相关select数据
       // this.genrateI18nSearchItems()
@@ -141,26 +212,23 @@ export default {
       // 是否显示树形数据
       this.tableConfig.rowKey = 'id'
       // this.tableConfig.hasPagination = false
+      // this.tableConfig.highlightCurrentRow = true
+      // this.tableConfig.defaultExpandAll = true
       // this.tableConfig.lazy = true
-      this.tableConfig.tableType = 'selection'
+      // this.tableConfig.tableType = 'selection'
       // console.log(this.$attrs)
 
       // 设置获取列表信息
       this.tableConfig.tableHeadReadOnly = [
-        // 名称
-        { prop: 'name', label: 'role.name', width: '200', align: 'center' },
-        // 备注
-        { prop: 'remark', label: 'role.remark', align: 'center' },
-        // 创建时间
-        { prop: 'createDate', label: 'role.createDate', width: '200', align: 'center', sortable: true }
+        // 岗位名称
+        { prop: 'name', label: 'role.name' }
       ]
       // 是否填充查询条件为空
-      this.tableConfig.searchFillEmpty = true
-      this.tableSearchParams = {
-        name: ''
-      }
+      // this.tableConfig.searchFillEmpty = true
+      // this.tableSearchParams = {}
       // 配置列表请求
       this.tableHandle.list.api = getSysRolePageList
+      // this.tableHandle.list.callback = this.listCallback
       // 配置导出功能
       // this.tableHandle.export.api = exportXXX
       // 配置删除功能
@@ -169,25 +237,33 @@ export default {
       // 配置节点懒加载功能
       // this.tableHandle.lazy.api = lazyXXX
       // 配置section删除功能
-      this.tableHandle.deleteSection.api = deleteSysRole
+      // this.tableHandle.deleteSection.api = deleteSysRole
       // console.log('table page created')
       this.generateTable()
     },
     genrateI18nSearchItems() {
       // XXX
-      // this.smsStatus = [
+      // this.i18nItems = [
       //   { label: this.$t('aaa'), value: 0 },
       //   { label: this.$t('aaa'), value: 1 }
       // ]
     },
     // 创建
-    createHandle(options = { componentNames: ['yunlin-table', 'tree-dynamic-1', 'tree-dynamic-2'] }) {
+    createHandle(options = { componentNames: ['yunlin-table'] }) {
       this.$pageSwitch('form', { pageType: 'create', ...options })
     },
     // 编辑
-    editHandle(item, options = { componentNames: ['yunlin-table', 'tree-dynamic-1', 'tree-dynamic-2'] }) {
-      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
+    editHandle(item, options = { componentNames: ['yunlin-table'] }) {
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
     }
+    // 显示次序更替
+    // exchangeHandle() {
+    // return XXX
+    // }
+    // 上下架
+    // displayHandle() {
+    // return XXX
+    // }
   }
 }
 </script>

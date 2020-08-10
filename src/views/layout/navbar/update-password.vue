@@ -47,7 +47,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { modifyUserPassword } from '@/api/sys/user'
+import { modifyPassword } from '@/api/auth'
 export default {
   data() {
     return {
@@ -60,7 +60,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user_userInfo']),
+    ...mapGetters(['user_userInfo', 'app_systemType']),
     dataRule() {
       var validateConfirmPassword = (rule, value, callback) => {
         if (this.dataForm.newPassword !== value) {
@@ -104,21 +104,24 @@ export default {
     },
     // 表单提交
     dataFormSubmitHandle() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs['dataForm'].validate((valid) => {
         if (!valid) {
           return false
         }
-        modifyUserPassword(this.dataForm)
-          .then(response => {
+        modifyPassword(this.dataForm)
+          .then((response) => {
             this.$message({
               message: this.$t('prompt.success'),
               type: 'success',
               duration: 2000,
               onClose: () => {
                 this.visible = false
+                const routerName = this.app_systemType === 'platform' ? 'platform' : 'login'
                 this.logout().then(() => {
-                  this.$router.replace({ name: 'login' }).then(() => {
-                    window.location.reload()
+                  this.$router.replace({ name: routerName }).then(() => {
+                    setTimeout(() => {
+                      window.location.reload()
+                    }, 10)
                   })
                 })
               }

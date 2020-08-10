@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     singleImageUploadInit() {
-      console.log('singleImageUploadInit')
+      // console.log('singleImageUploadInit')
       const { propName } = this.config
       const { pageData } = this
       this.$refs['file-upload-single-image'] && this.$refs['file-upload-single-image'].clearFiles()

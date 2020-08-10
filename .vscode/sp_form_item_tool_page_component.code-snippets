@@ -1,0 +1,21 @@
+{
+  "form代码片段_tool_page_component": {
+    "prefix": "sp_form_item_tool_page_component",
+    "body": [
+      "{\r",
+      "  // 等级设置\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'page-component',\r",
+      "  rules: [{ required: true }],\r",
+      "  component: xxx$4Component,\r",
+      "  componentConfig: {\r",
+      "    propName: '字段$5'\r",
+      "  }\r",
+      "}\r",
+      "$5"
+    ],
+    "description": "form代码片段_tool_page_component"
+  }
+}

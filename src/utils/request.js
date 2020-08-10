@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import router from '@/router'
 import store from '../store'
-import { getToken, getLanguage } from '@/utils/cookie'
+import { getToken, getLanguage, getProjectId, getSystemType } from '@/utils/cookie'
 
 // 创建axios实例
 const service = axios.create({
@@ -41,6 +41,10 @@ service.interceptors.request.use(
       config.headers['token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     }
 
+    if (store.getters.app_projectId) {
+      config.headers['project_id'] = getProjectId()
+    }
+
     if (config.dataType === 'formData') {
       config.transformRequest = transformRequest
     }
@@ -68,6 +72,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const { code, data, msg } = response.data
+    const routerName = getSystemType() === 'platform' ? 'platform' : 'login'
     if (code === 0) {
       return data
     } else {
@@ -78,7 +83,8 @@ service.interceptors.response.use(
           type: 'error',
           duration: 2000
         })
-        router.replace({ name: 'login' })
+        store.commit('app/logout')
+        router.replace({ name: routerName })
       } else {
         // 调用方在页面处理
         if (code === 10004 || code === 10007 || code === 10008 || code === 10018 || code === 100006025) {

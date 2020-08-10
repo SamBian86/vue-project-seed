@@ -12,7 +12,7 @@ export default {
         withHeader: true,
         wrapperClosable: true,
         destroyOnClose: true,
-        size: '80%'
+        size: '90%'
       },
       drawerData: {},
       drawerComponent: null, // 当前只用的component
@@ -62,7 +62,7 @@ export default {
       console.log('关闭drawer钩子')
     },
     // 用于子组件关闭drawer
-    drawerCloseByChild() {
+    drawerCloseByChild(data) {
       this.drawerVisibleHandle(false)
     }
   }

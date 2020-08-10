@@ -8,17 +8,6 @@ export function getCaptcha(uuid) {
 }
 
 // POST
-// /auth/login
-// 登录
-export function login(data) {
-  return request({
-    url: '/auth/login',
-    method: 'post',
-    data
-  })
-}
-
-// POST
 // /auth/logout
 // 退出
 export function logout(params) {
@@ -26,5 +15,26 @@ export function logout(params) {
     url: '/auth/logout',
     method: 'post',
     params
+  })
+}
+
+// 修改密码
+// PUT
+// /auth/modify/password
+export function modifyPassword(data = {}) {
+  return request({
+    url: `/auth/modify/password`,
+    method: 'put',
+    data
+  })
+}
+
+// 登录用户信息
+// GET
+// /auth/user/info
+export function getAuthUserInfo() {
+  return request({
+    url: `/auth/user/info`,
+    method: 'get'
   })
 }

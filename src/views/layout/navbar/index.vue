@@ -30,16 +30,31 @@
           <el-dropdown :show-timeout="0" placement="bottom">
             <el-button size="mini">{{ $t('_lang') }}</el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                v-for="(val, key) in i18nMessages"
-                :key="key"
-                @click.native="$i18n.locale = key"
-              >{{ val._lang }}</el-dropdown-item>
+              <el-dropdown-item v-for="(val, key) in i18nMessages" :key="key" @click.native="$i18n.locale = key">
+                {{ val._lang }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+        </el-menu-item>-->
+        <el-menu-item index="1">
+          <el-dropdown :show-timeout="0" placement="bottom">
+            <span class="el-dropdown-link">
+              <span>{{ projectName || $t('brand.projectDefault') }}</span>
+              <i class="el-icon-arrow-down"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                v-for="(item, index) in projectList"
+                :key="index"
+                @click.native="switchTenantHandle(item.id)"
+              >{{ item.label }}</el-dropdown-item>
+            </el-dropdown-menu>
+            <!-- 这个空标签一定要留着，不然要你好看 -->
+            <!-- <el-dropdown-menu v-else></el-dropdown-menu> -->
+          </el-dropdown>
         </el-menu-item>
-        <el-menu-item index="2">
-          <a href="//www.yunlin.io/" target="_blank">
+        <!-- <el-menu-item index="2">
+          <a href="javascript:void(0)" @click.stop="goToDashBoard">
             <svg class="icon-svg aui-navbar__icon-menu" aria-hidden="true">
               <use xlink:href="#icon-earth" />
             </svg>
@@ -58,9 +73,9 @@
               <i class="el-icon-arrow-down"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
+              <!-- <el-dropdown-item
                 @click.native="updatePasswordHandle()"
-              >{{ $t('updatePassword.title') }}</el-dropdown-item>
+              >{{ $t('updatePassword.title') }}</el-dropdown-item>-->
               <el-dropdown-item @click.native="logoutHandle()">{{ $t('logout') }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -77,6 +92,8 @@ import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { messages } from '@/i18n'
 import screenfull from 'screenfull'
 import UpdatePassword from './update-password'
+import { getProjectPermissionList } from '@/api/project'
+import { getProjectId, setProjectId } from '@/utils/cookie'
 
 export default {
   inject: ['refresh'],
@@ -85,19 +102,49 @@ export default {
   },
   data() {
     return {
+      projectList: [],
+      projectId: '',
+      projectName: '',
       i18nMessages: messages,
       updatePassowrdVisible: false
     }
   },
   computed: {
-    ...mapGetters(['layout_navbar_layoutType', 'layout_sidebar_fold', 'user_userInfo'])
+    ...mapGetters(['layout_navbar_layoutType', 'layout_sidebar_fold', 'user_userInfo', 'app_systemType'])
+  },
+  created() {
+    this.getProjectPermissionList()
   },
   methods: {
     ...mapMutations('layout', ['setSidebarFold']),
-    ...mapActions('app', ['logout']),
+    ...mapActions('app', ['logout', 'setProjectId']),
     // 展开收缩菜单
     toggleFold() {
       this.setSidebarFold(!this.layout_sidebar_fold)
+    },
+    getProjectPermissionList() {
+      const projectId = getProjectId()
+      this.projectId = projectId
+      getProjectPermissionList().then((response) => {
+        if (response && response.length !== 0) {
+          response.forEach((item) => {
+            item.value = item.id
+            item.label = item.projectName
+            if (projectId === item.id) {
+              this.projectName = item.projectName
+            }
+          })
+          this.projectList = response
+        }
+      })
+    },
+    switchTenantHandle(projectId) {
+      this.projectId = projectId
+      setProjectId(projectId)
+      this.setProjectId(projectId)
+      setTimeout(() => {
+        window.location.reload()
+      }, 200)
     },
     // 全屏
     fullscreenHandle() {
@@ -125,14 +172,20 @@ export default {
         type: 'warning'
       })
         .then(() => {
+          const routerName = this.app_systemType === 'platform' ? 'platform' : 'login'
           this.logout().then(() => {
-            this.$router.replace({ name: 'login' }).then(() => {
-              window.location.reload()
+            this.$router.replace({ name: routerName }).then(() => {
+              setTimeout(() => {
+                window.location.reload()
+              }, 10)
             })
           })
         })
         .catch(() => {})
     }
+    // goToDashBoard() {
+    //   window.open(`/dashboard/index.html?env=${process.env.VUE_APP_NODE_ENV}`, '_blank')
+    // }
   }
 }
 </script>

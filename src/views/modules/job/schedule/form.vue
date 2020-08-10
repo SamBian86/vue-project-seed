@@ -1,9 +1,15 @@
 <template>
   <el-row :gutter="10">
-    <el-col :span="formConfig.formSpan" :lg="formConfig.formSpan" :md="formConfig.formSpan" :sm="24" :xs="24">
-      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">{{
-        formGenerateTitle[$attrs.page_info.data.pageType]
-      }}</div>
+    <el-col
+      :span="formConfig.formSpan"
+      :lg="formConfig.formSpan"
+      :md="formConfig.formSpan"
+      :sm="24"
+      :xs="24"
+    >
+      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">
+        {{ formGenerateTitle[$attrs.page_info.data.pageType] }}
+      </div>
       <yunlin-form
         ref="yunlinForm"
         :config="formConfig"
@@ -23,25 +29,19 @@
               v-if="containsPageType(['create', 'edit', 'detail'])"
               :size="formConfig.formSize"
               @click.stop="cancleHandle"
-            >
-              {{ $t('back') }}
-            </el-button>
+            >{{ $t('back') }}</el-button>
             <el-button
               v-if="containsPageType(['create']) && filterPermission('sys:schedule:save')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
-            >
-              {{ $t('add') }}
-            </el-button>
+            >{{ $t('add') }}</el-button>
             <el-button
               v-if="containsPageType(['edit']) && filterPermission('sys:schedule:update')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
-            >
-              {{ $t('update') }}
-            </el-button>
+            >{{ $t('update') }}</el-button>
           </div>
         </template>
       </yunlin-form>
@@ -90,7 +90,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('app', ['filterPermission'])
+    ...mapGetters('app', ['filterPermission', 'getDictByType'])
   },
   activated() {
     // console.log('form activated')

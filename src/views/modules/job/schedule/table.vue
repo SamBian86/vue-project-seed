@@ -190,7 +190,7 @@ import { mapGetters } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
 import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
-import scheduleLog from './log'
+import scheduleLog from '../schedule-log'
 import {
   getJobSchedulePageList,
   deleteJobSchedule,
@@ -208,7 +208,7 @@ export default {
   },
   computed: {
     // 用于判断是否有权限的方法
-    ...mapGetters('app', ['filterPermission'])
+    ...mapGetters('app', ['filterPermission', 'getDictByType'])
   },
   activated() {
     // console.log('table activated')

@@ -119,7 +119,13 @@ export default {
       // 如果是详情页面
       if (pageType === 'detail') {
         generateProps.forEach(item => {
-          item.disabled = true
+          if (item.allways) {
+            item.disabled = false
+          } else {
+            item.disabled = true
+          }
+
+          item.placeholderText = ' '
         })
       } else {
         generateProps.forEach(item => {
@@ -150,7 +156,8 @@ export default {
         'popover-icon',
         'resource-selector',
         'file-upload',
-        'tree-dynamic'
+        'tree-dynamic',
+        'page-component'
       ]
       items.map(item => {
         const rules = []
@@ -185,6 +192,7 @@ export default {
           }
         }
       })
+      // console.log(formRules)
       // 初始化表单验证规则
       this.$set(this, 'formRules', Object.assign({}, formRules))
 
@@ -203,8 +211,11 @@ export default {
     // 提交表单
     submitHandle() {
       const { formName } = this.formConfig
+      this.beforeSubmitHandle()
       this.$refs[formName].submitHandle()
     },
+    // 点击提交按钮前的钩子
+    beforeSubmitHandle() {},
     // 点击取消按钮前的钩子
     beforeCancleHandle() {},
     // 取消按钮
@@ -249,17 +260,20 @@ export default {
     // 选择值以后需要重新修改某些组件的选取范围,比如date-time
     formResetConfigItem(props = []) {
       const { formItemsReadOnly } = this.formConfig
+      const newFormItemsReadOnly = []
       formItemsReadOnly.forEach(item => {
         props.map(ite => {
           if (item.prop === ite.prop) {
             Object.keys(ite).map(i => {
               item[i] = ite[i]
             })
-            console.log('修改' + item.prop)
+            // console.log('修改' + item.prop)
           }
         })
+        newFormItemsReadOnly.push(item)
       })
-      this.formConfig.formItemsReadOnly = formItemsReadOnly
+      this.formConfig.formItemsReadOnly = newFormItemsReadOnly
+      this.generateForm()
     },
     // 获取详情数据以后的处理
     afterFormDataUpdate() {

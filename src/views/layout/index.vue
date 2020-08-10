@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['cleanDictStore']),
-    ...mapMutations('layout', ['setSidebarFold', 'setTabActive', 'setTabActive', 'setMenuActive', 'setTabs']),
+    ...mapMutations('layout', ['setSidebarFold', 'setTabActive', 'setMenuActive', 'setTabs']),
     ...mapActions('app', ['getDict', 'getPermissions']),
     ...mapActions('user', ['getUserInfo']),
     ...mapActions('layout', ['getMenuNav']),

@@ -1,0 +1,167 @@
+// 登录页面背景
+.wrapper_platform0 {
+  background: url(~@/assets/img/login_platform0_bg.png) no-repeat top right;
+  background-size: cover;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+
+  // 表单区域
+  .login-container {
+    margin-left: 80px;
+    width: 400px;
+    height: 500px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    box-sizing: border-box;
+    padding: 20px;
+    background: #fff;
+  }
+
+  .login-slogan {
+    width: 340px;
+    height: 90px;
+    background: url(~@/assets/img/logo_platform0.png) no-repeat center center;
+    background-size: 100% 100%;
+  }
+
+  .login-body {
+    padding-top: 60px;
+    width: 80%;
+
+    // 验证码区域样式
+    .captcha_container {
+      display: flex;
+      .login_input {
+        width: 90%;
+      }
+      img {
+        height: 40px;
+        margin-left: 10px;
+        width: 100px;
+      }
+    }
+
+    // 忘记密码
+    .forget {
+      text-align: right;
+      span {
+        color: #2098f1;
+      }
+    }
+
+    // 按钮样式
+    .el-button-login {
+      background: #2098f1;
+      color: #fff;
+      border-radius: 20px;
+      &:hover {
+        color: #fff;
+      }
+      .el-button-text {
+        display: flex;
+        align-items: center;
+        .icon-arrow {
+          width: 20px;
+          height: 10px;
+          background: url(~@/assets/img/arrow.png) no-repeat center center;
+          background-size: 100% 100%;
+        }
+      }
+    }
+  }
+
+  // 表单布局样式
+  .el-form-item {
+    margin-bottom: 10px;
+  }
+
+  .el-form-item__label {
+    padding-bottom: 0;
+    line-height: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    &::before {
+      display: none;
+    }
+  }
+
+  // 表单input样式
+  .login_input {
+    // border-bottom: 1px solid #000;
+    background: #f7f7f7;
+    // line-height: 30px;
+    border-radius: 20px;
+    overflow: hidden;
+    input {
+      background: #f7f7f7;
+      border: none;
+      padding: 0px 10px;
+      // height: 30px;
+      // line-height: 30px;
+    }
+  }
+
+  .login_select {
+    width: 100%;
+    // border-bottom: 1px solid #000;
+    background: #f7f7f7;
+    // line-height: 30px;
+    border-radius: 20px;
+    overflow: hidden;
+    input {
+      background: #f7f7f7;
+      border: none;
+      padding: 0px 10px;
+      // height: 30px;
+      // line-height: 30px;
+    }
+  }
+
+  // 版权区域
+  .login-footer {
+    position: absolute;
+    bottom: 0px;
+    padding: 10px;
+    text-align: right;
+    width: 100%;
+    box-sizing: border-box;
+    color: #fff;
+    text-shadow: 0 0 10px #333;
+  }
+
+  // 错误提示样式
+  .el-form-item__error {
+    padding-top: -20px;
+    top: 40px;
+    width: 100%;
+    text-align: left;
+    padding-left: 10px;
+  }
+
+  .el-input__validateIcon {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+}
+@media (max-width: 767px) {
+}
+@media (max-width: 575px) {
+  .wrapper_platform0 {
+    .login-container {
+      margin-left: 0px;
+      width: 100%;
+      height: 500px;
+      box-sizing: border-box;
+      padding: 20px;
+      background: #fff;
+    }
+    .login-footer {
+      text-align: center;
+    }
+  }
+}

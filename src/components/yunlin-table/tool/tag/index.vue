@@ -1,7 +1,11 @@
 <template>
   <div>
     <span v-if="config.type === 'text'">{{ tagItem.name }}</span>
-    <el-tag v-else :size="config.tagSize" :type="tagItem.type">{{ tagItem.name }}</el-tag>
+    <el-tag
+      v-if="config.type !== 'text' && tagItem.name !== ''"
+      :size="config.tagSize"
+      :type="tagItem.type"
+    >{{ tagItem.name }}</el-tag>
   </div>
 </template>
 

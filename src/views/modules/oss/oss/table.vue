@@ -20,9 +20,7 @@
         >
           <!-- 查询 -->
           <!-- <el-form-item>
-            <el-button :size="tableConfig.tableSearchSize" @click="searchHandle()">
-              {{ $t('query') }}
-            </el-button>
+            <el-button :size="tableConfig.tableSearchSize" @click="searchHandle()">{{ $t('query') }}</el-button>
           </el-form-item>-->
           <!-- 上传文件 -->
           <el-form-item>
@@ -126,13 +124,6 @@ import drawerDefaultMixin from '@/mixins/drawer-default-mixin'
 import { getOssFilePage, deleteOssFile } from '@/api/oss/oss'
 import configOss from './config'
 
-// 1.修改查询条件
-// 2.修改授权标识
-// 3.修改列表相关事件行为
-// 4.配置接口
-// 5.添加table项配置
-// 6.放开pageSwitch的formDataUpdate配置用于检查详情接口
-// 7.删除此处注释信息
 export default {
   name: 'Tabel',
   components: { configOss },
@@ -146,7 +137,7 @@ export default {
   },
   computed: {
     // 用于判断是否有权限的方法
-    ...mapGetters('app', ['filterPermission'])
+    ...mapGetters('app', ['filterPermission', 'getDictByType'])
   },
   activated() {
     // console.log('table activated')

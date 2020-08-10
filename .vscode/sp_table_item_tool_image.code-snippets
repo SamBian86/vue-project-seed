@@ -1,0 +1,22 @@
+{
+  "table代码片段_item_toolImage": {
+    "prefix": "sp_table_item_tool_image",
+    "body": [
+      "{\r",
+      "  prop: '字段$1',\r",
+      "  label: '国际化$2',\r",
+      "  width: '160',\r",
+      "  align: 'center',\r",
+      "  component: 'toolImage',\r",
+      "  componentConfig: {\r",
+      "    propName: '字段$3',\r",
+      "    altName: '字段$4',\r",
+      "    fit: 'contain',\r",
+      "    lazy: true\r",
+      "  }\r",
+      "},\r",
+      "$4"
+    ],
+    "description": "table代码片段_item_toolImage"
+  }
+}

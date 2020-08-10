@@ -34,3 +34,8 @@ export function validateEmailAddress(email) {
 export function validatePrice(price) {
   return /\d+(\.\d{1,2})?/.test(price)
 }
+
+// 检查身份证号
+export function validateIDCardNumber(number) {
+  return /^\d{17}(\d+?|X)$/.test(number)
+}

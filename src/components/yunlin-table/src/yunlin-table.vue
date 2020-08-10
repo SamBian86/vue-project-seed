@@ -186,7 +186,7 @@ export default {
     this.$pageCheckUpdateWhenActivated(() => {
       this.searchHandle()
     })
-    console.log('table component activated')
+    // console.log('table component activated')
   },
   deactivated() {},
   beforeDestroy() {},
@@ -211,7 +211,7 @@ export default {
       let params = {}
 
       // 组装查询条件
-      Object.keys(query).map(item => {
+      Object.keys(query).map((item) => {
         if (searchFillEmpty) {
           _query[item] = query[item] !== '' ? query[item] : ''
         } else {
@@ -220,7 +220,7 @@ export default {
           }
         }
       })
-      Object.keys(searchParams).map(item => {
+      Object.keys(searchParams).map((item) => {
         if (searchFillEmpty) {
           _searchParams[item] = searchParams[item] !== '' ? searchParams[item] : ''
         } else {
@@ -235,9 +235,10 @@ export default {
       } else {
         params = { ..._searchParams }
       }
+
       // 检查是否覆盖获取列表方法
       this.getListBridge({ ...params })
-        .then(response => {
+        .then((response) => {
           if (hasPagination) {
             if (tableDataFrom) {
               this.tableData = tableDataFrom(response)
@@ -260,8 +261,8 @@ export default {
             callback()
           }
         })
-        .catch(message => {
-          console.log(message)
+        .catch((message) => {
+          // console.log(message)
         })
     },
     // 清除查询条件
@@ -277,14 +278,18 @@ export default {
     // 触发删除
     deleteHandle(item) {
       const { callback } = this.$attrs.handle.delete
-      this.$confirm(`${this.$t('confirm')}${this.$t('delete')}`, this.$t('prompt.title'), {
-        confirmButtonText: this.$t('confirm'),
-        cancelButtonText: this.$t('cancel'),
-        type: 'warning'
-      })
+      this.$confirm(
+        item.i18nMessage ? `${this.$t(item.i18nMessage)}` : `${this.$t('confirm')}${this.$t('delete')}!`,
+        this.$t('prompt.title'),
+        {
+          confirmButtonText: this.$t('confirm'),
+          cancelButtonText: this.$t('cancel'),
+          type: 'warning'
+        }
+      )
         .then(() => {
           this.deleteBridge(item)
-            .then(response => {
+            .then((response) => {
               if (callback) {
                 callback()
               }
@@ -295,7 +300,7 @@ export default {
               })
               this.searchHandle()
             })
-            .catch(message => {
+            .catch((message) => {
               this.$message({
                 message,
                 type: 'error',
@@ -311,22 +316,29 @@ export default {
       // {
       //    data: data, // 需要提交的数据
       //    i18nRequestMessage: 'schedule.pauseBatch', // 提交前提示信息
+      //    i18nRequestCustomMessage: 'schedule.pauseBatch', // 提交前提示信息
       //    request: pauseJobSchedule // 处理接口方法
       // }
       const { request } = opts
-      if (!opts.i18nRequestMessage) {
+      if (!opts.i18nRequestMessage && !opts.i18nRequestCustomMessage) {
         request()(opts.data)
         return
       }
 
-      this.$confirm(`${this.$t('confirm')}${this.$t(opts.i18nRequestMessage)}？`, this.$t('prompt.title'), {
-        confirmButtonText: this.$t('confirm'),
-        cancelButtonText: this.$t('cancel'),
-        type: 'warning'
-      })
+      this.$confirm(
+        opts.i18nRequestCustomMessage
+          ? `${this.$t(opts.i18nRequestCustomMessage)}`
+          : `${this.$t('confirm')}${this.$t(opts.i18nRequestMessage)}？`,
+        this.$t('prompt.title'),
+        {
+          confirmButtonText: this.$t('confirm'),
+          cancelButtonText: this.$t('cancel'),
+          type: 'warning'
+        }
+      )
         .then(() => {
           request()(opts.data)
-            .then(response => {
+            .then((response) => {
               this.$message({
                 message: this.$t('prompt.success'),
                 type: 'success',
@@ -337,7 +349,7 @@ export default {
                 opts.successCallBack()
               }
             })
-            .catch(message => {
+            .catch((message) => {
               this.$message({
                 message,
                 type: 'error',
@@ -362,7 +374,7 @@ export default {
       })
         .then(() => {
           this.deleteSectionBridge(items)
-            .then(response => {
+            .then((response) => {
               if (callback) {
                 callback()
               }
@@ -373,7 +385,7 @@ export default {
               })
               this.searchHandle()
             })
-            .catch(message => {
+            .catch((message) => {
               this.$message({
                 message,
                 type: 'error',
@@ -399,7 +411,7 @@ export default {
       })
         .then(() => {
           request()(opts.data)
-            .then(response => {
+            .then((response) => {
               this.$message({
                 message: this.$t('prompt.success'),
                 type: 'success',
@@ -407,7 +419,7 @@ export default {
               })
               this.searchHandle()
             })
-            .catch(message => {
+            .catch((message) => {
               this.$message({
                 message,
                 type: 'error',
@@ -461,7 +473,7 @@ export default {
       if (sortable === true) {
         orderField = prop
           .split(/([A-Z])/g)
-          .map(item => (item !== item.toLowerCase() ? '_' + item.toLowerCase() : item))
+          .map((item) => (item !== item.toLowerCase() ? '_' + item.toLowerCase() : item))
           .join('')
       }
       // console.log(column, prop, order)

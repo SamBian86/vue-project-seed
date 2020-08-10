@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 角色管理
+// 岗位权限管理
 
 // 保存
 // POST
@@ -20,17 +20,6 @@ export function editSysRole(data = {}) {
   return request({
     url: `/sys/role`,
     method: 'put',
-    data
-  })
-}
-
-// 删除
-// DELETE
-// /sys/role
-export function deleteSysRole(data = []) {
-  return request({
-    url: `/sys/role`,
-    method: 'delete',
     data
   })
 }
@@ -64,5 +53,17 @@ export function getSysRoleById(params = {}) {
   return request({
     url: `/sys/role/${id}`,
     method: 'get'
+  })
+}
+
+// 删除
+// DELETE
+// /sys/role/{id}
+export function deleteSysRole(params = {}) {
+  const { id } = params
+  return request({
+    url: `/sys/role/${id}`,
+    method: 'delete',
+    params
   })
 }

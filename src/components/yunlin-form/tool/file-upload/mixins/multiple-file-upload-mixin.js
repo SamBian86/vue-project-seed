@@ -45,29 +45,45 @@ export default {
     // 文件上传
     uploadRequest() {
       const { uploadQueue } = this
-
+      const _uploadRequest = this.config.uploadRequest || uploadOssFile
+      const _requestParams = this.config.requestParams || {}
       if (uploadQueue.length === 0) {
         this.uploading = false
         clearTimeout(this.timer)
         return false
       }
       const file = uploadQueue.shift()
-      uploadOssFile({
-        file: file.raw
+      _uploadRequest({
+        file: file.raw,
+        ..._requestParams
       })
         .then(response => {
           const { resourcesList } = this
+          const { limit, message } = this.config
 
           this.multipleFileList = []
-          this.resourcesList = [...resourcesList, { ...response }]
+          // 用于多选文件组件每次只显示最新上传显示
+          if (limit === 1) {
+            this.resourcesList = response !== null ? [{ ...response }] : []
+          } else {
+            this.resourcesList = response !== null ? [...resourcesList, { ...response }] : []
+          }
           this.uploadQueue = uploadQueue
 
           this.formDataMerge()
-          this.$message({
-            message: this.$t('prompt.success'),
-            type: 'success',
-            duration: 2000
-          })
+          if (message) {
+            this.$message({
+              message: response.message,
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$message({
+              message: this.$t('prompt.success'),
+              type: 'success',
+              duration: 2000
+            })
+          }
         })
         .catch(message => {
           this.$message({

@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="editor-box">
     <div ref="editor" class="editor-container"></div>
+    <editor-upload @successHandle="successHandle"></editor-upload>
   </div>
 </template>
 
@@ -8,9 +9,11 @@
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formMixin from '@/mixins/form-mixin'
+import editorUpload from './upload'
 import E from 'wangeditor'
 export default {
   name: 'ToolEditor',
+  components: { editorUpload },
   mixins: [commonMixin, pageMixin, formMixin],
   props: {
     config: {
@@ -42,43 +45,81 @@ export default {
       componentNames: ['editor']
     }
   },
+  computed: {},
+  watch: {
+    // 用于检查表单赋值时对应数据修改
+    pageData(newVal, oldVal) {
+      const { propName } = this.config
+      const newData = newVal[propName] || ''
+      const oldData = oldVal[propName] || ''
+      // 检查prop_data数据是否变动
+      if (JSON.stringify(newData) !== JSON.stringify(oldData)) {
+        this.init()
+      }
+    }
+  },
   activated() {
-    // console.log('popover-icon activated')
+    // console.log('editor activated')
     // 检查是否需要重新获取数据
     this.$pageCheckUpdateWhenActivated(() => {
       this.init()
-      // console.log('重新获取popover-icon组件数据')
+      // console.log('重新获取editor组件数据')
     })
   },
-  created() {},
+  created() {
+    // this.init()
+  },
   mounted() {
+    // console.log('editor mounted')
     this.init()
   },
   methods: {
     init() {
-      this.editor = new E(this.$refs.editor)
-      this.editor.customConfig.onchange = html => {
-        const { mergeData } = this.config
-        const newData = {}
-        newData[mergeData.target || 'content'] = html
-        this.editorContent = html
-        this.$formDataMerge(newData)
+      const { editor } = this
+      if (!editor) {
+        let _editor = null
+        _editor = new E(this.$refs.editor)
+        _editor.customConfig.onchange = html => {
+          const { mergeData } = this.config
+          const newData = {}
+          newData[mergeData.target || 'content'] = html
+          this.editorContent = html
+          this.$formDataMerge(newData)
+        }
+        _editor.create()
+        this.editor = _editor
       }
-      this.editor.create()
-      this.initHtml()
+      setTimeout(() => {
+        this.initHtml()
+      }, 100)
     },
     initHtml() {
+      const { editor } = this
       const { propName } = this.config
       const { pageData } = this
       const editorContent = pageData[propName] || ''
-
       this.editorContent = editorContent
-      this.editor.txt.html(editorContent)
+      editor.txt.html(editorContent)
+    },
+    successHandle(item) {
+      const { editor, editorContent } = this
+      const { mergeData } = this.config
+      const newData = {}
+      const _editorContent = `${editorContent}<img src='${item.url}' />`
+      this.editorContent = _editorContent
+      newData[mergeData.target || 'content'] = _editorContent
+      editor.txt.append(`<img src='${item.url}' />`)
+      this.$formDataMerge(newData)
     }
   }
 }
 </script>
 <style lang="scss">
+.editor-box {
+  position: relative;
+  z-index: 999;
+}
+
 .editor-container .w-e-toolbar {
   flex-wrap: wrap !important;
 }

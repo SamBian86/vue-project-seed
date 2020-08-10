@@ -8,8 +8,8 @@
       :node-key="config.nodeKey"
       :accordion="config.accordion"
       :show-checkbox="config.showCheckbox"
-      :check-strictly="true"
       :default-expand-all="config.defaultExpandAll"
+      :check-strictly="true"
       @check="checkHandle"
     ></el-tree>
   </div>
@@ -36,6 +36,7 @@ export default {
           treeResultKey: '', // 用于取结果集的键
           propName: '', // 初始化用于显示的键名
           nodeKey: '',
+          valueType: '', // 返回id还是返回节点
           treeProps: {}, // el-tree的props配置 { label: 'name', children: 'children' }
           mergeData: { target: '' },
           accordion: true,
@@ -59,9 +60,14 @@ export default {
   },
   data() {
     return {
-      componentNames: ['tree-dynamic'],
+      componentNames: [
+        'tree-dynamic-' +
+          Math.random()
+            .toString()
+            .slice(-8)
+      ],
       items: [],
-      selected: this.pageData[this.config.propName] || []
+      selected: []
     }
   },
   computed: {},
@@ -73,7 +79,11 @@ export default {
 
       if (JSON.stringify(Array.from(newData).sort()) !== JSON.stringify(Array.from(oldData).sort())) {
         this.autoCheckedByPropName()
+        // if (checkStrictly === undefined) {
+        //   this.autoCheckedByPropName()
+        // }
         // console.log('watch autoCheckedByPropName')
+        // console.log('watch')
       }
     }
   },
@@ -82,9 +92,11 @@ export default {
     this.$pageCheckUpdateWhenActivated(() => {
       this.init()
       // console.log('重新获取tree-dynamic组件数据')
+      // console.log('activated')
     })
   },
   created() {
+    // console.log('created')
     this.componentNames = [...this.componentNames, ...this.config.componentNames]
     this.init()
   },
@@ -95,6 +107,11 @@ export default {
         this.config
           .treeRequest(this.config.treeRequestParams)
           .then(response => {
+            response.forEach(item => {
+              if (!item.children) {
+                item.children = []
+              }
+            })
             if (disabled) {
               this.items = treeMergeData(response, {
                 disabled
@@ -140,27 +157,47 @@ export default {
     },
     autoCheckedByPropName() {
       const { pageData } = this
-      const { propName } = this.config
-      this.selected = pageData[propName] || []
-      this.$refs['treeDynamic'].setCheckedKeys([])
+      const { propName, valueType, nodeKey } = this.config
+      const selected = []
+
+      if (pageData[propName] !== null && pageData[propName] !== undefined) {
+        if (valueType === 'node') {
+          pageData[propName].map(item => {
+            selected.push(item[nodeKey])
+          })
+          this.selected = selected
+        } else {
+          this.selected = pageData[propName] || []
+        }
+      } else {
+        this.selected = []
+      }
+
       this.autoChecked()
     },
     autoChecked() {
       const { selected } = this
+      this.$refs['treeDynamic'].setCheckedKeys([])
       selected.map(item => {
         this.$refs['treeDynamic'].setChecked(item, true)
       })
     },
     checkHandle() {
+      // console.log('checkHandle')
       const { componentNames } = this
       this.formDataMerge()
       this.$pageUpdateListAdd(Array.from(new Set([...componentNames, ...this.config.componentNames])))
     },
     formDataMerge() {
-      const selected = [...this.$refs['treeDynamic'].getCheckedKeys(), ...this.$refs['treeDynamic'].getHalfCheckedKeys()]
+      const { valueType } = this.config
+      const selected =
+        valueType === 'node'
+          ? [...this.$refs['treeDynamic'].getCheckedNodes(), ...this.$refs['treeDynamic'].getHalfCheckedNodes()]
+          : [...this.$refs['treeDynamic'].getCheckedKeys(), ...this.$refs['treeDynamic'].getHalfCheckedKeys()]
       const { mergeData } = this.config
       const newData = {}
       newData[mergeData.target] = selected
+      // this.selected = [...selected]
       // console.log(newData)
       this.$formDataMerge(newData)
     }

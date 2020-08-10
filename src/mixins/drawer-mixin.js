@@ -17,8 +17,8 @@ export default {
       this.$emit('drawer-closed')
     },
     // 用于子组件关闭drawer
-    $drawerCloseByChild() {
-      this.$emit('drawer-close-by-child')
+    $drawerCloseByChild(data) {
+      this.$emit('drawer-close-by-child', data || {})
     }
   }
 }

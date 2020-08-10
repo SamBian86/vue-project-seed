@@ -69,7 +69,7 @@ export default {
   },
   computed: {
     // 用于判断是否有权限的方法
-    ...mapGetters('app', ['filterPermission'])
+    ...mapGetters('app', ['filterPermission', 'getDictByType'])
   },
   activated() {
     // console.log('table activated')
@@ -118,8 +118,8 @@ export default {
           }
         },
         { prop: 'sort', label: 'menu.sort', width: '50', align: 'center' },
-        { prop: 'url', label: 'menu.url', align: 'center' },
-        { prop: 'permissions', label: 'menu.permissions', align: 'center' }
+        { prop: 'url', label: 'menu.url' },
+        { prop: 'permissions', label: 'menu.permissions' }
       ]
       // 配置列表请求
       this.tableHandle.list.api = getMenuList

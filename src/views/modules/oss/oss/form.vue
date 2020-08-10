@@ -1,9 +1,16 @@
 <template>
   <el-row :gutter="10">
-    <el-col :span="formConfig.formSpan" :lg="formConfig.formSpan" :md="formConfig.formSpan" :sm="24" :xs="24">
-      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">
-        {{ formGenerateTitle[$attrs.page_info.data.pageType] }}
-      </div>
+    <el-col
+      :span="formConfig.formSpan"
+      :lg="formConfig.formSpan"
+      :md="formConfig.formSpan"
+      :sm="24"
+      :xs="24"
+    >
+      <div
+        v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''"
+        class="form-title"
+      >{{ formGenerateTitle[$attrs.page_info.data.pageType] }}</div>
       <yunlin-form
         ref="yunlinForm"
         :config="formConfig"
@@ -23,9 +30,7 @@
               v-if="containsPageType(['create', 'edit', 'detail'])"
               :size="formConfig.formSize"
               @click.stop="cancleHandle"
-            >
-              {{ $t('back') }}
-            </el-button>
+            >{{ $t('back') }}</el-button>
             <!-- <el-button v-if="containsPageType(['create'])" type="primary" :size="formConfig.formSize" @click.stop="submitHandle">
               {{ $t('add') }}
             </el-button>-->
@@ -86,7 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('app', ['filterPermission'])
+    ...mapGetters('app', ['filterPermission', 'getDictByType'])
   },
   activated() {
     // console.log('form activated')
@@ -131,6 +136,9 @@ export default {
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
+    },
+    beforeCancleHandle() {
+      this.$pageUpdateListAdd(['yunlin-table'])
     }
   }
 }

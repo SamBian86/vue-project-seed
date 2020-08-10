@@ -116,7 +116,6 @@ export default {
           query: { ...tab.query }
         })
         this.setTabActive(tab.name)
-        this.setMenuActive(tab.name)
       }
 
       const tabs = this.filterTabExceptName(tabName)
@@ -134,7 +133,6 @@ export default {
       const tab = tabs[0]
       this.setTabs(tabs)
       this.setTabActive(tab.name)
-      this.setMenuActive(tab.name)
       this.$router.push({ name: 'home' })
     }
   }

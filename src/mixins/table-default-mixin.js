@@ -1,5 +1,5 @@
 import commonMixin from '@/mixins/common-mixin'
-import { getInstImage } from '@/api/activiti/his'
+// import { getInstImage } from '@/api/activiti/his'
 export default {
   mixins: [commonMixin],
   data() {
@@ -127,12 +127,12 @@ export default {
       return this.$refs[tableName].getResponseData()
     },
     // 活动流程图查看
-    instanceHandle(row) {
-      const { instanceId } = row
-      return getInstImage({
-        processInstanceId: instanceId
-      })
-    },
+    // instanceHandle(row) {
+    //   const { instanceId } = row
+    //   return getInstImage({
+    //     processInstanceId: instanceId
+    //   })
+    // },
     // 查询
     searchHandle() {
       this.generateColumn()
@@ -237,6 +237,30 @@ export default {
     // 详情
     detailHandle(item, options = {}) {
       this.$pageSwitch('form', { ...item, pageType: 'detail', formDataUpdate: true, ...options })
+    },
+    // 上移
+    upHandle(row, index) {
+      const list = this.getTableData()
+      this.customHandle({
+        data: {
+          id: row.id,
+          exchangeId: list[index - 1]['id']
+        },
+        i18nRequestMessage: 'up',
+        request: this.exchangeHandle
+      })
+    },
+    // 下移
+    downHandle(row, index) {
+      const list = this.getTableData()
+      this.customHandle({
+        data: {
+          id: row.id,
+          exchangeId: list[index + 1]['id']
+        },
+        i18nRequestMessage: 'down',
+        request: this.exchangeHandle
+      })
     },
     // yunlin-table组件 事件监听器 --------------------------------------------------------
 

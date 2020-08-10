@@ -11,6 +11,14 @@ Vue.use(Router)
 
 export const staticRouterMap = [
   {
+    // 运营登录
+    path: '/platform',
+    name: 'platform',
+    component: () => import('@/views/platform'),
+    meta: { title: '登录' }
+  },
+  {
+    // 企业登录
     path: '/login',
     name: 'login',
     component: () => import('@/views/login'),

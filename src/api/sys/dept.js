@@ -24,12 +24,23 @@ export function editSysDept(data = {}) {
   })
 }
 
-// 列表
+// 部门树
 // GET
 // /sys/dept/list
 export function getSysDeptListAll(params = {}) {
   return request({
     url: `/sys/dept/list`,
+    method: 'get',
+    params
+  })
+}
+
+// 分页列表
+// GET
+// /sys/dept/page
+export function getSysDeptPageList(params = {}) {
+  return request({
+    url: `/sys/dept/page`,
     method: 'get',
     params
   })
@@ -49,10 +60,11 @@ export function getSysDeptById(params = {}) {
 // 删除
 // DELETE
 // /sys/dept/{id}
-export function deleteSysDept(data = {}) {
-  const { id } = data
+export function deleteSysDept(params = {}) {
+  const { id } = params
   return request({
     url: `/sys/dept/${id}`,
-    method: 'delete'
+    method: 'delete',
+    params
   })
 }

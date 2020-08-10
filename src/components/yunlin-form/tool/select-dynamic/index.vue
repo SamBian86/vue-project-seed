@@ -107,10 +107,10 @@ export default {
       if (this.config.request) {
         this.config
           .request(this.config.requestParams)
-          .then(response => {
+          .then((response) => {
             this.items = response
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error)
           })
       } else {
@@ -123,7 +123,7 @@ export default {
       newData[mergeData.target] = value
       this.$formDataMerge(newData)
 
-      const item = this.items.find(item => item[itemProps.value] === value)
+      const item = this.items.find((item) => item[itemProps.value] === value)
       if (item) {
         this.mergeOtherData(item)
       }
@@ -136,7 +136,7 @@ export default {
 
       if (mergeOtherData && mergeOtherData.length !== 0) {
         const newData = {}
-        mergeOtherData.map(item => {
+        mergeOtherData.map((item) => {
           newData[item.target] = obj[item.source]
         })
         this.$formDataMerge(newData)

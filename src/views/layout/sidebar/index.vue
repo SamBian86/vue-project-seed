@@ -6,6 +6,9 @@
         :collapse-transition="false"
         :unique-opened="true"
         class="aui-sidebar__menu"
+        background-color="#0d1b33"
+        text-color="#8a979e"
+        active-text-color="#fff"
         :default-active="defaultActive"
         :default-openeds="defaultOpeneds"
       >
@@ -50,23 +53,32 @@ export default {
     ...mapMutations('layout', ['setTabActive', 'setMenuActive']),
     storeUpdate() {
       const { layout_menuStore, layout_tabActive } = this
-      let defaultOpenedsTag = false
+      // console.log(layout_menuActive)
       if (layout_tabActive !== 'home') {
-        layout_menuStore.map(item => {
+        const defaultOpeneds = []
+        layout_menuStore.map((item, index) => {
           if (item.children.length !== 0) {
-            item.children.map(ite => {
-              const _url = ite.url.replace('/', '_')
-              if (_url === layout_tabActive) {
+            item.children.map((ite) => {
+              const _url = (ite.url || '').replace('/', '_')
+              if (_url === layout_tabActive && _url !== '') {
+                defaultOpeneds.push(item.id)
                 this.defaultActive = ite.id
-                defaultOpenedsTag = true
+              } else if (ite.url === '' && ite.children.length !== 0) {
+                ite.children.map((i) => {
+                  const _url = (i.url || '').replace('/', '_')
+                  if (_url === layout_tabActive && _url !== '') {
+                    defaultOpeneds.push(item.id)
+                    defaultOpeneds.push(ite.id)
+                    this.defaultActive = i.id
+                  }
+                })
+              } else {
+                // console.log('完成') 1290114382608900097 "1290116159274131458" 1290117086865432577
               }
             })
           }
-          if (defaultOpenedsTag) {
-            this.defaultOpeneds = [item.id]
-            defaultOpenedsTag = false
-          }
         })
+        this.defaultOpeneds = defaultOpeneds
       }
     }
   }
