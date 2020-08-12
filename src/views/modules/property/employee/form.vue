@@ -92,7 +92,9 @@ export default {
       // 初始化数据定义
       formDefaultData: {},
       // 用于处理表单的隐藏与显示禁用行为
-      formAction: []
+      formAction: [
+        { prop: 'roleId', exclude: [{ value: '2', props: ['roleId', 'frontProjectIdList', 'projectIdList', 'deptName'] }] }
+      ]
     }
   },
   computed: {

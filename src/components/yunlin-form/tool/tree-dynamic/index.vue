@@ -60,12 +60,8 @@ export default {
   },
   data() {
     return {
-      componentNames: [
-        'tree-dynamic-' +
-          Math.random()
-            .toString()
-            .slice(-8)
-      ],
+      componentNames: ['tree-dynamic'], //  + Math.random().toString().slice(-8)
+      list: [],
       items: [],
       selected: []
     }
@@ -106,8 +102,9 @@ export default {
       if (this.config.treeRequest) {
         this.config
           .treeRequest(this.config.treeRequestParams)
-          .then(response => {
-            response.forEach(item => {
+          .then((response) => {
+            this.list = response
+            response.forEach((item) => {
               if (!item.children) {
                 item.children = []
               }
@@ -129,7 +126,7 @@ export default {
               })
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error)
           })
       } else {
@@ -141,14 +138,14 @@ export default {
       const { pageData } = this
       const { treeResultRequest, treeResultRequestParams, treeResultRequestPropParams, treeResultKey } = this.config
       let params = {}
-      treeResultRequestPropParams.map(item => {
+      treeResultRequestPropParams.map((item) => {
         if (pageData[item]) {
           params[item] = pageData[item]
         }
       })
       params = { ...treeResultRequestParams, ...params }
       if (Object.keys(params).length) {
-        treeResultRequest(params).then(response => {
+        treeResultRequest(params).then((response) => {
           this.selected = response[treeResultKey]
           this.autoChecked()
           this.formDataMerge()
@@ -156,13 +153,20 @@ export default {
       }
     },
     autoCheckedByPropName() {
-      const { pageData } = this
+      const { pageData, disabled, list } = this
       const { propName, valueType, nodeKey } = this.config
       const selected = []
+      if (disabled) {
+        this.items = treeMergeData(list, {
+          disabled
+        })
+      } else {
+        this.items = list
+      }
 
       if (pageData[propName] !== null && pageData[propName] !== undefined) {
         if (valueType === 'node') {
-          pageData[propName].map(item => {
+          pageData[propName].map((item) => {
             selected.push(item[nodeKey])
           })
           this.selected = selected
@@ -178,7 +182,7 @@ export default {
     autoChecked() {
       const { selected } = this
       this.$refs['treeDynamic'].setCheckedKeys([])
-      selected.map(item => {
+      selected.map((item) => {
         this.$refs['treeDynamic'].setChecked(item, true)
       })
     },

@@ -33,13 +33,13 @@
               @click.stop="cancleHandle"
             >{{ $t('back') }}</el-button>
             <el-button
-              v-if="containsPageType(['create']) && filterPermission('interior:check:save')"
+              v-if="containsPageType(['create']) && filterPermission('school:article:save')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
             >{{ $t('add') }}</el-button>
             <el-button
-              v-if="containsPageType(['edit']) && filterPermission('interior:check:update')"
+              v-if="containsPageType(['edit']) && filterPermission('school:article:update')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
@@ -56,8 +56,7 @@ import { mapGetters } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 import pageMixin from '@/mixins/page-mixin'
 import formDefaultMixin from '@/mixins/form-default-mixin'
-import { getInteriorCheckById } from '@/api/interior/check'
-import listComponent from './list'
+import { createArticle, editArticle, getArticleById } from '@/api/article'
 // import { validateMobile } from '@/utils/validator'
 
 export default {
@@ -76,29 +75,21 @@ export default {
       formHandle: {
         // 创建抽象方法，用创建接口方法覆盖
         create: {
-          // api: createXXX
+          api: createArticle
         },
         // 修改抽象方法，用修改接口方法覆盖
         edit: {
-          // api: editXXX
+          api: editArticle
         },
         // 详情抽象方法，用详情接口方法覆盖
         detail: {
-          api: getInteriorCheckById
+          api: getArticleById
         }
       },
       // 初始化数据定义
       formDefaultData: {},
       // 用于处理表单的隐藏与显示禁用行为
-      formAction: [
-        {
-          prop: 'interiorCheckType',
-          exclude: [
-            { value: 0, props: ['scoreList'] },
-            { value: 1, props: ['interiorConclusion'] }
-          ]
-        }
-      ]
+      formAction: []
     }
   },
   computed: {
@@ -111,6 +102,7 @@ export default {
   created() {
     // console.log(this.$attrs.page_info)
     // console.log('form created')
+
     // 设置整体表单栅格列数
     this.formConfig.formSpan = 12
   },
@@ -119,74 +111,26 @@ export default {
       const { formTitle } = this
       this.formGenerateTitle = formTitle
     },
-    afterFormDataUpdate() {
-      const { interiorConclusion, scoreList, interiorCheckType } = this.formData
-      if (interiorCheckType === 1) {
-        scoreList.unshift({ typeName: this.$t('interiorCheck.total'), checkScore: interiorConclusion })
-        this.$set(this.formData, 'scoreList', scoreList)
-      }
-    },
     init() {
       // 设置表单内容
       this.formConfig.formItemsReadOnly = [
         {
-          // 分割线
+          // 公告标题
           span: 24,
-          name: 'interiorCheck.baseInfo',
-          type: 'divider'
+          prop: 'title',
+          name: 'article.title',
+          type: 'text',
+          rules: [{ required: true }],
+          attrs: { maxlength: 30 }
         },
         {
-          // 检查时间
+          // 文章内容
           span: 24,
-          prop: 'createDate',
-          name: 'interiorCheck.createDate',
-          type: 'text'
-        },
-        {
-          // 检查人
-          span: 24,
-          prop: 'userName',
-          name: 'interiorCheck.userName',
-          type: 'text'
-        },
-        {
-          // 宿舍
-          span: 24,
-          prop: 'roomName',
-          name: 'interiorCheck.roomName',
-          type: 'text'
-        },
-        {
-          // 分割线
-          span: 24,
-          name: 'interiorCheck.otherInfo',
-          type: 'divider'
-        },
-        {
-          // 检查结果
-          span: 24,
-          prop: 'interiorConclusion',
-          name: 'interiorCheck.interiorConclusion',
-          type: 'text'
-        },
-        {
-          // 评分列表
-          span: 24,
-          prop: 'scoreList',
-          name: 'interiorCheck.scoreList',
-          type: 'page-component',
-          component: listComponent,
-          componentConfig: {
-            propName: 'scoreList'
-          }
-        },
-        {
-          // 备注
-          span: 24,
-          prop: 'regulationsRemark',
-          name: 'interiorCheck.regulationsRemark',
+          prop: 'content',
+          name: 'article.content',
           type: 'textarea',
-          attrs: { autosize: { minRows: 6, maxRows: 10 } }
+          rules: [{ required: true }],
+          attrs: { autosize: { minRows: 6, maxRows: 10 }, maxlength: 100 }
         }
       ]
 

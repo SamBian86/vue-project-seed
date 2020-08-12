@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="interiorCheckType === 0">
+    <div v-show="interiorCheckType === 0">
       <el-table :data="levelList" class="level_table">
         <el-table-column :label="$t('project.name')">
           <template slot-scope="scope">
@@ -12,7 +12,7 @@
             ></el-input>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('project.markPoint')">
+        <!-- <el-table-column :label="$t('project.markPoint')">
           <template slot-scope="scope">
             <el-input
               v-model="scope.row.markPoint"
@@ -21,11 +21,11 @@
               :placeholder="$t('project.markPointPlaceholder')"
             ></el-input>
           </template>
-        </el-table-column>
-        <el-table-column v-if="!disabled" label="操作" width="160">
+        </el-table-column>-->
+        <el-table-column v-show="!disabled" label="操作" width="160">
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.save === false"
+              v-show="scope.row.save === false"
               size="mini"
               type="success"
               @click="handleSave('levelList', scope.$index)"
@@ -38,7 +38,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div v-if="!disabled" style="text-align: center;">
+      <div v-show="!disabled" style="text-align: center;">
         <el-button
           type="text"
           icon="el-icon-plus el-icon-arrow-left"
@@ -46,7 +46,7 @@
         >{{ $t('project.addLevel') }}</el-button>
       </div>
     </div>
-    <div v-if="interiorCheckType === 1">
+    <div v-show="interiorCheckType === 1">
       <el-table :data="scoreList" class="level_table">
         <el-table-column :label="$t('project.name')">
           <template slot-scope="scope">
@@ -68,10 +68,10 @@
             ></el-input>
           </template>
         </el-table-column>
-        <el-table-column v-if="!disabled" label="操作" width="160">
+        <el-table-column v-show="!disabled" label="操作" width="160">
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.save === false"
+              v-show="scope.row.save === false"
               size="mini"
               type="success"
               @click="handleSave('scoreList', scope.$index)"
@@ -84,7 +84,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div v-if="!disabled" style="text-align: center;">
+      <div v-show="!disabled" style="text-align: center;">
         <el-button
           type="text"
           icon="el-icon-plus el-icon-arrow-left"

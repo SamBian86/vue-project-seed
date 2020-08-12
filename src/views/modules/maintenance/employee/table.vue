@@ -31,7 +31,7 @@
               <el-form-item>
                 <el-input
                   v-model="tableSearchParams.nameOrPhone"
-                  :placeholder="$t('buildingWorker.nameOrPhone')"
+                  :placeholder="$t('maintenanceWorker.nameOrPhone')"
                   :size="tableConfig.tableSearchSize"
                   clearable
                   @clear="clearHandle"
@@ -40,7 +40,7 @@
               <el-form-item>
                 <el-select
                   v-model="tableSearchParams.roleId"
-                  :placeholder="$t('buildingWorker.roleId')"
+                  :placeholder="$t('maintenanceWorker.roleId')"
                   :size="tableConfig.tableSearchSize"
                   clearable
                   @clear="clearHandle"
@@ -57,7 +57,7 @@
               <!-- 查询 -->
               <el-form-item>
                 <el-button
-                  v-if="filterPermission('building:worker:view')"
+                  v-if="filterPermission('maintenance:worker:view')"
                   :size="tableConfig.tableSearchSize"
                   @click="searchHandle()"
                 >{{ $t('query') }}</el-button>
@@ -65,7 +65,7 @@
               <!-- 创建 -->
               <!-- <el-form-item>
                 <el-button
-                  v-if="filterPermission('building:worker:save')"
+                  v-if="filterPermission('maintenance:worker:save')"
                   type="primary"
                   :size="tableConfig.tableSearchSize"
                   @click="createHandle()"
@@ -76,7 +76,7 @@
               <!-- 下载模板 -->
               <!--<el-form-item>
             <el-button
-              v-if="filterPermission('building:worker:downloadExcel')"
+              v-if="filterPermission('maintenance:worker:downloadExcel')"
               type="success"
               :size="tableConfig.tableSearchSize"
               @click="downloadHandle({
@@ -88,7 +88,7 @@
               </el-form-item>-->
               <!-- 导入 -->
               <!--<el-form-item>
-            <button-import v-if="filterPermission('building:worker:importExcel')" :config="importConfig"></button-import>
+            <button-import v-if="filterPermission('maintenance:worker:importExcel')" :config="importConfig"></button-import>
               </el-form-item>-->
               <!-- 清空选中 -->
               <!--<el-form-item>
@@ -101,7 +101,7 @@
               <!-- 导出 -->
               <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('building:worker:export')"
+              v-if="filterPermission('maintenance:worker:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
@@ -110,7 +110,7 @@
               <!-- 批量删除 -->
               <!-- <el-form-item>
                 <el-button
-                  v-if="filterPermission('building:worker:delete')"
+                  v-if="filterPermission('maintenance:worker:delete')"
                   type="danger"
                   :size="tableConfig.tableSearchSize"
                   @click="deleteSectionHandle()"
@@ -121,7 +121,7 @@
               <!-- 批量操作 -->
               <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('building:worker:xxx')"
+              v-if="filterPermission('maintenance:worker:xxx')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="customSectionHandle({
@@ -145,7 +145,7 @@
               <template slot-scope="scope">
                 <!-- 上下架 -->
                 <!--<el-button
-              v-if="filterPermission('building:worker:display')"
+              v-if="filterPermission('maintenance:worker:display')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="customHandle({
@@ -158,21 +158,22 @@
               })"
                 >{{ scope.row.XXX === 0 ? $t('on') : $t('off') }}</el-button>-->
                 <!-- 修改 -->
+                <!-- && scope.row.maintenanceWorkerSign === 1 -->
                 <el-button
-                  v-if="filterPermission('building:worker:set') && scope.row.buildingWorkerSign === 1 && userId !== scope.row.id"
+                  v-if="filterPermission('maintenance:worker:set') && scope.row.maintenanceWorkerSign === 1 && userId !== scope.row.id"
                   type="text"
                   :size="tableConfig.tableSearchSize"
                   @click="setHandle(scope.row)"
-                >{{ $t('buildingWorker.set') }}</el-button>
+                >{{ $t('maintenanceWorker.set') }}</el-button>
                 <el-button
-                  v-if="filterPermission('building:worker:set') && scope.row.buildingWorkerSign === 1 && userId === scope.row.id"
+                  v-if="filterPermission('maintenance:worker:set') && scope.row.maintenanceWorkerSign === 1 && userId === scope.row.id"
                   type="text"
                   disabled
                   :size="tableConfig.tableSearchSize"
-                >{{ $t('buildingWorker.already') }}</el-button>
+                >{{ $t('maintenanceWorker.already') }}</el-button>
                 <!-- 单个删除 -->
                 <!-- <el-button
-                  v-if="filterPermission('building:worker:delete')"
+                  v-if="filterPermission('maintenance:worker:delete')"
                   type="text"
                   :size="tableConfig.tableSearchSize"
                   @click="deleteHandle([scope.row.id])"
@@ -181,21 +182,21 @@
                 </el-button>-->
                 <!-- 上移 -->
                 <!--<el-button
-              v-if="filterPermission('building:worker:exchange') && scope.$index !== 0"
+              v-if="filterPermission('maintenance:worker:exchange') && scope.$index !== 0"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="upHandle(scope.row, scope.$index)"
                 >{{ $t('up') }}</el-button>-->
                 <!-- 下移 -->
                 <!--<el-button
-              v-if="filterPermission('building:worker:exchange') && scope.$index !== limit - 1"
+              v-if="filterPermission('maintenance:worker:exchange') && scope.$index !== limit - 1"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="downHandle(scope.row, scope.$index)"
                 >{{ $t('down') }}</el-button>-->
                 <!-- 单个操作 -->
                 <!-- <el-button
-                  v-if="filterPermission('building:worker:xxx')"
+                  v-if="filterPermission('maintenance:worker:xxx')"
                   type="text"
                   :size="tableConfig.tableSearchSize"
                   @click="
@@ -272,13 +273,13 @@ export default {
       // 设置获取列表信息
       this.tableConfig.tableHeadReadOnly = [
         // 员工姓名
-        { prop: 'name', label: 'buildingWorker.name', width: '140' },
+        { prop: 'name', label: 'maintenanceWorker.name', width: '140' },
         // 手机号
-        { prop: 'phoneNumber', label: 'buildingWorker.phoneNumber', width: '140' },
+        { prop: 'phoneNumber', label: 'maintenanceWorker.phoneNumber', width: '140' },
         // 岗位
-        { prop: 'roleName', label: 'buildingWorker.roleName', width: '140' },
+        { prop: 'roleName', label: 'maintenanceWorker.roleName', width: '140' },
         // 所属组织
-        { prop: 'deptName', label: 'buildingWorker.deptName' }
+        { prop: 'deptName', label: 'maintenanceWorker.deptName' }
       ]
       // 是否填充查询条件为空
       // this.tableConfig.searchFillEmpty = true
@@ -322,7 +323,7 @@ export default {
     setHandle(row) {
       this.userId = row.id
       this.$drawerCloseByChild({
-        userName: row.name,
+        employeeName: row.name,
         userId: row.id
       })
     }

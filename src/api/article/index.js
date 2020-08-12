@@ -7,7 +7,7 @@ import request from '@/utils/request'
 // /article
 export function createArticle(data = {}) {
   return request({
-    url: `/article`,
+    url: `/school/article`,
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function createArticle(data = {}) {
 // /article
 export function editArticle(data = {}) {
   return request({
-    url: `/article`,
+    url: `/school/article`,
     method: 'put',
     data
   })
@@ -29,7 +29,7 @@ export function editArticle(data = {}) {
 // /article
 export function deleteArticle(data = []) {
   return request({
-    url: `/article`,
+    url: `/school/article`,
     method: 'delete',
     data
   })
@@ -40,7 +40,7 @@ export function deleteArticle(data = []) {
 // /article/page
 export function getArticlePageList(params = {}) {
   return request({
-    url: `/article/page`,
+    url: `/school/article/page`,
     method: 'get',
     params
   })
@@ -52,7 +52,7 @@ export function getArticlePageList(params = {}) {
 export function getArticleById(params = {}) {
   const { id } = params
   return request({
-    url: `/article/${id}`,
+    url: `/school/article/${id}`,
     method: 'get'
   })
 }
