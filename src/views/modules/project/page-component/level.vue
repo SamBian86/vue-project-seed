@@ -22,7 +22,7 @@
             ></el-input>
           </template>
         </el-table-column>-->
-        <el-table-column v-show="!disabled" label="操作" width="160">
+        <el-table-column v-if="!disabled" label="操作" width="160">
           <template slot-scope="scope">
             <el-button
               v-show="scope.row.save === false"
@@ -68,7 +68,7 @@
             ></el-input>
           </template>
         </el-table-column>
-        <el-table-column v-show="!disabled" label="操作" width="160">
+        <el-table-column v-if="!disabled" label="操作" width="160">
           <template slot-scope="scope">
             <el-button
               v-show="scope.row.save === false"
@@ -226,7 +226,7 @@ export default {
     },
     handleAdd(type) {
       let addTag = false
-      const items = Array.from(this[type])
+      const items = Array.from(this[type] || [])
       items.map((item) => {
         if (item.name === '' || item.markPoint === '') {
           addTag = true

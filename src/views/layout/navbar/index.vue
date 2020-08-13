@@ -36,7 +36,7 @@
             </el-dropdown-menu>
           </el-dropdown>
         </el-menu-item>-->
-        <el-menu-item index="1">
+        <el-menu-item v-if="app_systemType === 'property'" index="1">
           <el-dropdown :show-timeout="0" placement="bottom">
             <span class="el-dropdown-link">
               <span>{{ projectName || $t('brand.projectDefault') }}</span>
@@ -60,30 +60,68 @@
             </svg>
           </a>
         </el-menu-item>-->
-        <el-menu-item index="3" @click="fullscreenHandle()">
+        <!-- <el-menu-item index="3" @click="fullscreenHandle()">
           <svg class="icon-svg aui-navbar__icon-menu" aria-hidden="true">
             <use xlink:href="#icon-fullscreen" />
           </svg>
-        </el-menu-item>
-        <el-menu-item index="4" class="aui-navbar__avatar">
+        </el-menu-item>-->
+        <!-- <el-menu-item index="4" class="aui-navbar__avatar">
           <el-dropdown :show-timeout="0" placement="bottom">
             <span class="el-dropdown-link">
-              <img src="~@/assets/img/avatar.png" />
-              <span>{{ user_userInfo.realName }}</span>
-              <i class="el-icon-arrow-down"></i>
+              <span>{{ user_userInfo.realName }}, 你好</span>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <!-- <el-dropdown-item
+              <el-dropdown-item
                 @click.native="updatePasswordHandle()"
-              >{{ $t('updatePassword.title') }}</el-dropdown-item>-->
+              >{{ $t('updatePassword.title') }}</el-dropdown-item>
               <el-dropdown-item @click.native="logoutHandle()">{{ $t('logout') }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+        </el-menu-item>-->
+        <el-menu-item index="4" class="aui-navbar__name">
+          <div>{{ user_userInfo.realName }}, 你好</div>
+        </el-menu-item>
+        <el-menu-item index="5">
+          <div @click="updatePasswordHandle()">{{ $t('updatePassword.title') }}</div>
+        </el-menu-item>
+        <el-menu-item index="6">
+          <div @click="logoutHandle()">{{ $t('logout') }}</div>
         </el-menu-item>
       </el-menu>
     </div>
     <!-- 弹窗, 修改密码 -->
-    <update-password v-if="updatePassowrdVisible" ref="updatePassowrd"></update-password>
+    <update-password
+      v-if="updatePassowrdVisible"
+      ref="updatePassowrd"
+      @close-listener="closeListener"
+    ></update-password>
+    <!-- 选择项目 -->
+    <el-dialog
+      append-to-body
+      width="220px"
+      class="project-container"
+      :visible.sync="dialogVisible"
+      :show-close="false"
+      :close-on-click-modal="false"
+    >
+      <template slot="title">
+        <div class="project-title">{{ $t('projectTitle') }}</div>
+      </template>
+      <el-select
+        v-model="projectId"
+        class="select-block"
+        size="small"
+        :placeholder="$t('projectTitle')"
+        @change="switchTenantHandle"
+      >
+        <el-option
+          v-for="(item,index) in projectList"
+          :key="index"
+          :label="item.projectName"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+    </el-dialog>
   </nav>
 </template>
 
@@ -93,7 +131,7 @@ import { messages } from '@/i18n'
 import screenfull from 'screenfull'
 import UpdatePassword from './update-password'
 import { getProjectPermissionList } from '@/api/project'
-import { getProjectId, setProjectId } from '@/utils/cookie'
+import { getProjectId, setProjectId, getSystemType } from '@/utils/cookie'
 
 export default {
   inject: ['refresh'],
@@ -102,6 +140,7 @@ export default {
   },
   data() {
     return {
+      dialogVisible: false,
       projectList: [],
       projectId: '',
       projectName: '',
@@ -113,7 +152,17 @@ export default {
     ...mapGetters(['layout_navbar_layoutType', 'layout_sidebar_fold', 'user_userInfo', 'app_systemType'])
   },
   created() {
-    this.getProjectPermissionList()
+    const systemType = getSystemType()
+    setTimeout(() => {
+      if (this.user_userInfo.resetPassword === 1) {
+        this.checkResetPassword()
+        return false
+      }
+      if (systemType === 'property') {
+        this.getProjectPermissionList()
+        return false
+      }
+    }, 1000)
   },
   methods: {
     ...mapMutations('layout', ['setSidebarFold']),
@@ -124,22 +173,51 @@ export default {
     },
     getProjectPermissionList() {
       const projectId = getProjectId()
-      this.projectId = projectId
       getProjectPermissionList().then((response) => {
-        if (response && response.length !== 0) {
-          response.forEach((item) => {
-            item.value = item.id
-            item.label = item.projectName
-            if (projectId === item.id) {
-              this.projectName = item.projectName
-            }
-          })
-          this.projectList = response
+        const len = (response && response.length) || 0
+        this.projectList = response
+        if (len === 1) {
+          if (projectId === '') {
+            this.switchTenantHandle(response[0]['id'])
+          }
+        } else if (len > 1) {
+          if (projectId === '') {
+            this.chooseProject()
+            // console.log(response)
+          } else {
+            response.forEach((item) => {
+              item.value = item.id
+              item.label = item.projectName
+              if (projectId === item.id) {
+                this.projectName = item.projectName
+              }
+            })
+          }
+        } else {
+          // console.log(response)
         }
       })
     },
+    chooseProject() {
+      this.dialogVisible = true
+    },
+    checkResetPassword() {
+      this.$message({
+        message: this.$t('resetPassword'),
+        type: 'warning',
+        customClass: 'el-reset-message--warning',
+        duration: 3000
+      })
+      this.updatePasswordHandle()
+    },
+    closeListener() {
+      if (this.user_userInfo.resetPassword === 1) {
+        setTimeout(() => {
+          this.checkResetPassword()
+        }, 1000)
+      }
+    },
     switchTenantHandle(projectId) {
-      this.projectId = projectId
       setProjectId(projectId)
       this.setProjectId(projectId)
       setTimeout(() => {
@@ -172,7 +250,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          const routerName = this.app_systemType === 'platform' ? 'platform' : 'login'
+          const routerName = this.user_userInfo.type === 1 ? 'platform' : 'login'
           this.logout().then(() => {
             this.$router.replace({ name: routerName }).then(() => {
               setTimeout(() => {
@@ -189,3 +267,32 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.aui-navbar--colorful .aui-navbar__menu > .el-menu-item.aui-navbar__name,
+.aui-navbar--colorful .aui-navbar__menu > .el-menu-item.aui-navbar__name.is-active {
+  &:hover {
+    background: transparent;
+    cursor: text;
+  }
+}
+.project-title {
+  font-weight: bold;
+}
+
+.project-container .el-dialog {
+  margin-top: 0px !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+}
+
+.project-container .el-dialog__body {
+  padding: 20px 20px;
+}
+
+.el-reset-message--warning {
+  z-index: 2010 !important;
+}
+</style>

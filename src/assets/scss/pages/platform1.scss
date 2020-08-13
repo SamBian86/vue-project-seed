@@ -34,7 +34,13 @@
     .captcha_container {
       display: flex;
       .login_input {
-        width: 90%;
+        width: 100%;
+        .el-input-group__append {
+          border: none !important;
+          .captcha_btn {
+            padding: 0px 10px;
+          }
+        }
       }
       img {
         height: 40px;
@@ -45,10 +51,12 @@
 
     // 忘记密码
     .forget {
-      text-align: right;
+      text-align: left;
       span {
         color: #1669ff;
       }
+      padding-bottom: 60px;
+      padding-left: 5px;
     }
 
     // 按钮样式
@@ -75,6 +83,7 @@
   // 表单布局样式
   .el-form-item {
     margin-bottom: 10px;
+    height: 50px;
   }
 
   .el-form-item__label {

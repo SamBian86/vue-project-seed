@@ -57,6 +57,17 @@ export function sendMessageSms(data = {}) {
   })
 }
 
+// 短信验证码
+// GET
+// /message/sms/send/{type}/{mobile}
+export function getMessageSmsByType(params = {}) {
+  const { type, mobile } = params
+  return request({
+    url: `/message/sms/send/${type}/${mobile}`,
+    method: 'get'
+  })
+}
+
 // 信息
 // GET
 // /message/sms/{id}

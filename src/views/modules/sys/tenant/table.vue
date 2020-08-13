@@ -224,7 +224,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import pageMixin from '@/mixins/page-mixin'
 import tableDefaultMixin from '@/mixins/table-default-mixin'
 import { getTenantPageList, setTenantStatus } from '@/api/sys/tenant'
@@ -250,6 +250,8 @@ export default {
     this.init()
   },
   methods: {
+    ...mapMutations('app', ['cleanPermissionStore', 'setSystemType']),
+    ...mapMutations('layout', ['cleanMenuStore']),
     // listCallback() {
     //   const list = this.getTableData()
     //   this.limit = list.length
@@ -339,7 +341,10 @@ export default {
     },
     // 进入企业后台
     enterCallBack() {
-      // this.$router.replace({ name: 'tenant' })
+      this.cleanMenuStore()
+      this.cleanPermissionStore()
+      this.setSystemType('property')
+      this.$router.replace({ name: 'tenant' })
       setTimeout(() => {
         window.location.reload()
       }, 500)

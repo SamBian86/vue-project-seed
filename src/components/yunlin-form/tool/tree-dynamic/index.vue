@@ -3,13 +3,11 @@
     <el-tree
       ref="treeDynamic"
       :data="items"
-      :default-checked-keys="selected"
       :props="config.treeProps"
       :node-key="config.nodeKey"
       :accordion="config.accordion"
       :show-checkbox="config.showCheckbox"
       :default-expand-all="config.defaultExpandAll"
-      :check-strictly="true"
       @check="checkHandle"
     ></el-tree>
   </div>

@@ -159,13 +159,13 @@
                 >{{ scope.row.XXX === 0 ? $t('on') : $t('off') }}</el-button>-->
                 <!-- 修改 -->
                 <el-button
-                  v-if="filterPermission('building:worker:set') && scope.row.buildingWorkerSign === 1 && userId !== scope.row.id"
+                  v-if="filterPermission('building:worker:set') && scope.row.buildingWorkerSign === 0"
                   type="text"
                   :size="tableConfig.tableSearchSize"
                   @click="setHandle(scope.row)"
                 >{{ $t('buildingWorker.set') }}</el-button>
                 <el-button
-                  v-if="filterPermission('building:worker:set') && scope.row.buildingWorkerSign === 1 && userId === scope.row.id"
+                  v-if="filterPermission('building:worker:set') && scope.row.buildingWorkerSign === 1"
                   type="text"
                   disabled
                   :size="tableConfig.tableSearchSize"

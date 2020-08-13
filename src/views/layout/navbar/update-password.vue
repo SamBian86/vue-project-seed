@@ -1,10 +1,13 @@
 <template>
   <el-dialog
+    width="375px"
     :visible.sync="visible"
     :title="$t('updatePassword.title')"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :append-to-body="true"
+    :show-close="false"
+    @close="closeHandle"
   >
     <el-form
       ref="dataForm"
@@ -39,14 +42,14 @@
       </el-form-item>
     </el-form>
     <template slot="footer">
-      <el-button @click="visible = false">{{ $t('cancel') }}</el-button>
+      <!-- <el-button @click="visible = false">{{ $t('cancel') }}</el-button> -->
       <el-button type="primary" @click="dataFormSubmitHandle()">{{ $t('confirm') }}</el-button>
     </template>
   </el-dialog>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { modifyPassword } from '@/api/auth'
 export default {
   data() {
@@ -95,7 +98,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('user', ['cleanUserInfoStore']),
     ...mapActions('app', ['logout']),
+    ...mapActions('user', ['getUserInfo']),
     init() {
       this.visible = true
       this.$nextTick(() => {
@@ -110,25 +115,22 @@ export default {
         }
         modifyPassword(this.dataForm)
           .then((response) => {
+            this.cleanUserInfoStore()
+            this.getUserInfo()
             this.$message({
               message: this.$t('prompt.success'),
               type: 'success',
               duration: 2000,
               onClose: () => {
                 this.visible = false
-                const routerName = this.app_systemType === 'platform' ? 'platform' : 'login'
-                this.logout().then(() => {
-                  this.$router.replace({ name: routerName }).then(() => {
-                    setTimeout(() => {
-                      window.location.reload()
-                    }, 10)
-                  })
-                })
               }
             })
           })
           .catch(() => {})
       })
+    },
+    closeHandle() {
+      this.$emit('close-listener')
     }
   }
 }

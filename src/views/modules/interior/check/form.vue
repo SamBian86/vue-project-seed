@@ -95,7 +95,7 @@ export default {
           prop: 'interiorCheckType',
           exclude: [
             { value: 0, props: ['scoreList'] },
-            { value: 1, props: ['interiorConclusion'] }
+            { value: 1, props: ['interiorConclusion', 'regulationsRemark'] }
           ]
         }
       ]

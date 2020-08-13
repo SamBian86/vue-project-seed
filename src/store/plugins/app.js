@@ -1,4 +1,5 @@
 import { setDictStore, setPermissionStore } from '@/utils/localStorage'
+import { setToken, setSystemType, setTenantCode } from '@/utils/cookie'
 
 export function appPlugin(store) {
   // eslint-disable-next-line no-unused-vars
@@ -22,9 +23,24 @@ export function appPlugin(store) {
     }
 
     // 清除授权storage数据
-    if (mutation.type === 'app/cleantPermissionStore') {
+    if (mutation.type === 'app/cleanPermissionStore') {
       setPermissionStore()
       store.commit('app/setPermissionTag', false)
+    }
+
+    // 设置token数据
+    if (mutation.type === 'app/setToken') {
+      setToken(state.app.token)
+    }
+
+    // 设置systemType数据
+    if (mutation.type === 'app/setSystemType') {
+      setSystemType(state.app.systemType)
+    }
+
+    // 设置tenantCode数据
+    if (mutation.type === 'app/setTenantCode') {
+      setTenantCode(state.app.tenantCode)
     }
 
     // 登出
@@ -32,7 +48,7 @@ export function appPlugin(store) {
       // 清除字典数据
       store.commit('app/cleanDictStore')
       // 清除授权数据
-      store.commit('app/cleantPermissionStore')
+      store.commit('app/cleanPermissionStore')
       // 清除用户数据
       store.commit('user/cleanUserInfoStore')
       // 清除菜单数据

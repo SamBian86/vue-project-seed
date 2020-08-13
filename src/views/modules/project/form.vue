@@ -1,9 +1,16 @@
 <template>
   <el-row :gutter="10">
-    <el-col :span="formConfig.formSpan" :lg="formConfig.formSpan" :md="formConfig.formSpan" :sm="24" :xs="24">
-      <div v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''" class="form-title">
-        {{ formGenerateTitle[$attrs.page_info.data.pageType] }}
-      </div>
+    <el-col
+      :span="formConfig.formSpan"
+      :lg="formConfig.formSpan"
+      :md="formConfig.formSpan"
+      :sm="24"
+      :xs="24"
+    >
+      <div
+        v-if="formGenerateTitle[$attrs.page_info.data.pageType] !== ''"
+        class="form-title"
+      >{{ formGenerateTitle[$attrs.page_info.data.pageType] }}</div>
       <yunlin-form
         ref="yunlinForm"
         :config="formConfig"
@@ -24,25 +31,19 @@
               v-if="containsPageType(['create', 'edit', 'detail'])"
               :size="formConfig.formSize"
               @click.stop="cancleHandle"
-            >
-              {{ $t('back') }}
-            </el-button>
+            >{{ $t('back') }}</el-button>
             <el-button
               v-if="containsPageType(['create']) && filterPermission('project:save')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
-            >
-              {{ $t('add') }}
-            </el-button>
+            >{{ $t('add') }}</el-button>
             <el-button
               v-if="containsPageType(['edit']) && filterPermission('project:update')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
-            >
-              {{ $t('update') }}
-            </el-button>
+            >{{ $t('update') }}</el-button>
           </div>
         </template>
       </yunlin-form>
@@ -97,7 +98,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['app_projectId']),
     ...mapGetters('app', ['filterPermission', 'getDictByType', 'getDictNameByValue'])
   },
   activated() {
@@ -138,24 +138,11 @@ export default {
           span: 24,
           prop: 'schoolId',
           name: 'project.schoolId',
-          type: 'select-dynamic',
+          type: 'select',
+          className: 'select-block',
           rules: [{ required: true }],
-          component: 'toolSelectDynamic',
-          componentConfig: {
-            request: getProjectSchoolList,
-            requestParams: {
-              projectId: this.containsPageType(['create']) ? '' : this.app_projectId
-            },
-            itemProps: {
-              label: 'schoolName',
-              value: 'id'
-            },
-            propName: 'schoolId',
-            placeholder: 'project.schoolIdPlaceholder',
-            className: 'select-block',
-            mergeData: { target: 'schoolId' },
-            componentNames: ['select-dynamic']
-          }
+          placeholder: 'project.schoolId',
+          items: []
         },
         {
           // 项目负责人
@@ -241,11 +228,27 @@ export default {
       this.generateTitle()
       // 生成表单及验证规则
       this.generateForm()
+
+      if (this.containsPageType(['create'])) {
+        this.getProjectSchoolList()
+      }
     },
     afterFormDataUpdate() {
-      const { isLinkHousekeeper, levelList, scoreList } = this.formData
+      const { isLinkHousekeeper, levelList, scoreList, id } = this.formData
       this.$set(this.formData, 'isLinkHousekeeper', parseInt(isLinkHousekeeper))
       this.$set(this.formData, 'level', levelList || scoreList)
+      this.getProjectSchoolList(id)
+    },
+    getProjectSchoolList(projectId = '') {
+      getProjectSchoolList({
+        projectId
+      }).then((response) => {
+        response.forEach((item) => {
+          item.placeholderText = item.schoolName
+          item.value = item.id
+        })
+        this.formResetConfigItem([{ prop: 'schoolId', items: response }])
+      })
     }
   }
 }

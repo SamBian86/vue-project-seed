@@ -160,13 +160,13 @@
                 <!-- 修改 -->
                 <!-- && scope.row.maintenanceWorkerSign === 1 -->
                 <el-button
-                  v-if="filterPermission('maintenance:worker:set') && scope.row.maintenanceWorkerSign === 1 && userId !== scope.row.id"
+                  v-if="filterPermission('maintenance:worker:set') && scope.row.maintenanceWorkerSign === 0"
                   type="text"
                   :size="tableConfig.tableSearchSize"
                   @click="setHandle(scope.row)"
                 >{{ $t('maintenanceWorker.set') }}</el-button>
                 <el-button
-                  v-if="filterPermission('maintenance:worker:set') && scope.row.maintenanceWorkerSign === 1 && userId === scope.row.id"
+                  v-if="filterPermission('maintenance:worker:set') && scope.row.maintenanceWorkerSign === 1"
                   type="text"
                   disabled
                   :size="tableConfig.tableSearchSize"

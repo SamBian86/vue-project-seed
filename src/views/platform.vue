@@ -10,11 +10,18 @@
           status-icon
           @keyup.enter.native="postDataSubmitHandle()"
         >
-          <el-form-item prop="username">
+          <el-form-item v-if="mode === 'login'" prop="username">
             <el-input
               v-model="postData.username"
               class="login_input"
               :placeholder="$t('login.username')"
+            ></el-input>
+          </el-form-item>
+          <el-form-item v-if="mode === 'forget'" prop="mobile">
+            <el-input
+              v-model="postData.mobile"
+              class="login_input"
+              :placeholder="$t('login.mobile')"
             ></el-input>
           </el-form-item>
           <el-form-item v-if="mode === 'login'" prop="password">
@@ -33,14 +40,30 @@
               :placeholder="$t('login.newPassword')"
             ></el-input>
           </el-form-item>
+          <el-form-item v-if="mode === 'forget'" prop="confirmNewPassword">
+            <el-input
+              v-model="postData.confirmNewPassword"
+              class="login_input"
+              type="password"
+              :placeholder="$t('login.confirmNewPassword')"
+            ></el-input>
+          </el-form-item>
           <el-form-item v-if="mode === 'forget'" prop="vcode">
             <div class="captcha_container">
               <el-input
                 v-model="postData.vcode"
                 class="login_input"
                 :placeholder="$t('login.captcha')"
-              ></el-input>
-              <img v-if="captchaPath !== ''" :src="captchaPath" @click="getCaptcha()" />
+              >
+                <template slot="append">
+                  <el-button
+                    :disabled="captchaTag"
+                    class="captcha_btn"
+                    type="text"
+                    @click="getCaptchaHandle"
+                  >{{ !captchaTag ? $t('login.getCaptcha') : formatCaptcha }}</el-button>
+                </template>
+              </el-input>
             </div>
           </el-form-item>
           <div class="forget">
@@ -70,22 +93,29 @@
 
 <script>
 import { messages } from '@/i18n'
-import { getUUID } from '@/utils'
+import { getUUID, debounce } from '@/utils'
 import { getCaptcha } from '@/api/auth'
 import { authPlatformResetPassword } from '@/api/auth/platform'
+import { getMessageSmsByType } from '@/api/message/sms'
 import { mapActions, mapMutations } from 'vuex'
+import { validateMobile } from '@/utils/validator'
+
 export default {
   data() {
     return {
       skin: 0,
       mode: 'login',
+      formatCaptcha: '',
       i18nMessages: messages,
       captchaPath: '',
+      captchaTag: false,
       postData: {
         systemType: 'platform',
+        mobile: '',
         username: '',
         password: '',
         newPassword: '',
+        confirmNewPassword: '',
         uuid: '',
         vcode: ''
       }
@@ -113,17 +143,33 @@ export default {
         }
       } else {
         return {
-          username: [
+          mobile: [
+            {
+              required: true,
+              message: this.$t('validate.required'),
+              trigger: 'blur'
+            },
+            { validator: validateMobile, trigger: 'blur' }
+          ],
+          newPassword: [
             {
               required: true,
               message: this.$t('validate.required'),
               trigger: 'blur'
             }
           ],
-          newPassword: [
+          confirmNewPassword: [
             {
               required: true,
               message: this.$t('validate.required'),
+              trigger: 'blur'
+            },
+            {
+              validator: (rule, value, callback) => {
+                if (value !== this.postData.newPassword) {
+                  callback(new Error(this.$t('login.confirmNewPasswordMessage')))
+                }
+              },
               trigger: 'blur'
             }
           ],
@@ -140,7 +186,7 @@ export default {
   },
   created() {
     this.randomSkin()
-    this.getCaptcha()
+    // this.getCaptcha()
     // this.checkType()
   },
   methods: {
@@ -149,23 +195,11 @@ export default {
     ...mapActions('app', ['login']),
     changeMode() {
       const { mode } = this
-      this.mode = mode === 'login' ? 'forget' : 'login'
-      this.captchaPath = ''
-      this.$set(this, 'postData', {
-        systemType: 'platform',
-        tenantCode: '',
-        username: '',
-        password: '',
-        newPassword: '',
-        uuid: '',
-        vcode: ''
-      })
+      this.$set(this, 'captchaPath', '')
+      this.$set(this, 'mode', mode === 'login' ? 'forget' : 'login')
+      this.$set(this.postData, 'systemType', 'platform')
       this.$nextTick(() => {
-        const { mode } = this
         this.$refs['form'].clearValidate()
-        if (mode === 'forget') {
-          this.getCaptcha()
-        }
       })
     },
     randomSkin() {
@@ -196,7 +230,12 @@ export default {
               this.$message.error(error)
             })
         } else {
-          authPlatformResetPassword(this.postData)
+          const { newPassword, mobile, vcode } = this.postData
+          authPlatformResetPassword({
+            newPassword,
+            username: mobile,
+            vcode
+          })
             .then((response) => {
               console.log(response)
             })
@@ -205,6 +244,42 @@ export default {
             })
         }
       })
+    },
+    // 获取验证码
+    getCaptchaHandle() {
+      const { captchaTag } = this
+      const { mobile } = this.postData
+      if (captchaTag) {
+        return false
+      } else {
+        if (mobile && mobile.length === 11) {
+          getMessageSmsByType({
+            type: 2,
+            mobile
+          }).then((response) => {
+            this.captchaTimer()
+          })
+        } else {
+          this.$message.error(this.$t('login.mobile'))
+        }
+      }
+    },
+    captchaTimer() {
+      let second = 60
+      const countSecond = () => {
+        --second
+        if (second !== 0) {
+          this.$set(this, 'formatCaptcha', this.$t('validate.format_captcha', { second }))
+          this.$set(this, 'captchaTag', true)
+          countSecondAction()
+        } else {
+          // formatCaptcha
+          this.$set(this, 'formatCaptcha', '')
+          this.$set(this, 'captchaTag', false)
+        }
+      }
+      const countSecondAction = debounce(countSecond, 1000)
+      countSecondAction()
     }
   }
 }

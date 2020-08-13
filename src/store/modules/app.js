@@ -4,7 +4,7 @@ import { authPropertyLogin } from '@/api/auth/property'
 import { getDictTypeListAll } from '@/api/sys/dictType'
 import { getMenuPermissionsList } from '@/api/sys/menu'
 
-import { setToken, getToken, setProjectId, getProjectId, setSystemType, getSystemType } from '@/utils/cookie'
+import { setToken, getToken, setProjectId, getProjectId, getTenantCode, setSystemType, getSystemType } from '@/utils/cookie'
 import { getDictStore, getPermissionStore } from '@/utils/localStorage'
 
 export default {
@@ -15,6 +15,7 @@ export default {
     token: getToken(),
     systemType: getSystemType(),
     projectId: getProjectId(),
+    tenantCode: getTenantCode(),
     version: process.env.VUE_APP_VERSION,
     env: process.env.VUE_APP_NODE_ENV,
     dictTag: false, // false代表需要获取数据
@@ -32,6 +33,9 @@ export default {
     setProjectId: (state, projectId) => {
       state.projectId = projectId
     },
+    setTenantCode: (state, tenantCode) => {
+      state.tenantCode = tenantCode
+    },
     setDictStore(state, dictStore) {
       state.dictStore = dictStore
     },
@@ -48,7 +52,7 @@ export default {
     setPermissionTag(state, permissionTag) {
       state.permissionTag = permissionTag
     },
-    cleantPermissionStore(state) {
+    cleanPermissionStore(state) {
       state.permissionStore = Array.from(state.emptyList)
       state.permissionTag = false
     },
@@ -69,8 +73,7 @@ export default {
             const token = response.token
             commit('setToken', token)
             commit('setSystemType', params.systemType)
-            setToken(token) // 设置cookie
-            setSystemType(params.systemType)
+            commit('setTenantCode', params.tenantCode)
             resolve(response)
           })
           .catch(error => {

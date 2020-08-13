@@ -2,6 +2,7 @@ const getters = {
   app_token: state => state.app.token,
   app_systemType: state => state.app.systemType,
   app_projectId: state => state.app.projectId,
+  app_tenantCode: state => state.app.tenantCode,
   app_permissionStore: state => state.app.permissionStore,
   layout_sidebar_fold: state => state.layout.sidebar.fold,
   layout_sidebar_layoutSkin: state => state.layout.sidebar.layoutSkin,

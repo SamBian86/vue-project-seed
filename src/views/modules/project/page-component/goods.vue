@@ -149,7 +149,7 @@ export default {
     },
     handleAdd(type) {
       let addTag = false
-      const items = Array.from(this[type])
+      const items = Array.from(this[type] || [])
       items.map((item) => {
         if (item.goodsName === '') {
           addTag = true
