@@ -1,3 +1,4 @@
+import { mapGetters, mapMutations } from 'vuex'
 import commonMixin from '@/mixins/common-mixin'
 // import { getInstImage } from '@/api/activiti/his'
 export default {
@@ -57,7 +58,11 @@ export default {
       tableCurrent: null // 如果highlightCurrentRow是true，开启单选，选中会将值保存在此处
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['layout_tabs']),
+    ...mapGetters('page', ['filterMenuByMenuPath']),
+    ...mapGetters('layout', ['filterTabByName'])
+  },
   created() {
     // console.log('table default mixin created')
   },
@@ -69,6 +74,37 @@ export default {
     // console.log('table default mixin activated')
   },
   methods: {
+    ...mapMutations('layout', ['setTabActive', 'setMenuActive', 'setTabs']),
+    gotoRouteHandle(path, query) {
+      const routes = this.filterMenuByMenuPath(path)
+      if (routes.length === 1) {
+        // 如果有该动态路由
+        const route = routes[0]
+        const tab = [
+          {
+            name: route.name,
+            params: {},
+            query: {},
+            menuId: route.meta.menuIndex,
+            title: route.meta.title,
+            isTab: route.meta.isTab,
+            iframeURL: route.meta.iframeURL
+          }
+        ]
+
+        const hasTab = this.filterTabByName(route.name).length === 1 || false
+
+        this.setMenuActive(route.meta.menuIndex)
+        this.setTabActive(route.name)
+        if (!hasTab) {
+          // 如果还没有这个tab选项，需要新增tabs
+          this.setTabs([...this.layout_tabs, ...tab])
+        }
+        this.$router.push({ path: route.path, query: { ...query } })
+      } else {
+        console.log('没有此动态路由')
+      }
+    },
     generateTable() {
       const { tableSearchParams, tableColumnAction } = this
       const { tableHeadReadOnly } = this.tableConfig
