@@ -116,7 +116,7 @@ export default {
       const { formats } = this
       const { format } = this.config
       const reg = new RegExp('(' + formats[format].join('|') + ')')
-      fileList.map(item => {
+      fileList.map((item) => {
         if (item.raw) {
           const fileSuffix = item.raw.name.toLowerCase().replace(/\.(\w+)/, '$1')
           if (!reg.test(fileSuffix)) {
@@ -146,7 +146,7 @@ export default {
         file: file.raw,
         ...extraParams
       })
-        .then(response => {
+        .then((response) => {
           this.uploadFileList = []
           this.uploadQueue = uploadQueue
 
@@ -159,16 +159,71 @@ export default {
             uploadRequestCallBack()
           }
         })
-        .catch(message => {
-          this.$notify({
-            message,
-            type: 'warning',
-            dangerouslyUseHTMLString: true,
-            duration: 0
+        .catch((message) => {
+          const { failNum, successNum, errorList } = message
+          const messageTitleHtml = `
+          <div class="message_title">
+            <div class="message_fail">失败<b>${failNum}</b>条</div>
+            <div class="message_success">成功<b>${successNum}</b>条</div>
+          </div>`
+          let messageContentHtml = ``
+          let messageContentItemHtml = ``
+          errorList.map((item) => {
+            messageContentItemHtml += `<div class="message_content_item"><b>【${item.rowNum}】</b> ${item.errorMsg}</div>`
           })
+          messageContentHtml = `<div class="message_content">${messageContentItemHtml}</div>`
+          const messageHtml = `<div>
+            ${messageTitleHtml}
+            ${messageContentHtml}
+          </div>`
+          if (errorList.length !== 0) {
+            this.$notify({
+              customClass: 'message_notify',
+              title: this.$t('prompt.importTitle'),
+              message: messageHtml,
+              type: 'warning',
+              dangerouslyUseHTMLString: true,
+              duration: 0
+            })
+          }
         })
     }
   }
 }
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.message_notify {
+  .el-notification__group {
+    width: 100%;
+    .message_title {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .message_fail {
+      flex: 1;
+      b {
+        color: #f56c6c;
+      }
+    }
+
+    .message_success {
+      flex: 1;
+      text-align: right;
+      b {
+        color: #67c23a;
+      }
+    }
+
+    .message_content {
+      .message_content_item {
+        color: #666;
+        b {
+          color: #f56c6c;
+        }
+      }
+    }
+  }
+}
+</style>

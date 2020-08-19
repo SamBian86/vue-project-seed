@@ -75,6 +75,23 @@ service.interceptors.response.use(
     const routerName = getSystemType() === 'platform' ? 'platform' : 'login'
     if (code === 0) {
       return data
+    } else if (response.data instanceof Blob) {
+      const filename = decodeURI(response['headers']['content-disposition'].toLowerCase().split('filename=')[1])
+      const reader = new FileReader()
+      reader.onload = function(e) {
+        const url = e.target.result
+        // 转换完成，创建一个a标签用于下载
+        const filelink = document.createElement('a')
+        filelink.download = filename
+        filelink.href = url
+        document.body.appendChild(filelink)
+        filelink.click()
+        // 释放url
+        window.URL.revokeObjectURL(url)
+        document.body.removeChild(filelink)
+      }
+      reader.readAsDataURL(response.data) // 转换为base64
+      return response.data
     } else {
       // 直接在此处处理 token过期
       if (code === 401 || code === 10001) {
@@ -89,6 +106,11 @@ service.interceptors.response.use(
         // 调用方在页面处理
         if (code === 10004 || code === 10007 || code === 10008 || code === 10018 || code === 100006025) {
           return Promise.reject(msg)
+        }
+
+        // 文件导入处理
+        if (code === 10023) {
+          return Promise.reject(data)
         }
 
         // 服务器内部错误

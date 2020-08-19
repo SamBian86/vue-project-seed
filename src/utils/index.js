@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { getToken } from '@/utils/cookie'
+import { getToken, getProjectId } from '@/utils/cookie'
 /**
  * 获取uuid
  */
@@ -59,22 +59,11 @@ export const debounce = (fn, time) => {
   }
 }
 
-// 导出文件
-export const exportFile = (url, params) => {
-  params._t = new Date().getTime()
-  params.token = getToken()
-  const _params = '?'.concat(
-    Object.entries(params)
-      .map(item => item.join('='))
-      .join('&')
-  )
-  window.location.href = process.env.VUE_APP_API_URL + url + _params
-}
-
 // 在线设计
-export const openNewTab = (url, params) => {
+export const openNewTab = (url, params = {}) => {
   params._t = new Date().getTime()
   params.token = getToken()
+  params.project_id = getProjectId()
   const _params = '?'.concat(
     Object.entries(params)
       .map(item => item.join('='))
@@ -84,9 +73,10 @@ export const openNewTab = (url, params) => {
 }
 
 // 生成url
-export const generateUrl = (url, params) => {
+export const generateUrl = (url, params = {}) => {
   params._t = new Date().getTime()
   params.token = getToken()
+  params.project_id = getProjectId()
   const _params = '?'.concat(
     Object.entries(params)
       .map(item => item.join('='))
