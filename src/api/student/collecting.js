@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 
 // 物品领用、退还记录
 
@@ -7,7 +6,12 @@ import { exportFile } from '@/utils'
 // GET
 // /student/collecting/export
 export function exportStudentCollecting(params = {}) {
-  exportFile(`/student/collecting/export`, params)
+  return request({
+    url: `/student/collecting/export`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 分页

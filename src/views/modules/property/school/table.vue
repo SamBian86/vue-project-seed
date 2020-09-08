@@ -60,14 +60,14 @@
           class="table-search-form"
           :inline="true"
           :model="tableSearchParams"
-          @keyup.enter.native="searchHandle"
+          @keyup.enter.native="clearHandle"
         >-->
         <!-- 查询 -->
         <!-- <el-form-item>
             <el-button
               v-if="filterPermission('property:school:view')"
               :size="tableConfig.tableSearchSize"
-              @click="searchHandle()"
+              @click="clearHandle"
             >{{ $t('query') }}</el-button>
         </el-form-item>-->
         <!-- 创建 -->

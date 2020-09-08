@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 // 学生管理
 
 // 保存
@@ -29,7 +28,12 @@ export function editStudent(data = {}) {
 // /student/export/{excelType}
 export function exportStudent(params = {}) {
   const { excelType } = params
-  exportFile(`/student/export/${excelType}`, params)
+  return request({
+    url: `/student/export/${excelType}`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 批量导入学生信息

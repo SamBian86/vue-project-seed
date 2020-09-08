@@ -16,7 +16,7 @@
           class="table-search-form"
           :inline="true"
           :model="tableSearchParams"
-          @keyup.enter.native="searchHandle"
+          @keyup.enter.native="clearHandle"
         >
           <el-form-item>
             <el-input
@@ -50,7 +50,7 @@
             <el-button
               v-if="filterPermission('school:room:view')"
               :size="tableConfig.tableSearchSize"
-              @click="searchHandle()"
+              @click="clearHandle"
             >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->

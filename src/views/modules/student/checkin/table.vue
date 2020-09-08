@@ -12,7 +12,12 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableSearchParams"
+          @keyup.enter.native="clearHandle"
+        >
           <el-form-item>
             <el-input
               v-model="tableSearchParams.nameOrPhoneOrNo"
@@ -30,7 +35,12 @@
               clearable
               @clear="clearHandle"
             >
-              <el-option v-for="(item, index) in branchList" :key="index" :label="item.branchName" :value="item.id"></el-option>
+              <el-option
+                v-for="(item, index) in branchList"
+                :key="index"
+                :label="item.branchName"
+                :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -56,10 +66,8 @@
             <el-button
               v-if="filterPermission('student:checkin:view')"
               :size="tableConfig.tableSearchSize"
-              @click="searchHandle()"
-            >
-              {{ $t('query') }}
-            </el-button>
+              @click="clearHandle"
+            >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
           <!-- <el-form-item>
@@ -71,7 +79,7 @@
             >
               {{ $t('add') }}
             </el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 下载模板 -->
           <!--<el-form-item>
             <el-button
@@ -104,9 +112,7 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
-            >
-              {{ $t('export') }}
-            </el-button>
+            >{{ $t('export') }}</el-button>
           </el-form-item>
           <!-- 批量删除 -->
           <!-- <el-form-item>
@@ -118,7 +124,7 @@
             >
               {{ $t('deleteBatch') }}
             </el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
@@ -136,7 +142,13 @@
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="100">
+        <el-table-column
+          :label="$t('handle')"
+          align="center"
+          header-align="center"
+          fixed="right"
+          width="100"
+        >
           <template slot-scope="scope">
             <!-- 上下架 -->
             <!--<el-button
@@ -158,9 +170,7 @@
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="detailHandle(scope.row)"
-            >
-              {{ $t('detail') }}
-            </el-button>
+            >{{ $t('detail') }}</el-button>
             <!-- 修改 -->
             <!-- <el-button
               v-if="filterPermission('student:checkin:update')"
@@ -169,7 +179,7 @@
               @click="editHandle(scope.row)"
             >
               {{ $t('update') }}
-            </el-button> -->
+            </el-button>-->
             <!-- 单个删除 -->
             <!-- <el-button
               v-if="filterPermission('student:checkin:delete')"
@@ -178,7 +188,7 @@
               @click="deleteHandle([scope.row.id])"
             >
               {{ $t('delete') }}
-            </el-button> -->
+            </el-button>-->
             <!-- 上移 -->
             <!--<el-button
               v-if="filterPermission('student:checkin:exchange') && scope.$index !== 0"
@@ -299,7 +309,7 @@ export default {
       this.getPropertySchoolBranchList()
     },
     getPropertySchoolBranchList() {
-      getPropertySchoolBranchList().then(response => {
+      getPropertySchoolBranchList().then((response) => {
         this.branchList = response
       })
     }

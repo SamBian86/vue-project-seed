@@ -49,10 +49,12 @@ export function getMaintenanceWorkerPageList(params = {}) {
 // 生成维修码
 // GET
 // /maintenance/worker/qrcode
-export function getMaintenanceWorkerQRcode() {
+export function getMaintenanceWorkerQRcode(params = {}) {
   return request({
     url: `/maintenance/worker/qrcode`,
-    method: 'get'
+    method: 'get',
+    responseType: 'blob',
+    params
   })
 }
 

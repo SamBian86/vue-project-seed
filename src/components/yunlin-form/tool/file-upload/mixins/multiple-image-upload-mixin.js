@@ -17,14 +17,22 @@ export default {
   },
   methods: {
     multipleImageUploadInit() {
-      console.log('multipleImageUploadInit')
       const { propName } = this.config
       const { pageData } = this
+      const resourcesList = pageData[propName]
       this.$refs['file-upload-multiple-image'] && this.$refs['file-upload-multiple-image'].clearFiles()
-      if (pageData[propName] && pageData[propName].length !== 0) {
-        this.resourcesList = [...pageData[propName]]
+      if (resourcesList && resourcesList.length !== 0) {
+        let _resourcesList = []
+        if (typeof resourcesList[0] === 'string') {
+          resourcesList.map(item => {
+            _resourcesList.push({ url: item })
+          })
+        } else {
+          _resourcesList = [...resourcesList]
+        }
+        this.$set(this, 'resourcesList', _resourcesList)
       } else {
-        this.resourcesList = []
+        this.$set(this, 'resourcesList', [])
       }
       this.uploading = false
       this.multipleImageList = []

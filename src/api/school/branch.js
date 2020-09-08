@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 // 学院管理
 
 // 列表
@@ -63,7 +62,12 @@ export function editSchoolBranch(data = {}) {
 // /school/branch/export/{excelType}
 export function exportSchoolBranch(params = {}) {
   const { excelType } = params
-  exportFile(`/school/branch/export/${excelType}`, params)
+  return request({
+    url: `/school/branch/export/${excelType}`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 批量导入楼栋信息

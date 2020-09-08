@@ -12,7 +12,12 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableSearchParams"
+          @keyup.enter.native="clearHandle"
+        >
           <el-form-item>
             <el-input
               v-model="tableSearchParams.userName"
@@ -24,17 +29,8 @@
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model="tableSearchParams.buildingName"
-              :placeholder="$t('regulationsCheck.buildingName')"
-              :size="tableConfig.tableSearchSize"
-              clearable
-              @clear="clearHandle"
-            ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-input
-              v-model="tableSearchParams.floorName"
-              :placeholder="$t('regulationsCheck.floorName')"
+              v-model="tableSearchParams.buildingOrFloor"
+              :placeholder="$t('regulationsCheck.buildingOrFloor')"
               :size="tableConfig.tableSearchSize"
               clearable
               @clear="clearHandle"
@@ -49,15 +45,22 @@
               @clear="clearHandle"
             ></el-input>
           </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="tableSearchParams.studentName"
+              :placeholder="$t('regulationsCheck.studentName')"
+              :size="tableConfig.tableSearchSize"
+              clearable
+              @clear="clearHandle"
+            ></el-input>
+          </el-form-item>
           <!-- 查询 -->
           <el-form-item>
             <el-button
               v-if="filterPermission('regulations:check:view')"
               :size="tableConfig.tableSearchSize"
-              @click="searchHandle()"
-            >
-              {{ $t('query') }}
-            </el-button>
+              @click="clearHandle"
+            >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
           <!-- <el-form-item>
@@ -69,7 +72,7 @@
             >
               {{ $t('add') }}
             </el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 下载模板 -->
           <!--<el-form-item>
             <el-button
@@ -102,9 +105,7 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
-            >
-              {{ $t('export') }}
-            </el-button>
+            >{{ $t('export') }}</el-button>
           </el-form-item>
           <!-- 批量删除 -->
           <!-- <el-form-item>
@@ -116,7 +117,7 @@
             >
               {{ $t('deleteBatch') }}
             </el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
@@ -134,7 +135,13 @@
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="100">
+        <el-table-column
+          :label="$t('handle')"
+          align="center"
+          header-align="center"
+          fixed="right"
+          width="100"
+        >
           <template slot-scope="scope">
             <!-- 上下架 -->
             <!--<el-button
@@ -156,9 +163,7 @@
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="detailHandle(scope.row)"
-            >
-              {{ $t('detail') }}
-            </el-button>
+            >{{ $t('detail') }}</el-button>
             <!-- 修改 -->
             <!-- <el-button
               v-if="filterPermission('regulations:check:update')"
@@ -167,7 +172,7 @@
               @click="editHandle(scope.row)"
             >
               {{ $t('update') }}
-            </el-button> -->
+            </el-button>-->
             <!-- 单个删除 -->
             <!-- <el-button
               v-if="filterPermission('regulations:check:delete')"
@@ -176,7 +181,7 @@
               @click="deleteHandle([scope.row.id])"
             >
               {{ $t('delete') }}
-            </el-button> -->
+            </el-button>-->
             <!-- 上移 -->
             <!--<el-button
               v-if="filterPermission('regulations:check:exchange') && scope.$index !== 0"

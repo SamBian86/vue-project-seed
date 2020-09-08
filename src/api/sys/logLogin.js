@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 
 // 登录日志
 
@@ -7,7 +6,12 @@ import { exportFile } from '@/utils'
 // GET
 // /sys/log/login/export
 export function exportLogLogin(params = {}) {
-  exportFile(`/sys/log/login/export`, params)
+  return request({
+    url: `/sys/log/login/export`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 分页

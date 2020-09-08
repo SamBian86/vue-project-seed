@@ -1,0 +1,15 @@
+{
+  "form代码片段_text_普通文本": {
+    "prefix": "sp_form_item_text",
+    "body": [
+      "{\r",
+      "  // $1\r",
+      "  span: 24,\r",
+      "  prop: '字段$2',\r",
+      "  name: '国际化$3',\r",
+      "  type: 'label-text'\r",
+      "},$4"
+    ],
+    "description": "form代码片段_text_普通文本"
+  }
+}

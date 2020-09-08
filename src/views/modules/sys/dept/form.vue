@@ -88,7 +88,7 @@ export default {
       },
       // 初始化数据定义
       formDefaultData: {
-        pid: 0
+        // pid: 0
       },
       // 用于处理表单的隐藏与显示禁用行为
       formAction: []

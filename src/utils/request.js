@@ -3,6 +3,7 @@ import { Message } from 'element-ui'
 import router from '@/router'
 import store from '../store'
 import { getToken, getLanguage, getProjectId, getSystemType } from '@/utils/cookie'
+// import requestMessage from '@/utils/requestMessage'
 
 // 创建axios实例
 const service = axios.create({
@@ -73,28 +74,31 @@ service.interceptors.response.use(
   response => {
     const { code, data, msg } = response.data
     const routerName = getSystemType() === 'platform' ? 'platform' : 'login'
-    if (code === 0) {
-      return data
-    } else if (response.data instanceof Blob) {
-      const filename = decodeURI(response['headers']['content-disposition'].toLowerCase().split('filename=')[1])
-      const reader = new FileReader()
-      reader.onload = function(e) {
-        const url = e.target.result
-        // 转换完成，创建一个a标签用于下载
-        const filelink = document.createElement('a')
-        filelink.download = filename
-        filelink.href = url
-        document.body.appendChild(filelink)
-        filelink.click()
-        // 释放url
-        window.URL.revokeObjectURL(url)
-        document.body.removeChild(filelink)
+    // const message = requestMessage.get(code)
+    // 需要重新登录的报错
+    const loginAgain = [100005001, 100005002, 401]
+
+    if (code !== 0) {
+      if (response.data instanceof Blob) {
+        const filename = decodeURI(response['headers']['content-disposition'].toLowerCase().split('filename=')[1])
+        const reader = new FileReader()
+        reader.onload = function(e) {
+          const url = e.target.result
+          // 转换完成，创建一个a标签用于下载
+          const filelink = document.createElement('a')
+          filelink.download = filename
+          filelink.href = url
+          document.body.appendChild(filelink)
+          filelink.click()
+          // 释放url
+          window.URL.revokeObjectURL(url)
+          document.body.removeChild(filelink)
+        }
+        reader.readAsDataURL(response.data) // 转换为base64
+        return response.data
       }
-      reader.readAsDataURL(response.data) // 转换为base64
-      return response.data
-    } else {
-      // 直接在此处处理 token过期
-      if (code === 401 || code === 10001) {
+      // 需要重新登录的报错
+      if (loginAgain.includes(code)) {
         Message({
           message: msg,
           type: 'error',
@@ -102,23 +106,15 @@ service.interceptors.response.use(
         })
         store.commit('app/logout')
         router.replace({ name: routerName })
-      } else {
-        // 调用方在页面处理
-        if (code === 10004 || code === 10007 || code === 10008 || code === 10018 || code === 100006025) {
-          return Promise.reject(msg)
-        }
-
-        // 文件导入处理
-        if (code === 10023) {
-          return Promise.reject(data)
-        }
-
-        // 服务器内部错误
-        if (code === 500) {
-          return Promise.reject(msg)
-        }
-        return Promise.reject(msg)
+        return false
       }
+
+      if (code === 10023) {
+        return Promise.reject(response.data.data)
+      }
+      return Promise.reject(msg)
+    } else {
+      return data
     }
   },
   error => {

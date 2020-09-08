@@ -47,7 +47,7 @@
                 v-for="(item, index) in projectList"
                 :key="index"
                 @click.native="switchTenantHandle(item.id)"
-              >{{ item.label }}</el-dropdown-item>
+              >{{ item.projectName }}</el-dropdown-item>
             </el-dropdown-menu>
             <!-- 这个空标签一定要留着，不然要你好看 -->
             <!-- <el-dropdown-menu v-else></el-dropdown-menu> -->
@@ -156,11 +156,9 @@ export default {
     setTimeout(() => {
       if (this.user_userInfo.resetPassword === 1) {
         this.checkResetPassword()
-        return false
       }
       if (systemType === 'property') {
         this.getProjectPermissionList()
-        return false
       }
     }, 1000)
   },
@@ -179,6 +177,8 @@ export default {
         if (len === 1) {
           if (projectId === '') {
             this.switchTenantHandle(response[0]['id'])
+          } else {
+            this.projectName = response[0]['projectName']
           }
         } else if (len > 1) {
           if (projectId === '') {

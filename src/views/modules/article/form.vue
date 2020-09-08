@@ -33,13 +33,13 @@
               @click.stop="cancleHandle"
             >{{ $t('back') }}</el-button>
             <el-button
-              v-if="containsPageType(['create']) && filterPermission('school:article:save')"
+              v-if="containsPageType(['create']) && filterPermission('article:save')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"
             >{{ $t('add') }}</el-button>
             <el-button
-              v-if="containsPageType(['edit']) && filterPermission('school:article:update')"
+              v-if="containsPageType(['edit']) && filterPermission('article:update')"
               type="primary"
               :size="formConfig.formSize"
               @click.stop="submitHandle"

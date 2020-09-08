@@ -178,9 +178,7 @@ export default {
         // 多个图片上传
         if (type === 'multiple-image') {
           if (newData && newData.length !== 0) {
-            this.resourcesList = [...newData]
-          } else {
-            this.resourcesList = []
+            this.init()
           }
         }
         // 多个文件上传

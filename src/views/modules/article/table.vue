@@ -16,7 +16,7 @@
           class="table-search-form"
           :inline="true"
           :model="tableSearchParams"
-          @keyup.enter.native="searchHandle"
+          @keyup.enter.native="clearHandle"
         >
           <el-form-item>
             <el-input
@@ -30,15 +30,15 @@
           <!-- 查询 -->
           <el-form-item>
             <el-button
-              v-if="filterPermission('school:article:view')"
+              v-if="filterPermission('article:view')"
               :size="tableConfig.tableSearchSize"
-              @click="searchHandle()"
+              @click="clearHandle"
             >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
           <el-form-item>
             <el-button
-              v-if="filterPermission('school:article:save')"
+              v-if="filterPermission('article:save')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
@@ -47,7 +47,7 @@
           <!-- 下载模板 -->
           <!--<el-form-item>
             <el-button
-              v-if="filterPermission('school:article:downloadExcel')"
+              v-if="filterPermission('article:downloadExcel')"
               type="success"
               :size="tableConfig.tableSearchSize"
               @click="downloadHandle({
@@ -59,7 +59,7 @@
           </el-form-item>-->
           <!-- 导入 -->
           <!--<el-form-item>
-            <button-import v-if="filterPermission('school:article:importExcel')" :config="importConfig"></button-import>
+            <button-import v-if="filterPermission('article:importExcel')" :config="importConfig"></button-import>
           </el-form-item>-->
           <!-- 清空选中 -->
           <!--<el-form-item>
@@ -72,7 +72,7 @@
           <!-- 导出 -->
           <!--<el-form-item>
             <el-button
-              v-if="filterPermission('school:article:export')"
+              v-if="filterPermission('article:export')"
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="exportHandle()"
@@ -81,7 +81,7 @@
           <!-- 批量删除 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('school:article:delete')"
+              v-if="filterPermission('article:delete')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="deleteSectionHandle()"
@@ -90,7 +90,7 @@
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
-              v-if="filterPermission('school:article:xxx')"
+              v-if="filterPermission('article:xxx')"
               type="danger"
               :size="tableConfig.tableSearchSize"
               @click="customSectionHandle({
@@ -114,7 +114,7 @@
           <template slot-scope="scope">
             <!-- 上下架 -->
             <!--<el-button
-              v-if="filterPermission('school:article:display')"
+              v-if="filterPermission('article:display')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="customHandle({
@@ -128,42 +128,42 @@
             >{{ scope.row.XXX === 0 ? $t('on') : $t('off') }}</el-button>-->
             <!-- 详情 -->
             <el-button
-              v-if="filterPermission('school:article:view')"
+              v-if="filterPermission('article:view')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="detailHandle(scope.row)"
             >{{ $t('detail') }}</el-button>
             <!-- 修改 -->
             <el-button
-              v-if="filterPermission('school:article:update')"
+              v-if="filterPermission('article:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
             >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
             <el-button
-              v-if="filterPermission('school:article:delete')"
+              v-if="filterPermission('article:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle([scope.row.id])"
             >{{ $t('delete') }}</el-button>
             <!-- 上移 -->
             <!--<el-button
-              v-if="filterPermission('school:article:exchange') && scope.$index !== 0"
+              v-if="filterPermission('article:exchange') && scope.$index !== 0"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="upHandle(scope.row, scope.$index)"
             >{{ $t('up') }}</el-button>-->
             <!-- 下移 -->
             <!--<el-button
-              v-if="filterPermission('school:article:exchange') && scope.$index !== limit - 1"
+              v-if="filterPermission('article:exchange') && scope.$index !== limit - 1"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="downHandle(scope.row, scope.$index)"
             >{{ $t('down') }}</el-button>-->
             <!-- 单个操作 -->
             <!--<el-button
-              v-if="filterPermission('school:article:xxx')"
+              v-if="filterPermission('article:xxx')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="customHandle({

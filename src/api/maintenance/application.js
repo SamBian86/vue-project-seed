@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 
 // 报修记录
 
@@ -7,7 +6,12 @@ import { exportFile } from '@/utils'
 // GET
 // /maintenance/application/export
 export function exportMaintenanceApplication(params = {}) {
-  exportFile(`/maintenance/application/export`, params)
+  return request({
+    url: `/maintenance/application/export`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 分页

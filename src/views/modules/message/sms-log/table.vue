@@ -16,7 +16,7 @@
           class="table-search-form"
           :inline="true"
           :model="tableSearchParams"
-          @keyup.enter.native="searchHandle"
+          @keyup.enter.native="clearHandle"
         >
           <el-form-item>
             <el-input
@@ -45,7 +45,7 @@
           </el-form-item>
           <!-- 查询 -->
           <el-form-item>
-            <el-button :size="tableConfig.tableSearchSize" @click="searchHandle()">{{ $t('query') }}</el-button>
+            <el-button :size="tableConfig.tableSearchSize" @click="clearHandle">{{ $t('query') }}</el-button>
           </el-form-item>
           <el-form-item>
             <el-button

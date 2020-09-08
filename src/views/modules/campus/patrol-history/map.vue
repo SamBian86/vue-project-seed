@@ -101,16 +101,19 @@ export default {
       } else {
         // 载入高德地图和UI组件
         initAMapApiLoader({ key: this.key }).then(() => {
-          this.initMap()
+          setTimeout(() => {
+            this.initMap()
+          }, 100)
         })
       }
     },
     // 初始化地图
     initMap() {
+      const { lng, lat } = this.locations
       this.map = new window.AMap.Map('container', {
         resizeEnable: true,
         zoom: 11,
-        center: [116.397428, 39.90923]
+        center: lng && lat ? [lng, lat] : [116.405467, 39.907761]
         // 高德地图自定义style 不用可以去掉
         // mapStyle: 'amap://styles/ef58c0eb692d34c3616db1163054a205'
       })
@@ -214,13 +217,14 @@ export default {
     },
     // marker
     addMarker() {
+      const { lng, lat } = this.locations
       if (this.marker != null) {
         return
       }
       this.map.plugin('AMap.Marker', () => {
         this.marker = new window.AMap.Marker({
-          icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-          position: [116.405467, 39.907761],
+          // icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+          position: lng && lat ? [lng, lat] : [116.405467, 39.907761],
           draggable: true
         })
         this.marker.setMap(this.map)

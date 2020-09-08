@@ -16,7 +16,7 @@
           class="table-search-form"
           :inline="true"
           :model="tableSearchParams"
-          @keyup.enter.native="searchHandle"
+          @keyup.enter.native="clearHandle"
         >
           <el-form-item>
             <el-input
@@ -66,7 +66,7 @@
             <el-button
               v-if="filterPermission('maintenance:worker:view')"
               :size="tableConfig.tableSearchSize"
-              @click="searchHandle()"
+              @click="clearHandle"
             >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
@@ -79,8 +79,13 @@
             >{{ $t('add') }}</el-button>
           </el-form-item>
           <!-- 生成二维码 -->
-          <el-form-item v-if="QRCode !== ''">
-            <el-popover placement="bottom" width="200" trigger="hover">
+          <el-form-item>
+            <el-button
+              type="primary"
+              :size="tableConfig.tableSearchSize"
+              @click="getMaintenanceWorkerQRcode"
+            >{{ $t('maintenanceWorker.qrcode') }}</el-button>
+            <!-- <el-popover placement="bottom" trigger="hover">
               <div>
                 <el-image style="width: 200px; height: 200px" :src="QRCode" fit="fit"></el-image>
               </div>
@@ -89,7 +94,7 @@
                 type="primary"
                 :size="tableConfig.tableSearchSize"
               >{{ $t('maintenanceWorker.qrcode') }}</el-button>
-            </el-popover>
+            </el-popover>-->
           </el-form-item>
           <!-- 下载模板 -->
           <!--<el-form-item>
@@ -320,12 +325,10 @@ export default {
       //   { label: this.$t('aaa'), value: 0 },
       //   { label: this.$t('aaa'), value: 1 }
       // ]
-      this.getMaintenanceWorkerQRcode()
+      // this.getMaintenanceWorkerQRcode()
     },
     getMaintenanceWorkerQRcode() {
-      getMaintenanceWorkerQRcode().then((response) => {
-        this.qrcode = response
-      })
+      getMaintenanceWorkerQRcode()
     },
     // 创建
     createHandle(options = { componentNames: ['yunlin-table'] }) {

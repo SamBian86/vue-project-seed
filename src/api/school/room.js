@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 // 学校房间信息表
 
 // 保存
@@ -29,7 +28,12 @@ export function editSchoolRoom(data = {}) {
 // /school/room/export/{excelType}
 export function exportSchoolRoom(params = {}) {
   const { excelType } = params
-  exportFile(`/school/room/export/${excelType}`, params)
+  return request({
+    url: `/school/room/export/${excelType}`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 批量导入房间信息

@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 
 // 学生入宿、离宿管理
 
@@ -7,7 +6,12 @@ import { exportFile } from '@/utils'
 // GET
 // /student/dormitory/export
 export function exportStudentDormitory(params = {}) {
-  exportFile(`/student/dormitory/export`, params)
+  return request({
+    url: `/student/dormitory/export`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 分页

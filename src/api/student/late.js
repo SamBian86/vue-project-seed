@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 
 // 晚出晚归信息
 
@@ -7,7 +6,12 @@ import { exportFile } from '@/utils'
 // GET
 // /student/late/export
 export function exportStudentLate(params = {}) {
-  exportFile(`/student/late/export`, params)
+  return request({
+    url: `/student/late/export`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 分页

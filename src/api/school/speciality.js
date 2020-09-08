@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 
 // 学校专业管理
 
@@ -30,7 +29,12 @@ export function editSchoolSpeciality(data = {}) {
 // /school/speciality/export/{excelType}
 export function exportSchoolSpeciality(params = {}) {
   const { excelType } = params
-  exportFile(`/school/speciality/export/${excelType}`, params)
+  return request({
+    url: `/school/speciality/export/${excelType}`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 批量导入专业信息

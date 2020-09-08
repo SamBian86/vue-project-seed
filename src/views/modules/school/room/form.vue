@@ -144,7 +144,9 @@ export default {
           component: 'toolSelectDynamic',
           componentConfig: {
             request: getSchoolBuildingList,
-            requestParams: {},
+            requestParams: {
+              buildingType: 0
+            },
             afterChange: this.afterBuildingChange,
             itemProps: {
               label: 'buildingName',

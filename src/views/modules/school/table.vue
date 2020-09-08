@@ -16,7 +16,7 @@
           class="table-search-form"
           :inline="true"
           :model="tableSearchParams"
-          @keyup.enter.native="searchHandle"
+          @keyup.enter.native="clearHandle"
         >
           <el-form-item>
             <el-input
@@ -48,7 +48,7 @@
             <el-button
               v-if="filterPermission('school:view')"
               :size="tableConfig.tableSearchSize"
-              @click="searchHandle()"
+              @click="clearHandle"
             >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
@@ -337,7 +337,7 @@ export default {
     },
     // 编辑
     editHandle(item, options = { componentNames: ['yunlin-table'] }) {
-      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: false, ...options })
+      this.$pageSwitch('form', { ...item, pageType: 'edit', formDataUpdate: true, ...options })
     },
     // 显示次序更替
     // exchangeHandle() {

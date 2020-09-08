@@ -268,6 +268,7 @@ export default {
     // 清除查询条件
     clearHandle() {
       this.query.page = 1
+      this.pagination.currentPage = 1
       this.searchHandle()
     },
     // 重置查询条件

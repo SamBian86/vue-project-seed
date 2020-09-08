@@ -1,5 +1,10 @@
 /* eslint-disable no-undef */
 import { getToken, getProjectId } from '@/utils/cookie'
+
+export function getProjectName() {
+  return `${process.env.VUE_APP_PROJECT_NAME}_`
+}
+
 /**
  * 获取uuid
  */

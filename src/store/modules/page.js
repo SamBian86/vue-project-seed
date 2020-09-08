@@ -29,11 +29,8 @@ export default {
   },
   actions: {},
   getters: {
-    filterMenuByMenuId: (state) => (menuId) => {
-      return state.dynamicRoutes.filter((item) => item.meta.menuId === menuId)
-    },
-    filterMenuByMenuPath: (state) => (path) => {
-      return state.dynamicRoutes.filter((item) => item.path === path)
+    filterMenuByMenuId: state => menuId => {
+      return state.dynamicRoutes.filter(item => item.meta.menuId === menuId)
     }
   }
 }

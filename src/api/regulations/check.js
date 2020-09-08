@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 
 // 违章检查管理
 
@@ -7,7 +6,12 @@ import { exportFile } from '@/utils'
 // GET
 // /regulations/check/export
 export function exportRegulationsCheck(params = {}) {
-  exportFile(`/regulations/check/export`, params)
+  return request({
+    url: `/regulations/check/export`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 分页

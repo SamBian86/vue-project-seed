@@ -235,8 +235,9 @@ export default {
     },
     afterFormDataUpdate() {
       const { isLinkHousekeeper, levelList, scoreList, id } = this.formData
+      const _levelList = levelList.length === 0 ? (scoreList.length === 0 ? [] : scoreList) : levelList
       this.$set(this.formData, 'isLinkHousekeeper', parseInt(isLinkHousekeeper))
-      this.$set(this.formData, 'level', levelList || scoreList)
+      this.$set(this.formData, 'level', _levelList)
       this.getProjectSchoolList(id)
     },
     getProjectSchoolList(projectId = '') {

@@ -204,6 +204,7 @@ export default {
           interiorCheckType,
           ...items[index]
         }).then((response) => {
+          items[index]['id'] = response.id
           this.$set(this, type, items)
         })
       }
@@ -211,9 +212,11 @@ export default {
     handleDelete(type, index) {
       const { pageType } = this
       const items = Array.from(this[type])
-      if (pageType === 'create') {
+      const id = items[index]['id']
+      if (pageType === 'create' || id === undefined) {
         items.splice(index, 1)
         this.$set(this, type, items)
+        return false
       }
       if (pageType === 'edit') {
         deleteProjectInteriorTypeById({
@@ -225,13 +228,23 @@ export default {
       }
     },
     handleAdd(type) {
+      const { interiorCheckType } = this
       let addTag = false
       const items = Array.from(this[type] || [])
-      items.map((item) => {
-        if (item.name === '' || item.markPoint === '') {
-          addTag = true
-        }
-      })
+      if (interiorCheckType === 0) {
+        items.map((item) => {
+          if (item.name === '') {
+            addTag = true
+          }
+        })
+      }
+      if (interiorCheckType === 1) {
+        items.map((item) => {
+          if (item.name === '' || item.markPoint === '') {
+            addTag = true
+          }
+        })
+      }
 
       if (addTag) {
         this.$message({
@@ -245,6 +258,14 @@ export default {
         this.$set(this, type, items)
       }
     }
+    // inputHandle(type, index) {
+    //   const { pageType } = this
+    //   if (pageType === 'edit') {
+    //     const items = Array.from(this[type])
+    //     items[index]['save'] = false
+    //     this.$set(this, type, items)
+    //   }
+    // }
   }
 }
 </script>

@@ -12,7 +12,12 @@
     >
       <!-- 查询区域 -->
       <template slot="search">
-        <el-form class="table-search-form" :inline="true" :model="tableSearchParams" @keyup.enter.native="searchHandle">
+        <el-form
+          class="table-search-form"
+          :inline="true"
+          :model="tableSearchParams"
+          @keyup.enter.native="clearHandle"
+        >
           <el-form-item>
             <el-input
               v-model="tableSearchParams.nameOrPhone"
@@ -45,10 +50,8 @@
             <el-button
               v-if="filterPermission('building:worker:view')"
               :size="tableConfig.tableSearchSize"
-              @click="searchHandle()"
-            >
-              {{ $t('query') }}
-            </el-button>
+              @click="clearHandle"
+            >{{ $t('query') }}</el-button>
           </el-form-item>
           <!-- 创建 -->
           <el-form-item>
@@ -57,9 +60,7 @@
               type="primary"
               :size="tableConfig.tableSearchSize"
               @click="createHandle()"
-            >
-              {{ $t('add') }}
-            </el-button>
+            >{{ $t('add') }}</el-button>
           </el-form-item>
           <!-- 下载模板 -->
           <!--<el-form-item>
@@ -105,7 +106,7 @@
             >
               {{ $t('deleteBatch') }}
             </el-button>
-          </el-form-item> -->
+          </el-form-item>-->
           <!-- 批量操作 -->
           <!-- <el-form-item>
             <el-button
@@ -123,7 +124,13 @@
       </template>
       <!-- 操作区域 -->
       <template slot="operate">
-        <el-table-column :label="$t('handle')" align="center" header-align="center" fixed="right" width="160">
+        <el-table-column
+          :label="$t('handle')"
+          align="center"
+          header-align="center"
+          fixed="right"
+          width="160"
+        >
           <template slot-scope="scope">
             <!-- 上下架 -->
             <!--<el-button
@@ -145,27 +152,21 @@
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="detailHandle(scope.row)"
-            >
-              {{ $t('detail') }}
-            </el-button>
+            >{{ $t('detail') }}</el-button>
             <!-- 修改 -->
             <el-button
               v-if="filterPermission('building:worker:update')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="editHandle(scope.row)"
-            >
-              {{ $t('update') }}
-            </el-button>
+            >{{ $t('update') }}</el-button>
             <!-- 单个删除 -->
             <el-button
               v-if="filterPermission('building:worker:delete')"
               type="text"
               :size="tableConfig.tableSearchSize"
               @click="deleteHandle({ id: scope.row.id })"
-            >
-              {{ $t('delete') }}
-            </el-button>
+            >{{ $t('delete') }}</el-button>
             <!-- 上移 -->
             <!--<el-button
               v-if="filterPermission('building:worker:exchange') && scope.$index !== 0"

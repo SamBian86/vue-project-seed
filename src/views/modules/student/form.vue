@@ -71,6 +71,7 @@ export default {
   mixins: [commonMixin, pageMixin, formDefaultMixin],
   data() {
     return {
+      rooms: [],
       // 定义表单名称
       formTitle: {
         create: this.$t('add'),
@@ -215,7 +216,9 @@ export default {
           component: 'toolSelectDynamic',
           componentConfig: {
             request: getSchoolBuildingList,
-            requestParams: {},
+            requestParams: {
+              buildingType: 0
+            },
             afterChange: this.afterBuildingChange,
             itemProps: {
               label: 'buildingName',
@@ -249,16 +252,19 @@ export default {
           className: 'select-block',
           rules: [{ required: true }],
           placeholder: 'student.roomId',
+          afterChange: this.afterRoomChange,
           items: []
         },
         {
-          // 床位号
+          // 床位号 bedNum
           span: 24,
           prop: 'bedNum',
           name: 'student.bedNum',
-          type: 'text',
+          type: 'select',
+          className: 'select-block',
           rules: [{ required: true }],
-          attrs: { maxlength: 10 }
+          placeholder: 'student.bedNum',
+          items: []
         },
         {
           // 联系人姓名
@@ -337,11 +343,14 @@ export default {
       const { buildingId } = this.formData
       this.$set(this.formData, 'floorId', '')
       this.$set(this.formData, 'roomId', '')
+      this.$set(this.formData, 'bedNum', '')
       if (buildingId) {
         this.getSchoolFloorListByBuildingId()
       } else {
         this.formResetConfigItem([{ prop: 'floorId', items: [] }])
         this.formResetConfigItem([{ prop: 'roomId', items: [] }])
+        this.$set(this, 'rooms', [])
+        this.formResetConfigItem([{ prop: 'bedNum', items: [] }])
       }
     },
     getSchoolFloorListByBuildingId() {
@@ -357,10 +366,13 @@ export default {
     afterFloorChange() {
       const { floorId } = this.formData
       this.$set(this.formData, 'roomId', '')
+      this.$set(this.formData, 'bedNum', '')
       if (floorId) {
         this.getSchoolRoomListByFloorId()
       } else {
         this.formResetConfigItem([{ prop: 'roomId', items: [] }])
+        this.$set(this, 'rooms', [])
+        this.formResetConfigItem([{ prop: 'bedNum', items: [] }])
       }
     },
     getSchoolRoomListByFloorId() {
@@ -371,7 +383,35 @@ export default {
           item.value = item.id
         })
         this.formResetConfigItem([{ prop: 'roomId', items: response }])
+        this.$set(this, 'rooms', response)
+        this.getSchoolRoomBedNumList()
       })
+    },
+    afterRoomChange() {
+      const { roomId } = this.formData
+      if (roomId) {
+        this.getSchoolRoomBedNumList()
+      } else {
+        this.formResetConfigItem([{ prop: 'bedNum', items: [] }])
+      }
+    },
+    getSchoolRoomBedNumList() {
+      const { roomId } = this.formData
+      const { rooms } = this
+      const bedItem = rooms.filter((item) => item.id === roomId)
+      const beds = []
+      if (bedItem && bedItem.length !== 0) {
+        const roomBedNum = bedItem[0]['roomBedNum']
+        for (let i = 1; i <= roomBedNum; i++) {
+          beds.push({
+            placeholderText: i,
+            value: i
+          })
+        }
+        this.formResetConfigItem([{ prop: 'bedNum', items: beds }])
+      } else {
+        this.$set(this.formData, 'bedNum', '')
+      }
     }
   }
 }

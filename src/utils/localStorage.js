@@ -1,15 +1,16 @@
 import { stringify, parse } from '@/utils/index'
+import { getProjectName } from '@/utils'
+const ProjectName = getProjectName()
 
-const dictStoreKey = 'app.dictStore'
-const permissionStoreKey = 'app.permissionStore'
-const userInfoStoreKey = 'user.userInfoStore'
-const menuStoreKey = 'layout.menuStore'
+const dictStoreKey = `${ProjectName}app.dictStore`
+const permissionStoreKey = `${ProjectName}app.permissionStore`
+const userInfoStoreKey = `${ProjectName}user.userInfoStore`
+const menuStoreKey = `${ProjectName}layout.menuStore`
 // const dynamicRoutesKey = 'page.menuStore'
 
 // 获取字典storage数据
 export function getDictStore() {
-  return localStorage.getItem(dictStoreKey) === '' ||
-    localStorage.getItem(dictStoreKey) === null
+  return localStorage.getItem(dictStoreKey) === '' || localStorage.getItem(dictStoreKey) === null
     ? false
     : parse(localStorage.getItem(dictStoreKey))
 }
@@ -21,24 +22,19 @@ export function setDictStore(dictStore) {
 
 // 获取授权storage数据
 export function getPermissionStore() {
-  return localStorage.getItem(permissionStoreKey) === '' ||
-    localStorage.getItem(permissionStoreKey) === null
+  return localStorage.getItem(permissionStoreKey) === '' || localStorage.getItem(permissionStoreKey) === null
     ? false
     : parse(localStorage.getItem(permissionStoreKey))
 }
 
 // 保存授权storage数据
 export function setPermissionStore(permissionStore) {
-  return localStorage.setItem(
-    permissionStoreKey,
-    stringify(permissionStore) || ''
-  )
+  return localStorage.setItem(permissionStoreKey, stringify(permissionStore) || '')
 }
 
 // 获取用户信息storage数据
 export function getUserInfoStore() {
-  return localStorage.getItem(userInfoStoreKey) === '' ||
-    localStorage.getItem(userInfoStoreKey) === null
+  return localStorage.getItem(userInfoStoreKey) === '' || localStorage.getItem(userInfoStoreKey) === null
     ? false
     : parse(localStorage.getItem(userInfoStoreKey))
 }
@@ -50,8 +46,7 @@ export function setUserInfoStore(userInfoStore) {
 
 // 获取菜单storage数据
 export function getMenuStore() {
-  return localStorage.getItem(menuStoreKey) === '' ||
-    localStorage.getItem(menuStoreKey) === null
+  return localStorage.getItem(menuStoreKey) === '' || localStorage.getItem(menuStoreKey) === null
     ? false
     : parse(localStorage.getItem(menuStoreKey))
 }

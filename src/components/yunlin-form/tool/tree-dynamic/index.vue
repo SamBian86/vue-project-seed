@@ -174,8 +174,9 @@ export default {
       } else {
         this.selected = []
       }
-
-      this.autoChecked()
+      this.$nextTick(() => {
+        this.autoChecked()
+      })
     },
     autoChecked() {
       const { selected } = this

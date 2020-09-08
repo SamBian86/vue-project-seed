@@ -1,10 +1,12 @@
 import Cookies from 'js-cookie'
+import { getProjectName } from '@/utils'
+const ProjectName = getProjectName()
 
-const TokenKey = 'token'
-const languageKey = 'language'
-const projectKey = 'projectId'
-const tenantCodeKey = 'tenantCode'
-const systemTypeKey = 'systemType'
+const TokenKey = `${ProjectName}token`
+const languageKey = `${ProjectName}language`
+const projectKey = `${ProjectName}projectId`
+const tenantCodeKey = `${ProjectName}tenantCode`
+const systemTypeKey = `${ProjectName}systemType`
 
 export function getToken() {
   return Cookies.get(TokenKey) || ''

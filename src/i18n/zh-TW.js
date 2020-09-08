@@ -3,8 +3,8 @@ const t = {}
 t.loading = '加載中...'
 
 t.brand = {}
-t.brand.lg = '丽富社区数据看板'
-t.brand.mini = '丽富社区'
+t.brand.lg = '校园物业平台'
+t.brand.mini = '校园物业平台'
 t.brand.projectDefault = '选择项目'
 
 t.add = '新增'
@@ -51,6 +51,7 @@ t.prompt.success = '操作成功'
 t.prompt.failed = '操作失敗'
 t.prompt.deleteBatch = '請選擇刪除項'
 t.prompt.customBatch = '請選擇批量處理的選項'
+t.prompt.importTitle = '导入提示'
 
 t.validate = {}
 t.validate.required = '必填項不能為空'
@@ -94,7 +95,7 @@ t.notFound.back = '上一頁'
 t.notFound.home = '首頁'
 
 t.login = {}
-t.login.sysname = '丽富社区数据看板'
+t.login.sysname = '校园物业平台'
 t.login.title = '歡迎登錄'
 t.login.tenantCode = '请选择企业'
 t.login.newPassword = '新密码'
@@ -123,7 +124,7 @@ t.login.forgetBtn = '修改密码'
 t.home = {}
 t.home.desc = {}
 t.home.desc.title = '項目介紹'
-t.home.desc.list = ['丽富社区数据看板，基於最新的Spring Boot 2.2、Mybatis、Element 2.0+開發']
+t.home.desc.list = ['校园物业平台，基於最新的Spring Boot 2.2、Mybatis、Element 2.0+開發']
 
 /* 模塊 */
 t.model = {}
@@ -481,8 +482,8 @@ t.project.limitOvertime = '接单超时提醒'
 t.project.overtimeUnit = '分钟'
 t.project.markPoint = '等级分数'
 t.project.markPointPlaceholder = '请输入等级分数'
-t.project.name = '等级名称'
-t.project.namePlaceholder = '请输入等级名称'
+t.project.name = '项目名称'
+t.project.namePlaceholder = '请输入项目名称'
 t.project.baseInfo = '基本信息'
 t.project.projectConfig = '项目配置'
 t.project.level = '等级设置'
@@ -532,8 +533,8 @@ t.schoolFloor.buildingTypeName = '楼栋类型'
 t.schoolFloor.floorName = '楼层名称'
 
 t.schoolRoom = {}
-t.schoolRoom.buildingName = '所属楼栋'
-t.schoolRoom.buildingId = '所属楼栋'
+t.schoolRoom.buildingName = '所属宿舍栋'
+t.schoolRoom.buildingId = '所属宿舍栋'
 t.schoolRoom.floorName = '所属楼层'
 t.schoolRoom.floorId = '所属楼层'
 t.schoolRoom.roomName = '房间名称'
@@ -643,7 +644,6 @@ t.regulationsCheck.userName = '检查人'
 t.regulationsCheck.createDate = '登记时间'
 t.regulationsCheck.regulationsGoods = '违章物品'
 t.regulationsCheck.studentName = '违章人'
-t.regulationsCheck.userName = '检查人'
 t.regulationsCheck.baseInfo = '基本信息'
 t.regulationsCheck.otherInfo = '违章信息'
 

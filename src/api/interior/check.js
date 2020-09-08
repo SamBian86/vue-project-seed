@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 
 // 内务检查管理
 
@@ -7,7 +6,12 @@ import { exportFile } from '@/utils'
 // GET
 // /interior/check/export
 export function exportInteriorCheck(params = {}) {
-  exportFile(`/interior/check/export`, params)
+  return request({
+    url: `/interior/check/export`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 分页

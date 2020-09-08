@@ -6,7 +6,7 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :append-to-body="true"
-    :show-close="false"
+    :show-close="user_userInfo.resetPassword !== 1 ? true : false"
     @close="closeHandle"
   >
     <el-form

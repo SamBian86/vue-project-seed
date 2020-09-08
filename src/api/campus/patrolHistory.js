@@ -1,12 +1,16 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 // 巡检打卡记录管理
 
 // 导出excel
 // GET
 // /campus/patrol/history/export
 export function exportCampusPatrolHistory(params = {}) {
-  exportFile(`/campus/patrol/history/export`, params)
+  return request({
+    url: `/campus/patrol/history/export`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 分页

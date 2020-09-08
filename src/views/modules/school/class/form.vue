@@ -190,7 +190,7 @@ export default {
     },
     afterBranchChange() {
       const { branchId } = this.formData
-      this.formData.specialityId = ''
+      this.$set(this.formData, 'specialityId', '')
       if (branchId) {
         this.getSchoolSpecialityListByBranchId()
       } else {

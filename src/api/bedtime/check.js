@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { exportFile } from '@/utils'
 
 // 就寝检查管理
 
@@ -7,7 +6,12 @@ import { exportFile } from '@/utils'
 // GET
 // /bedtime/check/export
 export function exportBedtimeCheck(params = {}) {
-  exportFile(`/bedtime/check/export`, params)
+  return request({
+    url: `/bedtime/check/export`,
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
 }
 
 // 分页
