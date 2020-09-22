@@ -53,31 +53,26 @@ export default {
     ...mapMutations('layout', ['setTabActive', 'setMenuActive']),
     storeUpdate() {
       const { layout_menuStore, layout_tabActive } = this
-      // console.log(layout_menuActive)
-      if (layout_tabActive !== 'home') {
-        const defaultOpeneds = []
-        layout_menuStore.map((item, index) => {
-          if (item.children.length !== 0) {
-            item.children.map((ite) => {
-              const _url = (ite.url || '').replace('/', '_')
-              if (_url === layout_tabActive && _url !== '') {
-                defaultOpeneds.push(item.id)
-                this.defaultActive = ite.id
-              } else if (ite.url === '' && ite.children.length !== 0) {
-                ite.children.map((i) => {
-                  const _url = (i.url || '').replace('/', '_')
-                  if (_url === layout_tabActive && _url !== '') {
-                    defaultOpeneds.push(item.id)
-                    defaultOpeneds.push(ite.id)
-                    this.defaultActive = i.id
-                  }
-                })
-              } else {
-                // console.log('完成') 1290114382608900097 "1290116159274131458" 1290117086865432577
-              }
-            })
+
+      let defaultOpeneds = [] // 保存菜单路径 包含父子节点
+      let defaultActive = ''
+      const getRoad = (his, tree, tabName) => {
+        tree.some((item) => {
+          const _url = (item.url || '').replace(/\//g, '_')
+          if (_url === tabName) {
+            defaultActive = item.id
+            defaultOpeneds = his.map((item) => item.id)
+          } else if (item.children.length > 0) {
+            const history = [...his]
+            history.push(item)
+            return getRoad(history, item.children, tabName)
           }
         })
+      }
+
+      if (layout_tabActive !== 'home') {
+        getRoad([], layout_menuStore, layout_tabActive)
+        this.defaultActive = defaultActive
         this.defaultOpeneds = defaultOpeneds
       }
     }
