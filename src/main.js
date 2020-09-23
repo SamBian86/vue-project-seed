@@ -9,6 +9,7 @@ import '@/router/filter'
 import '@/icons'
 import '@/element-ui/theme/index.css'
 import '@/assets/scss/aui.scss'
+import { appWebSocket } from '@/socket'
 
 Vue.use(Element, {
   size: 'default',
@@ -28,11 +29,12 @@ Vue.use(YunlinDrawer)
 // 全局directive
 // import permission from './directive/permission'
 // Vue.use(permission)
+Vue.prototype.$websocket = appWebSocket()
 
 Vue.config.productionTip = false
 new Vue({
   i18n,
   store,
   router,
-  render: h => h(App)
+  render: (h) => h(App)
 }).$mount('#app')

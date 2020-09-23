@@ -45,7 +45,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['layout_sidebar_fold', 'page_refresh', 'layout_tabs'])
+    ...mapGetters(['layout_sidebar_fold', 'page_refresh', 'layout_tabs']),
+    ...mapGetters('page', ['filterMenuByMenuPath']),
+    ...mapGetters('layout', ['filterTabByName'])
   },
   watch: {
     $route: 'applicationCheck'
@@ -115,6 +117,81 @@ export default {
         const status = windowResizeListen()
         debounceSetSidebarFold(status)
       })
+    },
+    gotoRouteHandle(path) {
+      const routes = this.filterMenuByMenuPath(path)
+      if (routes.length === 1) {
+        // 如果有该动态路由
+        const route = routes[0]
+        const tab = [
+          {
+            name: route.name,
+            params: {},
+            query: {},
+            menuId: route.meta.menuIndex,
+            title: route.meta.title,
+            isTab: route.meta.isTab,
+            iframeURL: route.meta.iframeURL
+          }
+        ]
+
+        const hasTab = this.filterTabByName(route.name).length === 1 || false
+
+        this.setMenuActive(route.meta.menuIndex)
+        this.setTabActive(route.name)
+        if (!hasTab) {
+          // 如果还没有这个tab选项，需要新增tabs
+          this.setTabs([...this.layout_tabs, ...tab])
+        }
+        this.$router.push({ path: route.path })
+      } else {
+        console.log('没有此动态路由')
+      }
+    },
+    webSocketInit() {
+      const ws = this.$websocket
+      if (ws) {
+        ws.addHandle('open', this.openHandle)
+          .addHandle('message', this.messageHandle)
+          .addHandle('close', this.closeHandle)
+          .addHandle('error', this.errorHandle)
+          .init()
+      }
+    },
+    openHandle() {
+      // console.log('websocket open...')
+    },
+    messageHandle(event) {
+      let notify = null
+      const data = JSON.parse(event.data)
+      const { businessUrl, message } = data
+      if (businessUrl) {
+        notify = this.$notify({
+          title: this.$t('webSocket'),
+          dangerouslyUseHTMLString: true,
+          duration: 0,
+          message: `<div class="websocket_content"><div class="websocket_message">${message}</div><div><span class="websocket_btn">${this.$t(
+            'webSocketButton'
+          )}<span></div></div>`,
+          onClick: () => {
+            closeNotify()
+            this.gotoRouteHandle(`/${businessUrl}`)
+          }
+        })
+      }
+
+      function closeNotify() {
+        if (!notify) {
+          return
+        }
+        notify.close()
+      }
+    },
+    closeHandle() {
+      // console.log('websocket close...')
+    },
+    errorHandle() {
+      // console.log('websocket error...')
     }
   }
 }
