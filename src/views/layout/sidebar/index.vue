@@ -57,7 +57,7 @@ export default {
       let defaultOpeneds = [] // 保存菜单路径 包含父子节点
       let defaultActive = ''
       const getRoad = (his, tree, tabName) => {
-        tree.some((item) => {
+        tree.forEach((item) => {
           const _url = (item.url || '').replace(/\//g, '_')
           if (_url === tabName) {
             defaultActive = item.id
